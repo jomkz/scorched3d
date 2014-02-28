@@ -36,29 +36,23 @@
 REGISTER_ACCESSORY_SOURCE(WeaponAimedUnder);
 
 WeaponAimedUnder::WeaponAimedUnder() : 
-	moveUnderground_(true)
+	WeaponAimed("WeaponAimedUnder", 
+		"Aims a number of the next primitive at nearby tanks. "
+		"The weapons are shot straight at the tanks and are always shot with full power."),
+	moveUnderground_("Whether or not to move weapon position underground", 0, true)
 {
+	addChildXMLEntry("moveunderground", &moveUnderground_);
 }
 
 WeaponAimedUnder::~WeaponAimedUnder()
 {
 }
 
-bool WeaponAimedUnder::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!WeaponAimed::parseXML(context, accessoryNode)) return false;
-
-	// Get optional moveunderground attribute
-	accessoryNode->getNamedChild("moveunderground", moveUnderground_, false);
-
-	return true;
-}
-
 void WeaponAimedUnder::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &sentPosition, FixedVector &oldvelocity)
 {
 	FixedVector position = sentPosition;
-	if (moveUnderground_)
+	if (moveUnderground_.getValue())
 	{
 		fixed height = context.getLandscapeMaps().getGroundMaps().
 			getInterpHeight(position[0], position[1]);

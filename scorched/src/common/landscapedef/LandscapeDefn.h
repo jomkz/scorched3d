@@ -45,7 +45,7 @@ public:
 	LandscapeDefnHeightMapChoice heightmap;
 	LandscapeDefnDeformChoice deform;
 
-	virtual bool readXML(XMLNode *parentNode);
+	virtual bool readXML(XMLNode *parentNode, void *xmlData);
 protected:
 	XMLEntryInt minplayers, maxplayers;
 	XMLEntryInt landscapewidth, landscapeheight;

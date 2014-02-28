@@ -27,37 +27,17 @@
 REGISTER_ACCESSORY_SOURCE(WeaponCenterPosition);
 
 WeaponCenterPosition::WeaponCenterPosition() :
-	height_("WeaponCenterPosition::height"),
-	nextAction_(0)
+	Weapon("WeaponCenterPosition", "Moves the weapons position to the center of the landscape at a specified height."),
+	height_("WeaponCenterPosition::height", "Altitude to move position to, 0 = landscape height"),
+	nextAction_()
 {
-
+	addChildXMLEntry("height", &height_);
+	addChildXMLEntry("nextaction", &nextAction_);
 }
 
 WeaponCenterPosition::~WeaponCenterPosition()
 {
-	delete nextAction_;
-	nextAction_ = 0;
-}
 
-bool WeaponCenterPosition::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("height", height_)) return false;
-
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("nextaction", subNode)) return false;
-	
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	nextAction_ = (Weapon*) accessory;
-
-	return true;
 }
 
 void WeaponCenterPosition::fireWeapon(ScorchedContext &context,
@@ -73,6 +53,5 @@ void WeaponCenterPosition::fireWeapon(ScorchedContext &context,
 	newPositon[1] = (arenaHeight / 2) + arenaY;
 	newPositon[2] = height_.getValue(context);
 	
-	nextAction_->fire(context, weaponContext, newPositon, velocity);
-
+	nextAction_.getValue()->fire(context, weaponContext, newPositon, velocity);
 }

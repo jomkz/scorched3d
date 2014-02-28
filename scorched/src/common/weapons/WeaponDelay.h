@@ -22,16 +22,15 @@
 #define AFX_WeaponDelay_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <actions/CallbackWeapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
-class WeaponDelay  : public WeaponCallback
+class WeaponDelay : public WeaponCallback
 {
 public:
 	WeaponDelay();
 	virtual ~WeaponDelay();
 
 	// Inherited from Weapon
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 	void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
 
@@ -44,8 +43,8 @@ public:
 			unsigned int userData);
 
 protected:
-	NumberParser delay_;
-	Weapon *delayedWeapon_;
+	XMLEntryNumberParser delay_;
+	XMLEntryWeaponChoice delayedWeapon_;
 
 };
 

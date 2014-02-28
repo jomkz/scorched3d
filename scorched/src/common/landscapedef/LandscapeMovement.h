@@ -63,7 +63,7 @@ public:
 	XMLEntryFixed cruisedistance;
 	XMLEntryFixed maxacceleration;
 
-	virtual bool readXML(XMLNode *parentNode);
+	virtual bool readXML(XMLNode *parentNode, void *xmlData);
 };
 
 class LandscapeMovementShips : public LandscapeMovement
@@ -99,8 +99,6 @@ public:
 	XMLEntryFixed starttime;
 	XMLEntryBool groundonly;
 	LandscapeMovementSplineControlPoints points;
-
-	virtual bool readXML(XMLNode *parentNode);
 };
 
 

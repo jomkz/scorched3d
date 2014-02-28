@@ -44,9 +44,9 @@ PlacementTypeBounds::~PlacementTypeBounds()
 {
 }
 
-bool PlacementTypeBounds::readXML(XMLNode *node)
+bool PlacementTypeBounds::readXML(XMLNode *node, void *xmlData)
 {
-	if (!PlacementType::readXML(node)) return false;
+	if (!PlacementType::readXML(node, xmlData)) return false;
 
 	if (maxbounds.getValue()[0] - minbounds.getValue()[0] < 25 ||
 		maxbounds.getValue()[1] - minbounds.getValue()[1] < 25 ||

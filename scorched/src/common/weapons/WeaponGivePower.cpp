@@ -31,23 +31,15 @@
 REGISTER_ACCESSORY_SOURCE(WeaponGivePower);
 
 WeaponGivePower::WeaponGivePower() :
-	power_("WeaponGivePower::power")
+	WeaponCallback("WeaponGivePower", "Sets the player's maximum shot power to the specified amount. "),
+	power_("WeaponGivePower::power", "What to set the player's max shot power to.  Must be set over 1000 to give a maximum power above 1000")
 {
-
+	addChildXMLEntry("power", &power_)
 }
 
 WeaponGivePower::~WeaponGivePower()
 {
 
-}
-
-bool WeaponGivePower::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("power", power_)) return false;
-
-	return true;
 }
 
 void WeaponGivePower::fireWeapon(ScorchedContext &context,

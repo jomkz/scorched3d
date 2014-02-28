@@ -31,23 +31,17 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveScore);
 
-WeaponGiveScore::WeaponGiveScore()
+WeaponGiveScore::WeaponGiveScore() :
+	WeaponCallback("WeaponGiveScore", 
+		"Gives a specified amount of score points to the player. It can also be used to take score away from the player for doing something they shouldn't do. "),
+	score_("Amount of points to give to (or take away from) the player")
 {
-
+	addChildXMLEntry("score", &score_);
 }
 
 WeaponGiveScore::~WeaponGiveScore()
 {
 
-}
-
-bool WeaponGiveScore::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("score", score_)) return false;
-
-	return true;
 }
 
 void WeaponGiveScore::fireWeapon(ScorchedContext &context,
@@ -66,20 +60,21 @@ void WeaponGiveScore::weaponCallback(
 	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
+	int score = score_.getValue();
 	tank->getScore().setScore(tank->getScore().getScore() + score_);
 	if (tank->getTeam() > 0)
 	{
-		context.getTankTeamScore().addScore(score_, tank->getTeam());
+		context.getTankTeamScore().addScore(score, tank->getTeam());
 	}
 
 	{
-		if (score_ > 0)
+		if (score > 0)
 		{
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_GET_SCORE",
 				"[p:{0}] received {1} bonus score", 
 				tank->getTargetName(), 
-				S3D::formatStringBuffer("%i", score_)));
+				S3D::formatStringBuffer("%i", score)));
 			ChannelManager::showText(context, text);
 		}
 		else
@@ -88,7 +83,7 @@ void WeaponGiveScore::weaponCallback(
 				LANG_RESOURCE_2("TANK_LOST_SCORE",
 				"[p:{0}] lost {1} bonus score", 
 				tank->getTargetName(), 
-				S3D::formatStringBuffer("%i", -score_)));
+				S3D::formatStringBuffer("%i", -score)));
 			ChannelManager::showText(context, text);
 		}
 	}

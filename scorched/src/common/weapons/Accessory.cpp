@@ -30,22 +30,72 @@
 #include <tank/TankModelContainer.h>
 #include <stdlib.h>
 
-Accessory::Accessory(unsigned int accessoryId) :
-	accessoryId_(accessoryId),
-	name_("NONAME"), description_("NODESC"), 
-	accessoryAction_(0),
-	toolTip_(ToolTip::ToolTipHelp, LangString(), LangString()),
-	price_(0), bundle_(1), armsLevel_(9), freemarketLimits_(150),
-	modelScale_(1),
-	positionSelect_(ePositionSelectNone), positionSelectLimit_(10),
-	maximumNumber_(0),
-	startingNumber_(0),
-	useNumber_(1),
-	muzzleFlash_(true),
-	aiOnly_(false),
-	botOnly_(false),
-	noBuy_(false)
+static XMLEntryEnum::EnumEntry PositionSelectTypeEnum[] =
 {
+	{ "none", Accessory::ePositionSelectNone },
+	{ "fuel", Accessory::ePositionSelectFuel },
+	{ "generic", Accessory::ePositionSelectGeneric },
+	{ "limit", Accessory::ePositionSelectLimit },
+	{ "fuellimit", Accessory::ePositionSelectFuelLimit },
+	{ "", -1 }
+};
+
+AccessoryClassXmlEntry::AccessoryClassXmlEntry() :
+	XMLEntryTypeChoice<XMLEntry>("AccessoryClass", 
+		"Choses the class of accessory that this accessory will represent")
+{
+}
+
+AccessoryClassXmlEntry::~AccessoryClassXmlEntry()
+{
+}
+
+XMLEntry *AccessoryClassXmlEntry::createXMLEntry(const std::string &type)
+{
+	return 0;
+}
+
+void AccessoryClassXmlEntry::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("weapon");
+	allTypes.insert("parachute");
+	allTypes.insert("shield");
+	allTypes.insert("autodefense");
+	allTypes.insert("battery");
+}
+
+Accessory::Accessory(unsigned int accessoryId) :
+	XMLEntryContainer("Accessory", 
+		"An accessory that a player can aquire to boost the capabilities of their tank.  Accessories include weapons, shields, etc..."),
+	accessoryId_(accessoryId), accessoryAction_(0),
+	name_("The name of this accessory, as displayed in the game."), description_("The description of this accessory, as displayed in the game.", 0, ""), 
+	price_("The cost of this accessory to buy, this accessory can be bought in multiples defined by the bundle size", 0, 0), 
+	bundle_("The number of these accessories that will be purchased for the buying price", 0, 1),
+	modelId_("The 3D model of the accessory", false),
+	startingNumber_("The number of these accessories a player will start each new match with", 0, 0),
+	useNumber_("The number of this acessory that will be used when a player actives the accessory", 0, 1),
+	maximumNumber_("The maximum number of these accessories that a player can hold", 0, 0),
+	botOnly_("If this accessory can only be bought by an AI (a bot)", 0, false),
+	noBuy_("If this accessory can be bought at all, accessories that cannot be bought can still be given or aquired through pickups", 0, false),
+	iconName_("The name of an icon to use when displaying the weapon on the UI", 0, ""),
+	groupName_("The name of the group that this accessory will be added to, each group can be used to contain a set of similar accessories e.g. all weapons", 0, ""),
+	tabGroupName_("The name of the group that will group this accessory when it is being bought, e.g. defense, shield, etc...", 0, ""),
+	activationSound_("The sound that will be played when this accessory is activated", 0, ""),
+	positionSelect_("When activating this weapon it doesn't use the current power, rotation and elevation, but instead required clicking on the landscape", 0, (int) ePositionSelectNone, PositionSelectTypeEnum),
+	positionSelectLimit_("The extent/limit that this weapon can be moved if the position select type is chosen", 0, 10),
+	armsLevel_("The arms level that this accessory is allowed to be bought in, the current arms level is a game option that allows you to limit weapons to certain rounds (or completely)", 0, 9), 
+	freemarketLimits_("The limit (as a percentage) that this accessory price can increase/decrease due to the free market economy", 0, 150)
+{
+	addChildXMLEntry("name", &name_, "description", &description_);
+	addChildXMLEntry("cost", &price_, "bundlesize", &bundle_);
+	addChildXMLEntry("startingnumber", &startingNumber_, "usenumber", &useNumber_, "maximumnumber", &maximumNumber_);
+	addChildXMLEntry("botonly", &botOnly_, "nobuy", &noBuy_);
+	addChildXMLEntry("model", &modelId_);
+	addChildXMLEntry("icon", &iconName_, "group", &groupName_, "tabgroup", &tabGroupName_);
+	addChildXMLEntry("activationsound", &activationSound_);
+	addChildXMLEntry("positionselection", &positionSelect_, "positionselectionlimit", &positionSelectLimit_);
+	addChildXMLEntry("armslevel", &armsLevel_);
+	addChildXMLEntry("freemarketlimits", &freemarketLimits_);
 }
 
 Accessory::~Accessory()
@@ -54,171 +104,66 @@ Accessory::~Accessory()
 	accessoryAction_ = 0;
 }
 
-bool Accessory::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
+bool Accessory::readXML(XMLNode *accessoryNode, void *xmlData)
 {
-	// Get the accessory name
-	if (!accessoryNode->getNamedChild("name", name_)) return false;
-
-	// Get the accessory armslevel
-	accessoryNode->getNamedChild("armslevel", armsLevel_, false);
-
-	// Get the optional muzzleflash
-	XMLNode *muzzleFlashNode = 0;
-	accessoryNode->getNamedChild("nomuzzleflash", muzzleFlashNode, false);
-	if (muzzleFlashNode) muzzleFlash_ = false;
-
-	// Get the accessory description
-	accessoryNode->getNamedChild("description", description_, false);
-	toolTip_.setText(ToolTip::ToolTipHelp, LANG_STRING(getName()), LANG_STRING(getDescription()));
-
-	// Get the accessory icon
-	if (accessoryNode->getNamedChild("icon", iconName_, false))
-	{
-		// TODO
-		//if (!S3D::checkDataFile(S3D::formatStringBuffer("data/textures/wicons/%s", getIconName()))) return false;
-	}
-
-	// Get the accessory sound 
-	if (accessoryNode->getNamedChild("activationsound", activationSound_, false))
-	{
-		if (!S3D::checkDataFile(S3D::formatStringBuffer("%s", getActivationSound()))) return false;
-	}
-
-	// Get the accessory bundle
-	accessoryNode->getNamedChild("bundlesize", bundle_, false);
-
-	// Get ai only
-	accessoryNode->getNamedChild("aionly", aiOnly_, false);
-
-	// Get bot only (ie: only for bots, not for tank objects)
-	accessoryNode->getNamedChild("botonly", botOnly_, false);
-
-	// Get no buy 
-	accessoryNode->getNamedChild("nobuy", noBuy_, false);
-
-	// Get the maximum number
-	maximumNumber_ = context.getOptionsGame().getMaxNumberWeapons();
-	accessoryNode->getNamedChild("maximumnumber", maximumNumber_, false);
-
-	// Get the starting number
-	accessoryNode->getNamedChild("startingnumber", startingNumber_, false);
-
-	// Get the number to use of firing
-	accessoryNode->getNamedChild("usenumber", useNumber_, false);
-
-	// Freemarket limits
-	accessoryNode->getNamedChild("freemarketlimits", freemarketLimits_, false);
-
-	// Get the accessory cost
-	accessoryNode->getNamedChild("cost", price_, false);
-
-	// Get the weapon model scale
-	accessoryNode->getNamedChild("modelscale", modelScale_, false);
-
-	// Get the weapon model
-	XMLNode *modelNode = 0;
-	if (accessoryNode->getNamedChild("model", modelNode, false))
-	{
-		if (!modelId_.initFromNode(modelNode)) return false;
-	}
-
 	// Get action
 	XMLNode *subNode = 0;
 	if (!accessoryNode->getNamedChild("accessoryaction", subNode)) return false;
-	accessoryAction_ = context.getAccessoryStore().createAccessoryPart(context, this, subNode);
+	AccessoryCreateContext *creationContext = (AccessoryCreateContext *) xmlData;
+	accessoryAction_ = creationContext->getAccessoryStore().createAccessoryPart(*creationContext, this, subNode);
 	if (!accessoryAction_)
 	{
 		S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
-			"Failed to create action \"%s\"", name_.c_str()));
+			"Failed to create action \"%s\"", name_.getValue().c_str()));
 		return false;
 	}
 
-	// Setup price
-	sellPrice_ = 0;
-	if (price_ > 0 && bundle_ > 0) sellPrice_ = int((price_ / bundle_) * 0.8f);
-	originalPrice_ = price_;
-	originalSellPrice_ = sellPrice_;
-
-	// Position Selection Type
-	std::string positionSelection;
-	if (accessoryNode->getNamedChild("positionselection", positionSelection, false))
+	// Get the accessory groupname
+	switch (accessoryAction_->getType())
 	{
-		if (0 == strcmp(positionSelection.c_str(), "none"))
-		{
-			positionSelect_ = ePositionSelectNone;
-		}
-		else if (0 == strcmp(positionSelection.c_str(), "generic"))
-		{
-			positionSelect_ = ePositionSelectGeneric;
-		}
-		else if (0 == strcmp(positionSelection.c_str(), "fuel"))
-		{
-			positionSelect_ = ePositionSelectFuel;
-
-			// Make sure there is a "WeaponMoveTank" under here somewhere
-			if (!context.getAccessoryStore().findAccessoryPartByAccessoryId(
-				getAccessoryId(), "WeaponMoveTank"))
-			{
-				return accessoryNode->returnError(
-					"Fuel selection can only be used with WeaponMoveTank weapons");
-			}
-		}
-		else if (0 == strcmp(positionSelection.c_str(), "fuellimit"))
-		{
-			positionSelect_ = ePositionSelectFuelLimit;
-			if (!accessoryNode->getNamedChild("positionselectionlimit", positionSelectLimit_)) return false;
-		}
-		else if (0 == strcmp(positionSelection.c_str(), "limit"))
-		{
-			positionSelect_ = ePositionSelectLimit;
-			if (!accessoryNode->getNamedChild("positionselectionlimit", positionSelectLimit_)) return false;
-		}
-		else
-		{
-			return accessoryNode->returnError(S3D::formatStringBuffer(
-				"Unknown accessory position selection type \"%s\"", 
-				positionSelection.c_str()));
-		}
+	case AccessoryPart::AccessoryWeapon:
+		groupName_.setValue("weapon");
+		break;
+	case AccessoryPart::AccessoryParachute:
+		groupName_.setValue("parachute");
+		break;
+	case AccessoryPart::AccessoryShield:
+		groupName_.setValue("shield");
+		break;
+	case AccessoryPart::AccessoryAutoDefense:
+		groupName_.setValue("autodefense");
+		break;
+	case AccessoryPart::AccessoryBattery:
+		groupName_.setValue("battery");
+		break;
+	default:
+		groupName_.setValue("none");
+		break;
 	}
 
 	// Get the accessory tabgroupname
-	if (!accessoryNode->getNamedChild("tabgroup", tabGroupName_, false))
+	if (accessoryAction_->getType() == AccessoryPart::AccessoryWeapon)
 	{
-		if (accessoryAction_->getType() == AccessoryPart::AccessoryWeapon)
-		{
-			tabGroupName_ = "weapon";
-		}
-		else
-		{
-			tabGroupName_ = "defense";
-		}
+		tabGroupName_.setValue("weapon");
+	}
+	else
+	{
+		tabGroupName_.setValue("defense");
 	}
 
-	// Get the accessory groupname
-	if (!accessoryNode->getNamedChild("group", groupName_, false))
+	if (!XMLEntryContainer::readXML(accessoryNode, xmlData)) return false;
+
+	// Get the maximum number
+	if (maximumNumber_.getValue() == 0)
 	{
-		switch (accessoryAction_->getType())
-		{
-		case AccessoryPart::AccessoryWeapon:
-			groupName_ = "weapon";
-			break;
-		case AccessoryPart::AccessoryParachute:
-			groupName_ = "parachute";
-			break;
-		case AccessoryPart::AccessoryShield:
-			groupName_ = "shield";
-			break;
-		case AccessoryPart::AccessoryAutoDefense:
-			groupName_ = "autodefense";
-			break;
-		case AccessoryPart::AccessoryBattery:
-			groupName_ = "battery";
-			break;
-		default:
-			groupName_ = "none";
-			break;
-		}
+		maximumNumber_.setValue(creationContext->getOptionsGame().getMaxNumberWeapons());
 	}
+	
+	// Setup price
+	sellPrice_ = 0;
+	if (price_.getValue() > 0 && bundle_.getValue() > 0) sellPrice_ = int((price_.getValue() / bundle_.getValue()) * 0.8f);
+	originalPrice_ = price_.getValue();
+	originalSellPrice_ = sellPrice_;
 
 	return true;
 }
@@ -234,6 +179,6 @@ LangString &Accessory::getStringName()
 
 const char *Accessory::getActivationSound()
 {
-	if (!activationSound_.c_str()[0]) return 0;
-	return activationSound_.c_str();
+	if (!activationSound_.getValue().c_str()[0]) return 0;
+	return activationSound_.getValue().c_str();
 }

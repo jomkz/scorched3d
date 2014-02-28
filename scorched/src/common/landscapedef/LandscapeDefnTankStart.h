@@ -78,7 +78,7 @@ public:
 	LandscapeDefnTankStartHeight();
 	virtual ~LandscapeDefnTankStartHeight();
 
-	virtual bool readXML(XMLNode *node);
+	virtual bool readXML(XMLNode *node, void *xmlData);
 
 	virtual DefnTankStartType getType() { return eHeight; }
 	virtual FixedVector placeTank(unsigned int playerId, int team,
@@ -97,8 +97,6 @@ class LandscapeDefnTankStartPositional : public LandscapeDefnTankStart
 public:
 	LandscapeDefnTankStartPositional();
 	virtual ~LandscapeDefnTankStartPositional();
-
-	virtual bool readXML(XMLNode *node);
 
 	virtual DefnTankStartType getType() { return ePositional; }
 	virtual FixedVector placeTank(unsigned int playerId, int team,

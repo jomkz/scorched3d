@@ -22,15 +22,13 @@
 #define AFX_WeaponAnimation_H__A96ADD10_0901_4E1D_A49B_9BE78AD33B9B__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponAnimation : public Weapon
 {
 public:
 	WeaponAnimation();
 	virtual ~WeaponAnimation();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -39,9 +37,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponAnimation, AccessoryPart::AccessoryWeapon);
 
 protected:
-	std::string rendererName_;
-	std::string data_;
-
+	XMLEntryParticleID particleName_;
 };
 
 #endif // !defined(AFX_WeaponAnimation_H__A96ADD10_0901_4E1D_A49B_9BE78AD33B9B__INCLUDED_)

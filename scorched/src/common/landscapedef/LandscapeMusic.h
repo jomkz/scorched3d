@@ -23,16 +23,7 @@
 
 #include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeMusicStateList : public XMLEntryList<XMLEntryString>
-{
-public:
-	LandscapeMusicStateList();
-	virtual ~LandscapeMusicStateList();
-
-	virtual XMLEntryString *createXMLEntry();
-};
-
-class LandscapeMusic : public XMLEntryContainer
+class LandscapeMusicStateList : public XMLEntryList<XMLEntryEnum>
 {
 public:
 	enum PlayState
@@ -46,15 +37,21 @@ public:
 		StateScore
 	};
 
+	LandscapeMusicStateList();
+	virtual ~LandscapeMusicStateList();
+
+	virtual XMLEntryEnum *createXMLEntry();
+};
+
+class LandscapeMusic : public XMLEntryContainer
+{
+public:
 	LandscapeMusic();
 	virtual ~LandscapeMusic();
-
-	virtual bool readXML(XMLNode *node);
 
 	XMLEntryFile file;
 	XMLEntryFixed gain;
 	LandscapeMusicStateList playstatelist;
-	std::list<PlayState> playstates;
 };
 
 class LandscapeMusicList : public XMLEntryList<LandscapeMusic>

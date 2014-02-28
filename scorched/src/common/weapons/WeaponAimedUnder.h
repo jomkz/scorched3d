@@ -29,13 +29,10 @@ public:
 	WeaponAimedUnder();
 	virtual ~WeaponAimedUnder();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	REGISTER_ACCESSORY_HEADER(WeaponAimedUnder, AccessoryPart::AccessoryWeapon);
 
 protected:
-	bool moveUnderground_;
+	XMLEntryBool moveUnderground_;
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context, 

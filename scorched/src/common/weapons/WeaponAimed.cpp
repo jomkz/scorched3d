@@ -35,74 +35,39 @@
 #include <map>
 #include <math.h>
 
-WeaponAimed::WeaponAimed() :
-	warHeads_(0),
-	aimedWeapon_(0),
-	randomWhenNoTargets_(true),
-	noSelfHoming_(false),
-	maxAimedDistance_("WeaponAimed::maxAimedDistance"),
-	percentageMissChance_("WeaponAimed::percentageMissChance"),
-	maxInacuracy_("WeaponAimed::maxInacuracy")
+WeaponAimed::WeaponAimed(const char *name, const char *description) :
+	Weapon(name, description),
+	warHeads_("number of instances of the next primitive to create"),
+	aimedWeapon_(),
+	groupNames_(),
+	randomWhenNoTargets_("If there are no targets in range, just fire random shots (true) or do nothing (false)", 0, true),
+	noSelfHoming_("If there are no tarets in range do not target the firing tank", 0, false),
+	maxAimedDistance_("WeaponAimed::maxAimedDistance", "Weapon will aim at targets within this distance"),
+	percentageMissChance_("WeaponAimed::percentageMissChance", "Chance a projectile will miss (higher = less accurate)"),
+	maxInacuracy_("WeaponAimed::maxInacuracy", "Amount of weapon innaccuracy (higher = less accurate)")
 {
-
+	addChildXMLEntry("nowarheads", &warHeads_);
+	addChildXMLEntry("aimedweapon", &aimedWeapon_);
+	addChildXMLEntry("randomwhennotargets", &randomWhenNoTargets_);
+	addChildXMLEntry("maxaimdistance", &maxAimedDistance_);
+	addChildXMLEntry("percentagemiss", &percentageMissChance_);
+	addChildXMLEntry("inaccuracy", &maxInacuracy_);
+	addChildXMLEntry("noselfhoming", &noSelfHoming_);
+	addChildXMLEntry("groupname", &groupNames_);
 }
 
 WeaponAimed::~WeaponAimed()
 {
-	delete aimedWeapon_;
-	aimedWeapon_ = 0;
-}
-
-bool WeaponAimed::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	aimedWeapon_ = (Weapon*) accessory;
-
-	// Get the accessory warheads
-	if (!accessoryNode->getNamedChild("nowarheads", warHeads_)) return false;
-	
-	// Get the accessory aimed distance
-	if (!accessoryNode->getNamedChild("maxaimdistance", maxAimedDistance_)) return false;
-	
-	// Get the accessory percentage miss chance
-	if (!accessoryNode->getNamedChild("percentagemiss", percentageMissChance_)) return false;
-
-	// Get the accessory percentage miss chance
-	if (!accessoryNode->getNamedChild("inaccuracy", maxInacuracy_)) return false;
-
-	// If set only consider items of this group
-	accessoryNode->getNamedChild("groupname", groupName_, false);
-
-	// Do we ignore shots to ourself
-	accessoryNode->getNamedChild("noselfhoming", noSelfHoming_, false);
-
-	// If there are no items in group/range just randomly shoot
-	accessoryNode->getNamedChild("randomwhennotargets", randomWhenNoTargets_, false);
-
-	return true;
 }
 
 void WeaponAimed::addWeaponSyncCheck(ScorchedContext &context,
 	WeaponFireContext &weaponContext,
 	FixedVector &position, FixedVector &velocity)
 {
-	context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponFire %s-%u-%s %u %s %s \"%s\"",
+	context.getSimulator().addSyncCheck(S3D::formatStringBuffer("WeaponFire %s-%u-%s %u %s %s",
 		getParent()->getName(), getParent()->getAccessoryId(), getAccessoryTypeName(),
 		weaponContext.getPlayerId(),
-		position.asQuickString(), velocity.asQuickString(),
-		groupName_.c_str()));
+		position.asQuickString(), velocity.asQuickString()));
 }
 
 void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
@@ -110,7 +75,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 {
 	// Get a list of possible destinations
 	std::list<FixedVector *> positions;
-	if (groupName_.empty())
+	if (groupNames_.getChildren().empty())
 	{
 		std::map<unsigned int, Tanket *> &allTankets =
 			context.getTargetContainer().getTankets();
@@ -122,23 +87,29 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 			Tanket *tanket = itor->second;
 			if (tanket->getAlive())
 			{
-				if (noSelfHoming_ && weaponContext.getPlayerId() == tanket->getPlayerId()) continue;
+				if (noSelfHoming_.getValue() && weaponContext.getPlayerId() == tanket->getPlayerId()) continue;
 				positions.push_back(&itor->second->getLife().getTargetPosition());
 			}
 		}
 	}
 	else
 	{
-		ObjectGroup *objectGroup = weaponContext.getInternalContext().getLocalGroups().getGroup(groupName_.c_str());
-		if (!objectGroup) objectGroup = context.getObjectGroups().getGroup(groupName_.c_str());
-		if (objectGroup) 
+		std::list<XMLEntryString *>::iterator itor = groupNames_.getChildren().begin(),
+			end = groupNames_.getChildren().end();
+		for (;itor!=end;++itor)
 		{
-			ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup);
-			ObjectGroupEntry *entry;
-			while (entry = iterator.getNext())
+			const char *groupName = (*itor)->getValue().c_str();
+			ObjectGroup *objectGroup = weaponContext.getInternalContext().getLocalGroups().getGroup(groupName);
+			if (!objectGroup) objectGroup = context.getObjectGroups().getGroup(groupName);
+			if (objectGroup) 
 			{
-				positions.push_back(&entry->getPosition());
-			}			
+				ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup);
+				ObjectGroupEntry *entry;
+				while (entry = iterator.getNext())
+				{
+					positions.push_back(&entry->getPosition());
+				}			
+			}
 		}
 	}
 
@@ -200,7 +171,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 	maxDist *= (percentageMissChance_.getValue(context) / 100) + 1;
 
 	// For each war head
-	for (int i=0; i<warHeads_; i++)
+	for (int i=0; i<warHeads_.getValue(); i++)
 	{
 		// Random probablity
 		fixed dist = maxDist * random.getRandFixed("WeaponAimed");
@@ -251,7 +222,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 			angleYZDegs += (random.getRandFixed("WeaponAimed") * maxInacuracy_.getValue(context)) - 
 				(maxInacuracy_.getValue(context) / 2);
 		}
-		else if (!randomWhenNoTargets_)
+		else if (!randomWhenNoTargets_.getValue())
 		{
 			continue;
 		}
@@ -262,7 +233,7 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 		TankLib::getVelocityVector(velocity, angleXYDegs, angleYZDegs);
 		velocity *= power;
 
-		aimedWeapon_->fire(
+		aimedWeapon_.getValue()->fire(
 			context, weaponContext, position, velocity);	
 	}
 }

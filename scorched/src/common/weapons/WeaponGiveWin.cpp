@@ -34,25 +34,17 @@
 REGISTER_ACCESSORY_SOURCE(WeaponGiveWin);
 
 WeaponGiveWin::WeaponGiveWin() :
-	winningTeam_(0)
+	WeaponCallback("WeaponGiveWin", "Used to award the round win to the player or team that triggers the event"),
+	objective_("The name of the objective that gets displayed on the screen"),
+	winningTeam_("Team that gets the win, 0 = player (no team), 1 = red, 2 = blue, etc", 0, 0)
 {
-
+	addChildXMLEntry("objective", &objective_);
+	addChildXMLEntry("winningteam", &winningTeam_);
 }
 
 WeaponGiveWin::~WeaponGiveWin()
 {
 
-}
-
-bool WeaponGiveWin::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("objective", objective_)) return false;
-
-	accessoryNode->getNamedChild("winningteam", winningTeam_);
-
-	return true;
 }
 
 void WeaponGiveWin::fireWeapon(ScorchedContext &context,
@@ -70,7 +62,7 @@ void WeaponGiveWin::weaponCallback(
 {
 	if (context.getOptionsGame().getTeams() > 1)
 	{
-		int team = winningTeam_;
+		int team = winningTeam_.getValue();
 		if (team == 0) 
 		{
 			Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
@@ -85,7 +77,7 @@ void WeaponGiveWin::weaponCallback(
 				LANG_RESOURCE_2("TANK_TEAM_WIN",
 				"{0} team {1} and won the game", 
 				TankColorGenerator::getTeamName(team), 
-				objective_));
+				objective_.getValue().c_str()));
 			ChannelManager::showText(context, text);
 		}
 	}
@@ -101,7 +93,7 @@ void WeaponGiveWin::weaponCallback(
 				LANG_RESOURCE_2("TANK_SINGLE_WIN",
 				"[p:{0}] {1} and won the game", 
 				tank->getTargetName(), 
-				objective_));
+				objective_.getValue().c_str()));
 			ChannelManager::showText(context, text);
 		}
 	}

@@ -17,7 +17,6 @@
     <ClCompile Include="..\..\common\actions\CallbackWeapon.cpp" />
     <ClCompile Include="..\..\common\actions\CameraPositionAction.cpp" />
     <ClCompile Include="..\..\common\actions\Explosion.cpp" />
-    <ClCompile Include="..\..\common\actions\ExplosionParams.cpp" />
     <ClCompile Include="..\..\common\actions\Laser.cpp" />
     <ClCompile Include="..\..\common\actions\LaserParams.cpp" />
     <ClCompile Include="..\..\common\actions\Lightning.cpp" />
@@ -500,7 +499,6 @@
     <ClInclude Include="..\..\common\actions\CallbackWeapon.h" />
     <ClInclude Include="..\..\common\actions\CameraPositionAction.h" />
     <ClInclude Include="..\..\common\actions\Explosion.h" />
-    <ClInclude Include="..\..\common\actions\ExplosionParams.h" />
     <ClInclude Include="..\..\common\actions\Laser.h" />
     <ClInclude Include="..\..\common\actions\LaserParams.h" />
     <ClInclude Include="..\..\common\actions\Lightning.h" />

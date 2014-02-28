@@ -211,12 +211,6 @@ bool TanketAccessories::accessoryAllowed(Accessory *accessory, int count)
 	{
 		return false;
 	}
-
-	// Check if this is an ai only weapon
-	if (accessory->getAIOnly())
-	{
-		return false;
-	}
 	
 	// Check if this is a bot only weapon
 	if (accessory->getBotOnly())

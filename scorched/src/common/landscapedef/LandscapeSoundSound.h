@@ -59,7 +59,6 @@ public:
 	LandscapeSoundSoundFile();
 	virtual ~LandscapeSoundSoundFile();
 
-	virtual bool readXML(XMLNode *node);
 	virtual bool play(VirtualSoundSource *source, float ambientGain);
 	virtual float getGain() { return gain.getValue().asFloat(); }
 

@@ -22,15 +22,13 @@
 #define __INCLUDE_WeaponGiveScoreh_INCLUDE__
 
 #include <actions/CallbackWeapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class WeaponGiveScore  : public WeaponCallback
 {
 public:
 	WeaponGiveScore();
 	virtual ~WeaponGiveScore();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -45,7 +43,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponGiveScore, AccessoryPart::AccessoryWeapon);
 
 protected:
-	int score_;
+	XMLEntryInt score_;
 
 };
 

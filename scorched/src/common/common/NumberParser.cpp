@@ -31,10 +31,10 @@ NumberParser::NumberParser(const char *valueName) :
 
 }
 
-NumberParser::NumberParser(const char *valueName, fixed value) :
+NumberParser::NumberParser(const char *valueName, const char *expression) :
 	valueName_(valueName)
 {
-	setExpression(value);
+	setExpression(expression);
 }
 
 NumberParser::~NumberParser()
@@ -74,14 +74,6 @@ bool NumberParser::setExpression(const char *expression)
 {
 	expression_ = expression;
 	// test to ensure it's valid! TODO
-	this->getOperands();
-
-	return true;
-}
-
-bool NumberParser::setExpression(fixed value)
-{
-	expression_ = value.asString();
 	this->getOperands();
 
 	return true;
@@ -135,9 +127,7 @@ fixed NumberParser::getValue(ScorchedContext &context) //RandomGenerator &genera
 // Allow for default values to be passed along for optional attributes
 fixed NumberParser::getValue(ScorchedContext &context, fixed defaultValue)
 {
-	if (expression_.size() == 0)
-		this->setExpression(defaultValue);
-
+	if (expression_.size() == 0) return defaultValue;
 	return getValue(context);
 }
 

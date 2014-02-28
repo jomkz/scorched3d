@@ -21,8 +21,19 @@
 #include <landscapedef/LandscapeMusic.h>
 #include <math.h>
 
+static XMLEntryEnum::EnumEntry LandscapeMusicStateListEnum[] =
+{
+	{ "loading", LandscapeMusicStateList::StateLoading },
+	{ "buying", LandscapeMusicStateList::StateBuying },
+	{ "playing", LandscapeMusicStateList::StatePlaying },
+	{ "shot", LandscapeMusicStateList::StateShot },
+	{ "score", LandscapeMusicStateList::StateScore },
+	{ "wait", LandscapeMusicStateList::StateWait },
+	{ "", -1 }
+};
+
 LandscapeMusicStateList::LandscapeMusicStateList() :
-	XMLEntryList<XMLEntryString>("The list of state names that this music should be played in.")
+	XMLEntryList<XMLEntryEnum>("The list of state names that this music should be played in.")
 {
 }
 
@@ -30,9 +41,9 @@ LandscapeMusicStateList::~LandscapeMusicStateList()
 {
 }
 
-XMLEntryString *LandscapeMusicStateList::createXMLEntry()
+XMLEntryEnum *LandscapeMusicStateList::createXMLEntry()
 {
-	return new XMLEntryString("Play/enable the given music for the given state.");
+	return new XMLEntryEnum("Play/enable the given music for the given state.", LandscapeMusicStateListEnum);
 }
 
 LandscapeMusic::LandscapeMusic() :
@@ -46,30 +57,6 @@ LandscapeMusic::LandscapeMusic() :
 
 LandscapeMusic::~LandscapeMusic()
 {
-}
-
-bool LandscapeMusic::readXML(XMLNode *node)
-{
-	if (!XMLEntryContainer::readXML(node)) return false;
-
-	std::list<XMLEntryString *>::iterator itor = playstatelist.getChildren().begin(),
-		end = playstatelist.getChildren().end();
-
-	for (;itor!=end; itor++)
-	{
-		std::string state = (*itor)->getValue();
-		PlayState playstate;
-		if (0 == strcmp(state.c_str(), "loading")) playstate = StateLoading;
-		else if (0 == strcmp(state.c_str(), "buying")) playstate = StateBuying;
-		else if (0 == strcmp(state.c_str(), "playing")) playstate = StatePlaying;
-		else if (0 == strcmp(state.c_str(), "shot")) playstate = StateShot;
-		else if (0 == strcmp(state.c_str(), "score")) playstate = StateScore;
-		else if (0 == strcmp(state.c_str(), "wait")) playstate = StateWait;
-		else return node->returnError("Unknown playstate type");
-		playstates.push_back(playstate);
-	}
-	if (playstates.empty()) return node->returnError("No playstats defined");
-	return true;
 }
 
 LandscapeMusicList::LandscapeMusicList() : 

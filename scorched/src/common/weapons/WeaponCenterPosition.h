@@ -22,15 +22,13 @@
 #define __INCLUDE_WeaponCenterPositionh_INCLUDE__
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponCenterPosition  : public Weapon
 {
 public:
 	WeaponCenterPosition();
 	virtual ~WeaponCenterPosition();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,8 +37,8 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponCenterPosition, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser height_;
-	Weapon *nextAction_;
+	XMLEntryNumberParser height_;
+	XMLEntryWeaponChoice nextAction_;
 };
 
 #endif // __INCLUDE_WeaponCenterPositionh_INCLUDE__

@@ -24,16 +24,32 @@
 #include <engine/ActionController.h>
 #include <common/Defines.h>
 
+static XMLEntryEnum::EnumEntry deformTypeEnum[] =
+{
+	{ "up", WeaponExplosion::DeformUp },
+	{ "down", WeaponExplosion::DeformDown },
+	{ "none", WeaponExplosion::DeformNone },
+	{ "", -1 }
+};
+
 REGISTER_ACCESSORY_SOURCE(WeaponExplosion);
 
 WeaponExplosion::WeaponExplosion() :
-	sizeExp_("WeaponExplosion::sizeExp"),
-	deformSizeExp_("WeaponExplosion::deformSizeExp"),
-	shakeExp_("WeaponExplosion::shakeExp"),
-	minLifeExp_("WeaponExplosion::minLifeExp"), maxLifeExp_("WeaponExplosion::maxLifeExp"),
-	createMushroomAmountExp_("WeaponExplosion::createMushroomAmountExp"),
-	hurtAmountExp_("WeaponExplosion::hurtAmountExp")
+	Weapon("WeaponExplosion", 
+		"Creates an explosion of the given size. Explosions can be used for creating or removing earth, damaging tanks, and various other effects."),
+	deform_("Determines how the explosion effects the landscape", 0, (int) DeformDown, deformTypeEnum),
+	deformSizeExp_("WeaponExplosion::deformSizeExp", "Actual radius of the explosion, in world units"),
+	hurtAmountExp_("WeaponExplosion::hurtAmountExp", "How much damage the explosion will do, 1 = 100 pts"),
+	explodeUnderGround_("Can the explosion be underground, if not any underground explosions will do nothing", 0, true),
+	onlyHurtShield_("Explosion will only do damage to shields", 0, false),
+	noCameraTrack_("Do use this explosion for the action camera views", 0, false)
 {
+	addChildXMLEntry("deform", &deform_);
+	addChildXMLEntry("size", &deformSizeExp_);
+	addChildXMLEntry("hurtamount", &hurtAmountExp_);
+	addChildXMLEntry("explodeunderground", &explodeUnderGround_);
+	addChildXMLEntry("onlyhurtshield", &onlyHurtShield_);
+	addChildXMLEntry("nocameratrack", &noCameraTrack_);
 
 }
 
@@ -42,46 +58,11 @@ WeaponExplosion::~WeaponExplosion()
 
 }
 
-bool WeaponExplosion::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-    if (!accessoryNode->getNamedChild("size", sizeExp_)) return false;
-	if (accessoryNode->getNamedChild("deformsize", deformSizeExp_, false))
-	{
-		deformSizeSet_ = true;
-	}
-	else
-	{
-		deformSizeSet_ = false;
-	}
-	if (!accessoryNode->getNamedChild("hurtamount", hurtAmountExp_)) return false;
-
-	accessoryNode->getNamedChild("explosionshake", shakeExp_, false);
-	accessoryNode->getNamedChild("createmushroomamount", createMushroomAmountExp_, false);
-	accessoryNode->getNamedChild("minlife", minLifeExp_, false);
-	accessoryNode->getNamedChild("maxlife", maxLifeExp_, false);
-
-	if (!params_.parseXML(accessoryNode)) return false;
-
-	return true;
-}
-
 void WeaponExplosion::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	ExplosionParams *newParams = new ExplosionParams(params_);
-
-	newParams->setSize(sizeExp_.getValue(context, params_.getSize()));
-	newParams->setDeformSize(deformSizeSet_?deformSizeExp_.getValue(context, params_.getDeformSize()):newParams->getSize());
-	newParams->setHurtAmount(hurtAmountExp_.getValue(context, params_.getHurtAmount()));
-	newParams->setShake(shakeExp_.getValue(context, params_.getShake()));
-	newParams->setMinLife(minLifeExp_.getValue(context, params_.getMinLife()));
-	newParams->setMaxLife(maxLifeExp_.getValue(context, params_.getMaxLife()));
-	newParams->setCreateMushroomAmount(createMushroomAmountExp_.getValue(context, params_.getCreateMushroomAmount()));
-
 	Action *action = new Explosion(
-		position, velocity, newParams, this, weaponContext);
+		position, velocity, this, weaponContext);
 	context.getActionController().addAction(action);	
 }
 

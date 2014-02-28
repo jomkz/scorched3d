@@ -35,7 +35,7 @@ class NumberParser
 {
 public:
 	NumberParser(const char *valueName);
-	NumberParser(const char *valueName, fixed value);
+	NumberParser(const char *valueName, const char *expression);
 	virtual ~NumberParser();
 
 	fixed getValue(ScorchedContext &context); 
@@ -43,7 +43,7 @@ public:
 	int getInt(ScorchedContext &context);
 	unsigned int getUInt(ScorchedContext &context);
 	bool setExpression(const char *expression);
-	bool setExpression(fixed value);
+	const char *getExpression() { return expression_.c_str(); }
 
 protected:
 	const char *valueName_;

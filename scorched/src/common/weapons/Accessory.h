@@ -21,18 +21,24 @@
 #if !defined(AFX_ACCESSORY_H__21765D5B_DB45_4275_AB63_BAD1E84C1790__INCLUDED_)
 #define AFX_ACCESSORY_H__21765D5B_DB45_4275_AB63_BAD1E84C1790__INCLUDED_
 
-#include <common/ToolTip.h>
-#include <common/ModelID.h>
-#include <XML/XMLFile.h>
+#include <XML/XMLEntryComplexTypes.h>
 #include <weapons/AccessoryPart.h>
 #include <weapons/AccessoryCreateContext.h>
 #include <lang/LangString.h>
 #include <string>
 #include <map>
 
-class Tank;
-class MissileMesh;
-class Accessory  
+class AccessoryClassXmlEntry : public XMLEntryTypeChoice<XMLEntry>
+{
+public:
+	AccessoryClassXmlEntry();
+	virtual ~AccessoryClassXmlEntry();
+
+	virtual XMLEntry *createXMLEntry(const std::string &type);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
+};
+
+class Accessory : public XMLEntryContainer
 {
 public:
 	Accessory(unsigned int accessoryId);
@@ -47,72 +53,58 @@ public:
 		ePositionSelectFuelLimit = 4
 	};
 
-	bool parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode);
-
 	const char *getActivationSound();
-	const char *getName() { return name_.c_str(); }
+	const char *getName() { return name_.getValue().c_str(); }
 	LangString &getStringName();
-	const char *getDescription() { return description_.c_str(); }
-	int getPrice() { return price_; }
+	const char *getDescription() { return description_.getValue().c_str(); }
+	int getPrice() { return price_.getValue(); }
 	int getSellPrice() { return sellPrice_; }
 	int getOriginalSellPrice() { return originalSellPrice_; }
 	int getOriginalPrice() { return originalPrice_; }
-	int getFreeMarketLimits() { return freemarketLimits_; }
-	int getBundle() { return bundle_; }
-	int getArmsLevel() { return armsLevel_; }
-	int getMaximumNumber() { return maximumNumber_; }
-	int getStartingNumber() { return startingNumber_; }
-	int getUseNumber() { return useNumber_; }
-	bool getAIOnly() { return aiOnly_; }
-	bool getBotOnly() { return botOnly_; }
-	bool getNoBuy() { return noBuy_; }
-	PositionSelectType getPositionSelect() { return positionSelect_; }
-	int getPositionSelectLimit() { return positionSelectLimit_; }
+	int getFreeMarketLimits() { return freemarketLimits_.getValue(); }
+	int getBundle() { return bundle_.getValue(); }
+	int getArmsLevel() { return armsLevel_.getValue(); }
+	int getMaximumNumber() { return maximumNumber_.getValue(); }
+	int getStartingNumber() { return startingNumber_.getValue(); }
+	int getUseNumber() { return useNumber_.getValue(); }
+	bool getBotOnly() { return botOnly_.getValue(); }
+	bool getNoBuy() { return noBuy_.getValue(); }
+	PositionSelectType getPositionSelect() { return  (PositionSelectType) positionSelect_.getValue(); }
+	int getPositionSelectLimit() { return positionSelectLimit_.getValue(); }
 
-	ToolTip &getToolTip() { return toolTip_; }
-	const char *getIconName() { return iconName_.c_str(); }
-	const char *getGroupName() { return groupName_.c_str(); }
-	const char *getTabGroupName() { return tabGroupName_.c_str(); }
+	const char *getIconName() { return iconName_.getValue().c_str(); }
+	const char *getGroupName() { return groupName_.getValue().c_str(); }
+	const char *getTabGroupName() { return tabGroupName_.getValue().c_str(); }
 	AccessoryPart *getAction() { return accessoryAction_; }
-	fixed getModelScale() { return modelScale_; }
-	ModelID &getModel() { return modelId_; }
-	bool getMuzzleFlash() { return muzzleFlash_; }
+	XMLEntryModelID &getModel() { return modelId_; }
 
 	AccessoryPart::AccessoryType getType() { return accessoryAction_->getType(); }
 
-	void setPrice(int p) { if (p>0) price_ = p; }
+	void setPrice(int p) { if (p>0) price_.setValue(p); }
 	void setSellPrice(int p) { if (p>0) sellPrice_ = p; }
 
 	unsigned int getAccessoryId() { return accessoryId_; }
+
+	// XMLEntryContainer
+	virtual bool readXML(XMLNode *accessoryNode, void *xmlData);
 protected:
 	unsigned int nextAccessoryId_;
 	unsigned int accessoryId_;
-	bool aiOnly_;
-	bool botOnly_;
-	bool noBuy_;
 	AccessoryPart *accessoryAction_;
-	PositionSelectType positionSelect_;
-	ToolTip toolTip_;
-	ModelID modelId_;
 	LangString stringName_;
-	std::string iconName_;
-	std::string groupName_, tabGroupName_;
-	std::string name_;
-	std::string description_;
-	std::string activationSound_;
-	int positionSelectLimit_;
-	int price_;
-	int originalPrice_;
-	int bundle_;
-	int armsLevel_;
-	int sellPrice_;
-	int originalSellPrice_;
-	int freemarketLimits_;
-	int maximumNumber_;
-	int useNumber_;
-	int startingNumber_;
-	fixed modelScale_;
-	bool muzzleFlash_;
+	int sellPrice_, originalPrice_, originalSellPrice_;
+
+	XMLEntryString name_, description_;
+	XMLEntryInt price_, bundle_;
+	XMLEntryInt startingNumber_, useNumber_, maximumNumber_;
+	XMLEntryBool botOnly_, noBuy_;
+	XMLEntryModelID modelId_;
+	XMLEntryString iconName_, groupName_, tabGroupName_;
+	XMLEntryString activationSound_;
+	XMLEntryEnum positionSelect_;
+	XMLEntryInt positionSelectLimit_;
+	XMLEntryInt armsLevel_;
+	XMLEntryInt freemarketLimits_;
 };
 
 #endif // !defined(AFX_ACCESSORY_H__21765D5B_DB45_4275_AB63_BAD1E84C1790__INCLUDED_)

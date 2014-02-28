@@ -62,7 +62,7 @@ LandscapeEventAction::~LandscapeEventAction()
 LandscapeEventActionFireWeapon::LandscapeEventActionFireWeapon() :
 	LandscapeEventAction("LandscapeEventActionFireWeapon", 
 		"When the event fires, fires the given weapon."),
-	weapon("The name of the weapon to fire, weapons are defined in the accessories file.")
+	weapon("The name of the weapon accessory to fire, accessory are defined in the accessories file.")
 {
 	addChildXMLEntry("weapon", &weapon);
 }
@@ -92,7 +92,7 @@ void LandscapeEventActionFireWeapon::fireAction(ScorchedContext &context)
 LandscapeEventActionFireWeaponFromGroup::LandscapeEventActionFireWeaponFromGroup() :
 	LandscapeEventAction("LandscapeEventActionFireWeaponFromGroup", 
 		"When the event fires, fires the given weapon from an object in the specified group."),
-	weapon("The name of the weapon to fire, weapons are defined in the accessories file."),
+	weapon("The name of the weapon accessory to fire, accessory are defined in the accessories file."),
 	groupname("The name of the group to randomly choose an object from.")
 {
 	addChildXMLEntry("weapon", &weapon, "groupname", &groupname);

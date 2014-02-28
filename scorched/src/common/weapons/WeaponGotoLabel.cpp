@@ -23,26 +23,29 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponGotoLabel);
 
-WeaponGotoLabel::WeaponGotoLabel()
+WeaponGotoLabel::WeaponGotoLabel() :
+	Weapon("WeaponGotoLabel", 
+		"Loops back to a place in the XML defined by a WeaponLabel tag. This can be used to make chains of translates and other hard to repeat actions."),
+	count_("Number of times to loop back"),
+	label_("Label name of spot in code to loop back to")
 {
+	addChildXMLEntry("label", &label_);
+	addChildXMLEntry("count", &count_);
 }
 
 WeaponGotoLabel::~WeaponGotoLabel()
 {
 }
 
-bool WeaponGotoLabel::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
+bool WeaponGotoLabel::readXML(XMLNode *node, void *xmlData)
 {
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
+	if (!Weapon::readXML(node, xmlData)) return false;
 
-	std::string label;
-	if (!accessoryNode->getNamedChild("label", label)) return false;
-	if (!accessoryNode->getNamedChild("count", count_)) return false;
-
-	weaponLabel_ = context.getLabel(label.c_str());
+	AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
+	weaponLabel_ = context->getLabel(label_.getValue().c_str());
 	if (!weaponLabel_)
 	{
-		return accessoryNode->returnError("Failed to find the named label");
+		return node->returnError("Failed to find the named label");
 	}
 
 	return true;
@@ -52,7 +55,7 @@ void WeaponGotoLabel::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	int doneCount = weaponContext.getInternalContext().getIncLabelCount(getAccessoryPartId());
-	if (doneCount <= count_)
+	if (doneCount <= count_.getValue())
 	{
 		weaponLabel_->fire(context, weaponContext, position, velocity);
 	}

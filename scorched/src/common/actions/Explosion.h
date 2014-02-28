@@ -22,17 +22,15 @@
 #define __INCLUDE_Explosionh_INCLUDE__
 
 #include <actions/Action.h>
-#include <weapons/Weapon.h>
 #include <common/FixedVector.h>
 
-class ExplosionParams;
+class WeaponExplosion;
 class Explosion : public Action
 {
 public:
 	Explosion(FixedVector &position, 
 		FixedVector &velocity,
-		ExplosionParams *params,
-		Weapon *weapon, 
+		WeaponExplosion *weapon, 
 		WeaponFireContext &weaponContext);
 	virtual ~Explosion();
 
@@ -43,11 +41,10 @@ public:
 	virtual std::string getActionDetails();
 	virtual std::string getActionType() { return "Explosion"; }
 protected:
-	ExplosionParams *params_;
 	bool firstTime_;
 	FixedVector position_, velocity_;
-	fixed totalTime_;
-	Weapon *weapon_;
+	fixed totalTime_, explosionSize_;
+	WeaponExplosion *weapon_;
 	WeaponFireContext weaponContext_;
 	
 };

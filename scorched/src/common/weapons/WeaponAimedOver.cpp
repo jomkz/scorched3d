@@ -36,19 +36,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponAimedOver);
 
-WeaponAimedOver::WeaponAimedOver() 
+WeaponAimedOver::WeaponAimedOver() :
+	WeaponAimed("WeaponAimedOver", 
+		"Aims a number of the next primitive at nearby targets. "
+		"Projectiles shot with this primitive are aimed upward somewhat and will travel toward the target in a parabolic arc. ")
 {
 
 }
 
 WeaponAimedOver::~WeaponAimedOver()
 {
-}
-
-bool WeaponAimedOver::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!WeaponAimed::parseXML(context, accessoryNode)) return false;
-	return true;
 }
 
 void WeaponAimedOver::fireWeapon(ScorchedContext &context,

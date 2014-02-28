@@ -95,7 +95,7 @@ LandscapeMovementShips::~LandscapeMovementShips()
 }
 
 LandscapeMovementSplineControlPoints::LandscapeMovementSplineControlPoints() :
-	XMLEntryList("The list of control points that defined the spline curve")
+	XMLEntryList("The list of control points that defined the spline curve", 3)
 {
 }
 
@@ -123,14 +123,6 @@ LandscapeMovementSpline::~LandscapeMovementSpline()
 {
 }
 
-bool LandscapeMovementSpline::readXML(XMLNode *parentNode)
-{
-	if (!LandscapeMovement::readXML(parentNode)) return false;
-
-	if (points.getChildren().size() < 3) return parentNode->returnError("Must have at least 3 control points");
-	return true;
-}
-
 LandscapeMovementBoids::LandscapeMovementBoids() :
 	LandscapeMovement("LandscapeMovementBoids", 
 		"A movement type where objects are moved due to a Boids simulation, i.e. in a flocking motion"),
@@ -149,9 +141,9 @@ LandscapeMovementBoids::~LandscapeMovementBoids()
 {
 }
 
-bool LandscapeMovementBoids::readXML(XMLNode *parentNode)
+bool LandscapeMovementBoids::readXML(XMLNode *parentNode, void *xmlData)
 {
-	if (!LandscapeMovement::readXML(parentNode)) return false;
+	if (!LandscapeMovement::readXML(parentNode, xmlData)) return false;
 
 	if (maxbounds.getValue()[0] - minbounds.getValue()[0] < fixed(25) ||
 		maxbounds.getValue()[1] - minbounds.getValue()[1] < fixed(25) ||

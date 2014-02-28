@@ -22,7 +22,9 @@
 #include <engine/ScorchedContext.h>
 #include <engine/ObjectGroups.h>
 
-ObjectGroupEntryDefinition::ObjectGroupEntryDefinition()
+ObjectGroupEntryDefinition::ObjectGroupEntryDefinition() :
+	XMLEntryList<XMLEntryString>(
+		"Defines a list of object group names that this object will be added to, the groups will be created if they don't already exist.", 0)
 {
 }
 
@@ -30,23 +32,20 @@ ObjectGroupEntryDefinition::~ObjectGroupEntryDefinition()
 {
 }
 
-bool ObjectGroupEntryDefinition::readXML(XMLNode *node, const std::string &nodeName)
+XMLEntryString *ObjectGroupEntryDefinition::createXMLEntry()
 {
-	std::string groupname;
-	while (node->getNamedChild(nodeName.c_str(), groupname, false))
-	{
-		groupnames_.push_back(groupname);
-	}
-	return true;
+	return new XMLEntryString("The name of an object group, the group will be created if it doesn't already exist");
 }
 
 void ObjectGroupEntryDefinition::addToGroups(
 	ObjectGroups &objectGroups,
 	ObjectGroupEntry *objectGroupEntry)
 {
-	for (unsigned int i=0; i<groupnames_.size(); i++)
+	std::list<XMLEntryString *>::iterator itor = getChildren().begin(),
+		end = getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		std::string groupname = groupnames_[i];
+		std::string groupname = (*itor)->getValue();
 		addToGroup(groupname.c_str(), objectGroups, objectGroupEntry);
 	}
 }
@@ -61,4 +60,19 @@ void ObjectGroupEntryDefinition::addToGroup(
 	{
 		group->addObject(objectGroupEntry);
 	}
+}
+
+ObjectGroupReferenceDefinition::ObjectGroupReferenceDefinition() :
+	XMLEntryList<XMLEntryString>(
+		"Defines a list of object group names that objects can be retrieved from", 0)
+{
+}
+
+ObjectGroupReferenceDefinition::~ObjectGroupReferenceDefinition()
+{
+}
+
+XMLEntryString *ObjectGroupReferenceDefinition::createXMLEntry()
+{
+	return new XMLEntryString("The name of an object group, the group will be used to retrieve objects from");
 }

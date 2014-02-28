@@ -31,24 +31,18 @@
 REGISTER_ACCESSORY_SOURCE(WeaponGiveLife);
 
 WeaponGiveLife::WeaponGiveLife() :
-	life_("WeaponGiveLife::life")
+	WeaponCallback("WeaponGiveLife", "Gives a specified amount of life (health) to the player. It can also be used to reduce the player's health."),
+	life_("WeaponGiveLife::life", "Amount of life to give to the player"),
+	exceedMax_("If true, player can exceed their maximum health.  "
+		"When exceedmax is  true, the value used must be over 100 to give a maximum health over 100")
 {
-
+	addChildXMLEntry("life", &life_);
+	addChildXMLEntry("exceedmax", &exceedMax_);
 }
 
 WeaponGiveLife::~WeaponGiveLife()
 {
 
-}
-
-bool WeaponGiveLife::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("life", life_)) return false;
-	if (!accessoryNode->getNamedChild("exceedmax", exceedMax_)) return false;
-
-	return true;
 }
 
 void WeaponGiveLife::fireWeapon(ScorchedContext &context,
@@ -71,7 +65,7 @@ void WeaponGiveLife::weaponCallback(
 	if (life > 0)
 	{
 		if (life > tank->getLife().getMaxLife() &&
-			exceedMax_)
+			exceedMax_.getValue())
 		{
 			tank->getLife().setMaxLife(life);
 		}

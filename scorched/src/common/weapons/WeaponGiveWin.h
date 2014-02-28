@@ -22,15 +22,13 @@
 #define __INCLUDE_WeaponGiveWinh_INCLUDE__
 
 #include <actions/CallbackWeapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class WeaponGiveWin  : public WeaponCallback
+class WeaponGiveWin : public WeaponCallback
 {
 public:
 	WeaponGiveWin();
 	virtual ~WeaponGiveWin();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -45,8 +43,8 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponGiveWin, AccessoryPart::AccessoryWeapon);
 
 protected:
-	std::string objective_;
-	int winningTeam_;
+	XMLEntryString objective_;
+	XMLEntryInt winningTeam_;
 
 };
 

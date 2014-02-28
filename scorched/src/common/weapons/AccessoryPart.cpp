@@ -23,7 +23,8 @@
 
 unsigned int AccessoryPart::nextAccessoryPartId_ = 100000;
 
-AccessoryPart::AccessoryPart() :
+AccessoryPart::AccessoryPart(const char *typeName, const char *description) :
+	XMLEntryContainer(typeName, description),
 	accessoryPartId_(++nextAccessoryPartId_),
 	parent_(0)
 {

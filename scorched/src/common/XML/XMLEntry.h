@@ -80,7 +80,7 @@ public:
 	XMLEntry();
 	virtual ~XMLEntry();
 
-	virtual bool readXML(XMLNode *node) = 0;
+	virtual bool readXML(XMLNode *node, void *xmlData) = 0;
 	virtual void writeXML(XMLNode *node) = 0;
 	virtual unsigned int getData() = 0;
 
@@ -127,7 +127,7 @@ public:
 	std::map<std::string, XMLEntry *> &getChildren() { return xmlEntryChildren_; }
 
 	// XMLEntry
-	virtual bool readXML(XMLNode *node);
+	virtual bool readXML(XMLNode *node, void *xmlData);
 	virtual void writeXML(XMLNode *node);
 	virtual unsigned int getData() { return required_?eDataRequired:0; }
 	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
@@ -166,7 +166,7 @@ public:
 	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
 	virtual void getDescription(std::string &result) { result = xmlDescription_; }
 
-	virtual bool readXML(XMLNode *node)
+	virtual bool readXML(XMLNode *node, void *xmlData)
 	{
 		if (!node->getNamedParameter("type", type_)) 
 		{
@@ -186,7 +186,7 @@ public:
 			return node->returnError(S3D::formatStringBuffer(
 				"Failed to create the type not specified as a type : \"%s\"", type_.c_str()));
 		}
-		if (!value_->readXML(node)) return false;
+		if (!value_->readXML(node, xmlData)) return false;
 
 		return true;
 	}
@@ -264,10 +264,10 @@ public:
 	}
 	virtual void getDescription(std::string &result) { result = xmlDescription_; }
 
-	virtual bool readXML(XMLNode *node)
+	virtual bool readXML(XMLNode *node, void *xmlData)
 	{
 		T *newEntry = createXMLEntry();
-		if (!newEntry->readXML(node)) return false;
+		if (!newEntry->readXML(node, xmlData)) return false;
 		xmlEntryChildren_.push_back(newEntry);
 
 		return true;

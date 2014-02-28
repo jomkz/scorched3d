@@ -21,7 +21,7 @@
 #if !defined(AFX_ACCESSORYPART_H__21765D5B_DB45_4275_AB63_BAD1E84C1790__INCLUDED_)
 #define AFX_ACCESSORYPART_H__21765D5B_DB45_4275_AB63_BAD1E84C1790__INCLUDED_
 
-#include <XML/XMLFile.h>
+#include <XML/XMLEntry.h>
 #include <net/NetBuffer.h>
 #include <map>
 
@@ -37,7 +37,7 @@
 class Accessory;
 class AccessoryStore;
 class AccessoryCreateContext;
-class AccessoryPart  
+class AccessoryPart : public XMLEntryContainer
 {
 public:
 	enum AccessoryType
@@ -49,7 +49,7 @@ public:
 		AccessoryBattery
 	};
 
-	AccessoryPart();
+	AccessoryPart(const char *typeName, const char *description);
 	virtual ~AccessoryPart();
 
 	void setParent(Accessory *parent) { parent_ = parent; }

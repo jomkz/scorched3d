@@ -22,6 +22,7 @@
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <common/OptionsGame.h>
+#include <weapons/Accessory.h>
 
 void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
@@ -33,6 +34,8 @@ void DocumentGenerator::generatDocumentation(const std::string &directory)
 	landscapeTex.generateDocumentation(documentGenerator);
 	LandscapeDefn landscapeDefn(0);
 	landscapeDefn.generateDocumentation(documentGenerator);
+	Accessory accessory(0);
+	accessory.generateDocumentation(documentGenerator);
 
 	documentGenerator.writeDocumentation();
 }

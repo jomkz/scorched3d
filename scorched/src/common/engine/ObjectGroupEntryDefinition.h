@@ -21,30 +21,37 @@
 #if !defined(__INCLUDE_ObjectGroupEntryDefinitionh_INCLUDE__)
 #define __INCLUDE_ObjectGroupEntryDefinitionh_INCLUDE__
 
-#include <XML/XMLNode.h>
+#include <XML/XMLEntrySimpleTypes.h>
 #include <vector>
 #include <string>
 
 class ObjectGroupEntry;
 class ObjectGroups;
-class ObjectGroupEntryDefinition
+class ObjectGroupEntryDefinition : public XMLEntryList<XMLEntryString>
 {
 public:
 	ObjectGroupEntryDefinition();
 	virtual ~ObjectGroupEntryDefinition();
 
-	bool readXML(XMLNode *node, const std::string &nodeName);
+	virtual XMLEntryString *createXMLEntry();
 
-	bool hasGroups() { return !groupnames_.empty(); }
+	bool hasGroups() { return !getChildren().empty(); }
 	void addToGroups(ObjectGroups &objectGroups,
 		ObjectGroupEntry *objectGroupEntry);
 
 protected:
-	std::vector<std::string> groupnames_;
-
 	void addToGroup(const char *groupName,
 		ObjectGroups &objectGroups,
 		ObjectGroupEntry *objectGroupEntry);
+};
+
+class ObjectGroupReferenceDefinition : public XMLEntryList<XMLEntryString>
+{
+public:
+	ObjectGroupReferenceDefinition();
+	virtual ~ObjectGroupReferenceDefinition();
+
+	virtual XMLEntryString *createXMLEntry();
 };
 
 #endif // __INCLUDE_ObjectGroupEntryDefinitionh_INCLUDE__

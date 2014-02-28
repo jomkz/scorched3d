@@ -47,7 +47,7 @@ void XMLEntrySimpleType::getDescription(std::string &result)
 	}
 }
 
-bool XMLEntrySimpleType::readXML(XMLNode *node)
+bool XMLEntrySimpleType::readXML(XMLNode *node, void *xmlData)
 {
 	if (!setValueFromString(node->getContent()))
 	{
@@ -218,7 +218,7 @@ bool XMLEntrySimpleContainer::readFromFile(const std::string &filePath)
 	if (!file.getRootNode()) return true;
 
 	// Read the options from the XML node
-	return readXML(file.getRootNode());
+	return readXML(file.getRootNode(), 0);
 }
 
 void XMLEntrySimpleContainer::addToArgParser(ARGParser &parser)
@@ -320,6 +320,13 @@ bool XMLEntryBoundedInt::setValue(int value)
 {
 	if (value < minValue_ || value > maxValue_) return false;
 	return XMLEntryInt::setValue(value);
+}
+
+XMLEntryEnum::XMLEntryEnum(const char *description,
+	XMLEntryEnum::EnumEntry enums[]) :
+	XMLEntryInt(description), 
+	enums_(enums)
+{	
 }
 
 XMLEntryEnum::XMLEntryEnum(const char *description,

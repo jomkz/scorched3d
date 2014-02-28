@@ -35,7 +35,7 @@ void LandscapeOptions::getDescription(std::string &result)
 	result = "Defines the game options for this level, these options override any set globaly as the server settings.";
 }
 
-bool LandscapeOptions::readXML(XMLNode *parentNode)
+bool LandscapeOptions::readXML(XMLNode *parentNode, void *xmlData)
 {
 	std::list<XMLNode *>::iterator itor = parentNode->getChildren().begin(),
 		end = parentNode->getChildren().end();
@@ -44,5 +44,5 @@ bool LandscapeOptions::readXML(XMLNode *parentNode)
 		changedOptionNames_.push_back((*itor)->getName());
 	}
 
-	return OptionsGame::readXML(parentNode);
+	return OptionsGame::readXML(parentNode, xmlData);
 }

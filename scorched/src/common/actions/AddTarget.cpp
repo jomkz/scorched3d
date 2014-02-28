@@ -33,9 +33,11 @@
 #include <common/OptionsScorched.h>
 
 AddTarget::AddTarget(FixedVector &position,
+	FixedVector &velocity,
 	WeaponAddTarget *addTarget) :
 	Action(true),
 	position_(position),
+	velocity_(velocity),
 	addTarget_(addTarget)
 {
 
@@ -54,7 +56,7 @@ void AddTarget::simulate(fixed frameTime, bool &remove)
 	unsigned int playerId = TankAIAdder::getNextTargetId(*context_);
 
 	Target *target = addTarget_->getTargetDefinition().createTarget(
-		playerId, position_, FixedVector::getNullVector(), *context_, 
+		playerId, position_, velocity_, *context_, 
 		context_->getSimulator().getRandomGenerator());
 
 	if (context_->getOptionsGame().getActionSyncCheck())

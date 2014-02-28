@@ -22,14 +22,52 @@
 #define __INCLUDE_XMLEntryComplexTypesh_INCLUDE__
 
 #include <XML/XMLEntrySimpleTypes.h>
+#include <common/NumberParser.h>
 
 class XMLEntryModelID : public XMLEntryContainer
 {
 public:
-	XMLEntryModelID();
+	XMLEntryModelID(bool required = true);
 	virtual ~XMLEntryModelID();
 
 	XMLEntryString meshName;
+	XMLEntryFixed scale;
+	XMLEntryFixed rotation;
+	XMLEntryFixed brightness;
+};
+
+class XMLEntryParticleID : public XMLEntryContainer
+{
+public:
+	XMLEntryParticleID(bool required = true);
+	virtual ~XMLEntryParticleID();
+
+	XMLEntryString particleName;
+};
+
+class XMLEntryNumberParser : public XMLEntry
+{
+public:
+	XMLEntryNumberParser(const char *parserName, const char *description);
+	XMLEntryNumberParser(const char *parserName, const char *description,
+		unsigned int data,
+		const std::string &defaultValue);
+	virtual ~XMLEntryNumberParser();
+
+	virtual fixed getValue(ScorchedContext &context);
+
+	// XMLEntry
+	virtual bool readXML(XMLNode *node, void *xmlData);
+	virtual void writeXML(XMLNode *node);
+	virtual unsigned int getData() { return data_; }
+
+	virtual void getTypeName(std::string &result);
+	virtual void getDescription(std::string &result);
+
+protected:
+	const char *description_;
+	unsigned int data_;
+	NumberParser value_;
 };
 
 #endif // __INCLUDE_XMLEntryComplexTypesh_INCLUDE__

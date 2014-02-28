@@ -29,9 +29,6 @@ public:
 	WeaponAimedOver();
 	virtual ~WeaponAimedOver();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	REGISTER_ACCESSORY_HEADER(WeaponAimedOver, AccessoryPart::AccessoryWeapon);
 
 protected:

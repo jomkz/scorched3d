@@ -22,17 +22,16 @@
 #define AFX_WeaponGotoLabel_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/WeaponLabel.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class WeaponGotoLabel  : public Weapon
+class WeaponGotoLabel : public Weapon
 {
 public:
 	WeaponGotoLabel();
 	virtual ~WeaponGotoLabel();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// Inherited from Weapon
+	virtual bool readXML(XMLNode *node, void *xmlData);
 	void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
 
@@ -40,8 +39,8 @@ public:
 
 protected:
 	Weapon *weaponLabel_;
-	int count_;
-
+	XMLEntryString label_;
+	XMLEntryInt count_;
 };
 
 #endif // !defined(AFX_WeaponGotoLabel_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

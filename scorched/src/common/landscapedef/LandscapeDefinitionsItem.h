@@ -91,7 +91,7 @@ public:
 
 			item = new T(defns);
 			items_[fileName] = item;
-			if (!item->readXML(file.getRootNode()))
+			if (!item->readXML(file.getRootNode(), 0))
 			{
 				S3D::dialogMessage("Scorched Landscape", 
 					S3D::formatStringBuffer("Failed to parse \"%s\"",

@@ -27,6 +27,9 @@
 class WeaponCallback : public Weapon
 {
 public:
+	WeaponCallback(const char *typeName, const char *description);
+	virtual ~WeaponCallback();
+
 	virtual void weaponCallback(
 		ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,

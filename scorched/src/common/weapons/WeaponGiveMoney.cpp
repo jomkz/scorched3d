@@ -30,23 +30,17 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveMoney);
 
-WeaponGiveMoney::WeaponGiveMoney()
+WeaponGiveMoney::WeaponGiveMoney() :
+	WeaponCallback("WeaponGiveMoney", 
+		"Gives a specified amount of money to the player, can also be used to reduce the amount of money a player has."),
+	money_("WeaponGiveMoney::money", "Amount of money to give to the player")
 {
-
+	addChildXMLEntry("money", &money_);
 }
 
 WeaponGiveMoney::~WeaponGiveMoney()
 {
 
-}
-
-bool WeaponGiveMoney::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("money", money_)) return false;
-
-	return true;
 }
 
 void WeaponGiveMoney::fireWeapon(ScorchedContext &context,
@@ -65,16 +59,18 @@ void WeaponGiveMoney::weaponCallback(
 	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
-	tank->getScore().setMoney(tank->getScore().getMoney() + money_);
+	int money = money_.getValue(context).asInt();
+
+	tank->getScore().setMoney(tank->getScore().getMoney() + money);
 
 	{
-		if (money_ > 0)
+		if (money > 0)
 		{
 			ChannelText text("combat", 
 				LANG_RESOURCE_2("TANK_GET_MONEY",
 				"[p:{0}] received {1}", 
 				tank->getTargetName(), 
-				S3D::formatMoney(money_)));
+				S3D::formatMoney(money)));
 			ChannelManager::showText(context, text);
 		}
 		else
@@ -83,7 +79,7 @@ void WeaponGiveMoney::weaponCallback(
 				LANG_RESOURCE_2("TANK_LOST_MONEY",
 				"[p:{0}] lost {1}", 
 				tank->getTargetName(), 
-				S3D::formatMoney(-money_)));
+				S3D::formatMoney(-money)));
 			ChannelManager::showText(context, text);
 		}
 	}

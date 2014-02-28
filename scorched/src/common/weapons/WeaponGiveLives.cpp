@@ -30,23 +30,17 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponGiveLives);
 
-WeaponGiveLives::WeaponGiveLives()
+WeaponGiveLives::WeaponGiveLives() :
+	WeaponCallback("WeaponGiveLives", 
+		"Gives a specified number of lives to the player, used to ressurect the player after death."),
+	lives_("Number of lives to give to the player")
 {
-
+	addChildXMLEntry("lives", &lives_);
 }
 
 WeaponGiveLives::~WeaponGiveLives()
 {
 
-}
-
-bool WeaponGiveLives::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("lives", lives_)) return false;
-
-	return true;
 }
 
 void WeaponGiveLives::fireWeapon(ScorchedContext &context,
@@ -69,16 +63,16 @@ void WeaponGiveLives::weaponCallback(
 		tank->getState().getMaxLives() > 0)
 	{
 		tank->getState().setLives(
-			S3D_MAX(tank->getState().getLives() + lives_, 1));
+			S3D_MAX(tank->getState().getLives() + lives_.getValue(), 1));
 
 		{
-			if (lives_ > 0)
+			if (lives_.getValue() > 0)
 			{
 				ChannelText text("combat", 
 					LANG_RESOURCE_2("TANK_GET_LIVE",
 					"[p:{0}] has received {1} extra live(s)", 
 					tank->getTargetName(), 
-					S3D::formatStringBuffer("%i", lives_)));
+					S3D::formatStringBuffer("%i", lives_.getValue())));
 				ChannelManager::showText(context, text);
 			}
 			else
@@ -87,7 +81,7 @@ void WeaponGiveLives::weaponCallback(
 					LANG_RESOURCE_2("TANK_LOST_LIVE",
 					"[p:{0}] has lost {1} extra live(s)", 
 					tank->getTargetName(), 
-					S3D::formatStringBuffer("%i", -lives_)));
+					S3D::formatStringBuffer("%i", -lives_.getValue())));
 				ChannelManager::showText(context, text);
 			}
 		}

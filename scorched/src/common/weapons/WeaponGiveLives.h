@@ -22,15 +22,13 @@
 #define __INCLUDE_WeaponGiveLivesh_INCLUDE__
 
 #include <actions/CallbackWeapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class WeaponGiveLives  : public WeaponCallback
 {
 public:
 	WeaponGiveLives();
 	virtual ~WeaponGiveLives();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -45,7 +43,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponGiveLives, AccessoryPart::AccessoryWeapon);
 
 protected:
-	int lives_;
+	XMLEntryInt lives_;
 
 };
 

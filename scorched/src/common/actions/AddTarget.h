@@ -28,7 +28,7 @@ class WeaponAddTarget;
 class AddTarget : public Action
 {
 public:
-	AddTarget(FixedVector &position, WeaponAddTarget *addTarget);
+	AddTarget(FixedVector &position, FixedVector &velocity, WeaponAddTarget *addTarget);
 	virtual ~AddTarget();
 
 	virtual void init();
@@ -37,7 +37,7 @@ public:
 	virtual std::string getActionType() { return "AddTarget"; }
 
 protected:
-	FixedVector position_;
+	FixedVector position_, velocity_;
 	WeaponAddTarget *addTarget_;
 
 };

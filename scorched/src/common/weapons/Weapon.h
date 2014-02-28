@@ -98,7 +98,7 @@ class Action;
 class Weapon : public AccessoryPart
 {
 public:
-	Weapon();
+	Weapon(const char *typeName, const char *description);
 	virtual ~Weapon();
 
 	virtual bool parseXML(AccessoryCreateContext &context,
@@ -108,10 +108,7 @@ public:
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity);
 
-	int getArmsLevel();
-
 protected:
-	int armsLevel_;
 
 	virtual void addWeaponSyncCheck(ScorchedContext &context,
 		WeaponFireContext &weaponContext,
@@ -119,6 +116,16 @@ protected:
 	virtual void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext,
 		FixedVector &position, FixedVector &velocity) = 0;
+};
+
+class XMLEntryWeaponChoice : public XMLEntryTypeChoice<Weapon>
+{
+public:
+	XMLEntryWeaponChoice();
+	virtual ~XMLEntryWeaponChoice();
+
+	virtual Weapon *createXMLEntry(const std::string &type);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 #endif // !defined(AFX_WEAPON_H__65439E20_84A6_406A_8FD0_045A3E7555D3__INCLUDED_)

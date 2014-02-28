@@ -65,7 +65,7 @@ LandscapeSoundSound::~LandscapeSoundSound()
 }
 
 LandscapeSoundSoundFileList::LandscapeSoundSoundFileList() :
-	XMLEntryList<XMLEntryString>("A list of files to load sounds from, a random file will be chosen each time a sound is played.")
+	XMLEntryList<XMLEntryString>("A list of files to load sounds from, a random file will be chosen each time a sound is played.", 1)
 {
 }
 
@@ -91,13 +91,6 @@ LandscapeSoundSoundFile::LandscapeSoundSoundFile() :
 
 LandscapeSoundSoundFile::~LandscapeSoundSoundFile()
 {
-}
-
-bool LandscapeSoundSoundFile::readXML(XMLNode *node)
-{
-	if (!LandscapeSoundSound::readXML(node)) return false;
-	if (files.getChildren().empty()) return node->returnError("No file node");
-	return true;
 }
 
 bool LandscapeSoundSoundFile::play(VirtualSoundSource *source, float ambientGain)

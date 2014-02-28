@@ -24,23 +24,22 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponAddTarget);
 
-WeaponAddTarget::WeaponAddTarget()
+WeaponAddTarget::WeaponAddTarget() :
+	Weapon("WeaponAddTarget",
+		"Adds/Spawns a new target.  This target will be added at the current weapon position, with the current weapon velocity."
+		"Targets can have shields and parachutes and a set amount of life. They can be made to do different things when destroyed or burnt."),
+	targetDefinition_()
 {
+	addChildXMLEntry("target", &targetDefinition_);
 }
 
 WeaponAddTarget::~WeaponAddTarget()
 {
 }
 
-bool WeaponAddTarget::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	targetDefinition_.readXML(accessoryNode);
-	return accessoryNode->failChildren();
-}
-
 void WeaponAddTarget::fireWeapon(ScorchedContext &context, 
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	Action *action = new AddTarget(position, this);
+	Action *action = new AddTarget(position, velocity, this);
 	context.getActionController().addAction(action);
 }

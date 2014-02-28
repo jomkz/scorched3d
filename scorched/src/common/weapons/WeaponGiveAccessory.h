@@ -22,7 +22,17 @@
 #define __INCLUDE_WeaponGiveAccessoryh_INCLUDE__
 
 #include <actions/CallbackWeapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
 #include <vector>
+
+class WeaponGiveAccessoryList : public XMLEntryList<XMLEntryString>
+{
+public:
+	WeaponGiveAccessoryList();
+	virtual ~WeaponGiveAccessoryList();
+
+	virtual XMLEntryString *createXMLEntry();
+};
 
 class WeaponGiveAccessory  : public WeaponCallback
 {
@@ -30,12 +40,10 @@ public:
 	WeaponGiveAccessory();
 	virtual ~WeaponGiveAccessory();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
+	virtual bool readXML(XMLNode *node, void *xmlData);
 
 	// Inherited from WeaponPowerUp
 	virtual void weaponCallback(
@@ -46,9 +54,9 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponGiveAccessory, AccessoryPart::AccessoryWeapon);
 
 protected:
-	std::vector<Accessory *> giveAccessories_;
-	int number_;
-
+	std::vector<Accessory *> giveAccessoriesList_;
+	WeaponGiveAccessoryList giveAccessories_;
+	XMLEntryInt number_;
 };
 
 #endif // __INCLUDE_WeaponGiveAccessoryh_INCLUDE__

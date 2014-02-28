@@ -39,7 +39,6 @@ Maximum range is 50.</description>
 				<maximumrange>50</maximumrange>
 			</aimedweapon>
 		</accessoryaction>
-		<nomuzzleflash/>
 		<positionselection>fuel</positionselection>
     <usenumber>0</usenumber>
 		<group>fuel</group>
@@ -61,7 +60,6 @@ Maximum range is 75.</description>
 				<maximumrange>75</maximumrange>
 			</aimedweapon>
 		</accessoryaction>
-		<nomuzzleflash/>
 		<positionselection>fuel</positionselection>
     <usenumber>0</usenumber>
 		<group>fuel</group>
@@ -186,7 +184,7 @@ near the flames will lose life.</description>
 		<bundlesize>10</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model type='MilkShape'>data/accessories/napalm/napalm.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
@@ -214,7 +212,7 @@ Any tanks near the flames will lose life.</description>
 		<bundlesize>3</bundlesize>
 		<cost>20000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model type='MilkShape'>data/accessories/napalm/napalm.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/napalm/napalm.txt</projectilemodel>
 			<collisionaction type='WeaponNapalm'>
@@ -319,7 +317,10 @@ with any tank.</description>
 		<icon>bmissile.bmp</icon>
 		<startingnumber>-1</startingnumber>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<modelscale>0.5</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>0.5</scale>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.5</projectilescale>
 			<shieldhurtfactor>0.4</shieldhurtfactor>
@@ -343,7 +344,10 @@ with any tank.</description>
 		<bundlesize>5</bundlesize>
 		<cost>2000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-		<modelscale>0.75</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>0.75</scale>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.75</projectilescale>
 			<shieldhurtfactor>0.6</shieldhurtfactor>
@@ -364,7 +368,7 @@ with any tank.</description>
 		<bundlesize>3</bundlesize>
 		<cost>8000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-		<model type='MilkShape'>data/accessories/littleboy/littleboy.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/littleboy/littleboy.txt</projectilemodel>
 			<collisionaction type='WeaponExplosion'>
@@ -385,7 +389,7 @@ with any tank.</description>
 		<bundlesize>2</bundlesize>
 		<cost>12000</cost>
 		<activationsound>data/accessories/sounds/shoot/xlarge.wav</activationsound>
-		<model type='MilkShape'>data/accessories/fatman/fatman.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>1.2</shieldhurtfactor>
 			<projectilemodel type='MilkShape'>data/accessories/fatman/fatman.txt</projectilemodel>
@@ -413,8 +417,10 @@ to cover them.</description>
 		<bundlesize>10</bundlesize>
 		<cost>3000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
-		<modelscale>0.6</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>0.6</scale>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.5</shieldhurtfactor>
 			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
@@ -441,8 +447,10 @@ cover them.</description>
 		<bundlesize>5</bundlesize>
 		<cost>5750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
-		<modelscale>0.8</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>0.8</scale>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 			<projectilescale>0.8</projectilescale>
@@ -469,7 +477,7 @@ cover them.</description>
 		<bundlesize>2</bundlesize>
 		<cost>6750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 			<collisionaction type='WeaponExplosion'>
@@ -491,7 +499,7 @@ small dirt clods in all directions.</description>
 		<bundlesize>3</bundlesize>
 		<cost>6250</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/dirt/dirt.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
 			<collisionaction type='WeaponMulti'>
@@ -604,7 +612,7 @@ remove earth from under them.</description>
 		<bundlesize>8</bundlesize>
 		<cost>1750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model type='MilkShape'>data/accessories/riot/riot.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/riot/riot.txt</projectilemodel>
 <shieldhurtfactor>0.5</shieldhurtfactor>
@@ -629,7 +637,7 @@ remove earth from under them.</description>
 		<bundlesize>3</bundlesize>
 		<cost>4250</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model type='MilkShape'>data/accessories/riot/riot.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/riot/riot.txt</projectilemodel>
 			<collisionaction type='WeaponExplosion'>
@@ -652,7 +660,7 @@ your tank when covered by dirt.</description>
 		<icon>rcharge.bmp</icon>
 		<bundlesize>10</bundlesize>
 		<cost>1800</cost>
-		<model type='MilkShape'>data/accessories/riot/riot.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
@@ -701,7 +709,7 @@ your tank when covered by dirt.</description>
 		<icon>rblast.bmp</icon>
 		<bundlesize>5</bundlesize>
 		<cost>4200</cost>
-		<model type='MilkShape'>data/accessories/riot/riot.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
@@ -751,7 +759,7 @@ in the same direction.</description>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-		<model type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
 			<collisionaction type='WeaponMulti'>
@@ -803,8 +811,10 @@ tank-seeking riot bombs.</description>
 		<bundlesize>10</bundlesize>
 		<cost>6000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
-		<modelscale>0.5</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>0.5</scale>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.5</projectilescale>
 			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
@@ -840,7 +850,7 @@ tank-seeking riot bombs.</description>
 		<bundlesize>5</bundlesize>
 		<cost>7500</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
@@ -874,8 +884,10 @@ tank-seeking riot bombs.</description>
 		<bundlesize>2</bundlesize>
 		<cost>6750</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
-		<modelscale>2</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>2</scale>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>2</projectilescale>
 			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
@@ -911,8 +923,10 @@ tanks from underground.</description>
 		<bundlesize>7</bundlesize>
 		<cost>24000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
-		<modelscale>0.5</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>0.5</scale>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.5</projectilescale>
 			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
@@ -947,7 +961,7 @@ tanks from underground.</description>
 		<bundlesize>5</bundlesize>
 		<cost>31000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
@@ -980,8 +994,10 @@ tanks from underground.</description>
 		<bundlesize>2</bundlesize>
 		<cost>37000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/digger/digger.txt</model>
-		<modelscale>2</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>2</scale>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>2</projectilescale>
 			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
@@ -1017,10 +1033,9 @@ in a straight path.</description>
 		<bundlesize>3</bundlesize>
 		<cost>16000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-		<model type='ase'>
-			<mesh>data/accessories/clusterbomb.ase</mesh>
-			<skin>data/accessories/white.bmp</skin>
-		</model>
+    <model>
+      <meshname>snakeeye</meshname>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
 			<apexcollision></apexcollision>
 			<projectilemodel type='ase'>
@@ -1056,11 +1071,10 @@ random direction.</description>
 		<bundlesize>4</bundlesize>
 		<cost>16000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-		<model type='ase'>
-			<mesh>data/accessories/clusterbomb.ase</mesh>
-			<skin>data/accessories/white.bmp</skin>
-		</model>
-		<accessoryaction type='WeaponProjectile'>
+    <model>
+      <meshname>snakeeye</meshname>
+    </model>
+    <accessoryaction type='WeaponProjectile'>
 			<apexcollision></apexcollision>
 			<projectilemodel type='ase'>
 				<mesh>data/accessories/clusterbomb.ase</mesh>
@@ -1095,9 +1109,10 @@ in a random direction.</description>
 		<bundlesize>1</bundlesize>
 		<cost>48000</cost>
 		<activationsound>data/accessories/sounds/shoot/launch.wav</activationsound>
-		<model type='MilkShape'>data/accessories/icbm/icbm.txt</model>
-		<modelscale>5</modelscale>
-		<accessoryaction type='WeaponProjectile'>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>5</scale>
+    </model>		<accessoryaction type='WeaponProjectile'>
 			<apexcollision></apexcollision>
 			<projectilescale>5</projectilescale>
 			<projectilemodel type='MilkShape'>data/accessories/icbm/icbm.txt</projectilemodel>
@@ -1132,7 +1147,7 @@ any nearby tanks.</description>
 		<bundlesize>2</bundlesize>
 		<cost>39000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-		<model type='MilkShape'>data/accessories/icbm/icbm.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/icbm/icbm.txt</projectilemodel>
 			<collisionaction type='WeaponMulti'>
@@ -1229,7 +1244,7 @@ without wasting weapons.</description>
 		<bundlesize>20</bundlesize>
 		<cost>100</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/flare.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilemodel type='MilkShape'>data/accessories/flare.txt</projectilemodel>
 			<shieldhurtfactor>0.2</shieldhurtfactor>
@@ -1248,7 +1263,7 @@ range without wasting weapons.  </description>
 		<bundlesize>10</bundlesize>
 		<cost>500</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model type='MilkShape'>data/accessories/flare.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.3</shieldhurtfactor>
 			<projectilemodel type='MilkShape'>data/accessories/flare.txt</projectilemodel>
@@ -1377,12 +1392,13 @@ range without wasting weapons.  </description>
 		<armslevel>10</armslevel>
 		<bundlesize>4</bundlesize>
 		<icon>laser.bmp</icon>
-		<model type="MilkShape">data/accessories/laser/laser.txt</model>
-		<description>Fires a laser that cuts through hills 
+    <model>
+      <meshname>snakeeye</meshname>
+    </model>
+    <description>Fires a laser that cuts through hills 
 and shields damaging the tank directly.</description>
 		<cost>8000</cost>
 		<activationsound>data/accessories/sounds/shoot/laser1.wav</activationsound>
-		<nomuzzleflash/>
 		<accessoryaction type='WeaponLaser'>
 			<totaltime>1</totaltime>
 			<minimumdistance>10</minimumdistance>
@@ -1402,12 +1418,13 @@ and shields damaging the tank directly.</description>
 		<armslevel>6</armslevel>
 		<bundlesize>2</bundlesize>
 		<icon>hlaser.bmp</icon>
-		<model type="MilkShape">data/accessories/laser/hlaser.txt</model>
-		<description>Fires a powerful laser that cuts through hills 
+    <model>
+      <meshname>snakeeye</meshname>
+    </model>
+    <description>Fires a powerful laser that cuts through hills 
 and shields damaging the tank directly.</description>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/laser1.wav</activationsound>
-		<nomuzzleflash/>
 		<accessoryaction type='WeaponLaser'>
 			<totaltime>1</totaltime>
 			<minimumdistance>10</minimumdistance>
@@ -1430,9 +1447,10 @@ and shields damaging the tank directly.</description>
 		<icon>teleport.bmp</icon>
 		<activationsound>none</activationsound>
 		<bundlesize>2</bundlesize>
-		<model type="MilkShape">data/accessories/teleport/teleport.txt</model>
-		<nomuzzleflash/>
-		<cost>18000</cost>
+    <model>
+      <meshname>snakeeye</meshname>
+    </model>
+    <cost>18000</cost>
 		<accessoryaction type="WeaponCenterPosition">
 			<height>0</height>
 			<nextaction type="WeaponScatterPosition">
@@ -1516,7 +1534,10 @@ and shields damaging the tank directly.</description>
 		<icon>teleport.bmp</icon>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<bundlesize>1</bundlesize>
-		<modelscale>0.5</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>0.5</scale>
+    </model>
 		<cost>20000</cost>
 		<accessoryaction type='WeaponProjectile'>
 			<projectilescale>0.5</projectilescale>
@@ -1559,8 +1580,8 @@ and shields damaging the tank directly.</description>
       <collisionaction type='WeaponNull'></collisionaction>
     </accessoryaction>
   </accessory>
-
-      <accessory>
+  
+  <accessory>
 		<name>TreeExplode</name>
 		<armslevel>9</armslevel>
 		<maximumnumber>0</maximumnumber>
@@ -1569,7 +1590,10 @@ and shields damaging the tank directly.</description>
 		<bundlesize>1</bundlesize>
 		<cost>1875</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-		<modelscale>0.75</modelscale>
+    <model>
+      <meshname>snakeeye</meshname>
+      <scale>0.75</scale>
+    </model>
 		<accessoryaction type='WeaponExplosion'>
 			<hurtamount>0.0</hurtamount>
 			<deform>none</deform>
@@ -1580,14 +1604,12 @@ and shields damaging the tank directly.</description>
 	</accessory>	
 	<accessory>
 		<name>TestPowerUpWeapon</name>
-		<aionly>true</aionly>
 		<accessoryaction type='WeaponGivePower'>
 			<power>2000</power>
 		</accessoryaction>
 	</accessory>
 	<accessory>
 		<name>TestShield</name>
-		<aionly>true</aionly>
 		<accessoryaction type='ShieldRound'>
 			<radius>8.0</radius>
 			<halfshield>false</halfshield>
@@ -1614,8 +1636,10 @@ and shields damaging the tank directly.</description>
 					<scatterpercentage>75</scatterpercentage>
 					<aimedweapon type='WeaponAddTarget'>
 						<name>Bannana</name>
-						<model type="MilkShape">data/accessories/banana/banana.txt</model>
-						<modelscale>0.01</modelscale>
+            <model>
+              <meshname>snakeeye</meshname>
+              <scale>0.5</scale>
+            </model>
 						<shield>Shield</shield>
 						<parachute>Parachute</parachute>
 						<removeaction>TestPowerUpWeapon</removeaction>
@@ -1631,7 +1655,7 @@ and shields damaging the tank directly.</description>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
-		<model type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
@@ -1660,7 +1684,7 @@ and shields damaging the tank directly.</description>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-		<model type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</model>
+		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
@@ -1689,9 +1713,10 @@ and shields damaging the tank directly.</description>
 		<name>Teleport Test</name>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>1</bundlesize>
-		<model type="MilkShape">data/accessories/teleport/teleport.txt</model>
-		<nomuzzleflash/>
-		<cost>15000</cost>
+    <model>
+      <meshname>snakeeye</meshname>
+    </model>
+    <cost>15000</cost>
 		<accessoryaction type='WeaponSelectPosition'>
 			<aimedweapon type='WeaponTeleport'>
 				<sound>data/accessories/sounds/misc/teleport.wav</sound>
@@ -1986,7 +2011,7 @@ and shields damaging the tank directly.</description>
     <bundlesize>3</bundlesize>
     <cost>8000</cost>
     <activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-    <model type='MilkShape'>data/accessories/littleboy/littleboy.txt</model>
+    <model><meshname>snakeeye</meshname></model>
     <accessoryaction type='WeaponExplosion'>
       <hurtamount>0.0</hurtamount>
       <deform>none</deform>

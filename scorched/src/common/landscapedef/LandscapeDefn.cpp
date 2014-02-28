@@ -45,9 +45,9 @@ LandscapeDefn::~LandscapeDefn()
 {
 }
 
-bool LandscapeDefn::readXML(XMLNode *node)
+bool LandscapeDefn::readXML(XMLNode *node, void *xmlData)
 {
-	if (!LandscapeInclude::readXML(node)) return false;
+	if (!LandscapeInclude::readXML(node, xmlData)) return false;
 
 	if (landscapewidth.getValue() % 128 != 0 ||
 		landscapeheight.getValue() % 128 != 0)

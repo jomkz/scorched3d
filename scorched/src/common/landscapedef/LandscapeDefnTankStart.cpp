@@ -53,7 +53,7 @@ LandscapeDefnTankStartMinMax::~LandscapeDefnTankStartMinMax()
 
 LandscapeDefnTankStartPositionList::LandscapeDefnTankStartPositionList() :
 	XMLEntryList<XMLEntryFixedVector>(
-		"An explicit position that a tank may spawn on, the height is ignore and normalized to the lanscape height")
+		"An explicit position that a tank may spawn on, the height is ignore and normalized to the lanscape height", 1)
 {
 }
 
@@ -115,9 +115,9 @@ LandscapeDefnTankStartHeight::~LandscapeDefnTankStartHeight()
 {
 }
 
-bool LandscapeDefnTankStartHeight::readXML(XMLNode *node)
+bool LandscapeDefnTankStartHeight::readXML(XMLNode *node, void *xmlData)
 {
-	if (!LandscapeDefnTankStart::readXML(node)) return false;
+	if (!LandscapeDefnTankStart::readXML(node, xmlData)) return false;
 
 	if (!startmask.getValue().empty() && startmask.getValue() != "none")
 	{
@@ -360,19 +360,6 @@ LandscapeDefnTankStartPositional::LandscapeDefnTankStartPositional() :
 
 LandscapeDefnTankStartPositional::~LandscapeDefnTankStartPositional()
 {
-}
-
-bool LandscapeDefnTankStartPositional::readXML(XMLNode *node)
-{
-	if (!LandscapeDefnTankStart::readXML(node)) return false;
-	if (positions.getChildren().empty())
-	{
-		S3D::dialogMessage("LandscapeDefnTankStartPositional", S3D::formatStringBuffer(
-			"Error: At least one tank starting positon must be specfied"));
-		return false;
-	}
-	
-	return true;
 }
 
 FixedVector LandscapeDefnTankStartPositional::placeTank(unsigned int playerId, int team,

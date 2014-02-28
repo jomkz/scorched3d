@@ -29,7 +29,7 @@ public:
 	PlacementTypeBounds();
 	virtual ~PlacementTypeBounds();
 
-	virtual bool readXML(XMLNode *node);
+	virtual bool readXML(XMLNode *node, void *xmlData);
 	virtual void getPositions(ScorchedContext &context,
 		RandomGenerator &generator,
 		std::list<Position> &returnPositions,

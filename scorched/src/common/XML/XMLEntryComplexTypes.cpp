@@ -20,13 +20,83 @@
 
 #include <XML/XMLEntryComplexTypes.h>
 
-XMLEntryModelID::XMLEntryModelID() :
-	XMLEntryContainer("ModelID", "A definition of a displayable model"),
-	meshName("The ogre mesh resource name, this mesh must already be loaded in the ogre resources")
+XMLEntryModelID::XMLEntryModelID(bool required) :
+	XMLEntryContainer("ModelID", "A reference to an ogre mesh", required),
+	meshName("The ogre mesh resource name, this mesh must already be loaded in the ogre resources"),
+	scale("The scale of the mesh, a scale of 1.0 is an unchanged scale", 0, fixed(1)),
+	rotation("The rotation of the mesh around the blah axis TODO", 0, fixed(1)),
+	brightness("The brightness of the mesh blah", 0, fixed(1))
 {
 	addChildXMLEntry("meshname", &meshName);
+	addChildXMLEntry("scale", &scale);
+	addChildXMLEntry("rotation", &rotation);
+	addChildXMLEntry("brightness", &brightness);
 }
 
 XMLEntryModelID::~XMLEntryModelID()
 {
+}
+
+XMLEntryParticleID::XMLEntryParticleID(bool required) :
+	XMLEntryContainer("ParticleID", "A reference to an ogre particle definition", required),
+	particleName("The ogre particle script name, this script  must already be loaded in the ogre resources")
+{
+	addChildXMLEntry("particlename", &particleName);
+}
+
+XMLEntryParticleID::~XMLEntryParticleID()
+{
+}
+
+XMLEntryNumberParser::XMLEntryNumberParser(const char *parserName, const char *description) :
+	description_(description), data_(XMLEntrySimpleType::eDataRequired),
+	value_(parserName)
+{
+
+}
+
+XMLEntryNumberParser::XMLEntryNumberParser(const char *parserName, const char *description, 
+	unsigned int data,
+	const std::string &value) :
+	description_(description), data_(data),
+	value_(parserName, value.c_str())
+{
+	
+}
+
+XMLEntryNumberParser::~XMLEntryNumberParser()
+{
+
+}
+
+fixed XMLEntryNumberParser::getValue(ScorchedContext &context)
+{
+	return value_.getValue(context);
+}
+
+
+bool XMLEntryNumberParser::readXML(XMLNode *node, void *xmlData)
+{
+	if (!value_.setExpression(node->getContent()))
+	{
+		return node->returnError(S3D::formatStringBuffer(
+			"Failed to set XMLEntryNumberParser with \"%s\"",
+			node->getContent()));
+	}
+	return true;
+}
+
+void XMLEntryNumberParser::writeXML(XMLNode *node)
+{
+	node->setContent(value_.getExpression());
+}
+
+void XMLEntryNumberParser::getTypeName(std::string &result)
+{
+	result = "number expression";
+}
+
+void XMLEntryNumberParser::getDescription(std::string &result)
+{
+	result = description_;
 }

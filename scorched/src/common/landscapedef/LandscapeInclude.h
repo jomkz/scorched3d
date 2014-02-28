@@ -56,7 +56,7 @@ public:
 	LansdscapeIncludeList includeList;
 	std::list<LandscapeInclude *> includes;
 
-	virtual bool readXML(XMLNode *parentNode);
+	virtual bool readXML(XMLNode *parentNode, void *xmlData);
 protected:
 	LandscapeDefinitions *definitions_;
 

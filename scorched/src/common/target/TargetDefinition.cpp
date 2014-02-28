@@ -39,71 +39,52 @@
 #include <XML/XMLNode.h>
 
 TargetDefinition::TargetDefinition() : 
-	life_(1), boundingsphere_(true),
-	size_(0, 0, 0), 
-	modelscale_(fixed(true, 500)), modelscalediff_(0),
-	modelrotation_(0), modelrotationsnap_(-1),
-	driveovertodestroy_(false), flattendestroy_(false), border_(0), 
-	displaydamage_(true), displayshadow_(true), displayhardwareshadow_(true),
-	nodamageburn_(false), nocollision_(false), nofalling_(false),
-	nofallingdamage_(false), billboard_(false), team_(0), useNormalMoves_(true)
+	XMLEntryContainer("TargetDefinition", 
+		"Defines all attributes for a new target (a model on the lanscape with physical properties)"),
+	name_("The name given to this target, this name may be displayed on the score board or used for debugging", 0, ""),
+	ainame_("The name of an AI (bot) to associated with this target, this will turn the target into a computer controlled entity", 0, ""),
+	life_("The amount of life that this target will start with", 0, 1), 
+	boundingsphere_("If a bounding sphere should be used for collision detection rather than a box", 0, true),
+	driveovertodestroy_("Can this target be destroyed by a player tank driving over it", 0, false), 
+	flattendestroy_("Is this target destroyed when the surrounding area is flattened, e.g. by a tank placement or a falling tank", 0, false), 
+	border_("The minimum distance between targets when they are automaticaly placed", 0, 0), 
+	displaydamage_("Does this target have damage numbers displayed over it when it is damaged", 0, true), 
+	displayshadow_("Does this target cast shadows", 0, true), 
+	nodamageburn_("Does this target burn when affected by weapons such as napalm", 0, false), 
+	nocollision_("Can weapons hit this target", 0, false), 
+	nofalling_("Does this target fall when the earth underneath is removed", 0, false),
+	nofallingdamage_("Does this target take damage from falling (if it can fall)", 0, false), 
+	billboard_("Does this target always get rotated to the viewing camera", 0, false), 
+	team_("The team to add this target to, 0 is no team", 0, 0), 
+	parachute_("The name of a parachute accessory that this target will start with activated", 0, ""),
+	shield_("The name of a shield accessory that this target with start with activated", 0, ""), 
+	useNormalMoves_("If this target has an associated AI does the target take a turn at making a move, or can it make moves anytime", 0, true),
+	removeaction_("The accessory name to fire when this target is removed (destroyed)", 0, ""),
+	burnaction_("The accessory name to fire when this target is burned", 0, ""),
+	collisionaction_("The accessory name to fire when a projectile collides with this target", 0, ""),
+	groups_(),
+	modelId_("The model of the target")
 {
+	addChildXMLEntry("model", &modelId_);
+	addChildXMLEntry("name", &name_);
+	addChildXMLEntry("life", &life_);
+	addChildXMLEntry("boundingsphere", &boundingsphere_);
+	addChildXMLEntry("driveovertodestroy", &driveovertodestroy_, "flattendestroy", &flattendestroy_);
+	addChildXMLEntry("nocollision", &nocollision_, "nodamageburn", &nodamageburn_, "nofalling", &nofalling_);
+	addChildXMLEntry("displaydamage", &displaydamage_, "displayshadow", &displayshadow_);
+	addChildXMLEntry("nofallingdamage", &nofallingdamage_);
+	addChildXMLEntry("usenormalmoves", &useNormalMoves_);
+	addChildXMLEntry("billboard", &billboard_);
+	addChildXMLEntry("parachute", &parachute_, "shield", &shield_);
+	addChildXMLEntry("ainame", &ainame_);
+	addChildXMLEntry("team", &team_);
+	addChildXMLEntry("border", &border_);
+	addChildXMLEntry("removeaction", &removeaction_, "burnaction", &burnaction_, "collisionaction", &collisionaction_);
+	addChildXMLEntry("groups", &groups_);
 }
 
 TargetDefinition::~TargetDefinition()
 {
-}
-
-bool TargetDefinition::readXML(XMLNode *node)
-{
-	node->getNamedChild("name", name_, false);
-	node->getNamedChild("life", life_, false);
-	node->getNamedChild("shield", shield_, false);
-	node->getNamedChild("parachute", parachute_, false);
-	node->getNamedChild("boundingsphere", boundingsphere_, false);
-	node->getNamedChild("nocollision", nocollision_, false);
-	node->getNamedChild("nofalling", nofalling_, false);
-	node->getNamedChild("nofallingdamage", nofallingdamage_, false);
-	node->getNamedChild("nodamageburn", nodamageburn_, false);
-	node->getNamedChild("displaydamage", displaydamage_, false);
-	node->getNamedChild("displayshadow", displayshadow_, false);
-	node->getNamedChild("displayhardwareshadow", displayhardwareshadow_, false);
-
-	node->getNamedChild("size", size_, false);
-	node->getNamedChild("modelscale", modelscale_, false);
-	node->getNamedChild("modelscalediff", modelscalediff_, false);
-	node->getNamedChild("modelrotation", modelrotation_, false);
-	node->getNamedChild("modelrotationsnap", modelrotationsnap_, false);
-	node->getNamedChild("modelbrightness", modelbrightness_, false);
-	node->getNamedChild("border", border_, false);
-	node->getNamedChild("billboard", billboard_, false);
-
-	XMLNode *modelnode, *burntmodelnode;
-	if (!node->getNamedChild("model", modelnode)) return false;
-	if (!modelId_.initFromNode(modelnode)) return false;
-	if (node->getNamedChild("modelburnt", burntmodelnode, false))
-	{
-		if (!modelburntId_.initFromNode(burntmodelnode)) return false;
-	}
-	else
-	{
-		modelnode->resurrectRemovedChildren();
-		if (!modelburntId_.initFromNode(modelnode)) return false;
-	}
-
-	node->getNamedChild("flattendestroy", flattendestroy_, false);
-	node->getNamedChild("driveovertodestroy", driveovertodestroy_, false);
-	node->getNamedChild("removeaction", removeaction_, false);
-	node->getNamedChild("burnaction", burnaction_, false);
-	node->getNamedChild("collisionaction", collisionaction_, false);
-
-	node->getNamedChild("ainame", ainame_, false);
-	node->getNamedChild("team", team_, false);
-	node->getNamedChild("usenormalmoves", useNormalMoves_, false);
-
-	if (!groups_.readXML(node, "groupname")) return false;
-
-	return node->failChildren();
 }
 
 Target *TargetDefinition::createTarget(unsigned int playerId,
@@ -114,130 +95,112 @@ Target *TargetDefinition::createTarget(unsigned int playerId,
 {
 	Target *target = 0;
 	Tanket *tanket = 0;
-	if (ainame_.empty())
+	if (ainame_.getValue().empty())
 	{
-		target = new Target(playerId, name_, context);
+		target = new Target(playerId, LANG_STRING(name_.getValue().c_str()), context);
 	} 
 	else
 	{
-		tanket = new Tanket(context, playerId, 0, name_);
+		tanket = new Tanket(context, playerId, 0, LANG_STRING(name_.getValue()));
 		TankAI *ai = 0;
 		if (context.getServerMode() &&
-			ainame_ != "Human")
+			ainame_.getValue() != "Human")
 		{
-			ai = ((ScorchedServer &)context).getTankAIs().getAIByName(ainame_.c_str());
+			ai = ((ScorchedServer &)context).getTankAIs().getAIByName(ainame_.getValue().c_str());
 			if (!ai) 
 			{
 				S3D::dialogExit("TargetDefinition",
-					S3D::formatStringBuffer("Cannot find AI name %s", ainame_.c_str()));
+					S3D::formatStringBuffer("Cannot find AI name %s", ainame_.getValue().c_str()));
 			}
 			ai = ai->createCopy(tanket);
 		}
 		tanket->setTankAI(ai);
-		tanket->getShotInfo().setUseNormalMoves(useNormalMoves_);
+		tanket->getShotInfo().setUseNormalMoves(useNormalMoves_.getValue());
 		target = tanket;
 	}
-	target->getLife().setBoundingSphere(boundingsphere_);
+	target->getLife().setBoundingSphere(boundingsphere_.getValue());
 
-	fixed rotation = modelrotation_;
-	if (modelrotationsnap_ > 0)
-	{
-		rotation = fixed((generator.getRandFixed("Target Definition") * 360).asInt() / 
-			(modelrotationsnap_.asInt())) * modelrotationsnap_;
-	}
-	fixed finalModelScale = modelscale_;
-	if (modelscalediff_ > 0)
-	{
-		finalModelScale += generator.getRandFixed("Target Definition") * modelscalediff_;
-	}
-	fixed finalBrightness = modelbrightness_;
-	if (finalBrightness == -1)
-	{
-		finalBrightness = generator.getRandFixed("Target Definition") * fixed(true, 7000) + fixed(true, 3000);
-	}
 
-	FixedVector finalSize = size_ * finalModelScale;
-	target->getTargetState().setNoCollision(nocollision_);
-	target->getTargetState().setDisplayDamage(displaydamage_);
-	target->getTargetState().setDisplayShadow(displayshadow_);
-	target->getTargetState().setDisplayHardwareShadow(displayhardwareshadow_);
-	target->getTargetState().setNoDamageBurn(nodamageburn_);
-	target->getTargetState().setNoFalling(nofalling_);
-	target->getTargetState().setNoFallingDamage(nofallingdamage_);
-	target->getTargetState().setDriveOverToDestroy(driveovertodestroy_);
-	target->getTargetState().setFlattenDestroy(flattendestroy_);
-	target->getLife().setMaxLife(life_);
-	target->getLife().setSize(finalSize);
+	target->getTargetState().setNoCollision(nocollision_.getValue());
+	target->getTargetState().setDisplayDamage(displaydamage_.getValue());
+	target->getTargetState().setDisplayShadow(displayshadow_.getValue());
+	target->getTargetState().setNoDamageBurn(nodamageburn_.getValue());
+	target->getTargetState().setNoFalling(nofalling_.getValue());
+	target->getTargetState().setNoFallingDamage(nofallingdamage_.getValue());
+	target->getTargetState().setDriveOverToDestroy(driveovertodestroy_.getValue());
+	target->getTargetState().setFlattenDestroy(flattendestroy_.getValue());
+	target->getLife().setMaxLife(life_.getValue());
+	// target->getLife().setSize(finalSize.getValue()); // TODO
 	target->getLife().setVelocity(velocity);
-	target->getLife().setRotation(rotation);
-	target->setBorder(border_);
+	//target->getLife().setRotation(rotation.getValue()); // TODO
+	target->setBorder(border_.getValue());
 	target->loaded();
 	if (tanket) tanket->newMatch();
 	target->newGame();
 
-	if (shield_.c_str()[0] && 0 != strcmp(shield_.c_str(), "none"))
+	if (shield_.getValue().c_str()[0] && 0 != strcmp(shield_.getValue().c_str(), "none"))
 	{
 		Accessory *shield = context.getAccessoryStore().
-			findByPrimaryAccessoryName(shield_.c_str());
+			findByPrimaryAccessoryName(shield_.getValue().c_str());
 		if (!shield)
 		{
 			S3D::dialogExit("Scorched3D",
 				S3D::formatStringBuffer("Failed to find shield named \"%s\"",
-				shield_.c_str()));
+				shield_.getValue().c_str()));
 		}
 
 		target->getShield().setCurrentShield(shield);
 	}
 
-	if (parachute_.c_str()[0] && 0 != strcmp(parachute_.c_str(), "none"))
+	if (parachute_.getValue().c_str()[0] && 0 != strcmp(parachute_.getValue().c_str(), "none"))
 	{
 		Accessory *parachute = context.getAccessoryStore().
-			findByPrimaryAccessoryName(parachute_.c_str());
+			findByPrimaryAccessoryName(parachute_.getValue().c_str());
 		if (!parachute)
 		{
 			S3D::dialogExit("Scorched3D",
 				S3D::formatStringBuffer("Failed to find parachute named \"%s\"",
-				parachute_.c_str()));
+				parachute_.getValue().c_str()));
 		}
 
 		target->getParachute().setCurrentParachute(parachute);
 	}
-
-	if (removeaction_.c_str()[0] && 0 != strcmp(removeaction_.c_str(), "none"))
+ 
+	if (removeaction_.getValue().c_str()[0] && 0 != strcmp(removeaction_.getValue().c_str(), "none"))
 	{
 		Accessory *action = context.getAccessoryStore().
-			findByPrimaryAccessoryName(removeaction_.c_str());		
+			findByPrimaryAccessoryName(removeaction_.getValue().c_str());		
 		if (!action || action->getType() != AccessoryPart::AccessoryWeapon)
 		{
 			S3D::dialogExit("Scorched3D",
 				S3D::formatStringBuffer("Failed to find death action \"%s\"",
-				removeaction_.c_str()));
+				removeaction_.getValue().c_str()));
 		}
 
 		target->setDeathAction(action);
 	}
-	if (burnaction_.c_str()[0] && 0 != strcmp(burnaction_.c_str(), "none"))
+	if (burnaction_.getValue().c_str()[0] && 0 != strcmp(burnaction_.getValue().c_str(), "none"))
 	{
 		Accessory *action = context.getAccessoryStore().
-			findByPrimaryAccessoryName(burnaction_.c_str());		
+			findByPrimaryAccessoryName(burnaction_.getValue().c_str());		
 		if (!action || action->getType() != AccessoryPart::AccessoryWeapon)
 		{
 			S3D::dialogExit("Scorched3D",
 				S3D::formatStringBuffer("Failed to find burn action \"%s\"",
-				burnaction_.c_str()));
+				burnaction_.getValue().c_str()));
 		}
 
 		target->setBurnAction(action);
 	}
-	if (collisionaction_.c_str()[0] && 0 != strcmp(collisionaction_.c_str(), "none"))
+	if (collisionaction_.getValue().c_str()[0] && 0 != strcmp(collisionaction_.getValue().c_str(), "none"))
 	{
 		Accessory *action = context.getAccessoryStore().
-			findByPrimaryAccessoryName(collisionaction_.c_str());		
+			findByPrimaryAccessoryName(collisionaction_.getValue().c_str());		
 		if (!action || action->getType() != AccessoryPart::AccessoryWeapon)
 		{
 			S3D::dialogExit("Scorched3D",
 				S3D::formatStringBuffer("Failed to find collision action \"%s\"",
-				collisionaction_.c_str()));
+				collisionaction_.getValue().c_str()));
 		}
 
 		target->setCollisionAction(action);

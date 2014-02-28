@@ -21,6 +21,15 @@
 #include <actions/CallbackWeapon.h>
 #include <weapons/AccessoryStore.h>
 
+WeaponCallback::WeaponCallback(const char *typeName, const char *description) :
+	Weapon(typeName, description)
+{
+}
+
+WeaponCallback::~WeaponCallback()
+{
+}
+
 CallbackWeapon::CallbackWeapon(
 	const char *name,
 	WeaponCallback *callback,

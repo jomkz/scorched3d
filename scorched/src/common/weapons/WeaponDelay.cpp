@@ -25,38 +25,16 @@
 REGISTER_ACCESSORY_SOURCE(WeaponDelay);
 
 WeaponDelay::WeaponDelay() :
-	delay_("WeaponDelay::delay"),
-	delayedWeapon_(0)
+	WeaponCallback("WeaponDelay", "Delays for a specific amount of time before performing the next action."),
+	delay_("WeaponDelay::delay", "Amount of time in seconds to delay before performing the following action"),
+	delayedWeapon_()
 {
-
+	addChildXMLEntry("delayedweapon", &delayedWeapon_);
+	addChildXMLEntry("delay", &delay_);
 }
 
 WeaponDelay::~WeaponDelay()
 {
-	delete delayedWeapon_;
-	delayedWeapon_ = 0;
-}
-
-bool WeaponDelay::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("delayedweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	delayedWeapon_ = (Weapon*) accessory;
-
-	if (!accessoryNode->getNamedChild("delay", delay_)) return false;
-
-	return true;
 }
 
 void WeaponDelay::fireWeapon(ScorchedContext &context,
@@ -74,5 +52,5 @@ void WeaponDelay::weaponCallback(
 			WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 			unsigned int userData)
 {
-	delayedWeapon_->fire(context, weaponContext, position, velocity);
+	delayedWeapon_.getValue()->fire(context, weaponContext, position, velocity);
 }

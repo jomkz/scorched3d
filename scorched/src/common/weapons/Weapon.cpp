@@ -84,8 +84,8 @@ WeaponFireContext::~WeaponFireContext()
 	internalContext_->decrementReference();
 }
 
-Weapon::Weapon() : 
-	armsLevel_(-1)
+Weapon::Weapon(const char *typeName, const char *description) : 
+	AccessoryPart(typeName, description)
 {
 
 }
@@ -93,20 +93,6 @@ Weapon::Weapon() :
 Weapon::~Weapon()
 {
 
-}
-
-bool Weapon::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	// Get the optional weapon armslevel
-	accessoryNode->getNamedChild("armslevel", armsLevel_, false);
-
-	return true;
-}
-
-int Weapon::getArmsLevel()
-{
-	if (armsLevel_ == -1) return parent_->getArmsLevel();
-	return armsLevel_;
 }
 
 void Weapon::fire(ScorchedContext &context,
@@ -129,4 +115,23 @@ void Weapon::addWeaponSyncCheck(ScorchedContext &context,
 		getParent()->getName(), getParent()->getAccessoryId(), getAccessoryTypeName(),
 		weaponContext.getPlayerId(),
 		position.asQuickString(), velocity.asQuickString()));
+}
+
+XMLEntryWeaponChoice::XMLEntryWeaponChoice() :
+	XMLEntryTypeChoice<Weapon>("WeaponChoice", "The choice of another weapon")
+{
+}
+
+XMLEntryWeaponChoice::~XMLEntryWeaponChoice()
+{
+}
+
+Weapon *XMLEntryWeaponChoice::createXMLEntry(const std::string &type)
+{
+	return 0;
+}
+
+void XMLEntryWeaponChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+
 }

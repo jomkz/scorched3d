@@ -316,7 +316,7 @@ XMLEntryContainer *XMLEntryContainer::addChildXMLEntryContainer(const char *name
 	return container;
 }
 
-bool XMLEntryContainer::readXML(XMLNode *node)
+bool XMLEntryContainer::readXML(XMLNode *node, void *xmlData)
 {
 	std::set<std::string> seenTags;
 	{
@@ -326,7 +326,7 @@ bool XMLEntryContainer::readXML(XMLNode *node)
 			std::map<std::string, XMLEntry *>::iterator findItor =
 				xmlEntryChildren_.find((*itor)->getName());
 			if (findItor == xmlEntryChildren_.end()) return (*itor)->returnError("Unrecognised XML element");
-			if (!findItor->second->readXML(*itor)) return (*itor)->returnError("Failed to parse XML element");
+			if (!findItor->second->readXML(*itor, xmlData)) return (*itor)->returnError("Failed to parse XML element");
 			seenTags.insert((*itor)->getName());
 		}
 	}

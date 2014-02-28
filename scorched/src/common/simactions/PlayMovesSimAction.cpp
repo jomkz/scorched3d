@@ -228,6 +228,7 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 			0 != strcmp("none", weapon->getParent()->getActivationSound()))
 		{
 			/*
+			TODO
 			SoundBuffer *firedSound = 
 				Sound::instance()->fetchOrCreateBuffer(
 					S3D::getModFile(S3D::formatStringBuffer("data/wav/%s", 
@@ -261,6 +262,8 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 
 	// Create an action for the muzzle flash
 	// add it to the action controller
+	/*
+	TODO
 	if (weapon->getParent()->getMuzzleFlash())
 	{
 		Accessory *muzzleFlash = context.getAccessoryStore().getMuzzelFlash();
@@ -270,6 +273,7 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 			muzzleWeapon->fire(context, weaponContext, position, velocity);
 		}
 	}
+	*/
 
 	// Create the action for the weapon and
 	// add it to the action controller

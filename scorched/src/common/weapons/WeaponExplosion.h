@@ -22,16 +22,27 @@
 #define AFX_WEAPONPEXPLOSION_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_
 
 #include <weapons/Weapon.h>
-#include <actions/ExplosionParams.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponExplosion : public Weapon
 {
 public:
+	enum DeformType
+	{
+		DeformNone = 0,
+		DeformDown = 1,
+		DeformUp = 2,
+	};
+
 	WeaponExplosion();
 	virtual ~WeaponExplosion();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
+	DeformType getDeformType() { return (DeformType) deform_.getValue(); }
+	fixed getDeformSize(ScorchedContext &context) { return deformSizeExp_.getValue(context); }
+	fixed getHurtAmount(ScorchedContext &context) { return hurtAmountExp_.getValue(context); }
+	bool getExplodeUnderGround() { return explodeUnderGround_.getValue(); }
+	bool getOnlyHurtShield() { return onlyHurtShield_.getValue(); }
+	bool getNoCameraTrack() { return noCameraTrack_.getValue(); }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -40,15 +51,12 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponExplosion, AccessoryPart::AccessoryWeapon);
 
 protected:
-	ExplosionParams params_;
-	bool deformSizeSet_;
-	NumberParser sizeExp_;
-	NumberParser deformSizeExp_;
-	NumberParser shakeExp_;
-	NumberParser minLifeExp_, maxLifeExp_;
-	NumberParser createMushroomAmountExp_;
-	NumberParser hurtAmountExp_;
-
+	XMLEntryEnum deform_;
+	XMLEntryNumberParser deformSizeExp_;
+	XMLEntryNumberParser hurtAmountExp_;
+	XMLEntryBool explodeUnderGround_;
+	XMLEntryBool onlyHurtShield_;
+	XMLEntryBool noCameraTrack_;
 };
 
 #endif // !defined(AFX_WEAPONPEXPLOSION_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_)

@@ -93,7 +93,7 @@ bool AccessoryStore::parseFile(
 		// Parse the accessory
 		AccessoryCreateContext createContext(context);
 		Accessory *accessory = new Accessory(++nextAccessoryId_);
-		if (!accessory->parseXML(createContext, currentNode))
+		if (!accessory->readXML(currentNode, &createContext))
 		{
 			return currentNode->returnError(
 				S3D::formatStringBuffer("Failed to create accessory \"%s\"",

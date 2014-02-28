@@ -28,33 +28,17 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponAnimation);
 
-WeaponAnimation::WeaponAnimation()
+WeaponAnimation::WeaponAnimation() :
+	Weapon("WeaponAnimation", 
+		"Used to generate the animation/particle effects like the laser beam death or the small blue ring that flashes when you die."),
+	particleName_()
 {
-
+	addChildXMLEntry("animation", &particleName_);
 }
 
 WeaponAnimation::~WeaponAnimation()
 {
 
-}
-
-bool WeaponAnimation::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("data", data_)) return false;
-	if (!accessoryNode->getNamedChild("animation", rendererName_)) return false;
-
-	if (0 != strcmp(rendererName_.c_str(), "ExplosionLaserBeamRenderer"))
-	{
-		S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
-			"Failed to find animation named \"%s\" in accessory \"%s\"",
-			rendererName_.c_str(),
-			parent_->getName()));
-		return false;
-	}
-
-	return true;
 }
 
 void WeaponAnimation::fireWeapon(ScorchedContext &context,

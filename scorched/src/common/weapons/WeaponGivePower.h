@@ -22,15 +22,13 @@
 #define __INCLUDE_WeaponGivePowerh_INCLUDE__
 
 #include <actions/CallbackWeapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
-class WeaponGivePower  : public WeaponCallback
+class WeaponGivePower : public WeaponCallback
 {
 public:
 	WeaponGivePower();
 	virtual ~WeaponGivePower();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -45,7 +43,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponGivePower, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser power_;
+	XMLEntryNumberParser power_;
 
 };
 

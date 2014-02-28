@@ -21,13 +21,13 @@
 #if !defined(__INCLUDE_TargetDefinitionh_INCLUDE__)
 #define __INCLUDE_TargetDefinitionh_INCLUDE__
 
-#include <common/ModelID.h>
+#include <XML/XMLEntryComplexTypes.h>
 #include <common/RandomGenerator.h>
 #include <engine/ScorchedContext.h>
 #include <engine/ObjectGroupEntryDefinition.h>
 
 class Target;
-class TargetDefinition
+class TargetDefinition : public XMLEntryContainer
 {
 public:
 	TargetDefinition();
@@ -43,30 +43,24 @@ public:
 	ObjectGroupEntryDefinition &getGroups() { return groups_; }
 
 protected:
-	fixed life_;
-	bool boundingsphere_;
-	bool driveovertodestroy_, flattendestroy_;
-	bool nocollision_, nodamageburn_, nofalling_;
-	bool displaydamage_, displayshadow_;
-	bool displayhardwareshadow_;
-	bool nofallingdamage_;
-	bool useNormalMoves_;
-	bool billboard_;
-	LangString name_;
-	std::string parachute_;
-	std::string shield_;
-	std::string ainame_;
-	int team_;
-	FixedVector size_;
-	fixed modelscale_, modelscalediff_;
-	fixed modelrotation_, modelbrightness_;
-	fixed modelrotationsnap_;
-	fixed border_;
-	std::string removeaction_;
-	std::string burnaction_;
-	std::string collisionaction_;
-	ModelID modelId_;
-	ModelID modelburntId_;
+	XMLEntryFixed life_;
+	XMLEntryBool boundingsphere_;
+	XMLEntryBool driveovertodestroy_, flattendestroy_;
+	XMLEntryBool nocollision_, nodamageburn_, nofalling_;
+	XMLEntryBool displaydamage_, displayshadow_;
+	XMLEntryBool nofallingdamage_;
+	XMLEntryBool useNormalMoves_;
+	XMLEntryBool billboard_;
+	XMLEntryString name_;
+	XMLEntryString parachute_;
+	XMLEntryString shield_;
+	XMLEntryString ainame_;
+	XMLEntryInt team_;
+	XMLEntryFixed border_;
+	XMLEntryString removeaction_;
+	XMLEntryString burnaction_;
+	XMLEntryString collisionaction_;
+	XMLEntryModelID modelId_;
 	ObjectGroupEntryDefinition groups_;
 };
 

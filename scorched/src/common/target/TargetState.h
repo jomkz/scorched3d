@@ -51,9 +51,6 @@ public:
 	bool getDisplayShadow() { return displayShadow_; }
 	void setDisplayShadow(bool displayShadow) { displayShadow_ = displayShadow; }
 
-	bool getDisplayHardwareShadow() { return displayHardwareShadow_; }
-	void setDisplayHardwareShadow(bool displayHardwareShadow) { displayHardwareShadow_ = displayHardwareShadow; }
-
 	bool getNoDamageBurn() { return noDamageBurn_; }
 	void setNoDamageBurn(bool noDamageBurn) { noDamageBurn_ = noDamageBurn; }
 
@@ -82,7 +79,6 @@ protected:
 	TargetFalling *falling_;
 	TanketMovement *moving_;
 	TargetStateMovement *movement_;
-	bool displayHardwareShadow_;
 	bool displayShadow_;
 	bool displayDamage_;
 	bool noDamageBurn_;

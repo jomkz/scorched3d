@@ -22,25 +22,24 @@
 #define AFX_WeaponAimed_H__A96ADD10_0901_4E1D_A49B_9BE78AD33B9B__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <engine/ObjectGroupEntryDefinition.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponAimed : public Weapon
 {
 public:
-	WeaponAimed();
+	WeaponAimed(const char *name, const char *description);
 	virtual ~WeaponAimed();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 protected:
-	int warHeads_;
-	Weapon *aimedWeapon_;
-	NumberParser maxAimedDistance_;
-	NumberParser percentageMissChance_;
-	NumberParser maxInacuracy_;
-	bool noSelfHoming_;
-	std::string groupName_;
-	bool randomWhenNoTargets_;
+	XMLEntryInt warHeads_;
+	XMLEntryWeaponChoice aimedWeapon_;
+	XMLEntryNumberParser maxAimedDistance_;
+	XMLEntryNumberParser percentageMissChance_;
+	XMLEntryNumberParser maxInacuracy_;
+	XMLEntryBool noSelfHoming_;
+	ObjectGroupReferenceDefinition groupNames_;
+	XMLEntryBool randomWhenNoTargets_;
 
 	void fireAimedWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, bool invert);

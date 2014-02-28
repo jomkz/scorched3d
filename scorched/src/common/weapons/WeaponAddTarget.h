@@ -32,8 +32,6 @@ public:
 
 	TargetDefinition &getTargetDefinition() { return targetDefinition_; }
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 	void fireWeapon(ScorchedContext &context, 
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
 

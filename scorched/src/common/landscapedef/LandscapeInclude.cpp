@@ -51,9 +51,9 @@ LandscapeInclude::~LandscapeInclude()
 {
 }
 
-bool LandscapeInclude::readXML(XMLNode *parentNode)
+bool LandscapeInclude::readXML(XMLNode *parentNode, void *xmlData)
 {
-	if (!XMLEntryContainer::readXML(parentNode)) return false;
+	if (!XMLEntryContainer::readXML(parentNode, xmlData)) return false;
 
 	std::list<XMLEntryString *>::iterator itor = includeList.getChildren().begin(),
 		end = includeList.getChildren().end();

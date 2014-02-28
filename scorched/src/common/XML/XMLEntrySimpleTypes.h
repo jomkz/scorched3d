@@ -58,7 +58,7 @@ public:
 	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator);
 
 	// XMLEntry
-	virtual bool readXML(XMLNode *parentNode);
+	virtual bool readXML(XMLNode *parentNode, void *xmlData);
 	virtual void writeXML(XMLNode *parentNode);
 
 	// ARGParserBoolI, ARGParserIntI, ARGParserStringI
@@ -139,6 +139,8 @@ public:
 		int value;
 	};
 
+	XMLEntryEnum(const char *description,
+		XMLEntryEnum::EnumEntry enums[]);
 	XMLEntryEnum(const char *description,
 		unsigned int data,
 		int value,
