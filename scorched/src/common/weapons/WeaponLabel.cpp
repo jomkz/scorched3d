@@ -46,6 +46,11 @@ bool WeaponLabel::readXMLEntry(XMLNode *node, void *xmlData, const char *name, X
 	}
 	else
 	{
+		if (label_.getValue().empty())
+		{
+			return node->returnError("ERROR: Empty label, WeaponLabel must define the weapon after the label element"); 
+		}
+
 		AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
 		context->addLabel(label_.getValue().c_str(), this);
 		bool result = entry->readXML(node, xmlData);

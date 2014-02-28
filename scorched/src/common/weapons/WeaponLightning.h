@@ -22,15 +22,13 @@
 #define __INCLUDE_WeaponLightningh_INCLUDE__
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponLightning : public Weapon
 {
 public:
 	WeaponLightning();
 	virtual ~WeaponLightning();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	fixed getConeLength() { return coneLength_; }
 	fixed getSegLength() { return segLength_; }
@@ -46,8 +44,7 @@ public:
 	fixed getTotalTime() { return totalTime_; }
 	fixed getSegHurt() { return segHurt_; }
 	fixed getSegHurtRadius() { return segHurtRadius_; }
-	const char *getSound() { return sound_.c_str(); }
-	const char *getTexture() { return texture_.c_str(); }
+	const char *getTexture() { return texture_.getValue().c_str(); }
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -70,22 +67,21 @@ protected:
 	fixed totalTime_;
 	fixed segHurt_;
 	fixed segHurtRadius_;
-	std::string sound_;
-	std::string texture_;
-	NumberParser coneLengthExp_;
-	NumberParser segLengthExp_;
-	NumberParser segVarExp_;
-	NumberParser sizeExp_;
-	NumberParser sizeVarExp_;
-	NumberParser minSizeExp_;
-	NumberParser splitProbExp_;
-	NumberParser splitVarExp_;
-	NumberParser deathProbExp_;
-	NumberParser derivAngleExp_;
-	NumberParser angleVarExp_;
-	NumberParser totalTimeExp_;
-	NumberParser segHurtExp_;
-	NumberParser segHurtRadiusExp_;
+	XMLEntryString texture_;
+	XMLEntryNumberParser coneLengthExp_;
+	XMLEntryNumberParser segLengthExp_;
+	XMLEntryNumberParser segVarExp_;
+	XMLEntryNumberParser sizeExp_;
+	XMLEntryNumberParser sizeVarExp_;
+	XMLEntryNumberParser minSizeExp_;
+	XMLEntryNumberParser splitProbExp_;
+	XMLEntryNumberParser splitVarExp_;
+	XMLEntryNumberParser deathProbExp_;
+	XMLEntryNumberParser derivAngleExp_;
+	XMLEntryNumberParser angleVarExp_;
+	XMLEntryNumberParser totalTimeExp_;
+	XMLEntryNumberParser segHurtExp_;
+	XMLEntryNumberParser segHurtRadiusExp_;
 
 };
 

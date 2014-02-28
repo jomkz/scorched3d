@@ -22,7 +22,7 @@
 #define __INCLUDE_WeaponLaserh_INCLUDE__
 
 #include <weapons/Weapon.h>
-#include <actions/LaserParams.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponLaser  : public Weapon
 {
@@ -30,8 +30,12 @@ public:
 	WeaponLaser();
 	virtual ~WeaponLaser();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
+	fixed getMinimumHurt(ScorchedContext &context) { return minimumHurt_.getValue(context); }
+	fixed getMaximumHurt(ScorchedContext &context) { return maximumHurt_.getValue(context); }
+	fixed getMinimumDistance(ScorchedContext &context) { return minimumDistance_.getValue(context); }
+	fixed getMaximumDistance(ScorchedContext &context) { return maximumDistance_.getValue(context); }
+	fixed getHurtRadius(ScorchedContext &context) { return hurtRadius_.getValue(context); }
+	bool getHurtFirer() { return hurtFirer_.getValue(); }
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -40,14 +44,10 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponLaser, AccessoryPart::AccessoryWeapon);
 
 protected:
-	LaserParams laserParams_;
-
-	// Use the following to hold the NumberParser fixed expression
-	// convert to values in actions/Laser
-	NumberParser minimumHurt_, maximumHurt_;
-	NumberParser minimumDistance_, maximumDistance_;
-	NumberParser hurtRadius_;
-	NumberParser totalTime_;
+	XMLEntryNumberParser minimumHurt_, maximumHurt_;
+	XMLEntryNumberParser minimumDistance_, maximumDistance_;
+	XMLEntryNumberParser hurtRadius_;
+	XMLEntryBool hurtFirer_;
 };
 
 #endif // __INCLUDE_WeaponLaserh_INCLUDE__

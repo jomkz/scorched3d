@@ -26,38 +26,16 @@
 REGISTER_ACCESSORY_SOURCE(WeaponLeapFrog);
 
 WeaponLeapFrog::WeaponLeapFrog():  
-	collisionAction_(0), bounce_("WeaponLeapFrog::bounce", fixed(true, 6000))
+	Weapon("WeaponLeapFrog", "Causes the next primitive to be shot at the same angle of inclination that it came in at and with a given change in velocity. "
+		"So if it was coming down at an angle of 60 degrees, it will be shot at 60 degrees toward the direction it was traveling before it hit."),
+	bounce_("WeaponLeapFrog::bounce", "amount to change the velocity by (newvelocity = velocity * bounce)", 0, "0.6")
 {
-
+	addChildXMLEntry("bounce", &bounce_);
+	addChildXMLEntry("collisionaction", &collisionAction_);
 }
 
 WeaponLeapFrog::~WeaponLeapFrog()
 {
-	delete collisionAction_;
-	collisionAction_ = 0;
-}
-
-bool WeaponLeapFrog::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("collisionaction", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	collisionAction_ = (Weapon*) accessory;
-
-	// Get the bounce
-	if (!accessoryNode->getNamedChild("bounce", bounce_)) return false;
-
-	return true;
 }
 
 void WeaponLeapFrog::fireWeapon(ScorchedContext &context,
@@ -82,5 +60,5 @@ void WeaponLeapFrog::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	collisionAction_->fire(context, weaponContext, newPosition, newVelocity);
+	collisionAction_.getValue()->fire(context, weaponContext, newPosition, newVelocity);
 }

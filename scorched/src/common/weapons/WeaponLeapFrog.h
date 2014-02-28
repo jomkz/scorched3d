@@ -22,6 +22,7 @@
 #define AFX_WEAPONLEAPFROG_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponLeapFrog : public Weapon
 {
@@ -29,10 +30,7 @@ public:
 	WeaponLeapFrog();
 	virtual ~WeaponLeapFrog();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
-	Weapon *getCollisionAction() { return collisionAction_; }
+	Weapon *getCollisionAction() { return collisionAction_.getValue(); }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -41,9 +39,8 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponLeapFrog, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser bounce_;
-	Weapon *collisionAction_;
-
+	XMLEntryNumberParser bounce_;
+	XMLEntryWeaponChoice collisionAction_;
 };
 
 #endif // !defined(AFX_WEAPONLEAPFROG_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_)

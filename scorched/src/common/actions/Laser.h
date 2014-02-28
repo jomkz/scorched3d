@@ -23,12 +23,11 @@
 
 #include <actions/Action.h>
 #include <weapons/WeaponLaser.h>
-#include <actions/LaserParams.h>
 
 class Laser : public Action
 {
 public:
-	Laser(Weapon *weapon, LaserParams *params,
+	Laser(WeaponLaser *weapon, 
 		FixedVector &position, FixedVector &direction,
 		WeaponFireContext &weaponContext);
 	virtual ~Laser();
@@ -39,12 +38,11 @@ public:
 	virtual std::string getActionType() { return "Laser"; }
 
 protected:
-	LaserParams *params_;
 	fixed totalTime_;
 	fixed drawLength_;
 	fixed directionMagnitude_;
 	WeaponFireContext weaponContext_;
-	Weapon *weapon_;
+	WeaponLaser *weapon_;
 	FixedVector position_, direction_;
 
 	bool firstTime_;

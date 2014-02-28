@@ -22,15 +22,13 @@
 #define AFX_WEAPONMIRV_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponMirv  : public Weapon
 {
 public:
 	WeaponMirv();
 	virtual ~WeaponMirv();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,11 +37,10 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponMirv, AccessoryPart::AccessoryWeapon);
 
 protected:
-	int noWarheads_;
-	NumberParser hspreadDist_;
-	NumberParser vspreadDist_;
-	Weapon *aimedWeapon_;
-
+	XMLEntryInt noWarheads_;
+	XMLEntryNumberParser hspreadDist_;
+	XMLEntryNumberParser vspreadDist_;
+	XMLEntryWeaponChoice aimedWeapon_;
 };
 
 #endif // !defined(AFX_WEAPONMIRV_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

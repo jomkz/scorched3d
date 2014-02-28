@@ -28,31 +28,24 @@
 REGISTER_ACCESSORY_SOURCE(WeaponMoveTank);
 
 WeaponMoveTank::WeaponMoveTank() :
-	stepTime_(fixed(true, 500)), useFuel_(-1), maximumRange_(100)
+	Weapon("WeaponMoveTank", "Moves the players tank to the current position. "
+		"The player will gradually move across the landscape at a configurable speed. "
+		"This primitive can configured to use the accessory as 'fuel' so that the range is limited by the amount of that item the player has. "
+		"If the item is not used as fuel, the maximumrange is always whatever the current max range is defined as."),
+	stepTime_("Used to determine rate at which the player moves. Lower = faster movement", 0, fixed(true, 500)), 
+	useFuel_("-1 = \"true\"= Use fuel from inventory."
+           "0 = \"false\"= Don't use fuel from inventory."
+           "1+ = Use this much fuel from inventory.", 0, -1), 
+	maximumRange_("Maximum distance the player can move per turn", 0, 100)
 {
-
+	addChildXMLEntry("steptime", &stepTime_);
+	addChildXMLEntry("maximumrange", &maximumRange_);
+	addChildXMLEntry("usefuel", &useFuel_);
 }
 
 WeaponMoveTank::~WeaponMoveTank()
 {
 
-}
-
-bool WeaponMoveTank::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-	accessoryNode->getNamedChild("steptime", stepTime_, false);
-	accessoryNode->getNamedChild("maximumrange", maximumRange_, false);
-
-	std::string usefuel;
-	if (accessoryNode->getNamedChild("usefuel", usefuel, false))
-	{
-		if (0 == strcmp(usefuel.c_str(), "true")) useFuel_ = -1;
-		else if (0 == strcmp(usefuel.c_str(), "false")) useFuel_ = 0;
-		else useFuel_ = atoi(usefuel.c_str());
-	}
-
-	return true;
 }
 
 void WeaponMoveTank::fireWeapon(ScorchedContext &context,

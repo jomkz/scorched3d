@@ -22,6 +22,7 @@
 #define AFX_WeaponMoveTank_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class WeaponMoveTank  : public Weapon
 {
@@ -29,12 +30,9 @@ public:
 	WeaponMoveTank();
 	virtual ~WeaponMoveTank();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
-	int getMaximumRange() { return maximumRange_; }
-	fixed getStepTime() { return stepTime_; }
-	int getUseFuel() { return useFuel_; }
+	int getMaximumRange() { return maximumRange_.getValue(); }
+	fixed getStepTime() { return stepTime_.getValue(); }
+	int getUseFuel() { return useFuel_.getValue(); }
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -43,10 +41,9 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponMoveTank, AccessoryPart::AccessoryWeapon);
 
 protected:
-	int maximumRange_;
-	fixed stepTime_;
-	int useFuel_;
-
+	XMLEntryInt maximumRange_;
+	XMLEntryFixed stepTime_;
+	XMLEntryInt useFuel_;
 };
 
 #endif // !defined(AFX_WeaponMoveTank_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

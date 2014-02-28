@@ -27,51 +27,42 @@
 REGISTER_ACCESSORY_SOURCE(WeaponLightning);
 
 WeaponLightning::WeaponLightning() :
-	coneLengthExp_("WeaponLightning::coneLengthExp"),
-	segLengthExp_("WeaponLightning::segLengthExp"),
-	segVarExp_("WeaponLightning::segVarExp"),
-	sizeExp_("WeaponLightning::sizeExp"),
-	sizeVarExp_("WeaponLightning::sizeVarExp"),
-	minSizeExp_("WeaponLightning::minSizeExp"),
-	splitProbExp_("WeaponLightning::splitProbExp"),
-	splitVarExp_("WeaponLightning::splitVarExp"),
-	deathProbExp_("WeaponLightning::deathProbExp"),
-	derivAngleExp_("WeaponLightning::derivAngleExp"),
-	angleVarExp_("WeaponLightning::angleVarExp"),
-	totalTimeExp_("WeaponLightning::totalTimeExp"),
-	segHurtExp_("WeaponLightning::segHurtExp"),
-	segHurtRadiusExp_("WeaponLightning::segHurtRadiusExp")
+	Weapon("WeaponLightning", "Creates a bolt of lightning with the specified properties"),
+	coneLengthExp_("WeaponLightning::coneLengthExp", "Length of the lightning bolt"),
+	segLengthExp_("WeaponLightning::segLengthExp", "Length of each segment of the bolt"),
+	segVarExp_("WeaponLightning::segVarExp", "Max length variance of each segment"),
+	sizeExp_("WeaponLightning::sizeExp", "Width of the lightning segments"),
+	sizeVarExp_("WeaponLightning::sizeVarExp", "The amount added to the width for each new segment.  Segments get larger each itteration"),
+	minSizeExp_("WeaponLightning::minSizeExp", "Minimum width of a segment"),
+	splitProbExp_("WeaponLightning::splitProbExp", "Probability that the bolt will fork into multiple segments"),
+	splitVarExp_("WeaponLightning::splitVarExp", "The chance the lightning will split as it gets longer.  The chance gets larger the longer it is and this increase is controlled by this item "),
+	deathProbExp_("WeaponLightning::deathProbExp", "Probability that the bolt will stop at a given segment"),
+	derivAngleExp_("WeaponLightning::derivAngleExp", "The minimum allowed angle change between the very first segment and current segment's direction"),
+	angleVarExp_("WeaponLightning::angleVarExp", "The maximum angle change that will be tried for the next segment"),
+	totalTimeExp_("WeaponLightning::totalTimeExp", "Total life time of the lightning particles, in seconds"),
+	segHurtExp_("WeaponLightning::segHurtExp", "Amount of damage done to tanks per segment"),
+	segHurtRadiusExp_("WeaponLightning::segHurtRadiusExp", "Radius within which segments will do damage"),
+	texture_("Location of the texture to apply to the lightning effect")
 {
+	addChildXMLEntry("conelength", &coneLengthExp_);
+	addChildXMLEntry("seglength", &segLengthExp_);
+	addChildXMLEntry("segvar", &segVarExp_);
+	addChildXMLEntry("size", &sizeExp_);
+	addChildXMLEntry("sizevar", &sizeVarExp_);
+	addChildXMLEntry("minsize", &minSizeExp_);
+	addChildXMLEntry("splitprob", &splitProbExp_);
+	addChildXMLEntry("splitvar", &splitVarExp_);
+	addChildXMLEntry("deathprob", &deathProbExp_);
+	addChildXMLEntry("derivangle", &derivAngleExp_);
+	addChildXMLEntry("anglevar", &angleVarExp_);
+	addChildXMLEntry("totaltime", &totalTimeExp_);
+	addChildXMLEntry("seghurt", &segHurtExp_);
+	addChildXMLEntry("seghurtradius", &segHurtRadiusExp_);
+	addChildXMLEntry("texture", &texture_);
 }
 
 WeaponLightning::~WeaponLightning()
 {
-}
-
-bool WeaponLightning::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-	if (!accessoryNode->getNamedChild("conelength", coneLengthExp_)) return false;
-	if (!accessoryNode->getNamedChild("seglength", segLengthExp_)) return false;
-	if (!accessoryNode->getNamedChild("segvar", segVarExp_)) return false;
-	if (!accessoryNode->getNamedChild("size", sizeExp_)) return false;
-	if (!accessoryNode->getNamedChild("sizevar", sizeVarExp_)) return false;
-	if (!accessoryNode->getNamedChild("minsize", minSizeExp_)) return false;
-	if (!accessoryNode->getNamedChild("splitprob", splitProbExp_)) return false;
-	if (!accessoryNode->getNamedChild("splitvar", splitVarExp_)) return false;
-	if (!accessoryNode->getNamedChild("deathprob", deathProbExp_)) return false;
-	if (!accessoryNode->getNamedChild("derivangle", derivAngleExp_)) return false;
-	if (!accessoryNode->getNamedChild("anglevar", angleVarExp_)) return false;
-	if (!accessoryNode->getNamedChild("totaltime", totalTimeExp_)) return false;
-	if (!accessoryNode->getNamedChild("seghurt", segHurtExp_)) return false;
-	if (!accessoryNode->getNamedChild("seghurtradius", segHurtRadiusExp_)) return false;
-	if (!accessoryNode->getNamedChild("sound", sound_)) return false;
-
-	texture_ = "data/textures/lightning.bmp";
-	accessoryNode->getNamedChild("texture", texture_, false);
-
-	if (!S3D::checkDataFile(getSound())) return false;
-	return true;
 }
 
 void WeaponLightning::fireWeapon(ScorchedContext &context,

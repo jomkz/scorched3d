@@ -26,44 +26,29 @@
 REGISTER_ACCESSORY_SOURCE(WeaponLaser);
 
 WeaponLaser::WeaponLaser() :
-	minimumHurt_("WeaponLaser::minimumHurt"), maximumHurt_("WeaponLaser::maximumHurt"),
-	minimumDistance_("WeaponLaser::minimumDistance"), maximumDistance_("WeaponLaser::maximumDistance"),
-	hurtRadius_("WeaponLaser::hurtRadius"),
-	totalTime_("WeaponLaser::totalTime")
+	Weapon("WeaponLaser", "Shoots a laser beam in the direction currently being aimed at.  The longer the laser beam (the power) the less damage it will do"),
+	minimumHurt_("WeaponLaser::minimumHurt", "The amount of damage that will be taken from the target if the laser is at its minimum strength (maximum length)"), 
+	maximumHurt_("WeaponLaser::maximumHurt", "The amount of damage that will be taken from the target if the laser is at its maximum strength (minimum length)"),
+	minimumDistance_("WeaponLaser::minimumDistance", "Minimum distance the laser can travel (minimum length)"), 
+	maximumDistance_("WeaponLaser::maximumDistance", "Maximum distance the laser can travel (maximum length)"),
+	hurtRadius_("WeaponLaser::hurtRadius", "Radius from the center of the laser beam within which tanks will take damage from the laser"),
+	hurtFirer_("Whether or not the laser can hurt the firer of the weapon", 0, false)
 {
+	addChildXMLEntry("minimumhurt", &minimumHurt_);
+	addChildXMLEntry("maximumhurt", &maximumHurt_);
+	addChildXMLEntry("hurtradius", &hurtRadius_);
+	addChildXMLEntry("minimumdistance", &minimumDistance_);
+	addChildXMLEntry("maximumdistance", &maximumDistance_);
+	addChildXMLEntry("hurtfirer", &hurtFirer_);
 }
 
 WeaponLaser::~WeaponLaser()
 {
 }
 
-bool WeaponLaser::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("minimumhurt", minimumHurt_)) return false;
-	if (!accessoryNode->getNamedChild("maximumhurt", maximumHurt_)) return false;
-	if (!accessoryNode->getNamedChild("hurtradius", hurtRadius_)) return false;
-	if (!accessoryNode->getNamedChild("minimumdistance", minimumDistance_)) return false;
-	if (!accessoryNode->getNamedChild("maximumdistance", maximumDistance_)) return false;
-	if (!accessoryNode->getNamedChild("totaltime", totalTime_)) return false;
-
-	if (!laserParams_.parseXML(accessoryNode)) return false;
-
-	return true;
-}
-
 void WeaponLaser::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	LaserParams *params = new LaserParams(laserParams_);
-	params->setMinimumHurt(minimumHurt_.getValue(context));
-	params->setMaximumHurt(maximumHurt_.getValue(context));
-	params->setHurtRadius(hurtRadius_.getValue(context));
-	params->setMinimumDistance(minimumDistance_.getValue(context));
-	params->setMaximumDistance(maximumDistance_.getValue(context));
-	params->setTotalTime(totalTime_.getValue(context));
-
 	context.getActionController().addAction(
-		new Laser(this, params, position, velocity, weaponContext));
+		new Laser(this, position, velocity, weaponContext));
 }

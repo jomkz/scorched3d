@@ -28,23 +28,16 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponMessage);
 
-WeaponMessage::WeaponMessage()
+WeaponMessage::WeaponMessage() :
+	WeaponCallback("WeaponMessage", "Broadcasts the given message on the combat chat channel"),
+	message_("Message to broadcast")
 {
-
+	addChildXMLEntry("message", &message_);
 }
 
 WeaponMessage::~WeaponMessage()
 {
 
-}
-
-bool WeaponMessage::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("message", message_)) return false;
-
-	return true;
 }
 
 void WeaponMessage::fireWeapon(ScorchedContext &context,
@@ -61,7 +54,7 @@ void WeaponMessage::weaponCallback(
 	unsigned int userData)
 {
 	{
-		ChannelText text("combat", LANG_STRING(message_));
+		ChannelText text("combat", LANG_STRING(message_.getValue()));
 		ChannelManager::showText(context, text);
 	}
 }

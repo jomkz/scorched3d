@@ -34,11 +34,10 @@
 #include <math.h>
 #include <set>
 
-Laser::Laser(Weapon *weapon, LaserParams *params,
+Laser::Laser(WeaponLaser *weapon, 
 		FixedVector &position, FixedVector &direction,
 		WeaponFireContext &weaponContext) :
 	Action(weaponContext.getInternalContext().getReferenced()),
-	params_(params),
 	totalTime_(0),
 	drawLength_(0),
 	firstTime_(true),
@@ -51,17 +50,16 @@ Laser::Laser(Weapon *weapon, LaserParams *params,
 
 Laser::~Laser()
 {
-	delete params_;
 }
 
 void Laser::init()
 {
 	directionMagnitude_ = direction_.Magnitude();
 	fixed per = directionMagnitude_ / 50;
-	length_ = params_->getMinimumDistance() + 
-		(params_->getMaximumDistance() - params_->getMinimumDistance()) * per;
-	damage_ = params_->getMinimumHurt() + 
-		(params_->getMaximumHurt() - params_->getMinimumHurt()) * (fixed(1) - per);
+	length_ = weapon_->getMinimumDistance(*context_) + 
+		(weapon_->getMaximumDistance(*context_) - weapon_->getMinimumDistance(*context_)) * per;
+	damage_ = weapon_->getMinimumHurt(*context_) + 
+		(weapon_->getMaximumHurt(*context_) - weapon_->getMinimumHurt(*context_)) * (fixed(1) - per);
 
 	FixedVector dir = direction_.Normalize();
 
@@ -69,8 +67,8 @@ void Laser::init()
 	angYZ_ = acosf(dir[2].asFloat()) / 3.14f * 180.0f;
 
 	// preset some values from the numberparser expressions
-	laserTime_ = params_->getTotalTime();
-	hurtRadius_ = params_->getHurtRadius();
+	laserTime_ = 1;
+	hurtRadius_ = weapon_->getHurtRadius(*context_);
 }
 
 std::string Laser::getActionDetails()
@@ -99,7 +97,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 			{
 				std::map<unsigned int, Target *> collisionTargets;
 				context_->getTargetSpace().getCollisionSet(pos, 
-					fixed(params_->getHurtRadius()), collisionTargets);
+					fixed(hurtRadius_), collisionTargets);
 				std::map<unsigned int, Target *>::iterator itor;
 				for (itor = collisionTargets.begin();
 					itor != collisionTargets.end();
@@ -108,7 +106,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 					Target *current = (*itor).second;
 					if (current->getAlive() &&
 						((current->getPlayerId() != weaponContext_.getPlayerId()) ||
-						params_->getHurtFirer()))
+						weapon_->getHurtFirer()))
 					{
 						Shield::ShieldLaserProofType laserProof = Shield::ShieldLaserProofNone;
 						if (current->getShield().getCurrentShield())
@@ -135,7 +133,7 @@ void Laser::simulate(fixed frameTime, bool &remove)
 							FixedVector offset = current->getLife().getTargetPosition() - pos;
 							fixed targetDistance = offset.Magnitude();
 
-							if (targetDistance < params_->getHurtRadius() + 
+							if (targetDistance < hurtRadius_ + 
 								S3D_MAX(current->getLife().getSize()[0], current->getLife().getSize()[1]))
 							{
 								damagedTargets_.insert(current->getPlayerId());

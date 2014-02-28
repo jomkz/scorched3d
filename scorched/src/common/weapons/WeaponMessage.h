@@ -22,15 +22,13 @@
 #define __INCLUDE_WeaponMessageh_INCLUDE__
 
 #include <actions/CallbackWeapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class WeaponMessage  : public WeaponCallback
 {
 public:
 	WeaponMessage();
 	virtual ~WeaponMessage();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -45,8 +43,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponMessage, AccessoryPart::AccessoryWeapon);
 
 protected:
-	std::string message_;
-
+	XMLEntryString message_;
 };
 
 #endif // __INCLUDE_WeaponMessageh_INCLUDE__
