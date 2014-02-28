@@ -18,58 +18,32 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStateh_INCLUDE__)
-#define __INCLUDE_UIStateh_INCLUDE__
+#if !defined(__INCLUDE_OgreSystemh_INCLUDE__)
+#define __INCLUDE_OgreSystemh_INCLUDE__
 
-#include <engine/ThreadCallback.h>
-
-class UIStateI;
-class UIStateMainMenu;
-class UIStateProgress;
-class UIStateJoining;
-class UIStatePlaying;
-class UIState
+class OgreSystem
 {
 public:
-	UIState();
-	virtual ~UIState();
+	OgreSystem();
+	virtual ~OgreSystem();
 
-	enum State
-	{
-		StateMainMenu,
-		StateProgress,
-		StateJoining,
-		StatePlaying
-	};
+	Ogre::Root *getOgreRoot() { return ogreRoot_; }
+	Ogre::RenderWindow *getOgreRenderWindow() { return ogreWindow_; }
 
-	void setState(State nextState);
-	void setStateNonUIThread(State nextState);
-	void updateState(float frameTime);
+	bool create();
+	bool createUI();
 
 protected:
-	static UIState *instance_;
-	UIStateMainMenu *uiStateMenuMenu_;
-	UIStateProgress *uiStateProgress_;
-	UIStateJoining *uiStateJoining_;
-	UIStatePlaying *uiStatePlaying_;
-	UIStateI *currentState_;
-	ThreadCallback uiThreadCallback_;
+	// Ogre
+	Ogre::Root *ogreRoot_;
+	Ogre::RenderWindow* ogreWindow_;
 
-private:
+	// CEGUI
+	CEGUI::OgreRenderer* guiRenderer_;
 
+	bool loadPlugin(const Ogre::String &pluginName, const Ogre::String &requiredName);
+	bool createWindow();
+	void loadResources();
 };
 
-class UIStateThreadCallback : public ThreadCallbackI
-{
-public:
-	UIStateThreadCallback(UIState::State state);
-	virtual ~UIStateThreadCallback();
-
-	// ThreadCallbackI
-	virtual void callbackInvoked();
-
-private:
-	UIState::State state_;
-};
-
-#endif // __INCLUDE_UIStateh_INCLUDE__
+#endif // __INCLUDE_OgreSystemh_INCLUDE__

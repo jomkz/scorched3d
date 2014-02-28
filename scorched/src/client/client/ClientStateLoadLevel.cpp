@@ -37,6 +37,7 @@
 #include <target/TargetContainer.h>
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
+#include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/UIProgressCounter.h>
 #include <scorched3dc/UIState.h>
 
@@ -227,11 +228,11 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 		}
 		*/
 
-		UIState::instance()->setStateNonUIThread(UIState::StateJoining);
+		ScorchedUI::instance()->getUIState().setStateNonUIThread(UIState::StateJoining);
 	}
 	else
 	{
-		UIState::instance()->setStateNonUIThread(UIState::StatePlaying);
+		ScorchedUI::instance()->getUIState().setStateNonUIThread(UIState::StatePlaying);
 	}
 
 	// Tell the server we have finished processing the landscape

@@ -18,34 +18,12 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingh_INCLUDE__
+#include <scorched3dc/InputHandlerMouse.h>
 
-#include <scorched3dc/UIStateI.h>
-#include <scorched3dc/CameraController.h>
-
-class UIStatePlayingEnv;
-class UIStatePlayingLand;
-class CameraController;
-class UIStatePlaying : public UIStateI, public CameraControllerHeightProvider
+InputHandlerMouse::InputHandlerMouse()
 {
-public:
-	UIStatePlaying();
-	virtual ~UIStatePlaying();
+}
 
-	// UIStateI
-	virtual void createState();
-	virtual void destroyState();
-	virtual void updateState(float frameTime);
-
-	// CameraControllerHeightProvider
-	virtual Ogre::Real getHeight(const Ogre::Vector3 &position);
-
-protected:
-	Ogre::SceneManager* sceneMgr_;
-	CameraController *cameraController_;
-	UIStatePlayingEnv *env_;
-	UIStatePlayingLand *land_;
-};
-
-#endif // __INCLUDE_UIStatePlayingh_INCLUDE__
+InputHandlerMouse::~InputHandlerMouse()
+{
+}

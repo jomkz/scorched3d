@@ -19,25 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/UIStatePlayingEnv.h>
-#include <scorched3dc/Scorched3DC.h>
-
-class HydraxListener : public Ogre::FrameListener
-{
-public:
-    HydraxListener(Hydrax::Hydrax *hydraX) : 
-		hydraX_(hydraX)
-    {
-    }
-
-    bool frameStarted(const Ogre::FrameEvent &e)
-    {
-        hydraX_->update(e.timeSinceLastFrame);
-        return true;
-    }
-
-private:
-	Hydrax::Hydrax *hydraX_;
-};
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/OgreSystem.h>
 
 class HydraxRttListener : public Hydrax::RttManager::RttListener
 {
@@ -148,8 +131,10 @@ UIStatePlayingEnv::~UIStatePlayingEnv()
 
 void UIStatePlayingEnv::create()
 {
-	Ogre::Root *ogreRoot = Scorched3DC::instance()->getOgreRoot();
-	Ogre::RenderWindow *ogreRenderWindow = Scorched3DC::instance()->getOgreRenderWindow();
+	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
+	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
+
+	sceneMgr_->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
 
 	// Light
 	sunLight_ = sceneMgr_->createLight("LightSun");
@@ -158,7 +143,9 @@ void UIStatePlayingEnv::create()
 
 	// Shadow caster
 	shadowLight_ = sceneMgr_->createLight("LightShadow");
-	shadowLight_->setType(Ogre::Light::LT_DIRECTIONAL);
+    shadowLight_->setType(Ogre::Light::LT_DIRECTIONAL);
+    shadowLight_->setDiffuseColour(Ogre::ColourValue::White);
+    shadowLight_->setSpecularColour(Ogre::ColourValue(0.4, 0.4, 0.4));
 
 	// Create HydraX
 	// Create Hydrax object
@@ -193,6 +180,7 @@ void UIStatePlayingEnv::create()
 	skyX_ = new SkyX::SkyX(sceneMgr_, mBasicController);
 	skyX_->create();
 	skyX_->setTimeMultiplier(0.0f); // Pause simulation
+	mBasicController->setTime(Ogre::Vector3(5, 4, 20));
 	mBasicController->setMoonPhase(0.75f);
 	// Add a basic cloud layer
 	skyX_->getCloudsManager()->add(SkyX::CloudLayer::Options(/* Default options */));
@@ -201,8 +189,6 @@ void UIStatePlayingEnv::create()
 
 	// Add the Hydrax Rtt listener
 	hydraX_->getRttManager()->addRttListener(new HydraxRttListener(skyX_, hydraX_));
-	// Add frame listener
-	ogreRoot->addFrameListener(new HydraxListener(hydraX_));
 
 	updateLighting(); // Should do each time the skyx (time) changes
 }
@@ -226,4 +212,10 @@ void UIStatePlayingEnv::updateLighting()
 	Ogre::Vector3 ambientCol = ambientGradient_.getColor(point);
 	sunLight_->setDiffuseColour(ambientCol.x, ambientCol.y, ambientCol.z);
 	hydraX_->setSunColor(sunCol);
+}
+
+void UIStatePlayingEnv::update(float frameTime)
+{
+	//updateLighting(); // Don't need to do this at the moment as the sky simulation is paused
+	hydraX_->update(frameTime);
 }

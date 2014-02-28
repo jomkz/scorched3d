@@ -29,15 +29,18 @@ class UIStatePlayingLand
 public:
 	UIStatePlayingLand(Ogre::SceneManager* sceneMgr,
 		Ogre::Camera* camera,
-		Ogre::Light *sunLight);
+		Ogre::Light *sunLight,
+		Ogre::Light *shadowLight);
 	virtual ~UIStatePlayingLand();
+
+	Ogre::Real getHeight(const Ogre::Vector3 &position);
 
 protected:
 	Ogre::Camera* camera_;
 	Ogre::SceneManager* sceneMgr_;
 	Ogre::TerrainGlobalOptions *terrainGlobalOptions_;
 	Ogre::TerrainGroup *terrainGroup_;
-	Ogre::Light *sunLight_;
+	Ogre::Light *sunLight_, *shadowLight_;
 	bool terrainsImported_;
 
 	void create();

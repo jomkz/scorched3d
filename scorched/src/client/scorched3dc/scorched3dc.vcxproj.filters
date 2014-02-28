@@ -78,9 +78,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
-    <ClCompile Include="Scorched3DC.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
     <ClCompile Include="..\client\ClientAdmin.cpp">
       <Filter>client</Filter>
     </ClCompile>
@@ -1416,12 +1413,21 @@
     <ClCompile Include="CameraController.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="OgreSystem.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="ScorchedUI.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandlerMouse.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
-    <ClInclude Include="Scorched3DC.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
     <ClInclude Include="..\client\ClientAdmin.h">
@@ -2772,6 +2778,18 @@
       <Filter>scorched3dc</Filter>
     </ClInclude>
     <ClInclude Include="CameraController.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="OgreSystem.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="ScorchedUI.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandlerMouse.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
   </ItemGroup>

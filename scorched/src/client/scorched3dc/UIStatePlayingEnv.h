@@ -33,6 +33,9 @@ public:
 		Ogre::Camera* camera);
 	virtual ~UIStatePlayingEnv();
 
+	void update(float frameTime);
+
+	Ogre::Real getWaterHeight() { return hydraX_->getPosition()[1]; }
 	Ogre::Light *getSunLight() { return sunLight_; }
 	Ogre::Light *getShadowLight() { return shadowLight_; }
 

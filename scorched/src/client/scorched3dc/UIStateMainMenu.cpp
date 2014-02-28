@@ -18,6 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/UIStateMainMenu.h>
 #include <scorched3dc/UIProgressCounter.h>
 #include <client/ClientState.h>
@@ -51,7 +52,7 @@ void UIStateMainMenu::createState()
 
 bool UIStateMainMenu::start(const CEGUI::EventArgs &e)
 {
-	UIState::instance()->setState(UIState::StateProgress);
+	ScorchedUI::instance()->getUIState().setState(UIState::StateProgress);
 	ClientParams::instance()->setStartCustom(true);
 	ScorchedClient::startClient(UIProgressCounter::instance());
 	return true;

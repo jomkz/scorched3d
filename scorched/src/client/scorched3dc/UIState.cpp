@@ -18,20 +18,13 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/UIState.h>
 #include <scorched3dc/UIStateI.h>
 #include <scorched3dc/UIStateMainMenu.h>
 #include <scorched3dc/UIStateProgress.h>
 #include <scorched3dc/UIStateJoining.h>
 #include <scorched3dc/UIStatePlaying.h>
-
-UIState *UIState::instance_ = 0;
-
-UIState *UIState::instance()
-{
-	if (!instance_) instance_ = new UIState();
-	return instance_;
-}
 
 UIState::UIState() : currentState_(0)
 {
@@ -75,6 +68,11 @@ void UIState::setStateNonUIThread(State nextState)
 	uiThreadCallback_.addCallback(new UIStateThreadCallback(nextState));
 }
 
+void UIState::updateState(float frameTime)
+{
+	currentState_->updateState(frameTime);
+}
+
 UIStateThreadCallback::UIStateThreadCallback(UIState::State state) :
 	state_(state)
 {
@@ -86,5 +84,5 @@ UIStateThreadCallback::~UIStateThreadCallback()
 
 void UIStateThreadCallback::callbackInvoked()
 {
-	UIState::instance()->setState(state_);
+	ScorchedUI::instance()->getUIState().setState(state_);
 }

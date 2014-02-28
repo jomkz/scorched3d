@@ -18,6 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/UIStateJoining.h>
 #include <scorched3dc/UIProgressCounter.h>
 #include <engine/ThreadCallback.h>
@@ -52,7 +53,7 @@ void UIStateJoining::createState()
 
 bool UIStateJoining::join(const CEGUI::EventArgs &e)
 {
-	UIState::instance()->setState(UIState::StateProgress);
+	ScorchedUI::instance()->getUIState().setState(UIState::StateProgress);
 	UIProgressCounter::instance()->setNewOp(LANG_STRING("Waiting for server..."));
 	ScorchedClient::getThreadCallback().addCallback(new ClientJoinGameThreadCallback());
 	return true;

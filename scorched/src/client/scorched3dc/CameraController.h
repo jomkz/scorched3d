@@ -21,7 +21,16 @@
 #if !defined(__INCLUDE_CameraControllerh_INCLUDE__)
 #define __INCLUDE_CameraControllerh_INCLUDE__
 
-class CameraController : public Ogre::FrameListener
+#include <scorched3dc/InputHandlerMouse.h>
+
+class CameraControllerHeightProvider 
+{
+public:
+	virtual Ogre::Real getHeight(const Ogre::Vector3 &position) = 0;
+};
+
+class CameraController : 
+	public InputHandlerMouse
 {
 public:
 	CameraController(Ogre::SceneManager* sceneMgr);
@@ -29,21 +38,29 @@ public:
 
 	Ogre::Camera* getCamera() { return camera_; }
 
-	// Ogre::FrameListener
-	bool frameStarted(const Ogre::FrameEvent &e);
+	void update(float frameTime);
+
+	void setHeightProvider(CameraControllerHeightProvider *heightProvider) { heightProvider_ = heightProvider; }
+
+	// InputHandlerMouse
+	virtual void mouseClick(int positionX, int positionY, int mouseButton);
+	virtual void mouseDrag(int positionX, int positionY, int positionDeltaX, 
+		int positionDeltaY, int mouseButton);
+	virtual void mouseWheel(int positionDelta);
 
 protected:
 	Ogre::SceneManager* sceneMgr_;
 	Ogre::Camera* camera_;
-	Ogre::SceneNode *targetNode_;
-	Ogre::SceneNode *cameraNode_;
-	Ogre::Vector3 wantedTarget_;
+	Ogre::Vector3 wantedTarget_, currentTarget_;
 	Ogre::Vector3 wantedCamera_;
 	Ogre::Real rotationRound_, rotationUpDown_;
 	Ogre::Real zoom_;
+	Ogre::Real simulationTime_;
+	CameraControllerHeightProvider *heightProvider_;
 
 	void create();
 	void calculateWantedPosition();
+	void scroll(Ogre::Real distance, Ogre::Real rotation);
 };
 
 #endif // __INCLUDE_CameraControllerh_INCLUDE__

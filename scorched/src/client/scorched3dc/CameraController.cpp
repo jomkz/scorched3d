@@ -19,96 +19,96 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/CameraController.h>
-#include <scorched3dc/Scorched3DC.h>
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/OgreSystem.h>
+#include <scorched3dc/InputManager.h>
 
 CameraController::CameraController(
 	Ogre::SceneManager* sceneMgr) : 
-	sceneMgr_(sceneMgr), camera_(0)
+	sceneMgr_(sceneMgr), camera_(0), simulationTime_(0.0f)
 {
 	create();
+	ScorchedUI::instance()->getInputManager().addMouseHandler(this);
 }
 
 CameraController::~CameraController()
 {
-	cameraNode_->detachAllObjects ();
 	delete camera_;
-	sceneMgr_->destroySceneNode(cameraNode_);
-	sceneMgr_->destroySceneNode(targetNode_);
-	Ogre::Root *ogreRoot = Scorched3DC::instance()->getOgreRoot();
-	ogreRoot->removeFrameListener(this);
+	ScorchedUI::instance()->getInputManager().removeMouseHandler(this);
 }
 
 void CameraController::create()
 {
-	// Create tacking nodes
-	cameraNode_ = sceneMgr_->getRootSceneNode ()->createChildSceneNode("Camera_Node");
-	targetNode_ = sceneMgr_->getRootSceneNode ()->createChildSceneNode("Camera_Target_Node");
-	cameraNode_->setAutoTracking(true, targetNode_); // The camera will always look at the camera target
-	cameraNode_->setFixedYawAxis(true); // Needed because of auto tracking
-
 	// Create camera
 	camera_ = sceneMgr_->createCamera("PlayerCam");
 	camera_->setNearClipDistance(5);
 	camera_->setFarClipDistance(99999*6);
-	cameraNode_->attachObject(camera_);
 
 	// Setup the initial position
 	rotationRound_ = 0.0;
 	rotationUpDown_ = 3.14 / 3.0;
-	zoom_ = 500.0;
+	zoom_ = 2000.0;
 	wantedTarget_ = Ogre::Vector3(0.0, 0.0, 0.0);
 	calculateWantedPosition();
 
 	// Set camera position
-	targetNode_->setPosition(wantedTarget_);
-	cameraNode_->setPosition(wantedCamera_);
-
-	Ogre::Root *ogreRoot = Scorched3DC::instance()->getOgreRoot();
-	ogreRoot->addFrameListener(this);
+	currentTarget_ = wantedTarget_;
+	camera_->setPosition(wantedCamera_);
+	camera_->lookAt(wantedTarget_);
 }
 
 void CameraController::calculateWantedPosition()
 {
+	if (rotationUpDown_ > 1.7f) rotationUpDown_ = 1.7f;
+	else if (rotationUpDown_ < 0.1f) rotationUpDown_ = 0.1f;
+	if (zoom_ < 100.0f) zoom_ = 100.0f;
+	else if (zoom_ > 14000.0f) zoom_ = 14000.0f;
+
 	wantedCamera_[0] = zoom_ * float(sin(rotationRound_) * sin(rotationUpDown_));
 	wantedCamera_[1] = zoom_ * float(cos(rotationUpDown_));
 	wantedCamera_[2] = zoom_ * float(cos(rotationRound_) * sin(rotationUpDown_));
 	wantedCamera_ += wantedTarget_;
 }
 
-bool CameraController::frameStarted(const Ogre::FrameEvent &e)
+void CameraController::scroll(Ogre::Real distance, Ogre::Real rotation)
 {
-	Ogre::Real elapsedTime = e.timeSinceLastFrame;
+	wantedTarget_ += Ogre::Vector3(float(sin(rotationRound_ + rotation) * distance), 0.0f, 
+		float(cos(rotationRound_ + rotation) * distance));
+	calculateWantedPosition();
+}
 
-	OIS::Keyboard *keyboard = Scorched3DC::instance()->getKeyboard();
+void CameraController::update(float elapsedTime)
+{
+	OIS::Keyboard *keyboard = ScorchedUI::instance()->getInputManager().getKeyboard();
+	if (!keyboard) return;
 	if (keyboard->isKeyDown(OIS::KC_W))
 	{
-		wantedTarget_ += Ogre::Vector3(0.0f, 0.0f, -elapsedTime * zoom_ / 5.0f);
-		calculateWantedPosition();
+		Ogre::Real distance = elapsedTime * zoom_ / -5.0f;
+		scroll(distance, 0.0f);
 	} 
 	else if (keyboard->isKeyDown(OIS::KC_S))
 	{
-		wantedTarget_ += Ogre::Vector3(0.0f, 0.0f, elapsedTime * zoom_ / 5.0f);
-		calculateWantedPosition();
+		Ogre::Real distance = elapsedTime * zoom_ / 5.0f;
+		scroll(distance, 0.0f);
 	}
 	if (keyboard->isKeyDown(OIS::KC_A))
 	{
-		wantedTarget_ += Ogre::Vector3(-elapsedTime * zoom_ / 5.0f, 0.0f, 0.0f);
-		calculateWantedPosition();
+		Ogre::Real distance = elapsedTime * zoom_ / -5.0f;
+		scroll(distance, 1.57f);
 	} 
 	else if (keyboard->isKeyDown(OIS::KC_D))
 	{
-		wantedTarget_ += Ogre::Vector3(elapsedTime * zoom_ / 5.0f, 0.0f, 0.0f);
-		calculateWantedPosition();
+		Ogre::Real distance = elapsedTime * zoom_ / 5.0f;
+		scroll(distance, 1.57f);
 	}
 	if (keyboard->isKeyDown(OIS::KC_R))
 	{
-		zoom_ += 1000.0f * elapsedTime;
+		zoom_ += -1000.0f * elapsedTime;
 		calculateWantedPosition();
 	} 
 	else if (keyboard->isKeyDown(OIS::KC_F))
 	{
-		zoom_ += 1000.0f * -elapsedTime;
-		if (zoom_ < 100.0f) zoom_ = 100.0f;
+		zoom_ += 1000.0f * elapsedTime;
 		calculateWantedPosition();
 	}
 	if (keyboard->isKeyDown(OIS::KC_Q))
@@ -118,17 +118,72 @@ bool CameraController::frameStarted(const Ogre::FrameEvent &e)
 	} 
 	else if (keyboard->isKeyDown(OIS::KC_E))
 	{
-		rotationRound_ += 3.14f / 4.0f * -elapsedTime;
+		rotationRound_ += 3.14f / -4.0f * elapsedTime;
 		calculateWantedPosition();
 	}
 
-	Ogre::Real snap = 0.1;
-	Ogre::Vector3 updateTarget = (wantedTarget_ - targetNode_->getPosition()) * snap;
-	updateTarget += targetNode_->getPosition();
-	targetNode_->setPosition(updateTarget);
-	Ogre::Vector3 updateCamera = (wantedCamera_ - cameraNode_->getPosition()) * snap;
-	updateCamera += cameraNode_->getPosition();
-	cameraNode_->setPosition(updateCamera);
+	// A simulation loop to keep the camera movement speed constant
+	// regardless of frametime
+	const Ogre::Real SimulationTimeStep = 1.0f / 66.0f;
+	simulationTime_ += elapsedTime;
+	while (simulationTime_ > SimulationTimeStep)
+	{
+		simulationTime_ -= SimulationTimeStep;
 
-	return true;
+		Ogre::Real snap = 0.1;
+		Ogre::Vector3 updateTarget = (wantedTarget_ - currentTarget_) * snap;
+		updateTarget += currentTarget_;
+		Ogre::Vector3 updateCamera = (wantedCamera_ - camera_->getPosition()) * snap;
+		updateCamera += camera_->getPosition();
+
+		Ogre::Real minHeight = 0.0f;
+		if (heightProvider_) minHeight = heightProvider_->getHeight(updateCamera);
+		if (updateCamera[1] < minHeight + 30.0f)
+		{
+			updateCamera[1] = minHeight + 30.0f;
+		}
+
+		camera_->setPosition(updateCamera);
+		camera_->lookAt(updateTarget);
+		currentTarget_ = updateTarget;
+	}
+}
+
+void CameraController::mouseClick(int positionX, int positionY, int mouseButton)
+{
+
+}
+
+void CameraController::mouseDrag(int positionX, int positionY, int positionDeltaX, 
+	int positionDeltaY, int mouseButton)
+{
+	if (mouseButton == OIS::MB_Left)
+	{
+		scroll(((Ogre::Real) positionDeltaX) * zoom_ / -900.0f, 1.57f);
+		scroll(((Ogre::Real) positionDeltaY) * zoom_ / -900.0f, 0.0f);
+	}
+	else if (mouseButton == OIS::MB_Right)
+	{
+		rotationRound_ += -3.14f / 400.0f * positionDeltaX;
+		rotationUpDown_ += -3.14f / 400.0f * positionDeltaY;
+		calculateWantedPosition();
+	}
+	else if (mouseButton == OIS::MB_Middle)
+	{
+		zoom_ += positionDeltaY * 5.0f;
+		calculateWantedPosition();
+	}
+}
+
+void CameraController::mouseWheel(int positionDelta)
+{
+	if (positionDelta < 0.0f)
+	{
+		zoom_ *= 1.15f;
+	}
+	else
+	{
+		zoom_ *= 0.85f;
+	}
+	calculateWantedPosition();
 }

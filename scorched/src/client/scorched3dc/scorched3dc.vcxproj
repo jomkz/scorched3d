@@ -447,8 +447,11 @@
     <ClCompile Include="..\console\ConsoleRuleMethodIAdapter.cpp" />
     <ClCompile Include="..\console\ConsoleRules.cpp" />
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="InputHandlerMouse.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Scorched3DC.cpp" />
+    <ClCompile Include="OgreSystem.cpp" />
+    <ClCompile Include="ScorchedUI.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -905,7 +908,10 @@
     <ClInclude Include="..\console\ConsoleRuleMethodIAdapter.h" />
     <ClInclude Include="..\console\ConsoleRules.h" />
     <ClInclude Include="CameraController.h" />
-    <ClInclude Include="Scorched3DC.h" />
+    <ClInclude Include="InputHandlerMouse.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="OgreSystem.h" />
+    <ClInclude Include="ScorchedUI.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UIProgressCounter.h" />
     <ClInclude Include="UIState.h" />

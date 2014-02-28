@@ -18,58 +18,35 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStateh_INCLUDE__)
-#define __INCLUDE_UIStateh_INCLUDE__
+#if !defined(__INCLUDE_ScorchedUIh_INCLUDE__)
+#define __INCLUDE_ScorchedUIh_INCLUDE__
 
-#include <engine/ThreadCallback.h>
-
-class UIStateI;
-class UIStateMainMenu;
-class UIStateProgress;
-class UIStateJoining;
-class UIStatePlaying;
-class UIState
+class InputManager;
+class OgreSystem;
+class UIState;
+class ThreadCallback;
+class ScorchedUI
 {
 public:
-	UIState();
-	virtual ~UIState();
+	ScorchedUI();
+	virtual ~ScorchedUI();
 
-	enum State
-	{
-		StateMainMenu,
-		StateProgress,
-		StateJoining,
-		StatePlaying
-	};
+	static ScorchedUI *instance();
 
-	void setState(State nextState);
-	void setStateNonUIThread(State nextState);
-	void updateState(float frameTime);
+	bool go();
+
+	OgreSystem &getOgreSystem() { return *ogreSystem_; }
+	UIState &getUIState() { return *uiState_; }
+	ThreadCallback &getUIThreadCallback() { return *uiThreadCallback_; }
+	InputManager &getInputManager() { return *inputManager_; }
 
 protected:
-	static UIState *instance_;
-	UIStateMainMenu *uiStateMenuMenu_;
-	UIStateProgress *uiStateProgress_;
-	UIStateJoining *uiStateJoining_;
-	UIStatePlaying *uiStatePlaying_;
-	UIStateI *currentState_;
-	ThreadCallback uiThreadCallback_;
-
-private:
-
+	static ScorchedUI *instance_;
+	bool quit_;
+	UIState *uiState_;
+	OgreSystem *ogreSystem_;
+	InputManager *inputManager_;
+	ThreadCallback *uiThreadCallback_;
 };
 
-class UIStateThreadCallback : public ThreadCallbackI
-{
-public:
-	UIStateThreadCallback(UIState::State state);
-	virtual ~UIStateThreadCallback();
-
-	// ThreadCallbackI
-	virtual void callbackInvoked();
-
-private:
-	UIState::State state_;
-};
-
-#endif // __INCLUDE_UIStateh_INCLUDE__
+#endif // __INCLUDE_ScorchedUIh_INCLUDE__

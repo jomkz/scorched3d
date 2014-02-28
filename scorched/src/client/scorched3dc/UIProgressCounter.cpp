@@ -18,6 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/UIProgressCounter.h>
 #include <scorched3dc/UIState.h>
 #include <common/Logger.h>
@@ -76,6 +77,6 @@ void UIProgressCounter::progressChange(const LangString &op, const float percent
 	{
 		lastTime_ = currentTime;
 		UIProgressThreadCallback *callback = new UIProgressThreadCallback(op, percentage);
-		UIState::instance()->getUIThreadCallback().addCallback(callback);
+		ScorchedUI::instance()->getUIThreadCallback().addCallback(callback);
 	}
 }

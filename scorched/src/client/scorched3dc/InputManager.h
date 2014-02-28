@@ -18,25 +18,27 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_Scorched3DCh_INCLUDE__)
-#define __INCLUDE_Scorched3DCh_INCLUDE__
+#if !defined(__INCLUDE_InputManagerh_INCLUDE__)
+#define __INCLUDE_InputManagerh_INCLUDE__
 
-class Scorched3DC : 
+#include <list>
+
+class InputHandlerMouse;
+class InputManager :
 	public Ogre::FrameListener, 
 	public Ogre::WindowEventListener, 
 	public OIS::KeyListener, 
 	public OIS::MouseListener
 {
 public:
-	Scorched3DC();
-	virtual ~Scorched3DC();
+	InputManager();
+	virtual ~InputManager();
 
-	static Scorched3DC *instance();
+	void create(Ogre::Root *ogreRoot, Ogre::RenderWindow* ogreWindow);
 
-	bool go();
+	void addMouseHandler(InputHandlerMouse *handler);
+	void removeMouseHandler(InputHandlerMouse *handler);
 
-	Ogre::Root *getOgreRoot() { return ogreRoot_; }
-	Ogre::RenderWindow *getOgreRenderWindow() { return ogreWindow_; }
 	OIS::Keyboard* getKeyboard() { return keyboard_; }
 
 	// Ogre::FrameListener
@@ -53,27 +55,18 @@ public:
 
 	// Ogre::WindowEventListener
 	virtual void windowResized(Ogre::RenderWindow* rw);
-	virtual void windowClosed(Ogre::RenderWindow* rw);
+	virtual void windowClosed(Ogre::RenderWindow* rw);	
 
 protected:
-	static Scorched3DC *instance_;
-	bool quit_;
-	Ogre::Root *ogreRoot_;
-	Ogre::RenderWindow* ogreWindow_;
-
-	// CEGUI
-	CEGUI::OgreRenderer* guiRenderer_;
-
 	// OIS Input devices
 	OIS::InputManager* inputManager_;
 	OIS::Mouse* mouse_;
 	OIS::Keyboard* keyboard_;
-
-	bool loadPlugin(const Ogre::String &pluginName, const Ogre::String &requiredName);
-	bool createWindow();
-	bool createInput();
-	bool createUI();
-	void loadResources();
+	
+	// Mouse handling
+	std::list<InputHandlerMouse *> mouseHandlers_;
+	int mouseDownButton_, mouseDownX_, mouseDownY_;
+	bool mouseDragging_;
 };
 
-#endif // __INCLUDE_Scorched3DCh_INCLUDE__
+#endif // __INCLUDE_InputManagerh_INCLUDE__

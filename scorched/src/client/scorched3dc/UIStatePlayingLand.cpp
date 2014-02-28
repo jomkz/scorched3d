@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/UIStatePlayingLand.h>
-#include <scorched3dc/Scorched3DC.h>
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/OgreSystem.h>
 
 // should be a static local function
 static void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
@@ -65,8 +66,10 @@ static void initBlendMaps(Ogre::Terrain* terrain)
 UIStatePlayingLand::UIStatePlayingLand(
 	Ogre::SceneManager* sceneMgr, 
 	Ogre::Camera* camera,
-	Ogre::Light *sunLight) : 
-	sceneMgr_(sceneMgr), camera_(camera), sunLight_(sunLight)
+	Ogre::Light *sunLight,
+	Ogre::Light *shadowLight) : 
+	sceneMgr_(sceneMgr), camera_(camera), 
+	sunLight_(sunLight), shadowLight_(shadowLight)
 {
 	create();
 }
@@ -77,20 +80,20 @@ UIStatePlayingLand::~UIStatePlayingLand()
 
 void UIStatePlayingLand::create()
 {
-	Ogre::Root *ogreRoot = Scorched3DC::instance()->getOgreRoot();
-	Ogre::RenderWindow *ogreRenderWindow = Scorched3DC::instance()->getOgreRenderWindow();
+	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
+	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
 	// Create the terrain objects
-	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 257, 3000.0f);
+	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 129, 3000.0f);
     terrainGroup_->setFilenameConvention(Ogre::String("Scorched3DO-Cache"), Ogre::String("dat"));
     terrainGroup_->setOrigin(Ogre::Vector3::ZERO);
 
 	// Load terrain data
+	terrainsImported_ = false;
 	defineOptions();
 	defineTerrain(0, 0);
 
 	// Generate the terrain
-	terrainsImported_ = false;
 	terrainGroup_->loadAllTerrains(true);
 	if (terrainsImported_)
 	{
@@ -102,6 +105,7 @@ void UIStatePlayingLand::create()
 		}
 	}
 
+	terrainGroup_->updateDerivedData(true);
 	terrainGroup_->freeTemporaryResources();
 }
 
@@ -112,15 +116,16 @@ void UIStatePlayingLand::defineOptions()
 	terrainGlobalOptions_ = new Ogre::TerrainGlobalOptions();
     terrainGlobalOptions_->setMaxPixelError(8);
     terrainGlobalOptions_->setCompositeMapDistance(3000);       // testing composite map
+	terrainGlobalOptions_->setDefaultResourceGroup("Landscape");
 
     // Important to set these so that the terrain knows what to use for derived (non-realtime) data
-    terrainGlobalOptions_->setLightMapDirection(sunLight_->getDerivedDirection());
+    terrainGlobalOptions_->setLightMapDirection(shadowLight_->getDerivedDirection());
     terrainGlobalOptions_->setCompositeMapAmbient(sceneMgr_->getAmbientLight());
-    terrainGlobalOptions_->setCompositeMapDiffuse(sunLight_->getDiffuseColour());
+    terrainGlobalOptions_->setCompositeMapDiffuse(shadowLight_->getDiffuseColour());
 
     // Configure default import settings for if we use imported image
     Ogre::Terrain::ImportData& defaultimp = terrainGroup_->getDefaultImportSettings();
-    defaultimp.terrainSize = 257; 
+    defaultimp.terrainSize = 129; 
     defaultimp.worldSize = 3000.0f;      // Set up for island.cfg
     defaultimp.inputScale = 200; 
     defaultimp.minBatchSize = 33;
@@ -153,4 +158,17 @@ void UIStatePlayingLand::defineTerrain(long x, long y)
         terrainGroup_->defineTerrain(x, y, &img);
         terrainsImported_ = true;
     }
+}
+
+Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
+{
+	Ogre::Vector3 newPosition = position + Ogre::Vector3(0,1000000,0);
+	Ogre::Ray ray(newPosition, Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::TerrainGroup::RayResult result = 
+		terrainGroup_->rayIntersects(ray);
+	if (result.hit) 
+	{
+		return result.terrain->getHeightAtWorldPosition(newPosition);
+	}
+	return 0.0f;
 }

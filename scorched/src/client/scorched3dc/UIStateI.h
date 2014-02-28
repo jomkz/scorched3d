@@ -31,6 +31,7 @@ public:
 
 	virtual void createState() = 0;
 	virtual void destroyState() = 0;
+	virtual void updateState(float frameTime) {}
 
 	UIState::State getState() { return thisState_; }
 

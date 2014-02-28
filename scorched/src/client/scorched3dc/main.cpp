@@ -18,7 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "Scorched3DC.h"
+#include "ScorchedUI.h"
 #include <stdlib.h>
 #include <common/main.h>
 #include <client/ClientParams.h>
@@ -37,7 +37,7 @@ extern "C" {
 		run_main(argc, argv, *ClientParams::instance());
 #endif
 
-		Scorched3DC app;
+		ScorchedUI app;
 		
 		try {
 			app.go();

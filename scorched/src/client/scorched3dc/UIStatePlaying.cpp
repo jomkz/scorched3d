@@ -22,7 +22,9 @@
 #include <scorched3dc/UIStatePlayingEnv.h>
 #include <scorched3dc/UIStatePlayingLand.h>
 #include <scorched3dc/CameraController.h>
-#include <scorched3dc/Scorched3DC.h>
+#include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/OgreSystem.h>
+#include <common/DefinesMath.h>
 
 UIStatePlaying::UIStatePlaying() : 
 	UIStateI(UIState::StatePlaying),
@@ -42,13 +44,13 @@ void UIStatePlaying::createState()
 {
 	Ogre::LogManager::getSingletonPtr()->logMessage("*** Creating Playing Scene ***");
 
-	Ogre::Root *ogreRoot = Scorched3DC::instance()->getOgreRoot();
-	Ogre::RenderWindow *ogreRenderWindow = Scorched3DC::instance()->getOgreRenderWindow();
+	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
+	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
 	// Create scene manager
-	sceneMgr_ = ogreRoot->createSceneManager(Ogre::ST_GENERIC);
-	sceneMgr_->setAmbientLight(Ogre::ColourValue(1, 1, 1));
+	sceneMgr_ = ogreRoot->createSceneManager(Ogre::ST_GENERIC, "PlayingSceneManager");
 	cameraController_ = new CameraController(sceneMgr_);
+	cameraController_->setHeightProvider(this);
 
 	// Create one viewport, entire window
 	Ogre::Viewport* vp = ogreRenderWindow->addViewport(cameraController_->getCamera());
@@ -64,10 +66,22 @@ void UIStatePlaying::createState()
 
 	// Create the land
 	Ogre::LogManager::getSingletonPtr()->logMessage("*** Creating Landscape ***");
-	land_ = new UIStatePlayingLand(sceneMgr_, cameraController_->getCamera(), env_->getSunLight());
+	land_ = new UIStatePlayingLand(sceneMgr_, cameraController_->getCamera(), 
+		env_->getSunLight(), env_->getShadowLight());
 }
 
 void UIStatePlaying::destroyState()
 {
 
+}
+
+void UIStatePlaying::updateState(float frameTime)
+{
+	cameraController_->update(frameTime);
+	env_->update(frameTime);
+}
+
+Ogre::Real UIStatePlaying::getHeight(const Ogre::Vector3 &position)
+{
+	return S3D_MAX(land_->getHeight(position), env_->getWaterHeight());
 }
