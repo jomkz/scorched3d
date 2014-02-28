@@ -51,11 +51,14 @@ bool XMLEntrySimpleType::readXML(XMLNode *node, void *xmlData)
 {
 	if (!setValueFromString(node->getContent()))
 	{
+		std::string typeName;
+		getTypeName(typeName);
 		return node->returnError(S3D::formatStringBuffer(
-			"Failed to set XML entry with \"%s\"",
+			"Failed to set %s XML entry with value \"%s\"",
+			typeName.c_str(),
 			node->getContent()));
 	}
-	return true;
+	return node->failChildren();
 }
 
 void XMLEntrySimpleType::writeXML(XMLNode *parentNode)
@@ -674,7 +677,7 @@ bool XMLEntryFixedVector::setValueFromString(const std::string &string)
 		value[i++] = fixed(token);		
 		token = strtok(0, " ");
 	}
-
+	if (i!=3) return false;
 	return setValue(value);
 }
 

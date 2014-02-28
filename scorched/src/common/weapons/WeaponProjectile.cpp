@@ -56,6 +56,7 @@ WeaponProjectile::WeaponProjectile() :
 	addChildXMLEntry("thrusttime", &thrustTime_);
 	addChildXMLEntry("thrustamount", &thrustAmount_);
 	addChildXMLEntry("showshotpath", &showShotPath_);
+	addChildXMLEntry("showendpoint", &showEndPoint_);
 	addChildXMLEntry("apexcollision", &apexCollision_);
 	addChildXMLEntry("apexnodud", &apexNoDud_);
 	addChildXMLEntry("timedcollision", &timedCollision_);

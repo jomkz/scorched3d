@@ -27,6 +27,7 @@ REGISTER_ACCESSORY_SOURCE(WeaponLaser);
 
 WeaponLaser::WeaponLaser() :
 	Weapon("WeaponLaser", "Shoots a laser beam in the direction currently being aimed at.  The longer the laser beam (the power) the less damage it will do"),
+	totalTime_("WeaponLaser::totalTime", "The total time to show the laser for", 0, "1"),
 	minimumHurt_("WeaponLaser::minimumHurt", "The amount of damage that will be taken from the target if the laser is at its minimum strength (maximum length)"), 
 	maximumHurt_("WeaponLaser::maximumHurt", "The amount of damage that will be taken from the target if the laser is at its maximum strength (minimum length)"),
 	minimumDistance_("WeaponLaser::minimumDistance", "Minimum distance the laser can travel (minimum length)"), 
@@ -34,6 +35,7 @@ WeaponLaser::WeaponLaser() :
 	hurtRadius_("WeaponLaser::hurtRadius", "Radius from the center of the laser beam within which tanks will take damage from the laser"),
 	hurtFirer_("Whether or not the laser can hurt the firer of the weapon", 0, false)
 {
+	addChildXMLEntry("totaltime", &totalTime_);
 	addChildXMLEntry("minimumhurt", &minimumHurt_);
 	addChildXMLEntry("maximumhurt", &maximumHurt_);
 	addChildXMLEntry("hurtradius", &hurtRadius_);

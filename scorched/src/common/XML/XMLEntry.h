@@ -194,19 +194,19 @@ public:
 		if (!node->getNamedParameter("type", type_)) 
 		{
 			return node->returnError(S3D::formatStringBuffer(
-				"Failed to find a required type attribute"));;
-		}
-		value_ = createXMLEntry(type_, xmlData);
-		if (!value_)
-		{
-			return node->returnError(S3D::formatStringBuffer(
-				"Failed to create the type : \"%s\"", type_.c_str()));
+				"Failed to create the type choice, failed to find the required \"type\" attribute"));;
 		}
 		std::set<std::string> *allTypes = getAllTypesCached();
 		if (allTypes->find(type_) == allTypes->end())
 		{
 			return node->returnError(S3D::formatStringBuffer(
-				"Failed to create the type not specified as a type : \"%s\"", type_.c_str()));
+				"Failed to create the type choice, specified type is not a valid option : \"%s\"", type_.c_str()));
+		}
+		value_ = createXMLEntry(type_, xmlData);
+		if (!value_)
+		{
+			return node->returnError(S3D::formatStringBuffer(
+				"Failed to create the type choice, failed to create the specified type : \"%s\"", type_.c_str()));
 		}
 		if (!value_->readXML(node, xmlData)) return false;
 

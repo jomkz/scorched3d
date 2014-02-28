@@ -67,7 +67,7 @@ void Laser::init()
 	angYZ_ = acosf(dir[2].asFloat()) / 3.14f * 180.0f;
 
 	// preset some values from the numberparser expressions
-	laserTime_ = 1;
+	laserTime_ = weapon_->getTotalTime(*context_);
 	hurtRadius_ = weapon_->getHurtRadius(*context_);
 }
 

@@ -64,9 +64,6 @@ bool WeaponReference::readXML(XMLNode *node, void *xmlData)
 		if (!weaponNode->getNamedChild("accessoryaction", actionNode)) return false;
 		if (!refWeapon_.readXML(actionNode, xmlData))
 		{
-			S3D::dialogMessage("Accessory", S3D::formatStringBuffer(
-				"Failed to find create weapon/wrong type \"%s\"",
-				weaponName_.getValue().c_str()));
 			return false;
 		}
 	}

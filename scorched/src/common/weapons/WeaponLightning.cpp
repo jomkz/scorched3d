@@ -41,8 +41,7 @@ WeaponLightning::WeaponLightning() :
 	angleVarExp_("WeaponLightning::angleVarExp", "The maximum angle change that will be tried for the next segment"),
 	totalTimeExp_("WeaponLightning::totalTimeExp", "Total life time of the lightning particles, in seconds"),
 	segHurtExp_("WeaponLightning::segHurtExp", "Amount of damage done to tanks per segment"),
-	segHurtRadiusExp_("WeaponLightning::segHurtRadiusExp", "Radius within which segments will do damage"),
-	texture_("Location of the texture to apply to the lightning effect")
+	segHurtRadiusExp_("WeaponLightning::segHurtRadiusExp", "Radius within which segments will do damage")
 {
 	addChildXMLEntry("conelength", &coneLengthExp_);
 	addChildXMLEntry("seglength", &segLengthExp_);
@@ -58,7 +57,6 @@ WeaponLightning::WeaponLightning() :
 	addChildXMLEntry("totaltime", &totalTimeExp_);
 	addChildXMLEntry("seghurt", &segHurtExp_);
 	addChildXMLEntry("seghurtradius", &segHurtRadiusExp_);
-	addChildXMLEntry("texture", &texture_);
 }
 
 WeaponLightning::~WeaponLightning()

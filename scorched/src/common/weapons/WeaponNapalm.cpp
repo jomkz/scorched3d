@@ -38,15 +38,10 @@ WeaponNapalm::WeaponNapalm() :
 	numberOfParticles_("How many napalm particles can be created", 0, 100),
 	numberStreams_("Number of napalm streams to create at the start point"),
 	effectRadius_("Radius within which the napalm will damage opponents"),
-	noObjectDamage_("If set, the napalm will not damage landscape objects"),
+	noObjectDamage_("If set, the napalm will not damage landscape objects", 0, false),
 	allowUnderWater_(" Whether or not this napalm can travel under water"),
 	singleFlow_("Use a single flow of napalm or cover the whole downward area", 0, false),
 	noCameraTrack_("Don't treat as a potential action camera target", 0, false)
-{
-
-}
-
-WeaponNapalm::~WeaponNapalm()
 {
 	addChildXMLEntry("napalmtime", &napalmTime_);
 	addChildXMLEntry("napalmheight", &napalmHeight_);
@@ -60,6 +55,11 @@ WeaponNapalm::~WeaponNapalm()
 	addChildXMLEntry("allowunderwater", &allowUnderWater_);
 	addChildXMLEntry("singleflow", &singleFlow_);
 	addChildXMLEntry("nocameratrack", &noCameraTrack_);
+}
+
+WeaponNapalm::~WeaponNapalm()
+{
+
 }
 
 void WeaponNapalm::fireWeapon(ScorchedContext &context,

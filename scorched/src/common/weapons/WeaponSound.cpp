@@ -43,7 +43,7 @@ XMLEntrySoundID *WeaponSoundList::createXMLEntry(void *xmlData)
 WeaponSound::WeaponSound() :
 	Weapon("WeaponSound", "Plays a random sound from the list of given sound definitions")
 {
-	addChildXMLEntry("SoundID", &soundList_);
+	addChildXMLEntry("sound", &soundList_);
 }
 
 WeaponSound::~WeaponSound()

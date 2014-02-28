@@ -44,7 +44,6 @@ public:
 	fixed getTotalTime() { return totalTime_; }
 	fixed getSegHurt() { return segHurt_; }
 	fixed getSegHurtRadius() { return segHurtRadius_; }
-	const char *getTexture() { return texture_.getValue().c_str(); }
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -67,7 +66,6 @@ protected:
 	fixed totalTime_;
 	fixed segHurt_;
 	fixed segHurtRadius_;
-	XMLEntryString texture_;
 	XMLEntryNumberParser coneLengthExp_;
 	XMLEntryNumberParser segLengthExp_;
 	XMLEntryNumberParser segVarExp_;

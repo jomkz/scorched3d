@@ -337,9 +337,14 @@ void XMLNode::resurrectRemovedChildren()
 		XMLNode *node = removedChildren_.front();
 		removedChildren_.pop_front();
 		children_.push_back(node);
-		
-		node->resurrectRemovedChildren();
 	}
+	std::list<XMLNode *>::iterator itor = children_.begin(),
+		end = children_.end();
+	for (;itor!=end;++itor)
+	{
+		(*itor)->resurrectRemovedChildren();
+	}
+
 	while (!removedParameters_.empty())
 	{
 		XMLNode *node = removedParameters_.front();

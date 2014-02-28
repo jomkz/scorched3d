@@ -35,6 +35,7 @@ public:
 	fixed getMinimumDistance(ScorchedContext &context) { return minimumDistance_.getValue(context); }
 	fixed getMaximumDistance(ScorchedContext &context) { return maximumDistance_.getValue(context); }
 	fixed getHurtRadius(ScorchedContext &context) { return hurtRadius_.getValue(context); }
+	fixed getTotalTime(ScorchedContext &context) { return totalTime_.getValue(context); }
 	bool getHurtFirer() { return hurtFirer_.getValue(); }
 
 	// Inherited from Weapon
@@ -44,6 +45,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponLaser, AccessoryPart::AccessoryWeapon);
 
 protected:
+	XMLEntryNumberParser totalTime_;
 	XMLEntryNumberParser minimumHurt_, maximumHurt_;
 	XMLEntryNumberParser minimumDistance_, maximumDistance_;
 	XMLEntryNumberParser hurtRadius_;

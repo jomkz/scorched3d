@@ -52,8 +52,8 @@ XMLEntrySoundID::XMLEntrySoundID(bool required) :
 	XMLEntryContainer("SoundID", "A reference to an OpenAL sound definition", required),
 	soundFile("The filename of the sound file"),
 	gain("The gain (volume) of the sound", 0, 1),
-	rollOff("The rolloff as used by the attenuation calculations"),
-	referenceDistance("The reference distance as used by the attenuation calculations")
+	rollOff("The rolloff as used by the attenuation calculations", 0, 1),
+	referenceDistance("The reference distance as used by the attenuation calculations", 0, 1)
 {
 	addChildXMLEntry("soundfile", &soundFile);
 	addChildXMLEntry("gain", &gain);

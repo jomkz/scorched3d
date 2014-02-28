@@ -77,8 +77,6 @@ Shields must be activated to work.</description>
 		<cost>25000</cost>
 		<accessoryaction type='ShieldRound'>
 			<radius>4</radius>
-			<halfshield>false</halfshield>
-			<collisionsound>data/accessories/sounds/shield/hit.wav</collisionsound>
 			<removepower>10</removepower>
 			<penetration>0.7</penetration>
 			<power>100</power>
@@ -96,8 +94,6 @@ Shields must be activated to work.</description>
 		<cost>45000</cost>
 		<accessoryaction type='ShieldRound'>
 			<radius>5.0</radius>
-			<halfshield>false</halfshield>
-			<collisionsound>data/accessories/sounds/shield/hit.wav</collisionsound>
 			<removepower>8</removepower>
 			<penetration>0.7</penetration>
 			<power>200</power>
@@ -115,9 +111,7 @@ be activated before they work.</description>
 		<cost>40000</cost>
 		<accessoryaction type='ShieldRoundReflective'>
 			<radius>4</radius>
-			<halfshield>false</halfshield>
 			<deflectfactor>1.0</deflectfactor>
-			<collisionsound>data/accessories/sounds/shield/hit2.wav</collisionsound>
 			<removepower>10</removepower>
 			<penetration>0.7</penetration>
 			<power>100</power>
@@ -135,9 +129,7 @@ before they can directly hit the tank.</description>
 		<cost>10000</cost>
 		<accessoryaction type='ShieldRoundMag'>
 			<radius>3.0</radius>
-			<halfshield>true</halfshield>
 			<deflectpower>50</deflectpower>
-			<collisionsound>data/accessories/sounds/shield/hit2.wav</collisionsound>
 			<removepower>4</removepower>
 			<penetration>1.0</penetration>
 			<power>100</power>
@@ -155,9 +147,7 @@ before they can directly hit the tank.</description>
 		<cost>17000</cost>
 		<accessoryaction type='ShieldRoundMag'>
 			<radius>6.0</radius>
-			<halfshield>true</halfshield>
 			<deflectpower>120</deflectpower>
-			<collisionsound>data/accessories/sounds/shield/hit2.wav</collisionsound>
 			<removepower>2</removepower>
 			<penetration>0.7</penetration>
 			<power>100</power>
@@ -186,7 +176,9 @@ near the flames will lose life.</description>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/napalm/napalm.txt</projectilemodel>
+			<projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>4.0</napalmtime>
 				<napalmheight>0.2</napalmheight>
@@ -195,8 +187,6 @@ near the flames will lose life.</description>
 				<hurtpersecond>1.0</hurtpersecond>
 				<numberstreams>1</numberstreams>
 				<effectradius>5</effectradius>
-				<napalmtexture>flames</napalmtexture>
-				<napalmsound>data/accessories/sounds/explosions/napalm.wav</napalmsound>
 				<allowunderwater>false</allowunderwater>
         <!--<nosingleflow/>-->
 			</collisionaction>
@@ -214,7 +204,9 @@ Any tanks near the flames will lose life.</description>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/napalm/napalm.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>4.0</napalmtime>
 				<napalmheight>0.2</napalmheight>
@@ -223,8 +215,6 @@ Any tanks near the flames will lose life.</description>
 				<hurtpersecond>2.0</hurtpersecond>
 				<numberstreams>3</numberstreams>
 				<effectradius>5</effectradius>
-				<napalmtexture>flames</napalmtexture>
-				<napalmsound>data/accessories/sounds/explosions/napalm.wav</napalmsound>
 				<allowunderwater>false</allowunderwater>
 			</collisionaction>
 		</accessoryaction>
@@ -241,17 +231,20 @@ with any tank.</description>
 		<cost>7500</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>8</numberrollers>
 				<time>RANGE(3,4)</time>
-				<rollermodel type='MilkShape'>data/accessories/roller/roller.txt</rollermodel>
+				<rollermodel>
+          <meshname>cube</meshname>
+        </rollermodel>
 				<!--<maintainvelocity>true</maintainvelocity>-->
 				<collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
 					<deform>down</deform>
 					<size>2</size>
-					<explosiontexture>exp00</explosiontexture>
-					<explosionsound>data/accessories/sounds/explosions/small.wav</explosionsound>
 				</collisionaction>
 			</collisionaction>
 		</accessoryaction>
@@ -268,17 +261,19 @@ contact with any tank.</description>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
-		<projectilescale>1.2</projectilescale>
-			<collisionaction type='WeaponRoller'>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+      <collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(3,4)</time>
-				<rollermodel type='MilkShape'>data/accessories/roller/roller.txt</rollermodel>
-				<collisionaction type='WeaponExplosion'>
+        <rollermodel>
+          <meshname>cube</meshname>
+        </rollermodel>
+        <collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
 					<deform>down</deform>
 					<size>5</size>
-					<explosiontexture>exp00</explosiontexture>
-					<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
 				</collisionaction>
 			</collisionaction>
 		</accessoryaction>
@@ -295,17 +290,19 @@ with any tank.</description>
 		<cost>8000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
 		<accessoryaction type='WeaponProjectile'>
-		<projectilescale>1.5</projectilescale>
-			<collisionaction type='WeaponRoller'>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+      <collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(3,4)</time>
-				<rollermodel type='MilkShape'>data/accessories/roller/roller.txt</rollermodel>
-				<collisionaction type='WeaponExplosion'>
+        <rollermodel>
+          <meshname>cube</meshname>
+        </rollermodel>
+        <collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
 					<deform>down</deform>
 					<size>9</size>
-					<explosiontexture>exp00</explosiontexture>
-					<explosionsound>data/accessories/sounds/explosions/large.wav</explosionsound>
 				</collisionaction>
 			</collisionaction>
 		</accessoryaction>
@@ -322,17 +319,15 @@ with any tank.</description>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilescale>0.5</projectilescale>
 			<shieldhurtfactor>0.4</shieldhurtfactor>
 			<spinspeed>1.0</spinspeed>
-      <!--<flametexture>trans</flametexture>
-      <animateflametexture/>-->
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
 				<size>3.5</size>
-				<explosiontexture>exp00</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/small.wav</explosionsound>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -349,14 +344,14 @@ with any tank.</description>
       <scale>0.75</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilescale>0.75</projectilescale>
-			<shieldhurtfactor>0.6</shieldhurtfactor>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+      <shieldhurtfactor>0.6</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
 				<size>6</size>
-				<explosiontexture>exp00</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -370,14 +365,13 @@ with any tank.</description>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/littleboy/littleboy.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
 				<size>11</size>
-				<explosionshake>2.0</explosionshake>
-				<explosiontexture>exp00</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/large.wav</explosionsound>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -392,17 +386,13 @@ with any tank.</description>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>1.2</shieldhurtfactor>
-			<projectilemodel type='MilkShape'>data/accessories/fatman/fatman.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
 				<size>18</size>
-				<createmushroomamount>1.0</createmushroomamount>
-				<minlife>0.5</minlife>
-				<maxlife>1.5</maxlife>
-				<explosionshake>4.0</explosionshake>
-				<explosiontexture>exp00</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/xlarge.wav</explosionsound>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -423,15 +413,13 @@ to cover them.</description>
     </model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.5</shieldhurtfactor>
-			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
-			<projectilescale>0.6</projectilescale>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>0.0</hurtamount>
-				<nocreatedebris></nocreatedebris>
 				<deform>up</deform>
 				<size>6</size>
-				<explosiontexture>exp03</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/gloop.wav</explosionsound>
 				<explodeunderground>false</explodeunderground>
 			</collisionaction>
 		</accessoryaction>
@@ -452,16 +440,14 @@ cover them.</description>
       <scale>0.8</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
-			<projectilescale>0.8</projectilescale>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<shieldhurtfactor>0.8</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
 				<deform>up</deform>
 				<hurtamount>0.0</hurtamount>
-				<nocreatedebris></nocreatedebris>
 				<size>10</size>
-				<explosiontexture>exp03</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/gloop.wav</explosionsound>
 				<explodeunderground>false</explodeunderground>
 			</collisionaction>
 		</accessoryaction>
@@ -479,14 +465,13 @@ cover them.</description>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
-			<collisionaction type='WeaponExplosion'>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+      <collisionaction type='WeaponExplosion'>
 				<deform>up</deform>
 				<hurtamount>0.0</hurtamount>
-				<nocreatedebris></nocreatedebris>
 				<size>18</size>
-				<explosiontexture>exp03</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/gloop.wav</explosionsound>
 				<explodeunderground>false</explodeunderground>
 			</collisionaction>
 		</accessoryaction>
@@ -501,51 +486,47 @@ small dirt clods in all directions.</description>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponMulti'>
-				<subweapon1 type='WeaponExplosion'>
+				<subweapon type='WeaponExplosion'>
 					<hurtamount>0</hurtamount>
 					<deform>down</deform><size>4</size>
-					<explosionsound>data/accessories/sounds/explosions/gloop.wav</explosionsound>
-					<explosiontexture>exp03</explosiontexture>
-				</subweapon1>
-				<subweapon2 type='WeaponAimedOver'>
+				</subweapon>
+				<subweapon type='WeaponAimedOver'>
 					<nowarheads>5</nowarheads>
 					<percentagemiss>1</percentagemiss>
 					<maxaimdistance>0</maxaimdistance>
 					<inaccuracy>50</inaccuracy>
 					<aimedweapon type='WeaponProjectile'>
 						<timedcollision>0.6</timedcollision>
-						<projectilescale>0.8</projectilescale>
-						<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
+            <projectilemodel>
+              <meshname>moab</meshname>
+            </projectilemodel>
 						<collisionaction type='WeaponMulti'>
-							<subweapon1 type='WeaponExplosion'>
+							<subweapon type='WeaponExplosion'>
 								<hurtamount>0</hurtamount>
 								<deform>down</deform>
 								<size>3</size>
-								<explosionsound>data/accessories/sounds/explosions/gloop.wav</explosionsound>
-								<explosiontexture>exp03</explosiontexture>
-								<nocreatedebris/>
-							</subweapon1>
-							<subweapon2 type='WeaponAimedOver'>
+							</subweapon>
+							<subweapon type='WeaponAimedOver'>
 								<nowarheads>3</nowarheads>
 								<percentagemiss>1</percentagemiss>
 								<maxaimdistance>0</maxaimdistance>
 								<inaccuracy>20</inaccuracy>
 								<aimedweapon type='WeaponProjectile'>
 									<timedcollision>0.8</timedcollision>
-									<projectilescale>0.6</projectilescale>
-									<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
+                  <projectilemodel>
+                    <meshname>moab</meshname>
+                  </projectilemodel>
 									<collisionaction type='WeaponMulti'>
-										<subweapon1 type='WeaponExplosion'>
+										<subweapon type='WeaponExplosion'>
 											<hurtamount>0</hurtamount>
 											<deform>down</deform>
 											<size>3</size>
-											<explosionsound>data/accessories/sounds/explosions/gloop.wav</explosionsound>
-											<explosiontexture>exp03</explosiontexture>
-											<nocreatedebris/>
-										</subweapon1>
-										<subweapon2 type='WeaponAimedOver'>
+										</subweapon>
+										<subweapon type='WeaponAimedOver'>
 											<nowarheads>2</nowarheads>
 											<percentagemiss>5</percentagemiss>
 											<maxaimdistance>0</maxaimdistance>
@@ -554,18 +535,16 @@ small dirt clods in all directions.</description>
 											<velocitychange>0.85</velocitychange>
 											<aimedweapon type='WeaponProjectile'>
 												<timedcollision>0.8</timedcollision>
-												<projectilescale>0.5</projectilescale>
-												<projectilemodel type='MilkShape'>data/accessories/dirt/dirt.txt</projectilemodel>
+                        <projectilemodel>
+                          <meshname>moab</meshname>
+                        </projectilemodel>
 												<collisionaction type='WeaponMulti'>
-													<subweapon1 type='WeaponExplosion'>
+													<subweapon type='WeaponExplosion'>
 														<hurtamount>0</hurtamount>
 														<deform>down</deform>
 														<size>2</size>
-														<explosionsound>data/accessories/sounds/explosions/gloop.wav</explosionsound>
-														<explosiontexture>exp03</explosiontexture>
-														<nocreatedebris/>
-													</subweapon1>
-													<subweapon2 type='WeaponAimedOver'>
+													</subweapon>
+													<subweapon type='WeaponAimedOver'>
 														<nowarheads>2</nowarheads>
 														<percentagemiss>5</percentagemiss>
 														<maxaimdistance>0</maxaimdistance>
@@ -573,31 +552,27 @@ small dirt clods in all directions.</description>
 														<aimedweapon type='WeaponVelocity'>
 														    <velocitychange>0.7</velocitychange>
 															<aimedweapon type='WeaponProjectile'>
-															<projectilescale>0.5</projectilescale>
 															<shieldhurtfactor>0.3</shieldhurtfactor>
-															<projectilemodel type='ase'>
-																<mesh>data/accessories/roller.ase</mesh><skin>data/accessories/white.bmp</skin>
-																 </projectilemodel>
-																<collisionaction type='WeaponExplosion'>
+			                        <projectilemodel>
+                                <meshname>moab</meshname>
+                              </projectilemodel>
+                                <collisionaction type='WeaponExplosion'>
 																	<hurtamount>0</hurtamount>
 																	<deform>up</deform><size>3.0</size>
-																	<explosionsound>data/accessories/sounds/explosions/gloop.wav</explosionsound>
-																	<explosiontexture>exp03</explosiontexture>
-																	<nocreatedebris/>
 																</collisionaction>
 			                                            	</aimedweapon>
 			                                            </aimedweapon>	
-													</subweapon2>
+													</subweapon>
 												</collisionaction>
 											</aimedweapon>
 											</aimedweapon>
-										</subweapon2>
+										</subweapon>
 									</collisionaction>
 								</aimedweapon>
-							</subweapon2>	
+							</subweapon>	
 						</collisionaction>
 					</aimedweapon>
-				</subweapon2>
+				</subweapon>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -614,15 +589,14 @@ remove earth from under them.</description>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/riot/riot.txt</projectilemodel>
-<shieldhurtfactor>0.5</shieldhurtfactor>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+      <shieldhurtfactor>0.5</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
 				<deform>down</deform>
 				<hurtamount>0.0</hurtamount>
-				<nocreatedebris></nocreatedebris>
 				<size>6</size>
-				<explosiontexture>exp03</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/crunch.wav</explosionsound>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -639,14 +613,13 @@ remove earth from under them.</description>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/riot/riot.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<deform>down</deform>
 				<hurtamount>0.0</hurtamount>
-				<nocreatedebris></nocreatedebris>
 				<size>13</size>
-				<explosiontexture>exp03</explosiontexture>
-				<explosionsound>data/accessories/sounds/explosions/crunch.wav</explosionsound>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -664,38 +637,29 @@ your tank when covered by dirt.</description>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
-				<subweapon1 type='WeaponExplosion'>
+				<subweapon type='WeaponExplosion'>
 					<hurtamount>0.0</hurtamount>
-					<nocreatedebris></nocreatedebris>
 					<deform>down</deform>
 					<size>2</size>
-					<explosiontexture>exp03</explosiontexture>
-					<explosionsound>data/accessories/sounds/explosions/crunch.wav</explosionsound>
-				</subweapon1>
-				<subweapon2 type='WeaponTranslate'>
+				</subweapon>
+				<subweapon type='WeaponTranslate'>
 					<translatedist>3.0</translatedist>
 					<nextaction type='WeaponMulti'>
-						<subweapon1 type='WeaponExplosion'>
+						<subweapon type='WeaponExplosion'>
 							<hurtamount>0.0</hurtamount>
-							<nocreatedebris></nocreatedebris>
 							<deform>down</deform>
 							<size>5</size>
-							<explosiontexture>exp03</explosiontexture>
-							<explosionsound>none</explosionsound>
-						</subweapon1>
-						<subweapon2 type='WeaponTranslate'>
+						</subweapon>
+						<subweapon type='WeaponTranslate'>
 							<translatedist>6.0</translatedist>
 							<nextaction type='WeaponExplosion'>
 								<hurtamount>0.0</hurtamount>
-								<nocreatedebris></nocreatedebris>
 								<deform>down</deform>
 								<size>6</size>
-								<explosiontexture>exp03</explosiontexture>
-								<explosionsound>none</explosionsound>
 							</nextaction>
-						</subweapon2>
+						</subweapon>
 					</nextaction>
-				</subweapon2>
+				</subweapon>
 			</nextaction>
 		</accessoryaction>
 	</accessory>
@@ -713,38 +677,29 @@ your tank when covered by dirt.</description>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
-				<subweapon1 type='WeaponExplosion'>
+				<subweapon type='WeaponExplosion'>
 					<hurtamount>0.0</hurtamount>
-					<nocreatedebris></nocreatedebris>
 					<deform>down</deform>
 					<size>4</size>
-					<explosiontexture>exp03</explosiontexture>
-					<explosionsound>data/accessories/sounds/explosions/crunch.wav</explosionsound>
-				</subweapon1>
-				<subweapon2 type='WeaponTranslate'>
+				</subweapon>
+				<subweapon type='WeaponTranslate'>
 					<translatedist>3.0</translatedist>
 					<nextaction type='WeaponMulti'>
-						<subweapon1 type='WeaponExplosion'>
+						<subweapon type='WeaponExplosion'>
 							<hurtamount>0.0</hurtamount>
-							<nocreatedebris></nocreatedebris>
 							<deform>down</deform>
 							<size>7</size>
-							<explosiontexture>exp03</explosiontexture>
-							<explosionsound>none</explosionsound>
-						</subweapon1>
-						<subweapon2 type='WeaponTranslate'>
+						</subweapon>
+						<subweapon type='WeaponTranslate'>
 							<translatedist>6.0</translatedist>
 							<nextaction type='WeaponExplosion'>
 								<hurtamount>0.0</hurtamount>
-								<nocreatedebris></nocreatedebris>
 								<deform>down</deform>
 								<size>10</size>
-								<explosiontexture>exp03</explosiontexture>
-								<explosionsound>none</explosionsound>
 							</nextaction>
-						</subweapon2>
+						</subweapon>
 					</nextaction>
-				</subweapon2>
+				</subweapon>
 			</nextaction>
 		</accessoryaction>
 	</accessory>
@@ -761,43 +716,43 @@ in the same direction.</description>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponMulti'>
-				<subweapon1 type='WeaponExplosion'>
+				<subweapon type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
 					<deform>down</deform>
 					<size>8</size>
-					<explosiontexture>exp01</explosiontexture>
-					<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
-				</subweapon1>
-				<subweapon2 type='WeaponLeapFrog'>
+				</subweapon>
+				<subweapon type='WeaponLeapFrog'>
 					<bounce>0.6</bounce>
 					<collisionaction type='WeaponProjectile'>
-						<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+            <projectilemodel>
+              <meshname>moab</meshname>
+            </projectilemodel>
 						<collisionaction type='WeaponMulti'>
-							<subweapon1 type='WeaponExplosion'>
+							<subweapon type='WeaponExplosion'>
 								<hurtamount>1.0</hurtamount>
 								<deform>down</deform>
 								<size>7</size>
-								<explosiontexture>exp01</explosiontexture>
-								<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
-							</subweapon1>
-							<subweapon2 type='WeaponLeapFrog'>
+							</subweapon>
+							<subweapon type='WeaponLeapFrog'>
 								<bounce>0.6</bounce>
 								<collisionaction type='WeaponProjectile'>
-									<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+                  <projectilemodel>
+                    <meshname>moab</meshname>
+                  </projectilemodel>
 									<collisionaction type='WeaponExplosion'>
 										<hurtamount>1.0</hurtamount>
 										<deform>down</deform>
 										<size>6</size>
-										<explosiontexture>exp01</explosiontexture>
-										<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
 									</collisionaction>
 								</collisionaction>
-							</subweapon2>
+							</subweapon>
 						</collisionaction>
 					</collisionaction>
-				</subweapon2>
+				</subweapon>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -816,25 +771,24 @@ tank-seeking riot bombs.</description>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilescale>0.5</projectilescale>
-			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>3</nowarheads>
 				<inaccuracy>40</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>75</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
-					<under></under>
-					<projectilescale>0.5</projectilescale>
+					<under>true</under>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
-					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>0.0</hurtamount>
-						<nocreatedebris></nocreatedebris>
 						<size>6</size>
-						<explosiontexture>exp03</explosiontexture>
-						<explosionsound>data/accessories/sounds/explosions/crunch.wav</explosionsound>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -852,7 +806,9 @@ tank-seeking riot bombs.</description>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>5</nowarheads>
 				<inaccuracy>40</inaccuracy>
@@ -860,15 +816,14 @@ tank-seeking riot bombs.</description>
 				<maxaimdistance>75</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
 				<shieldhurtfactor>0.6</shieldhurtfactor>
-					<under></under>
-					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+					<under>true</under>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>0.0</hurtamount>
-						<nocreatedebris></nocreatedebris>
 						<size>6</size>
-						<explosiontexture>exp03</explosiontexture>
-						<explosionsound>data/accessories/sounds/explosions/crunch.wav</explosionsound>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -889,25 +844,24 @@ tank-seeking riot bombs.</description>
       <scale>2</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilescale>2</projectilescale>
-			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>10</nowarheads>
 				<inaccuracy>40</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>75</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
-					<projectilescale>2</projectilescale>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
-					<under></under>
-					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+					<under>true</under>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>0.0</hurtamount>
-						<nocreatedebris></nocreatedebris>
 						<size>6</size>
-						<explosiontexture>exp03</explosiontexture>
-						<explosionsound>data/accessories/sounds/explosions/crunch.wav</explosionsound>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -928,24 +882,24 @@ tanks from underground.</description>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilescale>0.5</projectilescale>
-			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>2</nowarheads>
 				<inaccuracy>30</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>40</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
-					<projectilescale>0.5</projectilescale>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
-					<under></under>
-					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+					<under>true</under>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
 						<deform>down</deform>
 						<size>4</size>
-						<explosiontexture>exp03</explosiontexture>
-						<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -963,7 +917,9 @@ tanks from underground.</description>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>6</nowarheads>
 				<inaccuracy>30</inaccuracy>
@@ -971,14 +927,14 @@ tanks from underground.</description>
 				<maxaimdistance>50</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
 				<shieldhurtfactor>0.6</shieldhurtfactor>
-					<under></under>
-					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+					<under>true</under>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
 						<deform>down</deform>
 						<size>4</size>
-						<explosiontexture>exp03</explosiontexture>
-						<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -999,24 +955,24 @@ tanks from underground.</description>
       <scale>2</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilescale>2</projectilescale>
-			<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<nowarheads>15</nowarheads>
 				<inaccuracy>30</inaccuracy>
 				<percentagemiss>20</percentagemiss>
 				<maxaimdistance>120</maxaimdistance>
 				<aimedweapon type='WeaponProjectile'>
-					<projectilescale>2</projectilescale>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
-					<under></under>
-					<projectilemodel type='MilkShape'>data/accessories/digger/digger.txt</projectilemodel>
+					<under>true</under>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
 						<deform>down</deform>
 						<size>4</size>
-						<explosiontexture>exp03</explosiontexture>
-						<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -1037,24 +993,22 @@ in a straight path.</description>
       <meshname>snakeeye</meshname>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-			<apexcollision></apexcollision>
-			<projectilemodel type='ase'>
-				<mesh>data/accessories/clusterbomb.ase</mesh>
-				<skin>data/accessories/white.bmp</skin>
-			</projectilemodel>
-			<collisionaction type='WeaponMirv'>
+			<apexcollision>true</apexcollision>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+      <collisionaction type='WeaponMirv'>
 				<nowarheads>5</nowarheads>
 				<hspreaddist>0.1</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
-					<projectilescale>0.2</projectilescale>
-					<projectilemodel type='MilkShape'>data/accessories/bomblet/bomblet.txt</projectilemodel>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>1.0</hurtamount>
 						<size>6</size>
-						<explosionsound>data/accessories/sounds/explosions/large.wav</explosionsound>
-						<explosiontexture>exp04</explosiontexture>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -1075,24 +1029,22 @@ random direction.</description>
       <meshname>snakeeye</meshname>
     </model>
     <accessoryaction type='WeaponProjectile'>
-			<apexcollision></apexcollision>
-			<projectilemodel type='ase'>
-				<mesh>data/accessories/clusterbomb.ase</mesh>
-				<skin>data/accessories/white.bmp</skin>
-			</projectilemodel>
-			<collisionaction type='WeaponMirv'>
+			<apexcollision>true</apexcollision>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+      <collisionaction type='WeaponMirv'>
 				<nowarheads>5</nowarheads>
 				<hspreaddist>1.0</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
-					<projectilescale>0.2</projectilescale>
-					<projectilemodel type='MilkShape'>data/accessories/bomblet/bomblet.txt</projectilemodel>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>1.0</hurtamount>
 						<size>6</size>
-						<explosionsound>data/accessories/sounds/explosions/large.wav</explosionsound>
-						<explosiontexture>exp04</explosiontexture>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -1113,24 +1065,22 @@ in a random direction.</description>
       <meshname>snakeeye</meshname>
       <scale>5</scale>
     </model>		<accessoryaction type='WeaponProjectile'>
-			<apexcollision></apexcollision>
-			<projectilescale>5</projectilescale>
-			<projectilemodel type='MilkShape'>data/accessories/icbm/icbm.txt</projectilemodel>
+			<apexcollision>true</apexcollision>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponMirv'>
 				<nowarheads>20</nowarheads>
 				<hspreaddist>1.0</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
-					<projectilescale>0.5</projectilescale>
-					<projectilemodel type='MilkShape'>data/accessories/mirvwarhead/mirvwarhead.txt</projectilemodel>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
 						<hurtamount>1.0</hurtamount>
 						<size>18</size>
-						<createmushroomamount>0.2</createmushroomamount>
-						<explosionsound>data/accessories/sounds/explosions/xlarge.wav</explosionsound>
-						<explosiontexture>exp04</explosiontexture>
-						<explosionshake>2.0</explosionshake>
 					</collisionaction>
 				</aimedweapon>
 			</collisionaction>
@@ -1149,18 +1099,16 @@ any nearby tanks.</description>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/icbm/icbm.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<collisionaction type='WeaponMulti'>
-				<subweapon1 type='WeaponExplosion'>
+				<subweapon type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
-					<multicolor></multicolor>
 					<deform>down</deform>
 					<size>10</size>
-					<explosionsound>data/accessories/sounds/explosions/large.wav</explosionsound>
-					<explosiontexture>exp02</explosiontexture>
-					<explosionshake>1.0</explosionshake>
-				</subweapon1>			
-				<subweapon2 type='WeaponAimedOver'>
+				</subweapon>			
+				<subweapon type='WeaponAimedOver'>
 					<nowarheads>12</nowarheads>
 					<percentagemiss>12</percentagemiss>
 					<maxaimdistance>RANGE(40,55)</maxaimdistance>
@@ -1171,65 +1119,47 @@ any nearby tanks.</description>
 							<velocitychange>RANGE(0.8,1.1)</velocitychange>
 							<aimedweapon type='WeaponProjectile'>
 							<shieldhurtfactor>0.85</shieldhurtfactor>
-							<projectilemodel type='MilkShape'>data/accessories/bomb/bomb.txt</projectilemodel>
+                <projectilemodel>
+                  <meshname>moab</meshname>
+                </projectilemodel>
 								<collisionaction type='WeaponRandomChoice'>
-									<weaponchoice1>
+									<weaponchoice>
 										<weight>6</weight>
 										<weapon type='WeaponExplosion'>
 										<hurtamount>0.85</hurtamount>
-										<multicolor></multicolor>
-										<minlife>1.2</minlife>
-										<maxlife>2</maxlife>
 										<deform>down</deform>
 										<size>4</size>
-										<explosionsound>data/accessories/sounds/explosions/small.wav</explosionsound>
-										<explosiontexture>exp02</explosiontexture>
 										</weapon>
-									</weaponchoice1>
-									<weaponchoice2>
+									</weaponchoice>
+									<weaponchoice>
 										<weight>6</weight>
 										<weapon type='WeaponExplosion'>
 										<hurtamount>0.85</hurtamount>
-										<multicolor></multicolor>
-										<minlife>1.2</minlife>
-										<maxlife>2</maxlife>
 										<deform>down</deform>
 										<size>7</size>
-										<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
-										<explosiontexture>exp02</explosiontexture>
 										</weapon>
-									</weaponchoice2>
-									<weaponchoice3>
+									</weaponchoice>
+									<weaponchoice>
 										<weight>6</weight>
 										<weapon type='WeaponExplosion'>
 										<hurtamount>0.85</hurtamount>
-										<multicolor></multicolor>
-										<minlife>1.2</minlife>
-										<maxlife>2</maxlife>
 										<deform>down</deform>
 										<size>9</size>
-										<explosionsound>data/accessories/sounds/explosions/large.wav</explosionsound>
-										<explosiontexture>exp02</explosiontexture>
 										</weapon>
-									</weaponchoice3>
-									<weaponchoice4>
+									</weaponchoice>
+									<weaponchoice>
 										<weight>6</weight>
 										<weapon type='WeaponExplosion'>
 										<hurtamount>0.85</hurtamount>
-										<multicolor></multicolor>
-										<minlife>1.2</minlife>
-										<maxlife>2</maxlife>
 										<deform>down</deform>
 										<size>12</size>
-										<explosionsound>data/accessories/sounds/explosions/large.wav</explosionsound>
-										<explosiontexture>exp02</explosiontexture>
 										</weapon>
-									</weaponchoice4>
+									</weaponchoice>
 								</collisionaction>
 							</aimedweapon>
 						</delayedweapon>
 					</aimedweapon>
-				</subweapon2>		
+				</subweapon>		
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -1246,9 +1176,11 @@ without wasting weapons.</description>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel type='MilkShape'>data/accessories/flare.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
 			<shieldhurtfactor>0.2</shieldhurtfactor>
-			<showendpoint></showendpoint>
+			<showendpoint>true</showendpoint>
 			<collisionaction type='WeaponNull'></collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -1266,25 +1198,12 @@ range without wasting weapons.  </description>
 		<model><meshname>snakeeye</meshname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.3</shieldhurtfactor>
-			<projectilemodel type='MilkShape'>data/accessories/flare.txt</projectilemodel>
-			<showendpoint></showendpoint>
-			<showshotpath></showshotpath>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+			<showendpoint>true</showendpoint>
+			<showshotpath>true</showshotpath>
 			<collisionaction type='WeaponNull'></collisionaction>
-		</accessoryaction>
-	</accessory>
-	<accessory>
-		<name>WeaponMuzzle</name>
-		<armslevel>0</armslevel>
-		<description>The muzzle flash for guns</description>
-		<maximumnumber>0</maximumnumber>
-		<accessoryaction type='WeaponMuzzle'>
-			<hurtamount>0.0</hurtamount>
-			<nocreatedebris></nocreatedebris>
-			<nocreatesplash></nocreatesplash>
-			<deform>none</deform>
-			<size>2</size>
-			<explosiontexture>default</explosiontexture>
-			<explosionsound>none</explosionsound>
 		</accessoryaction>
 	</accessory>
 	<accessory>
@@ -1294,13 +1213,8 @@ range without wasting weapons.  </description>
 		<maximumnumber>0</maximumnumber>
 		<accessoryaction type='WeaponExplosion'>
 			<hurtamount>0.0</hurtamount>
-			<nocreatedebris></nocreatedebris>
-			<nocreatesplash></nocreatesplash>
 			<deform>none</deform>
 			<size>1</size>
-			<noluminance></noluminance>
-			<explosiontexture>smoke</explosiontexture>
-			<explosionsound>none</explosionsound>
 		</accessoryaction>
 	</accessory>
 	<accessory>
@@ -1314,20 +1228,25 @@ range without wasting weapons.  </description>
 				<landonly>false</landonly>
 				<scatterpercentage>90</scatterpercentage>
 				<aimedweapon type="WeaponScatterDirection">
-					<direction><A>0</A><B>0</B><C>-1</C></direction>
-					<directionoffset><A>0</A><B>0</B><C>0</C></directionoffset>		
+					<direction>0 0 -1</direction>
+					<directionoffset>0 0 0</directionoffset>		
 					<aimedweapon type='WeaponMulti'>
-						<subweapon1 type='WeaponSound'>
-							<sound>data/accessories/sounds/misc/thunder.wav</sound>
-							<sound>data/accessories/sounds/misc/thunder2.wav</sound>
-							<sound>data/accessories/sounds/misc/thunder3.wav</sound>
-							<relative>true</relative>
-						</subweapon1>
-						<subweapon2 type='WeaponDelay'>
+						<subweapon type='WeaponSound'>
+							<sound>
+                <soundfile>data/accessories/sounds/misc/thunder.wav</soundfile>
+              </sound>
+							<sound>
+                <soundfile>data/accessories/sounds/misc/thunder2.wav</soundfile>
+            </sound>
+							<sound>
+                <soundfile>data/accessories/sounds/misc/thunder3.wav</soundfile>
+            </sound>
+						</subweapon>
+						<subweapon type='WeaponDelay'>
 							<delay>0.5</delay>
 							<delayedweapon type='WeaponMulti'>
-								<subweapon1 type='WeaponSkyFlash'></subweapon1>
-								<subweapon2 type='WeaponLightning'>
+								<subweapon type='WeaponSkyFlash'></subweapon>
+								<subweapon type='WeaponLightning'>
 									<conelength>190</conelength>
 									<seglength>6</seglength>
 									<segvar>12</segvar>
@@ -1342,10 +1261,9 @@ range without wasting weapons.  </description>
 									<totaltime>1</totaltime>
 									<seghurt>0</seghurt>
 									<seghurtradius>0</seghurtradius>
-									<sound>none</sound>
-								</subweapon2>
+								</subweapon>
 							</delayedweapon>
-						</subweapon2>
+						</subweapon>
 					</aimedweapon>
 				</aimedweapon>
 			</nextaction>
@@ -1362,24 +1280,21 @@ range without wasting weapons.  </description>
 				<landonly>false</landonly>
 				<scatterpercentage>90</scatterpercentage>
 				<aimedweapon type="WeaponScatterDirection">
-					<direction><A>0</A><B>0</B><C>-1</C></direction>
-					<directionoffset><A>0</A><B>0</B><C>0</C></directionoffset>		
+					<direction>0 0 -1</direction>
+					<directionoffset>0 0 0</directionoffset>		
 					<aimedweapon type='WeaponAimedOver'>
 						<nowarheads>5</nowarheads>
 						<percentagemiss>20</percentagemiss>
 						<maxaimdistance>0</maxaimdistance>
 						<inaccuracy>10</inaccuracy>
 						<aimedweapon type='WeaponProjectile'>
-							<projectilemodel type='ase'>
-								<mesh>data/accessories/roller.ase</mesh>
-								<skin>data/accessories/magma.bmp</skin>
-							</projectilemodel>
-							<collisionaction type='WeaponExplosion'>
+              <projectilemodel>
+                <meshname>moab</meshname>
+              </projectilemodel>
+              <collisionaction type='WeaponExplosion'>
 								<hurtamount>0.0</hurtamount>
 								<deform>none</deform>
 								<size>4</size>
-								<explosionsound>data/accessories/sounds/explosions/small.wav</explosionsound>
-								<explosiontexture>exp04</explosiontexture>
 							</collisionaction>
 						</aimedweapon>
 					</aimedweapon>
@@ -1406,11 +1321,6 @@ and shields damaging the tank directly.</description>
 			<minimumhurt>34</minimumhurt>
 			<maximumhurt>40</maximumhurt>
 			<hurtradius>2</hurtradius>
-      <color>
-        <A>0.0</A>
-        <B>0.0</B>
-        <C>1.0</C>
-      </color>
 		</accessoryaction>
 	</accessory>
 	<accessory>
@@ -1432,12 +1342,6 @@ and shields damaging the tank directly.</description>
 			<minimumhurt>60</minimumhurt>
 			<maximumhurt>70</maximumhurt>
 			<hurtradius>2</hurtradius>
-      <ringradius>1.75</ringradius>
-			<color>
-				<A>0.0</A>
-				<B>0.0</B>
-				<C>1.0</C>
-			</color>
 		</accessoryaction>
 	</accessory>
 	<accessory>
@@ -1458,7 +1362,6 @@ and shields damaging the tank directly.</description>
 				<landonly>true</landonly>
 				<scatterpercentage>90</scatterpercentage>	
 				<aimedweapon type='WeaponTeleport'>
-					<sound>data/accessories/sounds/misc/teleport.wav</sound>
 					<delay>2.0</delay>
 				</aimedweapon>
 			</nextaction>
@@ -1470,61 +1373,49 @@ and shields damaging the tank directly.</description>
 		<description>The tank explosion weapon</description>
 		<maximumnumber>0</maximumnumber>
 		<accessoryaction type='WeaponMulti'>
-      <subweapon1 type='WeaponExplosion'>
+      <subweapon type='WeaponExplosion'>
         <hurtamount>0.0</hurtamount>
-        <nocreatedebris></nocreatedebris>
-        <nocreatesplash></nocreatesplash>
         <deform>none</deform>
         <size>6</size>
-        <explosiontexture>particle</explosiontexture>
-        <explosionsound>data/accessories/sounds/explosions/tank.wav</explosionsound>
-        <explosiontype>ring</explosiontype>
-      </subweapon1>
-			<subweapon2 type='WeaponRandomChoice'>
-				<weaponchoice1>
+      </subweapon>
+			<subweapon type='WeaponRandomChoice'>
+				<weaponchoice>
 					<weight>60</weight>
 					<weapon type='WeaponInvokeWeapon'>
 						<invoke>Baby Nuke</invoke>
 					</weapon>
-				</weaponchoice1>
-				<weaponchoice2>
+				</weaponchoice>
+				<weaponchoice>
 					<weight>10</weight>
 					<weapon type='WeaponInvokeWeapon'>
 						<invoke>Nuke</invoke>
 					</weapon>
-				</weaponchoice2>
-				<weaponchoice3>
+				</weaponchoice>
+				<weaponchoice>
 					<weight>10</weight>
 					<weapon type='WeaponInvokeWeapon'>
 						<invoke>Ton Of Dirt</invoke>
 					</weapon>
-				</weaponchoice3>
-				<weaponchoice4>
+				</weaponchoice>
+				<weaponchoice>
 					<weight>10</weight>
 					<weapon type='WeaponInvokeWeapon'>
 						<invoke>Hvy Riot Bomb</invoke>
 					</weapon>
-				</weaponchoice4>
-				<weaponchoice5>
+				</weaponchoice>
+				<weaponchoice>
 					<weight>10</weight>
 					<weapon type='WeaponInvokeWeapon'>
 						<invoke>Funky Bomb</invoke>
 					</weapon>
-				</weaponchoice5>
-				<weaponchoice6>
-					<weight>10</weight>
-					<weapon type='WeaponAnimation'>
-						<animation>ExplosionLaserBeamRenderer</animation>
-						<data>data/accessories/sounds/data/wav/misc/laserdeath.wav</data>
-					</weapon>
-				</weaponchoice6>
-        <weaponchoice7>
+				</weaponchoice>
+        <weaponchoice>
           <weight>10</weight>
           <weapon type='WeaponInvokeWeapon'>
             <invoke>Dirt Charge</invoke>
           </weapon>
-        </weaponchoice7>
-      </subweapon2>
+        </weaponchoice>
+      </subweapon>
 		</accessoryaction>
 	</accessory>
 	<accessory>
@@ -1540,10 +1431,11 @@ and shields damaging the tank directly.</description>
     </model>
 		<cost>20000</cost>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilescale>0.5</projectilescale>
-			<spinspeed>1.0</spinspeed>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
+      <spinspeed>1.0</spinspeed>
 			<collisionaction type='WeaponTeleport'>
-				<sound>data/accessories/sounds/misc/teleport.wav</sound>
 				<delay>2.0</delay>
 			</collisionaction>
 		</accessoryaction>
@@ -1561,8 +1453,11 @@ and shields damaging the tank directly.</description>
       <aimedweapon type='WeaponVelocity'>
         <velocitychange>2.0</velocitychange>
         <aimedweapon type='WeaponProjectile'>
+          <projectilemodel>
+            <meshname>moab</meshname>
+          </projectilemodel>
           <shieldhurtfactor>0.2</shieldhurtfactor>
-          <nowallcollision/>
+          <nowallcollision>true</nowallcollision>
           <collisionaction type='WeaponNull'></collisionaction>
         </aimedweapon>
       </aimedweapon>
@@ -1574,9 +1469,11 @@ and shields damaging the tank directly.</description>
     <activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
     <maximumnumber>0</maximumnumber>
     <accessoryaction type='WeaponProjectile'>
-      <projectilemodel type='MilkShape'>data/accessories/littleboy/littleboy.txt</projectilemodel>
+      <projectilemodel>
+        <meshname>moab</meshname>
+      </projectilemodel>
       <shieldhurtfactor>0.2</shieldhurtfactor>
-      <nowallcollision/>
+      <nowallcollision>true</nowallcollision>
       <collisionaction type='WeaponNull'></collisionaction>
     </accessoryaction>
   </accessory>
@@ -1598,8 +1495,6 @@ and shields damaging the tank directly.</description>
 			<hurtamount>0.0</hurtamount>
 			<deform>none</deform>
 			<size>6</size>
-			<explosiontexture>exp00</explosiontexture>
-			<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
 		</accessoryaction>
 	</accessory>	
 	<accessory>
@@ -1612,8 +1507,6 @@ and shields damaging the tank directly.</description>
 		<name>TestShield</name>
 		<accessoryaction type='ShieldRound'>
 			<radius>8.0</radius>
-			<halfshield>false</halfshield>
-			<collisionsound>data/accessories/sounds/shield/hit.wav</collisionsound>
 			<removepower>20</removepower>
 			<penetration>1.0</penetration>
 			<power>1000</power>
@@ -1635,14 +1528,16 @@ and shields damaging the tank directly.</description>
 					<landonly>true</landonly>
 					<scatterpercentage>75</scatterpercentage>
 					<aimedweapon type='WeaponAddTarget'>
-						<name>Bannana</name>
-            <model>
-              <meshname>snakeeye</meshname>
-              <scale>0.5</scale>
-            </model>
-						<shield>Shield</shield>
-						<parachute>Parachute</parachute>
-						<removeaction>TestPowerUpWeapon</removeaction>
+            <target>
+						  <name>Bannana</name>
+              <model>
+                <meshname>snakeeye</meshname>
+                <scale>0.5</scale>
+              </model>
+						  <shield>Shield</shield>
+						  <parachute>Parachute</parachute>
+						  <removeaction>TestPowerUpWeapon</removeaction>
+            </target>
 					</aimedweapon>
 				</nextaction>
 			</repeatweapon>
@@ -1659,19 +1554,19 @@ and shields damaging the tank directly.</description>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
-				<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+        <projectilemodel>
+          <meshname>moab</meshname>
+        </projectilemodel>
 				<collisionaction type='WeaponMulti'>
-					<subweapon1 type='WeaponExplosion'>
+					<subweapon type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
 						<deform>down</deform>
 						<size>8</size>
-						<explosiontexture>exp01</explosiontexture>
-						<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
-					</subweapon1>
-					<subweapon2 type='WeaponGotoLabel'>
+					</subweapon>
+					<subweapon type='WeaponGotoLabel'>
 						<label>label1</label>
 						<count>10</count>
-					</subweapon2>
+					</subweapon>
 				</collisionaction>
 			</nextweapon>
 		</accessoryaction>
@@ -1688,22 +1583,22 @@ and shields damaging the tank directly.</description>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
-				<projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
+        <projectilemodel>
+          <meshname>moab</meshname>
+        </projectilemodel>
 				<collisionaction type='WeaponMulti'>
-					<subweapon1 type='WeaponExplosion'>
+					<subweapon type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
 						<deform>down</deform>
 						<size>8</size>
-						<explosiontexture>exp01</explosiontexture>
-						<explosionsound>data/accessories/sounds/explosions/medium.wav</explosionsound>
-					</subweapon1>
-					<subweapon2 type='WeaponLeapFrog'>
+					</subweapon>
+					<subweapon type='WeaponLeapFrog'>
 						<bounce>0.4</bounce>
 						<collisionaction type='WeaponGotoLabel'>
 							<label>label1</label>
 							<count>10</count>
 						</collisionaction>
-					</subweapon2>
+					</subweapon>
 				</collisionaction>
 			</nextweapon>
 		</accessoryaction>
@@ -1719,7 +1614,6 @@ and shields damaging the tank directly.</description>
     <cost>15000</cost>
 		<accessoryaction type='WeaponSelectPosition'>
 			<aimedweapon type='WeaponTeleport'>
-				<sound>data/accessories/sounds/misc/teleport.wav</sound>
 				<delay>2.0</delay>
 			</aimedweapon>
 		</accessoryaction>
@@ -1734,10 +1628,12 @@ and shields damaging the tank directly.</description>
 		<bundlesize>1</bundlesize>
 		<cost>15000</cost>
 		<accessoryaction type='WeaponTeamAction'>
-			<team0 type='WeaponTeleport'>
-				<sound>data/accessories/sounds/misc/teleport.wav</sound>
-				<delay>2.0</delay>
-			</team0>
+      <action>
+        <team>TeamRed</team>
+        <weapon type='WeaponTeleport'>
+          <delay>2.0</delay>
+        </weapon>
+      </action>
 		</accessoryaction>
 	</accessory>
 	
@@ -1747,10 +1643,12 @@ and shields damaging the tank directly.</description>
 		<bundlesize>1</bundlesize>
 		<cost>15000</cost>
 		<accessoryaction type='WeaponTypeAction'>
-			<none type='WeaponTeleport'>
-				<sound>data/accessories/sounds/misc/teleport.wav</sound>
-				<delay>2.0</delay>
-			</none>
+      <action>
+        <type>none</type>
+        <weapon type='WeaponTeleport'>
+          <delay>2.0</delay>
+        </weapon>
+      </action>
 		</accessoryaction>
 	</accessory>
 	
@@ -1774,12 +1672,7 @@ and shields damaging the tank directly.</description>
 		<accessoryaction type='ShieldSquareReflective'>
 			<movementproof>true</movementproof>
 			<deflectfactor>1.0</deflectfactor>
-			<size>
-				<a>3.0</a>
-				<b>3.0</b>
-				<c>3.0</c>
-			</size>
-			<collisionsound>data/accessories/sounds/shield/hit.wav</collisionsound>
+      <size>3 3 3</size>
 			<removepower>20</removepower>
 			<penetration>1.0</penetration>
 			<power>100</power>
@@ -1794,8 +1687,8 @@ and shields damaging the tank directly.</description>
                 <startingnumber>-1</startingnumber>
                 <activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<accessoryaction type='WeaponPosition'>
-			<position><a>128</a><b>128</b><c>66</c></position>
-			<positionoffset><a>33</a><b>33</b><c>33</c></positionoffset>
+			<position>128 128 66</position>
+			<positionoffset>33 33 33</positionoffset>
 			<!-- onground>true</onground -->
                         <aimedweapon type='WeaponReference'>
 				<weapon>Smoke Tracer</weapon>
@@ -1836,193 +1729,4 @@ and shields damaging the tank directly.</description>
 			</nextaction>			
 		</accessoryaction>
 	</accessory>
-
-<!--
-  <accessory>
-    <name>expshot</name>
-    <armslevel>5</armslevel>
-    <description>flare2 shot</description>
-    <activationsound>none</activationsound>
-    <maximumnumber>0</maximumnumber>
-    <accessoryaction type="WeaponVelocity">
-      <abs>true</abs>
-      <velocitychange>RANGE (0.5,0.7)</velocitychange>
-      <aimedweapon type="WeaponProjectile">
-        <nowallcollision/>
-        <projectilescale>0.0001</projectilescale>
-        <shieldhurtfactor>0</shieldhurtfactor>
-        <stepsize>0.005</stepsize>
-        <spinspeed>1.0</spinspeed>
-        <timedcollision>0.5</timedcollision>
-        <windfactor>0</windfactor>
-        <enginesound>none</enginesound>
-        <flamestartsize>1.8</flamestartsize>
-        <flameendsize>1.2</flameendsize>
-        <flamelife>0.2</flamelife>
-        <nocreatesmoke/>
-        <flametexture>heat</flametexture>
-        <flamestartcolor1>
-          <A>0.5</A>
-          <B>0</B>
-          <C>0</C>
-        </flamestartcolor1>
-        <flameendcolor1>
-          <A>0</A>
-          <B>0</B>
-          <C>0.5</C>
-        </flameendcolor1>
-        <flamestartcolor2>
-          <A>1</A>
-          <B>0</B>
-          <C>0</C>
-        </flamestartcolor2>
-        <flameendcolor2>
-          <A>0.5</A>
-          <B>0.5</B>
-          <C>0</C>
-        </flameendcolor2>
-        <collisionaction type="WeaponProjectile">
-          <nowallcollision/>
-          <projectilescale>0.0001</projectilescale>
-          <shieldhurtfactor>0</shieldhurtfactor>
-          <stepsize>0.005</stepsize>
-          <spinspeed>1.0</spinspeed>
-          <timedcollision>0.2</timedcollision>
-          <windfactor>0</windfactor>
-          <enginesound>none</enginesound>
-          <flamestartsize>1</flamestartsize>
-          <flameendsize>1</flameendsize>
-          <flamelife>0.2</flamelife>
-          <nocreatesmoke/>
-          <flametexture>exp08</flametexture>
-          <flamestartcolor1>
-            <A>0.5</A>
-            <B>0</B>
-            <C>0</C>
-          </flamestartcolor1>
-          <flameendcolor1>
-            <A>0</A>
-            <B>0</B>
-            <C>0.5</C>
-          </flameendcolor1>
-          <flamestartcolor2>
-            <A>1</A>
-            <B>0</B>
-            <C>0</C>
-          </flamestartcolor2>
-          <flameendcolor2>
-            <A>0.5</A>
-            <B>0.5</B>
-            <C>0</C>
-          </flameendcolor2>
-          <collisionaction type="WeaponNull">
-          </collisionaction>
-        </collisionaction>
-      </aimedweapon>
-    </accessoryaction>
-  </accessory>
-  <accessory>
-    <name>missiledebris</name>
-    <armslevel>0</armslevel>
-    <description>flare2</description>
-    <maximumnumber>0</maximumnumber>
-    <accessoryaction type="WeaponMulti">
-      <subweapon1 type="WeaponAimedOver">
-        <nowarheads>8</nowarheads>
-        <maxaimdistance>0</maxaimdistance>
-        <percentagemiss>0</percentagemiss>
-        <inaccuracy>0</inaccuracy>
-        <aimedweapon type="WeaponRedirect">
-          <habs>true</habs>
-          <vabs>true</vabs>
-          <hredirect>RANGE (0,360)</hredirect>
-          <vredirect>RANGE (-45,45)</vredirect>
-          <nextaction type="WeaponReference">
-            <weapon>expshot</weapon>
-          </nextaction>
-        </aimedweapon>
-      </subweapon1>
-    </accessoryaction>
-  </accessory>
-  <accessory>
-    <name>Heat-Seeking Maverick</name>
-    <armslevel>5</armslevel>
-    <cost>10000</cost>
-    <bundlesize>5</bundlesize>
-    <maximumnumber>30</maximumnumber>
-    <modelscale>1</modelscale>
-    <projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
-    <description>Will seek out tanks before it detonates, aim is key to using this weapon.</description>
-    <accessoryaction type="WeaponMulti">
-      <subweapon1 type="WeaponNull"/>
-      <subweapon2 type="WeaponProjectile">
-        <projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
-        <projectilescale>1</projectilescale>
-        <spinspeed>0.3</spinspeed>
-        <apexcollision/>
-        <apexnodud/>
-        <collisionaction type="WeaponProjectile">
-          <projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
-          <projectilescale>1</projectilescale>
-          <spinspeed>0.3</spinspeed>
-          <heightcollision>8</heightcollision>
-          <collisionaction type="WeaponMulti">
-            <subweapon1 type="WeaponAimedUnder">
-              <nowarheads>1</nowarheads>
-              <maxaimdistance>50</maxaimdistance>
-              <moveunderground>false</moveunderground>
-              <percentagemiss>0</percentagemiss>
-              <inaccuracy>0</inaccuracy>
-              <aimedweapon type="WeaponProjectile">
-                <projectilemodel type='MilkShape'>data/accessories/bouncingbetty/bouncingbetty.txt</projectilemodel>
-                <nowallcollision/>
-                <timedcollision>3</timedcollision>
-                <projectilescale>1</projectilescale>
-                <spinspeed>0.3</spinspeed>
-                <collisionaction type="WeaponMulti">
-                  <subweapon1 type="WeaponExplosion">
-                    <hurtamount>3</hurtamount>
-                    <deform>down</deform>
-                    <size>2</size>
-                    <explosiontexture>exp00</explosiontexture>
-                  </subweapon1>
-                  <subweapon2 type="WeaponReference">
-                    <weapon>missiledebris</weapon>
-                  </subweapon2>
-                </collisionaction>
-              </aimedweapon>
-            </subweapon1>
-            <subweapon2 type="WeaponSound">
-              <gain>1.6</gain>
-              <sound>data/accessories/sounds/data/wav/misc/thunder.wav</sound>
-            </subweapon2>
-          </collisionaction>
-        </collisionaction>
-      </subweapon2>
-    </accessoryaction>
-  </accessory>
-  -->
-<!--
-  <accessory>
-    <name>Baby Ring</name>
-    <armslevel>6</armslevel>
-    <description>A large explosive projectile weapon.</description>
-    <icon>bnuke.bmp</icon>
-    <bundlesize>3</bundlesize>
-    <cost>8000</cost>
-    <activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-    <model><meshname>snakeeye</meshname></model>
-    <accessoryaction type='WeaponExplosion'>
-      <hurtamount>0.0</hurtamount>
-      <deform>none</deform>
-      <size>11</size>
-      <nocreatedebris></nocreatedebris>
-      <nocreatesplash></nocreatesplash>
-      <explosionshake>0.0</explosionshake>
-      <explosiontexture>exp00</explosiontexture>
-      <explosionsound>data/accessories/sounds/explosions/large.wav</explosionsound>
-      <explosiontype>directionalring</explosiontype>
-    </accessoryaction>
-  </accessory> 
---> 
 </accessories>
