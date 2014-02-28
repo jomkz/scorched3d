@@ -49,24 +49,24 @@ void TargetMovementEntryBoids::generate(ScorchedContext &context,
 		(LandscapeMovementTypeBoids *) movementType;
 
 	// Set the boid parameters
-	cruiseDistance_ = boids->cruisedistance * fixed(10);
-	maxVelocity_ = boids->maxvelocity * fixed(true, 750);
-	cruiseVelocity_ = boids->maxvelocity * fixed(true, 400);
-	maxAcceleration_ = boids->maxacceleration * fixed(true, 20);
-	minBounds_ = boids->minbounds;
-	maxBounds_ = boids->maxbounds;
+	cruiseDistance_ = boids->cruisedistance.getValue() * fixed(10);
+	maxVelocity_ = boids->maxvelocity.getValue() * fixed(true, 750);
+	cruiseVelocity_ = boids->maxvelocity.getValue() * fixed(true, 400);
+	maxAcceleration_ = boids->maxacceleration.getValue() * fixed(true, 20);
+	minBounds_ = boids->minbounds.getValue();
+	maxBounds_ = boids->maxbounds.getValue();
 
 	// Find the group to move the objects in
-	objectGroup_ = context.getObjectGroups().getGroup(boids->groupname.c_str());
+	objectGroup_ = context.getObjectGroups().getGroup(boids->groupname.getValue().c_str());
 	if (!objectGroup_)
 	{
 		S3D::dialogExit("TargetMovementEntryBoids", 
 			S3D::formatStringBuffer("Group entry %s has no objects defined for it", 
-			boids->groupname.c_str()));
+			boids->groupname.getValue().c_str()));
 	}
 
 	// Create boids
-	makeBoids(context, random, boids->maxbounds, boids->minbounds);
+	makeBoids(context, random, boids->maxbounds.getValue(), boids->minbounds.getValue());
 }
 
 void TargetMovementEntryBoids::makeBoids(ScorchedContext &context, 

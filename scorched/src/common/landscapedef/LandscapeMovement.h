@@ -21,24 +21,33 @@
 #if !defined(__INCLUDE_LandscapeMovementh_INCLUDE__)
 #define __INCLUDE_LandscapeMovementh_INCLUDE__
 
-#include <XML/XMLEntrySimpleTypes.h>
+#include <XML/XMLEntryComplexTypes.h>
 
-class LandscapeMovementTypeFactory : public XMLEntryTypeFactory
+class LandscapeMovementType : public XMLEntryContainer
 {
 public:
-	static LandscapeMovementTypeFactory *instance;
-
-	// XMLEntryFactory
-	virtual XMLEntry *createXMLEntry(const std::string &type);
-};
-
-class LandscapeMovementType : public XMLEntryNamedContainer
-{
-public:
-	LandscapeMovementType(const std::string &name, const std::string &description);
+	LandscapeMovementType(const char *name, const char *description);
 	virtual ~LandscapeMovementType();
 
 	XMLEntryString groupname;
+};
+
+class LandscapeMovementTypeChoice : public XMLEntryTypeChoice<LandscapeMovementType>
+{
+public:
+	LandscapeMovementTypeChoice();
+	virtual ~LandscapeMovementTypeChoice();
+
+	virtual LandscapeMovementType *createXMLEntry(const std::string &type);
+};
+
+class LandscapeMovementTypeList : public XMLEntryList<LandscapeMovementTypeChoice>
+{
+public:
+	LandscapeMovementTypeList();
+	virtual ~LandscapeMovementTypeList();
+
+	virtual LandscapeMovementTypeChoice *createXMLEntry();
 };
 
 class LandscapeMovementTypeBoids : public LandscapeMovementType
@@ -47,11 +56,13 @@ public:
 	LandscapeMovementTypeBoids();
 	virtual ~LandscapeMovementTypeBoids();
 
-	ModelID model;
+	//XMLEntryModelID model;
 	XMLEntryFixedVector minbounds, maxbounds;
 	XMLEntryFixed maxvelocity;
 	XMLEntryFixed cruisedistance;
 	XMLEntryFixed maxacceleration;
+
+	virtual bool readXML(XMLNode *parentNode);
 };
 
 class LandscapeMovementTypeShips : public LandscapeMovementType
@@ -68,6 +79,15 @@ public:
 	XMLEntryFixed starttime;
 };
 
+class LandscapeMovementTypeSplineControlPoints : public XMLEntryList<XMLEntryFixedVector>
+{
+public:
+	LandscapeMovementTypeSplineControlPoints();
+	virtual ~LandscapeMovementTypeSplineControlPoints();
+
+	virtual XMLEntryFixedVector *createXMLEntry();
+};
+
 class LandscapeMovementTypeSpline : public LandscapeMovementType
 {
 public:
@@ -77,7 +97,9 @@ public:
 	XMLEntryFixed speed;
 	XMLEntryFixed starttime;
 	XMLEntryBool groundonly;
-	std::vector<FixedVector> points;
+	LandscapeMovementTypeSplineControlPoints points;
+
+	virtual bool readXML(XMLNode *parentNode);
 };
 
 

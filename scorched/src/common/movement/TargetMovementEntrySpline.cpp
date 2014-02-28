@@ -48,12 +48,17 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 	LandscapeMovementTypeSpline *splineGroup = 
 		(LandscapeMovementTypeSpline *) movementType;
 	context_ = &context;
-	groundOnly_ = splineGroup->groundonly;
+	groundOnly_ = splineGroup->groundonly.getValue();
 
 	// Create the control points from those specified
 	std::vector<FixedVector> controlPoints;
 	controlPoints.push_back(FixedVector::getNullVector());
-	controlPoints.insert(controlPoints.end(), splineGroup->points.begin(), splineGroup->points.end());
+	std::list<XMLEntryFixedVector *>::iterator itor = splineGroup->points.getChildren().begin(), 
+		end = splineGroup->points.getChildren().end();
+	for (;itor!=end; ++end)
+	{
+		controlPoints.push_back((*itor)->getValue());
+	}
 
 	// Add a control point at the end to join the loop
 	FixedVector midPt = (controlPoints[1] + controlPoints.back()) / 2;
@@ -75,16 +80,16 @@ void TargetMovementEntrySpline::generate(ScorchedContext &context,
 	}
 
 	// Generate the spline path
-	path_.generate(controlPoints, 200, 3, splineGroup->speed);
-	path_.simulate(splineGroup->starttime);
+	path_.generate(controlPoints, 200, 3, splineGroup->speed.getValue());
+	path_.simulate(splineGroup->starttime.getValue());
 
 	// Find the group to move the objects in
-	objectGroup_ = context.getObjectGroups().getGroup(splineGroup->groupname.c_str());
+	objectGroup_ = context.getObjectGroups().getGroup(splineGroup->groupname.getValue().c_str());
 	if (!objectGroup_)
 	{
 		S3D::dialogExit("TargetMovementEntrySpline", 
 			S3D::formatStringBuffer("Group entry %s has no objects defined for it", 
-			splineGroup->groupname.c_str()));
+			splineGroup->groupname.getValue().c_str()));
 	}
 
 	// Generate the list of offsets for all of the targets in the group

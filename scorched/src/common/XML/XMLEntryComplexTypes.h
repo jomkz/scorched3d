@@ -18,29 +18,18 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandscapeEventsh_INCLUDE__)
-#define __INCLUDE_LandscapeEventsh_INCLUDE__
+#if !defined(__INCLUDE_XMLEntryComplexTypesh_INCLUDE__)
+#define __INCLUDE_XMLEntryComplexTypesh_INCLUDE__
 
-#include <landscapedef/LandscapeEventAction.h>
-#include <landscapedef/LandscapeEventCondition.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeEvent : public XMLEntryGroup
+class XMLEntryModelID : public XMLEntryGroup
 {
 public:
-	LandscapeEvent();
-	virtual ~LandscapeEvent();
+	XMLEntryModelID(const char *tagName);
+	virtual ~XMLEntryModelID();
 
-	LandscapeEventConditionChoice condition;
-	LandscapeEventActionChoice action;
+	XMLEntryString meshName;
 };
 
-class LandscapeEventList : public XMLEntryList<LandscapeEvent>
-{
-public:
-	LandscapeEventList();
-	virtual ~LandscapeEventList();
-
-	virtual LandscapeEvent *createXMLEntry();
-};
-
-#endif // __INCLUDE_LandscapeEventsh_INCLUDE__
+#endif // __INCLUDE_XMLEntryComplexTypesh_INCLUDE__

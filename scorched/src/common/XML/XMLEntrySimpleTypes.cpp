@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <map>
 
-XMLEntrySimpleType::XMLEntrySimpleType(const std::string &name, const std::string &description, unsigned int data) :
+XMLEntrySimpleType::XMLEntrySimpleType(const char *name, const char *description, unsigned int data) :
 	name_(name),
 	description_(description),
 	data_(data)
@@ -40,13 +40,13 @@ bool XMLEntrySimpleType::readXML(XMLNode *parentNode)
 {
 	bool required = data_ & eRequired;
 	XMLNode *foundNode = 0;
-	if (parentNode->getNamedChild(name_.c_str(), foundNode, required)) 
+	if (parentNode->getNamedChild(name_, foundNode, required)) 
 	{
 		if (!setValueFromString(foundNode->getContent()))
 		{
 			return foundNode->returnError(S3D::formatStringBuffer(
 				"Failed to set XML etry \"%s\" with \"%s\"",
-				name_.c_str(), foundNode->getContent()));
+				name_, foundNode->getContent()));
 		}
 	}
 	else if (required)
@@ -76,18 +76,18 @@ void XMLEntrySimpleType::writeXML(XMLNode *parentNode)
 		XMLNode::XMLCommentType));
 
 	// Add the actual node
-	XMLNode *newNode = new XMLNode(name_.c_str(), getValueAsString());
+	XMLNode *newNode = new XMLNode(name_, getValueAsString());
 	parentNode->addChild(newNode);
 }
 
-XMLEntryInt::XMLEntryInt(const std::string &name, 
-	const std::string &description) :
+XMLEntryInt::XMLEntryInt(const char *name, 
+	const char *description) :
 	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired), 
 	value_(0), defaultValue_(0)
 {
 }
 
-XMLEntryInt::XMLEntryInt(const std::string &name, const std::string &description,
+XMLEntryInt::XMLEntryInt(const char *name, const char *description,
 	unsigned int data, int value) :
 	XMLEntrySimpleType(name, description, data), 
 	value_(value), defaultValue_(value)
@@ -128,8 +128,8 @@ bool XMLEntryInt::setValue(int value)
 	return true;
 }
 
-XMLEntryBoundedInt::XMLEntryBoundedInt(const std::string &name,
-	const std::string &description,
+XMLEntryBoundedInt::XMLEntryBoundedInt(const char *name,
+	const char *description,
 	unsigned int data,
 	int value,
 	int minValue, int maxValue, int stepValue) :
@@ -153,8 +153,8 @@ bool XMLEntryBoundedInt::setValue(int value)
 	return XMLEntryInt::setValue(value);
 }
 
-XMLEntryEnum::XMLEntryEnum(const std::string &name,
-	const std::string &description,
+XMLEntryEnum::XMLEntryEnum(const char *name,
+	const char *description,
 	unsigned int data,
 	int value,
 	XMLEntryEnum::EnumEntry enums[]) :
@@ -235,15 +235,15 @@ bool XMLEntryEnum::setValueFromString(const std::string &string)
 	return setValue(val);
 }
 
-XMLEntryBool::XMLEntryBool(const std::string &name, 
-	const std::string &description) :
+XMLEntryBool::XMLEntryBool(const char *name, 
+	const char *description) :
 	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
 	value_(false), defaultValue_(false)
 {
 }
 
-XMLEntryBool::XMLEntryBool(const std::string &name, 
-	const std::string &description, 
+XMLEntryBool::XMLEntryBool(const char *name, 
+	const char *description, 
 	unsigned int data,
 	bool value) :
 	XMLEntrySimpleType(name, description, data), 
@@ -293,16 +293,16 @@ bool XMLEntryBool::getValue()
 	return ((value_==0)?false:true);
 }
 
-XMLEntryString::XMLEntryString(const std::string &name,
-	const std::string &description) :
+XMLEntryString::XMLEntryString(const char *name,
+	const char *description) :
 	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
 	value_(""), defaultValue_(""), multiline_(false)
 {
 
 }
 
-XMLEntryString::XMLEntryString(const std::string &name, 
-	const std::string &description, 
+XMLEntryString::XMLEntryString(const char *name, 
+	const char *description, 
 	unsigned int data,
 	const std::string &value,
 	bool multiline) :
@@ -343,8 +343,8 @@ bool XMLEntryString::setValue(const std::string &value)
 	return true;
 }
 
-XMLEntryStringEnum::XMLEntryStringEnum(const std::string &name,
-	const std::string &description,
+XMLEntryStringEnum::XMLEntryStringEnum(const char *name,
+	const char *description,
 	unsigned int data,
 	const std::string &value,
 	XMLEntryStringEnum::EnumEntry enums[]) :
@@ -387,15 +387,15 @@ bool XMLEntryStringEnum::setValueFromString(const std::string &string)
 	return setValue(string);
 }
 
-XMLEntryFixed::XMLEntryFixed(const std::string &name, 
-		const std::string &description) :
+XMLEntryFixed::XMLEntryFixed(const char *name, 
+		const char *description) :
 	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
 	value_(0), defaultValue_(0)
 {
 }
 
-XMLEntryFixed::XMLEntryFixed(const std::string &name,
-	const std::string &description,
+XMLEntryFixed::XMLEntryFixed(const char *name,
+	const char *description,
 	unsigned int data,
 	fixed value) :
 	XMLEntrySimpleType(name, description, data), 
@@ -435,8 +435,15 @@ bool XMLEntryFixed::setValue(fixed value)
 	return true;
 }
 
-XMLEntryFixedVector::XMLEntryFixedVector(const std::string &name,
-	const std::string &description,
+XMLEntryFixedVector::XMLEntryFixedVector(const char *name, 
+	const char *description) :
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired)
+{
+
+}
+
+XMLEntryFixedVector::XMLEntryFixedVector(const char *name,
+	const char *description,
 	unsigned int data,
 	FixedVector value) :
 	XMLEntrySimpleType(name, description, data), 

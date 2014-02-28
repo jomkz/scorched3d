@@ -24,26 +24,26 @@
 #include <common/fixed.h>
 #include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeEventConditionFactory : public XMLEntryTypeFactory
-{
-public:
-	static LandscapeEventConditionFactory *instance;
-
-	// XMLEntryFactory
-	virtual XMLEntry *createXMLEntry(const std::string &type);
-};
-
 class ScorchedContext;
-class LandscapeEventCondition : public XMLEntryNamedContainer
+class LandscapeEventCondition : public XMLEntryContainer
 {
 public:
-	LandscapeEventCondition(const std::string &name, const std::string &description);
+	LandscapeEventCondition(const char *name, const char *description);
 	virtual ~LandscapeEventCondition();
 
 	virtual fixed getNextEventTime(ScorchedContext &context, 
 		int eventNumber) = 0;
 	virtual bool fireEvent(ScorchedContext &context, 
 		fixed timeLeft, int eventNumber) = 0;
+};
+
+class LandscapeEventConditionChoice : public XMLEntryTypeChoice<LandscapeEventCondition>
+{
+public:
+	LandscapeEventConditionChoice(const char *name, const char *description);
+	virtual ~LandscapeEventConditionChoice();
+
+	virtual LandscapeEventCondition *createXMLEntry(const std::string &type);
 };
 
 class LandscapeEventConditionGroupSize : public LandscapeEventCondition

@@ -18,29 +18,15 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandscapeEventsh_INCLUDE__)
-#define __INCLUDE_LandscapeEventsh_INCLUDE__
+#include <XML/XMLEntryComplexTypes.h>
 
-#include <landscapedef/LandscapeEventAction.h>
-#include <landscapedef/LandscapeEventCondition.h>
-
-class LandscapeEvent : public XMLEntryGroup
+XMLEntryModelID::XMLEntryModelID(const char *tagName) :
+	XMLEntryGroup(tagName, "A definition of a displayable model"),
+	meshName("meshname", "The ogre mesh resource name, this mesh must already be loaded in the ogre resources")
 {
-public:
-	LandscapeEvent();
-	virtual ~LandscapeEvent();
+	addChildXMLEntry(&meshName);
+}
 
-	LandscapeEventConditionChoice condition;
-	LandscapeEventActionChoice action;
-};
-
-class LandscapeEventList : public XMLEntryList<LandscapeEvent>
+XMLEntryModelID::~XMLEntryModelID()
 {
-public:
-	LandscapeEventList();
-	virtual ~LandscapeEventList();
-
-	virtual LandscapeEvent *createXMLEntry();
-};
-
-#endif // __INCLUDE_LandscapeEventsh_INCLUDE__
+}

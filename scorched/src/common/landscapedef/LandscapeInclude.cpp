@@ -18,6 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <placement/PlacementType.h>
+#include <landscapedef/LandscapeSound.h>
 #include <landscapedef/LandscapeInclude.h>
 #include <landscapedef/LandscapeEvent.h>
 #include <landscapedef/LandscapeMovement.h>
@@ -27,24 +29,14 @@
 
 LandscapeInclude::LandscapeInclude()
 {
+	events = new LandscapeEventList();
+	movements = new LandscapeMovementTypeList();
 }
 
 LandscapeInclude::~LandscapeInclude()
 {
-	{
-		while (!events.empty())
-		{
-			delete events.back();
-			events.pop_back();
-		}
-	}
-	{
-		while (!movements.empty())
-		{
-			delete movements.back();
-			movements.pop_back();
-		}
-	}
+	delete events;
+	delete movements;
 	{
 		while (!placements.empty())
 		{
@@ -77,15 +69,8 @@ LandscapeInclude::~LandscapeInclude()
 
 bool LandscapeInclude::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 {
-	{
-		XMLNode *eventNode;
-		while (node->getNamedChild("event", eventNode, false))
-		{
-			LandscapeEvent *event = new LandscapeEvent;
-			if (!event->readXML(eventNode)) return false;
-			events.push_back(event);
-		}
-	}
+	if (!events->readXML(node)) return false;
+	if (!movements->readXML(node)) return false;
 	{
 		XMLNode *soundNode;
 		while (node->getNamedChild("sound", soundNode, false))
@@ -123,18 +108,6 @@ bool LandscapeInclude::readXML(LandscapeDefinitions *definitions, XMLNode *node)
 			if (!(placement = PlacementType::create(placementtype.c_str()))) return false;
 			if (!placement->readXML(placementNode)) return false;
 			placements.push_back(placement);
-		}
-	}
-	{
-		XMLNode *movement;
-		while (node->getNamedChild("movement", movement, false))
-		{
-			std::string type;
-			if (!movement->getNamedParameter("type", type)) return false;
-			LandscapeMovementType *object = LandscapeMovementType::create(type.c_str());
-			if (!object) return false;
-			if (!object->readXML(movement)) return false;
-			movements.push_back(object);
 		}
 	}
 	return node->failChildren();

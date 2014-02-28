@@ -1494,6 +1494,9 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeEventCondition.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLEntryComplexTypes.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1737,9 +1740,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\SplinePath.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\StdVectorPtr.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\ToolTip.h">
@@ -2923,6 +2923,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeEventCondition.h">
       <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLEntryComplexTypes.h">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

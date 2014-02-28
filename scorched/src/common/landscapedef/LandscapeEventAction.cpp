@@ -25,9 +25,16 @@
 #include <engine/ObjectGroupEntry.h>
 #include <engine/Simulator.h>
 
-LandscapeEventActionFactory *LandscapeEventActionFactory::instance(new LandscapeEventActionFactory());
+LandscapeEventActionChoice::LandscapeEventActionChoice(const char *name, const char *description) :
+	XMLEntryTypeChoice<LandscapeEventAction>(name, description)
+{
+}
 
-XMLEntry *LandscapeEventActionFactory::createXMLEntry(const std::string &type)
+LandscapeEventActionChoice::~LandscapeEventActionChoice()
+{
+}
+
+LandscapeEventAction *LandscapeEventActionChoice::createXMLEntry(const std::string &type)
 {
 	if (0 == strcmp(type.c_str(), "fireweapon")) return new LandscapeEventActionFireWeapon;
 	if (0 == strcmp(type.c_str(), "fireweaponfromgroup")) return new LandscapeEventActionFireWeaponFromGroup;
@@ -35,8 +42,8 @@ XMLEntry *LandscapeEventActionFactory::createXMLEntry(const std::string &type)
 	return 0;
 }
 
-LandscapeEventAction::LandscapeEventAction(const std::string &name, const std::string &description) :
-	XMLEntryNamedContainer(name, description)
+LandscapeEventAction::LandscapeEventAction(const char *name, const char *description) :
+	XMLEntryContainer(name, description)
 {
 }
 

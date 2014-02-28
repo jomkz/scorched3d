@@ -21,11 +21,11 @@
 #if !defined(__INCLUDE_LandscapeIncludeh_INCLUDE__)
 #define __INCLUDE_LandscapeIncludeh_INCLUDE__
 
-#include <placement/PlacementType.h>
 #include <vector>
 
-class LandscapeEvent;
-class LandscapeMovementType;
+class XMLNode;
+class LandscapeEventList;
+class LandscapeMovementTypeList;
 class PlacementType;
 class LandscapeSoundType;
 class LandscapeMusicType;
@@ -37,8 +37,8 @@ public:
 	LandscapeInclude();
 	virtual ~LandscapeInclude();
 
-	std::vector<LandscapeEvent *> events;
-	std::vector<LandscapeMovementType *> movements;
+	LandscapeEventList *events;
+	LandscapeMovementTypeList *movements;
 	std::vector<PlacementType *> placements;
 	std::vector<LandscapeSoundType *> sounds;
 	std::vector<LandscapeMusicType *> musics;

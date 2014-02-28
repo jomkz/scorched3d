@@ -36,7 +36,7 @@ public:
 		eDepricated = 2
 	};
 
-	XMLEntrySimpleType(const std::string &name, const std::string &description, unsigned int data);
+	XMLEntrySimpleType(const char *name, const char *description, unsigned int data);
 	virtual ~XMLEntrySimpleType();
 
 	std::string getName() { return name_; }
@@ -53,17 +53,17 @@ public:
 	virtual void writeXML(XMLNode *parentNode);
 protected:
 	unsigned int data_;
-	std::string name_;
-	std::string description_;
+	const char *name_;
+	const char *description_;
 };
 
 class XMLEntryInt : public XMLEntrySimpleType
 {
 public:
-	XMLEntryInt(const std::string &name, 
-		const std::string &description);
-	XMLEntryInt(const std::string &name, 
-		const std::string &description,
+	XMLEntryInt(const char *name, 
+		const char *description);
+	XMLEntryInt(const char *name, 
+		const char *description,
 		unsigned int data,
 		int defaultValue);
 	virtual ~XMLEntryInt();
@@ -82,8 +82,8 @@ protected:
 class XMLEntryBoundedInt : public XMLEntryInt
 {
 public:
-	XMLEntryBoundedInt(const std::string &name, 
-		const std::string &description,
+	XMLEntryBoundedInt(const char *name, 
+		const char *description,
 		unsigned int data,
 		int defaultValue,
 		int minValue, int maxValue, int stepValue);
@@ -111,8 +111,8 @@ public:
 		int value;
 	};
 
-	XMLEntryEnum(const std::string &name, 
-		const std::string &description,
+	XMLEntryEnum(const char *name, 
+		const char *description,
 		unsigned int data,
 		int value,
 		XMLEntryEnum::EnumEntry enums[]);
@@ -135,10 +135,10 @@ protected:
 class XMLEntryBool : public XMLEntrySimpleType
 {
 public:
-	XMLEntryBool(const std::string &name, 
-		const std::string &description);
-	XMLEntryBool(const std::string &name, 
-		const std::string &description,
+	XMLEntryBool(const char *name, 
+		const char *description);
+	XMLEntryBool(const char *name, 
+		const char *description,
 		unsigned int data,
 		bool defaultValue);
 	virtual ~XMLEntryBool();
@@ -158,10 +158,10 @@ protected:
 class XMLEntryString : public XMLEntrySimpleType
 {
 public:
-	XMLEntryString(const std::string &name,
-		const std::string &description);
-	XMLEntryString(const std::string &name,
-		const std::string &description,
+	XMLEntryString(const char *name,
+		const char *description);
+	XMLEntryString(const char *name,
+		const char *description,
 		unsigned int data,
 		const std::string &defaultValue,
 		bool multiline = false);
@@ -188,8 +188,8 @@ public:
 		std::string value;
 	};
 
-	XMLEntryStringEnum(const std::string &name, 
-		const std::string &description,
+	XMLEntryStringEnum(const char *name, 
+		const char *description,
 		unsigned int data,
 		const std::string &value,
 		XMLEntryStringEnum::EnumEntry enums[]);
@@ -209,10 +209,10 @@ protected:
 class XMLEntryFixed : public XMLEntrySimpleType
 {
 public:
-	XMLEntryFixed(const std::string &name, 
-		const std::string &description);
-	XMLEntryFixed(const std::string &name, 
-		const std::string &description,
+	XMLEntryFixed(const char *name, 
+		const char *description);
+	XMLEntryFixed(const char *name, 
+		const char *description,
 		unsigned int data,
 		fixed defaultValue);
 	virtual ~XMLEntryFixed();
@@ -232,8 +232,10 @@ protected:
 class XMLEntryFixedVector : public XMLEntrySimpleType
 {
 public:
-	XMLEntryFixedVector(const std::string &name, 
-		const std::string &description,
+	XMLEntryFixedVector(const char *name, 
+		const char *description);
+	XMLEntryFixedVector(const char *name, 
+		const char *description,
 		unsigned int data,
 		FixedVector defaultValue);
 	virtual ~XMLEntryFixedVector();

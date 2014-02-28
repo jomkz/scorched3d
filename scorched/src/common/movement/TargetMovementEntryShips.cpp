@@ -55,13 +55,13 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 		(LandscapeMovementTypeShips *) movementType;
 	std::vector<FixedVector> controlPoints;
 	controlPoints.push_back(FixedVector::getNullVector());
-	fixed diff = fixed(360) / fixed(shipGroup->controlpoints);
+	fixed diff = fixed(360) / fixed(shipGroup->controlpoints.getValue());
 	for (fixed i=0; i<360; i+=diff)
 	{
 		fixed distWidth = random.getRandFixed("ShipMovement") * 
-			shipGroup->controlpointsrand + shipGroup->controlpointswidth;
+			shipGroup->controlpointsrand.getValue() + shipGroup->controlpointswidth.getValue();
 		fixed distHeight = random.getRandFixed("ShipMovement") * 
-			shipGroup->controlpointsrand + shipGroup->controlpointsheight;
+			shipGroup->controlpointsrand.getValue() + shipGroup->controlpointsheight.getValue();
 		fixed x = (i / 180 * fixed::XPI).sin() * distWidth + fixed(mapWidth) / 2;
 		fixed y = (i / 180 * fixed::XPI).cos() * distHeight + fixed(mapHeight) / 2;
 
@@ -75,16 +75,16 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 	controlPoints.front() = midPt;
 
 	// Generate the spline path
-	path_.generate(controlPoints, 200, 3, shipGroup->speed);
-	path_.simulate(shipGroup->starttime);
+	path_.generate(controlPoints, 200, 3, shipGroup->speed.getValue());
+	path_.simulate(shipGroup->starttime.getValue());
 
 	// Find the group to move the objects in
-	objectGroup_ = context.getObjectGroups().getGroup(shipGroup->groupname.c_str());
+	objectGroup_ = context.getObjectGroups().getGroup(shipGroup->groupname.getValue().c_str());
 	if (!objectGroup_)
 	{
 		S3D::dialogExit("TargetMovementEntryShips", 
 			S3D::formatStringBuffer("Group entry %s has no objects defined for it", 
-			shipGroup->groupname.c_str()));
+			shipGroup->groupname.getValue().c_str()));
 	}
 
 	// Generate the list of offsets for all of the targets in the group

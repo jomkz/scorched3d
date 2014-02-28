@@ -34,42 +34,73 @@ public:
 protected:
 };
 
-class XMLEntryFactory
-{
-public:
-	virtual XMLEntry *createXMLEntry() = 0;
-};
-
-class XMLEntryTypeFactory
-{
-public:
-	virtual XMLEntry *createXMLEntry(const std::string &type) = 0;
-};
-
+template <class T>
 class XMLEntryTypeChoice : public XMLEntry
 {
 public:
-	XMLEntryTypeChoice(const std::string &name, const std::string &description);
-	virtual ~XMLEntryTypeChoice();
+	XMLEntryTypeChoice(const char *name, const char *description) :
+		name_(name), description_(description), value_(0)
+	{
 
-	void setXMLEntryFactory(XMLEntryTypeFactory *factory) { factory_ = factory; }
-	XMLEntry *getValue() { return value_; }
+	}
+	virtual ~XMLEntryTypeChoice()
+	{
+		delete value_;
+		value_ = 0;
+	}
+
+	std::string &getChoiceType() { return type_; }
+	T *getValue() { return value_; }
+	virtual T *createXMLEntry(const std::string &type) = 0;
 
 	// XMLEntry
-	virtual bool readXML(XMLNode *parentNode);
-	virtual void writeXML(XMLNode *parentNode);
+	virtual bool readXML(XMLNode *parentNode)
+	{
+		XMLNode *child = 0;
+		if (!parentNode->getNamedChild(name_, child))
+		{
+			return false;
+		}
+		if (child->getNamedParameter("type", type_)) 
+		{
+			return false;
+		}
+		value_ = createXMLEntry(type_);
+		if (!value_)
+		{
+			return child->returnError(S3D::formatStringBuffer(
+				"Failed to create the type : \"%s\"", type_.c_str()));
+		}
+		if (!value_->readXML(child)) return false;
+
+		return true;
+	}
+	virtual void writeXML(XMLNode *parentNode)
+	{
+		// Add the comments for this node
+		parentNode->addChild(new XMLNode("", 
+			S3D::formatStringBuffer("%s", description_), 
+			XMLNode::XMLCommentType));
+
+		// Add the actual node
+		XMLNode *newNode = new XMLNode(name_);
+		parentNode->addChild(newNode);
+		newNode->addParameter(new XMLNode("type", type_, XMLNode::XMLParameterType));
+
+		// Add contents
+		value_->writeXML(newNode);
+	}
 
 protected:
 	std::string type_;
-	XMLEntry *value_;
-	XMLEntryTypeFactory *factory_;
-	std::string name_, description_;
+	T *value_;
+	const char *name_, *description_;
 };
 
 class XMLEntryContainer : public XMLEntry
 {
 public:
-	XMLEntryContainer();
+	XMLEntryContainer(const char *name, const char *description);
 	virtual ~XMLEntryContainer();
 
 	void addChildXMLEntry(XMLEntry *entry1);
@@ -93,24 +124,15 @@ public:
 	virtual bool readXML(XMLNode *parentNode);
 	virtual void writeXML(XMLNode *parentNode);
 
-private:
-	std::list<XMLEntry *> xmlEntryChildren_;
-};
-
-class XMLEntryNamedContainer : public XMLEntryContainer
-{
-public:
-	XMLEntryNamedContainer(const std::string &name, const std::string &description);
-	virtual ~XMLEntryNamedContainer();
-
 protected:
-	std::string xmlEntryName_, xmlEntryDescription_;
+	std::list<XMLEntry *> xmlEntryChildren_;
+	const char *xmlEntryName_, *xmlEntryDescription_;
 };
 
-class XMLEntryGroup : public XMLEntryNamedContainer
+class XMLEntryGroup : public XMLEntryContainer
 {
 public:
-	XMLEntryGroup(const std::string &name, const std::string &description);
+	XMLEntryGroup(const char *name, const char *description);
 	virtual ~XMLEntryGroup();
 
 	// XMLEntry
@@ -118,19 +140,55 @@ public:
 	virtual void writeXML(XMLNode *parentNode);
 };
 
+template <class T>
 class XMLEntryList : public XMLEntry
 {
 public:
-	XMLEntryList();
-	virtual ~XMLEntryList();
+	XMLEntryList(const char *tagName, const char *description) :
+	  tagName_(tagName), description_(description)
+	{
+	}
+	virtual ~XMLEntryList()
+	{
+		std::list<T *>::iterator itor = xmlEntryChildren_.begin(),
+			end = xmlEntryChildren_.end();
+		for (;itor!=end; ++itor)
+		{
+			delete *itor;
+		}
+		xmlEntryChildren_.clear();
+	}
 	
-	std::list<XMLEntry *> getChildren() { return xmlEntryChildren_; }
+	std::list<T *> &getChildren() { return xmlEntryChildren_; }
+
+	virtual T *createXMLEntry() = 0;
 
 	// XMLEntry
-	virtual bool readXML(XMLNode *parentNode);
-	virtual void writeXML(XMLNode *parentNode);
+	virtual bool readXML(XMLNode *parentNode)
+	{
+		XMLNode *node = 0;
+		while (parentNode->getNamedChild(tagName_, node, false, false))
+		{
+			T *newEntry = createXMLEntry();
+			if (!newEntry->readXML(parentNode)) return false;
+			xmlEntryChildren_.push_back(newEntry);
+		}
+
+		return true;
+	}
+
+	virtual void writeXML(XMLNode *parentNode)
+	{
+		std::list<T *>::iterator itor = xmlEntryChildren_.begin(),
+			end = xmlEntryChildren_.end();
+		for (;itor!=end; ++itor)
+		{
+			(*itor)->writeXML(parentNode);
+		}
+	}
 protected:
-	std::list<XMLEntry *> xmlEntryChildren_;
+	std::list<T *> xmlEntryChildren_;
+	const char *tagName_, *description_;
 };
 
 #endif

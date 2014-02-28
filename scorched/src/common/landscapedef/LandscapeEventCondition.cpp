@@ -23,9 +23,16 @@
 #include <engine/ObjectGroupEntry.h>
 #include <engine/Simulator.h>
 
-LandscapeEventConditionFactory *LandscapeEventConditionFactory::instance(new LandscapeEventConditionFactory());
+LandscapeEventConditionChoice::LandscapeEventConditionChoice(const char *name, const char *description) :
+	XMLEntryTypeChoice<LandscapeEventCondition>(name, description)
+{
+}
 
-XMLEntry *LandscapeEventConditionFactory::createXMLEntry(const std::string &type)
+LandscapeEventConditionChoice::~LandscapeEventConditionChoice()
+{
+}
+
+LandscapeEventCondition *LandscapeEventConditionChoice::createXMLEntry(const std::string &type)
 {
 	if (0 == strcmp(type.c_str(), "time")) return new LandscapeEventConditionTime;
 	if (0 == strcmp(type.c_str(), "groupsize")) return new LandscapeEventConditionGroupSize;
@@ -33,8 +40,8 @@ XMLEntry *LandscapeEventConditionFactory::createXMLEntry(const std::string &type
 	return 0;
 }
 
-LandscapeEventCondition::LandscapeEventCondition(const std::string &name, const std::string &description) :
-	XMLEntryNamedContainer(name, description)
+LandscapeEventCondition::LandscapeEventCondition(const char *name, const char *description) :
+	XMLEntryContainer(name, description)
 {
 }
 

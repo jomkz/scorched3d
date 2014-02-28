@@ -339,6 +339,7 @@
     <ClCompile Include="..\..\common\weapons\WeaponVelocity.cpp" />
     <ClCompile Include="..\..\common\XML\XMLDiff.cpp" />
     <ClCompile Include="..\..\common\XML\XMLEntry.cpp" />
+    <ClCompile Include="..\..\common\XML\XMLEntryComplexTypes.cpp" />
     <ClCompile Include="..\..\common\XML\XMLEntrySimpleTypes.cpp" />
     <ClCompile Include="..\..\common\XML\XMLFile.cpp" />
     <ClCompile Include="..\..\common\XML\XmlNamedNetBuffer.cpp" />
@@ -552,7 +553,6 @@
     <ClInclude Include="..\..\common\common\simplexnoise.h" />
     <ClInclude Include="..\..\common\common\SplineCurve.h" />
     <ClInclude Include="..\..\common\common\SplinePath.h" />
-    <ClInclude Include="..\..\common\common\StdVectorPtr.h" />
     <ClInclude Include="..\..\common\common\ThreadUtils.h" />
     <ClInclude Include="..\..\common\common\ToolTip.h" />
     <ClInclude Include="..\..\common\common\ToolTipResource.h" />
@@ -821,6 +821,7 @@
     <ClInclude Include="..\..\common\weapons\WeaponVelocity.h" />
     <ClInclude Include="..\..\common\XML\XMLDiff.h" />
     <ClInclude Include="..\..\common\XML\XMLEntry.h" />
+    <ClInclude Include="..\..\common\XML\XMLEntryComplexTypes.h" />
     <ClInclude Include="..\..\common\XML\XMLEntrySimpleTypes.h" />
     <ClInclude Include="..\..\common\XML\XMLFile.h" />
     <ClInclude Include="..\..\common\XML\XmlNamedNetBuffer.h" />

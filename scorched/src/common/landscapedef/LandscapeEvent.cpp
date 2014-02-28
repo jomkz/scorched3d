@@ -21,16 +21,30 @@
 #include <landscapedef/LandscapeEvent.h>
 
 LandscapeEvent::LandscapeEvent() :
-	XMLEntryNamedContainer("LandscapeEvent", 
+	XMLEntryGroup("event", 
 		"Specifies actions that can be performed at various times during the simulation."),
 	condition("condition", "A condition to determine when this action fires"), 
 	action("action", "An action to perform when this action fires")
 {
-	condition.setXMLEntryFactory(LandscapeEventConditionFactory::instance);
-	action.setXMLEntryFactory(LandscapeEventActionFactory::instance);
 	addChildXMLEntry(&condition, &action);
 }
 
 LandscapeEvent::~LandscapeEvent()
 {
+}
+
+LandscapeEventList::LandscapeEventList() :
+	XMLEntryList<LandscapeEvent>("event", 
+		"Specifies a list of actions that can be performed at various times during the simulation.")
+{
+}
+
+
+LandscapeEventList::~LandscapeEventList()
+{
+}
+
+LandscapeEvent *LandscapeEventList::createXMLEntry()
+{
+	return new LandscapeEvent();
 }

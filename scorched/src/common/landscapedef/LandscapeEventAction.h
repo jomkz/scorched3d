@@ -23,22 +23,22 @@
 
 #include <XML/XMLEntrySimpleTypes.h>
 
-class LandscapeEventActionFactory : public XMLEntryTypeFactory
+class LandscapeEventAction : public XMLEntryContainer
 {
 public:
-	static LandscapeEventActionFactory *instance;
-
-	// XMLEntryFactory
-	virtual XMLEntry *createXMLEntry(const std::string &type);
-};
-
-class LandscapeEventAction : public XMLEntryNamedContainer
-{
-public:
-	LandscapeEventAction(const std::string &name, const std::string &description);
+	LandscapeEventAction(const char *name, const char *description);
 	virtual ~LandscapeEventAction();
 
 	virtual void fireAction(ScorchedContext &context) = 0;
+};
+
+class LandscapeEventActionChoice : public XMLEntryTypeChoice<LandscapeEventAction>
+{
+public:
+	LandscapeEventActionChoice(const char *name, const char *description);
+	virtual ~LandscapeEventActionChoice();
+
+	virtual LandscapeEventAction *createXMLEntry(const std::string &type);
 };
 
 class LandscapeEventActionFireWeapon : public LandscapeEventAction

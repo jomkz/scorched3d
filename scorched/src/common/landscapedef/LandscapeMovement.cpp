@@ -22,9 +22,17 @@
 #include <XML/XMLNode.h>
 #include <common/Defines.h>
 
-LandscapeMovementTypeFactory *LandscapeMovementTypeFactory::instance(new LandscapeMovementTypeFactory());
+LandscapeMovementTypeChoice::LandscapeMovementTypeChoice() :
+	XMLEntryTypeChoice<LandscapeMovementType>("movement", 
+		"Associates object movement animation to a give group of objects")
+{
+}
 
-XMLEntry *LandscapeMovementTypeFactory::createXMLEntry(const std::string &type)
+LandscapeMovementTypeChoice::~LandscapeMovementTypeChoice()
+{
+}
+
+LandscapeMovementType *LandscapeMovementTypeChoice::createXMLEntry(const std::string &type)
 {
 	if (0 == strcmp(type.c_str(), "boids")) return new LandscapeMovementTypeBoids;
 	if (0 == strcmp(type.c_str(), "ships")) return new LandscapeMovementTypeShips;
@@ -33,9 +41,25 @@ XMLEntry *LandscapeMovementTypeFactory::createXMLEntry(const std::string &type)
 	return 0;
 }
 
-LandscapeMovementType::LandscapeMovementType(const std::string &name, const std::string &description) :
-	XMLEntryNamedContainer(name, description),
-	groupname("groupname", "The name of the object group that contains the objects to move")
+LandscapeMovementTypeList::LandscapeMovementTypeList() :
+	XMLEntryList("movement", 
+		"A list of movement animations that can be associated with an object group")
+{
+}
+
+LandscapeMovementTypeList::~LandscapeMovementTypeList()
+{
+}
+
+LandscapeMovementTypeChoice *LandscapeMovementTypeList::createXMLEntry()
+{
+	return new LandscapeMovementTypeChoice();
+}
+
+LandscapeMovementType::LandscapeMovementType(const char *name, const char *description) :
+	XMLEntryContainer(name, description),
+	groupname("groupname", 
+		"The name of the object group that contains the objects to move")
 {
 }
 
@@ -61,46 +85,71 @@ LandscapeMovementTypeShips::~LandscapeMovementTypeShips()
 {
 }
 
+LandscapeMovementTypeSplineControlPoints::LandscapeMovementTypeSplineControlPoints() :
+	XMLEntryList("controlpoint", "The list of control points that defined the spline curve")
+{
+}
+
+LandscapeMovementTypeSplineControlPoints::~LandscapeMovementTypeSplineControlPoints()
+{
+}
+
+XMLEntryFixedVector *LandscapeMovementTypeSplineControlPoints::createXMLEntry()
+{
+	return new XMLEntryFixedVector("controlpoint", "A control point for the spline curve");
+}
+
 LandscapeMovementTypeSpline::LandscapeMovementTypeSpline() :
 	LandscapeMovementType("LandscapeMovementTypeSpline", 
 		"A movement type where objects are moved along a path defined by a series of control points joined by a spline curve."),
 	speed("speed", "The speed that animation occurs around the points"),
 	groundonly("groundonly", "If the height in the control points should be ignored and the curve should follow the landscape terrain height"),
-	starttime("starttime", "How far around the circle this group of objects will start")
+	starttime("starttime", "How far around the circle this group of objects will start"),
+	points()
+{
+	addChildXMLEntry(&speed, &groundonly, &starttime);
+}
+
+LandscapeMovementTypeSpline::~LandscapeMovementTypeSpline()
 {
 }
 
-bool LandscapeMovementTypeSpline::readXML(XMLNode *node)
+bool LandscapeMovementTypeSpline::readXML(XMLNode *parentNode)
 {
-	if (!node->getNamedChild("speed", speed)) return false;
-	if (!node->getNamedChild("starttime", starttime)) return false;
-	if (!node->getNamedChild("groundonly", groundonly)) return false;
-	FixedVector point;
-	while (node->getNamedChild("controlpoint", point, false))
-	{
-		points.push_back(point);
-	}
+	if (!LandscapeMovementType::readXML(parentNode)) return false;
 
-	if (points.size() < 3) return node->returnError("Must have at least 3 control points");
-
-	return LandscapeMovementType::readXML(node);
+	if (points.getChildren().size() < 3) return parentNode->returnError("Must have at least 3 control points");
+	return true;
 }
 
-bool LandscapeMovementTypeBoids::readXML(XMLNode *node)
+LandscapeMovementTypeBoids::LandscapeMovementTypeBoids() :
+	LandscapeMovementType("LandscapeMovementTypeBoids", 
+		"A movement type where objects are moved due to a Boids simulation, i.e. in a flocking motion"),
+	minbounds("minbounds", "The minimum extent that defines a bounding box tha will confine the boids"),
+	maxbounds("maxbounds", "The maximum extent that defines a bounding box tha will confine the boids"),
+	maxvelocity("maxvelocity", "The maximum velocity a boid can reach"),
+	cruisedistance("cruisedistance", "The ideal distance between boids that will be strived for"),
+	maxacceleration("maxacceleration", "The maximum acceleration a boid can reach")//,
+	//model("", "")
 {
-	if (!node->getNamedChild("minbounds", minbounds)) return false;
-	if (!node->getNamedChild("maxbounds", maxbounds)) return false;
-	if (!node->getNamedChild("maxvelocity", maxvelocity)) return false;
-	if (!node->getNamedChild("cruisedistance", cruisedistance)) return false;
-	if (!node->getNamedChild("maxacceleration", maxacceleration)) return false;
+	addChildXMLEntry(&minbounds, &maxbounds, &maxvelocity, &cruisedistance, &maxacceleration);
+}
 
-	if (maxbounds[0] - minbounds[0] < fixed(25) ||
-		maxbounds[1] - minbounds[1] < fixed(25) ||
-		maxbounds[2] - minbounds[2] < fixed(10))
+LandscapeMovementTypeBoids::~LandscapeMovementTypeBoids()
+{
+}
+
+bool LandscapeMovementTypeBoids::readXML(XMLNode *parentNode)
+{
+	if (!LandscapeMovementType::readXML(parentNode)) return false;
+
+	if (maxbounds.getValue()[0] - minbounds.getValue()[0] < fixed(25) ||
+		maxbounds.getValue()[1] - minbounds.getValue()[1] < fixed(25) ||
+		maxbounds.getValue()[2] - minbounds.getValue()[2] < fixed(10))
 	{
-		return node->returnError(
+		return parentNode->returnError(
 			"Boid bounding box is too small, it must be at least 25x10 units");
 	}
 
-	return LandscapeMovementType::readXML(node);
+	return true;
 }

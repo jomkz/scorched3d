@@ -25,6 +25,7 @@
 #include <common/RandomGenerator.h>
 #include <engine/ScorchedContext.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <landscapedef/LandscapeInclude.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeMovement.h>
@@ -73,38 +74,42 @@ void TargetMovement::addMovements(ScorchedContext &context,
 		++itor)
 	{
 		LandscapeInclude *movement = (*itor);
-		addMovementType(context, random, movement->movements);
+		addMovementType(context, random, movement->movements->getChildren());
 	}
 }
 
 void TargetMovement::addMovementType(ScorchedContext &context, 
 	RandomGenerator &random, 
-	std::vector<LandscapeMovementType *> &movementtypes)
+	std::list<LandscapeMovementTypeChoice *> &movementtypes)
 {
-	std::vector<LandscapeMovementType *>::iterator itor;
-	for (itor = movementtypes.begin();
-		itor != movementtypes.end();
-		++itor)
+	std::list<LandscapeMovementTypeChoice *>::iterator itor = movementtypes.begin(),
+		end = movementtypes.end();
+	for (;itor != end; ++itor)
 	{
-		LandscapeMovementType *movementtype = (*itor);
+		LandscapeMovementTypeChoice *movementtype = (*itor);
 
 		TargetMovementEntry *entry = 0;
-		switch(movementtype->getType())
+		if (movementtype->getChoiceType() == "boids")
 		{
-		case LandscapeMovementType::eBoids:
 			entry = new TargetMovementEntryBoids();
 			break;
-		case LandscapeMovementType::eShips:
+		}
+		else if (movementtype->getChoiceType() == "ships")
+		{
 			entry = new TargetMovementEntryShips();
 			break;
-		case LandscapeMovementType::eSpline:
+		}
+		else if (movementtype->getChoiceType() == "spline")
+		{
 			entry = new TargetMovementEntrySpline();
 			break;
-		default:
+		}
+		else
+		{
 			DIALOG_ASSERT(0);
 			break;
 		}
-		entry->generate(context, random, movementtype);
+		entry->generate(context, random, movementtype->getValue());
 		movements_.push_back(entry);
 	}
 }

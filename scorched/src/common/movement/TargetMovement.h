@@ -21,9 +21,10 @@
 #if !defined(__INCLUDE_TargetMovementh_INCLUDE__)
 #define __INCLUDE_TargetMovementh_INCLUDE__
 
-#include <landscapedef/LandscapeInclude.h>
 #include <movement/TargetMovementEntry.h>
+#include <landscapedef/LandscapeMovement.h>
 
+class LandscapeInclude;
 class ScorchedContext;
 class RandomGenerator;
 class TargetMovement
@@ -46,7 +47,7 @@ protected:
 		std::vector<LandscapeInclude *> &movements);
 	void addMovementType(ScorchedContext &context, 
 		RandomGenerator &random, 
-		std::vector<LandscapeMovementType *> &movementtype);
+		std::list<LandscapeMovementTypeChoice *> &movementtype);
 };
 
 #endif // __INCLUDE_TargetMovementh_INCLUDE__
