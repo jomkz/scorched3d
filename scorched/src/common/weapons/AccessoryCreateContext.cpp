@@ -19,14 +19,20 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <weapons/AccessoryCreateContext.h>
 
-AccessoryCreateContext::AccessoryCreateContext(ScorchedContext &context, Accessory *current) :
-	context_(context), currentAccessory_(current)
+AccessoryCreateContext::AccessoryCreateContext(ScorchedContext &context) :
+	context_(context), currentAccessory_(0)
 {
 
 }
 
 AccessoryCreateContext::~AccessoryCreateContext()
 {
+}
+
+void AccessoryCreateContext::setCurrentAccessory(Accessory *current)
+{
+	currentAccessory_ = current;
+	labels_.clear();
 }
 
 WeaponLabel *AccessoryCreateContext::getLabel(const char *label)

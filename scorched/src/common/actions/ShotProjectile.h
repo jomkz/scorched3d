@@ -53,7 +53,7 @@ protected:
 	TankViewPointProvider *vPoint_;
 	WeaponFireContext weaponContext_;
 	unsigned int flareType_;
-	bool up_;
+	bool up_, collided_;
 	fixed snapTime_;
 	fixed totalTime_, simulateTime_, timeout_;
 	fixed thrustTime_;

@@ -22,6 +22,7 @@
 #define AFX_ACCESSORY_H__21765D5B_DB45_4275_AB63_BAD1E84C1790__INCLUDED_
 
 #include <XML/XMLEntryComplexTypes.h>
+#include <XML/XMLEntryRoot.h>
 #include <weapons/AccessoryPart.h>
 #include <weapons/AccessoryCreateContext.h>
 #include <lang/LangString.h>
@@ -95,6 +96,28 @@ protected:
 	XMLEntryInt positionSelectLimit_;
 	XMLEntryInt armsLevel_;
 	XMLEntryInt freemarketLimits_;
+};
+
+class AccessoryList : public XMLEntryList<Accessory>
+{
+public:
+	AccessoryList();
+	virtual ~AccessoryList();
+
+	virtual Accessory *createXMLEntry(void *xmlData);
+private:
+	virtual bool listEntryCreated(Accessory *newEntry, XMLNode *node, void *xmlData);
+};
+
+class AccessoryRoot : public XMLEntryRoot
+{
+public:
+	AccessoryRoot();
+	virtual ~AccessoryRoot();
+
+	AccessoryList &getAccessoryList() { return accessoryList_; }
+protected:
+	AccessoryList accessoryList_;
 };
 
 #endif // !defined(AFX_ACCESSORY_H__21765D5B_DB45_4275_AB63_BAD1E84C1790__INCLUDED_)

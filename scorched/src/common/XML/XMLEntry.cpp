@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <XML/XMLEntry.h>
+#include <XML/XMLEntryRoot.h>
 #include <common/FileTemplate.h>
 
 XMLEntryDocumentInfo::XMLEntryDocumentInfo()
@@ -116,6 +117,13 @@ void XMLEntryDocumentGenerator::writeDocumentation()
 			itor->second.variables->addVariableValue("VERSION", s3dVersion.c_str());
 			FileTemplate::writeTemplateToFile(itor->second.fileName, *itor->second.variables, fileLocation);
 			
+			if (itor->second.root)
+			{
+				FileTemplateVariables *fileVariables = indexVariables.addLoopVariable("ROOT");
+				fileVariables->addVariableValue("INDEX_TYPE", itor->first.c_str());
+				fileVariables->addVariableValue("INDEX_DESCRIPTION", itor->second.variables->getVariableValue("TYPE_DESCRIPTION"));
+			}
+
 			FileTemplateVariables *fileVariables = indexVariables.addLoopVariable("INDEX");
 			fileVariables->addVariableValue("INDEX_TYPE", itor->first.c_str());
 			fileVariables->addVariableValue("INDEX_DESCRIPTION", itor->second.variables->getVariableValue("TYPE_DESCRIPTION"));
@@ -127,6 +135,19 @@ void XMLEntryDocumentGenerator::writeDocumentation()
 	FileTemplateVariables stylesVariables;
 	FileTemplate::writeTemplateToFile("docs/styles.css", stylesVariables, documentLocation_ + "/styles.css");
 	FileTemplate::writeTemplateToFile("docs/index.html", indexVariables, documentLocation_ + "/index.html");	
+}
+
+void XMLEntryDocumentGenerator::addRootTypeTags(XMLEntryRoot *coreType, std::list<std::pair<std::string, XMLEntry *> > &children,
+		const std::string &sourceTypeName, const std::string &sourceFileName)
+{
+	addTypeTags(coreType, children, sourceTypeName, sourceFileName);
+	std::map<std::string, TypeEntry>::iterator itor = types_.find(sourceTypeName);
+	DIALOG_ASSERT(itor != types_.end());
+	itor->second.root = true;
+	itor->second.variables->addVariableValue("TYPE_ROOT_FILENAME", coreType->getRootFileName());
+	itor->second.variables->addVariableValue("TYPE_ROOT_NODENAME", coreType->getRootNodeName());
+	itor->second.variables->addVariableValue("TYPE_ROOT_FILELOCATION", 
+		S3D::getLocationConstant(coreType->getRootFileLocation()));
 }
 
 void XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType,

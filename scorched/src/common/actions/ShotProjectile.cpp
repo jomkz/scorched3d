@@ -45,7 +45,7 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 	startPosition_(startPosition), velocity_(velocity), 
 	weapon_(weapon), weaponContext_(weaponContext), 
 	vPoint_(0),
-	snapTime_(fixed(true, 2000)), up_(false),
+	snapTime_(fixed(true, 2000)), up_(false), collided_(false),
 	totalTime_(0), simulateTime_(0), 
 	spinSpeed_(spinSpeed), spinAxis_(spinAxis),
 	groups_(0), physicsSpin_(0), timeout_(0)
@@ -277,6 +277,9 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 
 void ShotProjectile::doCollision(FixedVector &position)
 {	
+	if (collided_) return;
+	collided_ = true;
+
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{

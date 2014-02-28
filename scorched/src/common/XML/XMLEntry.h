@@ -36,6 +36,7 @@ private:
 
 class FileTemplateVariables;
 class XMLEntry;
+class XMLEntryRoot;
 class XMLEntryDocumentGenerator
 {
 public:
@@ -48,16 +49,19 @@ public:
 	bool hasType(const std::string &typeName);
 	void getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType);
 
+	void addRootTypeTags(XMLEntryRoot *coreType, std::list<std::pair<std::string, XMLEntry *> > &children,
+		const std::string &sourceTypeName, const std::string &sourceFileName);
 	void addTypeTags(XMLEntry *coreType, std::list<std::pair<std::string, XMLEntry *> > &children,
 		const std::string &sourceTypeName, const std::string &sourceFileName);
 private:
 	struct TypeEntry
 	{
-		TypeEntry() : variables(0) { }
+		TypeEntry() : variables(0), root(false) { }
 
 		std::string fileName;
 		FileTemplateVariables *variables;
 		std::list<std::string> typeReferences;
+		bool root;
 	};
 
 	std::string documentLocation_;
@@ -288,8 +292,8 @@ public:
 		T *newEntry = createXMLEntry(xmlData);
 		if (!newEntry->readXML(node, xmlData)) return false;
 		xmlEntryChildren_.push_back(newEntry);
-
-		return true;
+		
+		return listEntryCreated(newEntry, node, xmlData);
 	}
 
 	virtual void writeXML(XMLNode *node)
@@ -309,10 +313,16 @@ public:
 		delete newEntry;
 		return info;
 	}
+
 protected:
 	int minimumListNumber_;
 	std::list<T *> xmlEntryChildren_;
 	const char *xmlDescription_;
+
+	virtual bool listEntryCreated(T *newEntry, XMLNode *node, void *xmlData) 
+	{
+		return true;
+	}
 };
 
 #endif

@@ -18,25 +18,28 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <scorched3dc/DocumentGenerator.h>
-#include <landscapedef/LandscapeTex.h>
-#include <landscapedef/LandscapeDefn.h>
-#include <common/OptionsGame.h>
-#include <weapons/Accessory.h>
+#if !defined(__INCLUDE_XMLEntryRooth_INCLUDE__)
+#define __INCLUDE_XMLEntryRooth_INCLUDE__
 
-void DocumentGenerator::generatDocumentation(const std::string &directory)
+#include <XML/XMLEntry.h>
+
+class XMLEntryRoot : public XMLEntryContainer
 {
-	XMLEntryDocumentGenerator documentGenerator(directory);
+public:
+	XMLEntryRoot(S3D::FileLocation fileLocation, const char *fileName, const char *rootNodeName,
+		const char *typeName, const char *description, bool required = true);
+	virtual ~XMLEntryRoot();
 
-	OptionsGame optionsGame;
-	optionsGame.generateDocumentation(documentGenerator);
-	LandscapeTex landscapeTex(0);
-	landscapeTex.generateDocumentation(documentGenerator);
-	LandscapeDefn landscapeDefn(0);
-	landscapeDefn.generateDocumentation(documentGenerator);
+	bool parseFile(void *xmlData);
+	const char *getRootFileName() { return fileName_; }
+	S3D::FileLocation getRootFileLocation() { return fileLocation_; }
+	const char *getRootNodeName() { return rootNodeName_; }
 
-	AccessoryRoot accessory;
-	accessory.generateDocumentation(documentGenerator);
+	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator);
+protected:
+	S3D::FileLocation fileLocation_;
+	const char *fileName_;
+	const char *rootNodeName_;
+};
 
-	documentGenerator.writeDocumentation();
-}
+#endif

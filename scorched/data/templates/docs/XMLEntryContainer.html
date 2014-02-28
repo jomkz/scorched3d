@@ -9,7 +9,6 @@
     <h2>
       [[TYPE_NAME]]
     </h2>
-
     {{exists:REFERENCES}}
     <dl>
       <dt>
@@ -25,16 +24,28 @@
     <hr/>
     <p>
       [[TYPE_DESCRIPTION]]
+
+      {{exists:TYPE_ROOT_FILENAME}}
+      <br/>
+      File type : [[TYPE_ROOT_FILELOCATION]]<br/>
+      File name : [[TYPE_ROOT_FILENAME]]<br/>
+      {{exists:TYPE_ROOT_FILENAME}}
     </p>
     <hr/>
 
     <p>
+      {{exists:TYPE_ROOT_NODENAME}}
+      &lt;[[TYPE_ROOT_NODENAME]]&gt;<br/>
+      {{exists:TYPE_ROOT_NODENAME}}
       {{loop:TAG}}
-        <a class='tag' id='XML_[[TAG_NAME]]' href='#[[TAG_NAME]]'>&lt;[[TAG_NAME]]{{exists:TAG_CHOICE}}&nbsp;<span class='type'>type='...'</span>{{exists:TAG_CHOICE}}&gt;</a>
+      <a class='tag' id='XML_[[TAG_NAME]]' href='#[[TAG_NAME]]'>&lt;[[TAG_NAME]]{{exists:TAG_CHOICE}}&nbsp;<span class='type'>type='...'</span>{{exists:TAG_CHOICE}}&gt;</a>
           <span class='content'>&nbsp;[[TAG_TYPE]]</span>&nbsp;
         <a class='tag' href='#[[TAG_NAME]]'>&lt;/[[TAG_NAME]]&gt;</a>
         {{exists:TAG_OPTIONS}}&nbsp;<span class='option'>&lt;!-- [[TAG_OPTIONS]] --&gt;</span>{{exists:TAG_OPTIONS}}<br/>
       {{loop:TAG}}
+      {{exists:TYPE_ROOT_NODENAME}}
+      &lt;/[[TYPE_ROOT_NODENAME]]&gt;<br/>
+      {{exists:TYPE_ROOT_NODENAME}}
     </p>
     
     <hr/>

@@ -56,6 +56,7 @@ protected:
 	fixed totalTime_, simulateTime_, stepSize_, timeout_;
 	fixed weaponTime_;
 	float scale_;
+	bool collided_;
 
 	void doCollision();
 

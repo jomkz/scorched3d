@@ -40,6 +40,7 @@ namespace S3D
 	bool dirMake(const std::string &file);
 	bool removeFile(const std::string &file);
 	const std::string getLocation(FileLocation imageLocation, const std::string &filename);
+	const char *getLocationConstant(FileLocation imageLocation);
 	time_t fileModTime(const std::string &file);
 	std::string getHomeDir();
 	std::string getOSDesc();

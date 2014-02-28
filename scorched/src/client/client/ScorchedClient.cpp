@@ -244,10 +244,14 @@ void ScorchedClient::startClientInternal(ProgressCounter *counter)
 			if (ClientParams::instance()->getStartCustom())
 			{
 				clientFile = S3D::getSettingsFile("singlecustom.xml");
+				if (!S3D::fileExists(clientFile))
+				{
+					clientFile = S3D::getModFile("data/singlecustom.xml");
+				}
 			}
 
 			// If not load the client settings file
-			if (!S3D::fileExists(clientFile.c_str()))
+			if (!S3D::fileExists(clientFile))
 			{
 				S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
 					"Client file \"%s\" does not exist.",

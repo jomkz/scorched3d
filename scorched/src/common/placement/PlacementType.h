@@ -27,7 +27,7 @@ class XMLNode;
 class ScorchedContext;
 class ProgressCounter;
 class RandomGenerator;
-class PlacementObject;
+class PlacementObjectChoice;
 class PlacementType  : public XMLEntryContainer
 {
 public:
@@ -51,7 +51,7 @@ public:
 		ProgressCounter *counter = 0) = 0;
 
 protected:
-	PlacementObject *placementobject;
+	PlacementObjectChoice *placementobject;
 
 	bool checkCloseness(FixedVector &position,
 		ScorchedContext &context,

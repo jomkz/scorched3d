@@ -130,3 +130,23 @@ const std::string S3D::getLocation(FileLocation imageLocation, const std::string
 	}
 	return expandedFilename;
 }
+
+const char *S3D::getLocationConstant(FileLocation imageLocation)
+{
+	switch (imageLocation)
+	{
+	case eDataLocation:
+		return "DATA";
+		break;
+	case eModLocation:
+		return "MOD";
+		break;
+	case eAbsLocation:
+		return "ABSOLUTE";
+		break;
+	default:
+		DIALOG_ASSERT(0);
+		break;
+	}
+	return 0;
+}

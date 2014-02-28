@@ -1,349 +1,144 @@
-<options source="Scorched3D">
-  <!-- The largest weapon type allowed -->
-  <option>
-    <name>MaxArmsLevel</name>
-    <value>10</value>
-    <defaultvalue>10</defaultvalue>
-  </option>
-  <!-- The maximum number of turns all players are allowed in each round -->
-  <option>
-    <name>MaxNumberOfRoundTurns</name>
-    <value>15</value>
-    <defaultvalue>15</defaultvalue>
-  </option>
-  <!-- The amount of time each player has for each shot -->
-  <option>
-    <name>ShotTime</name>
-    <value>0</value>
-    <defaultvalue>0</defaultvalue>
-  </option>
-  <!-- The amount of time each player has to buy weapons and use auto defense -->
-  <option>
-    <name>BuyingTime</name>
-    <value>0</value>
-    <defaultvalue>0</defaultvalue>
-  </option>
-  <!-- The amount of time to show the end of game scores for -->
-  <option>
-    <name>ScoreTime</name>
-    <value>15</value>
-    <defaultvalue>15</defaultvalue>
-  </option>
-  <!-- The number of moves a player is allowed to miss (due to the shot timer) -->
-  <option>
-    <name>AllowedMissedMoves</name>
-    <value>3</value>
-    <defaultvalue>3</defaultvalue>
-  </option>
-  <!-- The number of rounds to play in each game -->
-  <option>
-    <name>NumberOfRounds</name>
-    <value>5</value>
-    <defaultvalue>5</defaultvalue>
-  </option>
-  <!-- The number of each weapon the player is allowed -->
-  <option>
-    <name>MaxNumberWeapons</name>
-    <value>90</value>
-    <defaultvalue>90</defaultvalue>
-  </option>
-  <!-- The maximum number of players to allow -->
-  <option>
-    <name>NumberOfPlayers</name>
-    <value>2</value>
-    <defaultvalue>2</defaultvalue>
-  </option>
-  <!-- The minimum number of players to allow -->
-  <option>
-    <name>NumberOfMinPlayers</name>
-    <value>2</value>
-    <defaultvalue>2</defaultvalue>
-  </option>
-  <!-- The percentage chance the computers will say something when killed -->
-  <option>
-    <name>ComputersDeathTalk</name>
-    <value>100</value>
-    <defaultvalue>100</defaultvalue>
-  </option>
-  <!-- The percentage chance the computers will say something when shooting -->
-  <option>
-    <name>ComputersAttackTalk</name>
-    <value>10</value>
-    <defaultvalue>10</defaultvalue>
-  </option>
-  <!-- The first round players are allowed to buy on -->
-  <option>
-    <name>MoneyBuyOnRound</name>
-    <value>2</value>
-    <defaultvalue>2</defaultvalue>
-  </option>
-  <!-- The money awarded for each won round -->
-  <option>
-    <name>MoneyWonForRound</name>
-    <value>5000</value>
-    <defaultvalue>5000</defaultvalue>
-  </option>
-  <!-- The largest landscape (in bytes) that will be sent to the clients -->
-  <option>
-    <name>MaxLandscapeSize</name>
-    <value>200000</value>
-    <defaultvalue>200000</defaultvalue>
-  </option>
-  <!-- The money awarded for each person hit * weapon used -->
-  <option>
-    <name>MoneyWonPerHitPoint</name>
-    <value>100</value>
-    <defaultvalue>100</defaultvalue>
-  </option>
-  <!-- The money awarded for each person killed * weapon used -->
-  <option>
-    <name>MoneyWonPerKillPoint</name>
-    <value>500</value>
-    <defaultvalue>500</defaultvalue>
-  </option>
-  <!-- The money awarded is proportional to the amount of health removed -->
-  <option>
-    <name>MoneyPerHealthPoint</name>
-    <value>on</value>
-    <defaultvalue>on</defaultvalue>
-  </option>
-  <!-- The money each player starts with -->
-  <option>
-    <name>MoneyStarting</name>
-    <value>10000</value>
-    <defaultvalue>10000</defaultvalue>
-  </option>
-  <!-- The amount of time to give clients to respond before kicking them -->
-  <option>
-    <name>IdleKickTime</name>
-    <value>30</value>
-    <defaultvalue>30</defaultvalue>
-  </option>
-  <!-- The interest awarded at the end of each round -->
-  <option>
-    <name>MoneyInterest</name>
-    <value>15</value>
-    <defaultvalue>15</defaultvalue>
-  </option>
-  <!-- Show power is limited by the amount of health a player has -->
-  <option>
-    <name>LimitPowerByHealth</name>
-    <value>on</value>
-    <defaultvalue>on</defaultvalue>
-  </option>
-  <!-- The player turn mode -->
-  <option>
-    <name>TurnType</name>
-    <value>TurnSimultaneous</value>
-  </option>
-  <!-- The force of the wind -->
-  <option>
-    <name>WindForce</name>
-    <value>0</value>
-    <defaultvalue>0</defaultvalue>
-  </option>
-  <!-- When the wind changes -->
-  <option>
-    <name>WindType</name>
-    <value>0</value>
-    <defaultvalue>0</defaultvalue>
-  </option>
-  <!-- The type of walls allowed -->
-  <option>
-    <name>WallType</name>
-    <value>0</value>
-    <defaultvalue>0</defaultvalue>
-  </option>
-  <!-- The scale of the weapons used -->
-  <option>
-    <name>WeaponScale</name>
-    <value>1</value>
-    <defaultvalue>1</defaultvalue>
-  </option>
-  <!-- Prepend and bot name with the specified text -->
-  <option>
-    <name>BotNamePrefix</name>
-    <value>(Bot) </value>
-    <defaultvalue>(Bot) </defaultvalue>
-  </option>
-  <!-- The name of the server to start -->
-  <option>
-    <name>ServerName</name>
-    <value>No Name</value>
-    <defaultvalue>No Name</defaultvalue>
-  </option>
-  <!-- The password for this server (empty password = no password) -->
-  <option>
-    <name>ServerPassword</name>
-    <value></value>
-    <defaultvalue></defaultvalue>
-  </option>
-  <!-- The port to start the server on -->
-  <option>
-    <name>PortNo</name>
-    <value>27270</value>
-    <defaultvalue>27270</defaultvalue>
-  </option>
-  <!-- IP address to publish to scorched net clients (auto-detected if not given). -->
-  <option>
-    <name>PublishAddress</name>
-    <value>AutoDetect</value>
-    <defaultvalue>AutoDetect</defaultvalue>
-  </option>
-  <!-- Allow other scorched net clients to see this server.  Do not use for LAN games. -->
-  <option>
-    <name>PublishServer</name>
-    <value>off</value>
-    <defaultvalue>off</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType1</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType2</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType3</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType4</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType5</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType6</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType7</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType8</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType9</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType10</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType11</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType12</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType13</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType14</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType15</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType16</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType17</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType18</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType19</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType20</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType21</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType22</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType23</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- The type of the player e.g. human, computer etc.. -->
-  <option>
-    <name>PlayerType24</name>
-    <value>Human</value>
-    <defaultvalue>Human</defaultvalue>
-  </option>
-  <!-- Start the game will all the weapons -->
-  <option>
-    <name>GiveAllWeapons</name>
-    <value>off</value>
-    <defaultvalue>off</defaultvalue>
-  </option>
+<!-- Scorched3D options that define properties for the game engine -->
+<options>
+	<!-- WeaponSpeed - The speed of projectiles and rollers (Max = 40000, Min = 2500).  Optional, default value 15000 -->
+	<!-- StartArmsLevel - The largest weapon type allowed (on round 1) (Max = 10, Min = 0).  Optional, default value 10 -->
+	<!-- EndArmsLevel - The largest weapon type allowed (on the last round) (Max = 10, Min = 0).  Optional, default value 10 -->
+	<!-- ShotTime - The amount of time each player has for each shot (Max = 90, Min = 0).  Optional, default value 0 -->
+	<!-- AIShotTime - The amount of time each computer controller player has for each shot (Max = 90, Min = 0).  Optional, default value 10 -->
+	<!-- StartTime - The amount of time before a new game starts (Max = 90, Min = 0).  Optional, default value 0 -->
+	<!-- BuyingTime - The amount of time each player has to buy weapons and use auto defense (Max = 90, Min = 0).  Optional, default value 0 -->
+	<!-- RemoveTime - The amount of time each player has before being removed when disconected (Max = 25, Min = 0).  Optional, default value 10 -->
+	<!-- RoundTime - The amount of time for each round (Max = 900, Min = 0).  Optional, default value 0 -->
+	<!-- RoundScoreTime - The amount of time to show the end of each round for (Max = 30, Min = 0).  Optional, default value 5 -->
+	<!-- ScoreTime - The amount of time to show the end of match scores for (Max = 90, Min = 0).  Optional, default value 15 -->
+	<!-- IdleCycleTime - The time before a new map is loaded when no one is playing (Max = 1800, Min = 45).  Optional, default value 900 -->
+	<!-- AllowedMissedMoves - The number of moves a player is allowed to miss (due to the shot timer) (Max = 10, Min = 0).  Optional, default value 0 -->
+	<!-- NumberOfRounds - The number of rounds to play in each game (Max = 50, Min = 1).  Optional, default value 5 -->
+	<!-- MaxNumberOfRoundTurns - The maximum number of turns all players are allowed in each round (0 is infinite) (Max = 50, Min = 0).  Optional, default value 15 -->
+	<!-- MaxNumberWeapons - The number of each weapon the player is allowed (Max = 500, Min = 0).  Optional, default value 90 -->
+	<!-- Gravity - The gravity used by the physics engine (Max = 0, Min = -25).  Optional, default value -10 -->
+	<!-- MinFallingDistance - The minimum distance that can be made with no damage (value is divided by 10) (Max = 100, Min = 0).  Optional, default value 5 -->
+	<!-- TankFallingDamage - If tanks tank damage from falling.  Optional, default value true -->
+	<!-- MaxClimbingDistance - The maximum distance that a tank can climb per movement square (divided by 10) (Max = 20, Min = 0).  Optional, default value 8 -->
+	<!-- PlayerLives - The number of lives that each player tank has (Max = 10, Min = 0).  Optional, default value 1 -->
+	<!-- Teams - The number of teams (1 is no teams) (Max = 4, Min = 1).  Optional, default value 1 -->
+	<!-- NumberOfPlayers - The maximum number of players to allow (Max = 24, Min = 2).  Optional, default value 2 -->
+	<NumberOfPlayers>4</NumberOfPlayers>
+	<!-- NumberOfMinPlayers - The minimum number of players to allow (Max = 24, Min = 2).  Optional, default value 2 -->
+	<NumberOfMinPlayers>4</NumberOfMinPlayers>
+	<!-- RemoveBotsAtPlayers - The number of players to allow before remvoing bots (Max = 24, Min = 0).  Optional, default value 0 -->
+	<!-- ComputersDeathTalk - The percentage chance the computers will say something when killed (Max = 100, Min = 0).  Optional, default value 100 -->
+	<!-- ComputersAttackTalk - The percentage chance the computers will say something when shooting (Max = 100, Min = 0).  Optional, default value 25 -->
+	<!-- MoneyBuyOnRound - The first round players are allowed to buy on (Max = 50, Min = 1).  Optional, default value 2 -->
+	<MoneyBuyOnRound>1</MoneyBuyOnRound>
+	<!-- MoneyWonForRound - The money awarded for each won round (Max = 100000, Min = 0).  Optional, default value 5000 -->
+	<!-- MoneyWonForLives - The money awarded for each life remaining (Max = 100000, Min = 0).  Optional, default value 5000 -->
+	<!-- MoneyWonPerKillPoint - The money awarded for each person killed * weapon used (Max = 2000, Min = 0).  Optional, default value 750 -->
+	<!-- MoneyWonPerMultiKillPoint - The extra money awarded for each person multi-killed * weapon used * multi-kill (Max = 2000, Min = 0).  Optional, default value 0 -->
+	<!-- MoneyWonPerAssistPoint - The money awarded for each kill assist * weapon used (Max = 2000, Min = 0).  Optional, default value 250 -->
+	<!-- MoneyWonPerHitPoint - The money awarded for each person hit * weapon used (Max = 2000, Min = 0).  Optional, default value 250 -->
+	<!-- MoneyPerRound - The money given at the end of each round (Max = 250000, Min = 0).  Optional, default value 0 -->
+	<!-- MoneyPerHealthPoint - The money awarded is proportional to the amount of health removed.  Optional, default value true -->
+	<!-- ScorePerMoney - The amount of score awarded for 100 money units earned (Max = 100, Min = 0).  Optional, default value 0 -->
+	<!-- ScorePerAssist - The amount of score awarded for each kill assist (Max = 50, Min = 0).  Optional, default value 2 -->
+	<!-- ScorePerKill - The amount of score awarded for each kill (Max = 50, Min = 0).  Optional, default value 10 -->
+	<!-- ScorePerResign - The amount of score awarded for each resign (Max = 50, Min = -50).  Optional, default value 0 -->
+	<!-- ScorePerSpectate - The amount of score awarded for each move to spectator (only when tank is still alive) (Max = 50, Min = -10).  Optional, default value 0 -->
+	<!-- ScoreWonForRound - The amount of score awarded for round won (Max = 500, Min = 0).  Optional, default value 250 -->
+	<!-- ScoreWonForLives - The amount of score awarded for lives left (Max = 500, Min = 0).  Optional, default value 0 -->
+	<!-- MaxLandscapeSize - The largest landscape (in bytes) that will be sent to the clients.  Optional, default value 200000 -->
+	<!-- FreeMarketAdjustment - The scale of the adjustment changes made by the free market.  Optional, default value 100 -->
+	<!-- FreeMarketLimits - The scale of the max/min prices (*1.5) allowed by the free market e.g. 2 is a 300% increase/reduction.  Optional, default value 2 -->
+	<!-- FreeMarketTrackBotPurchases - Allows the purchases bots (ais) make to be tracked by the free market.  Optional, default value false -->
+	<!-- MinimumLandHeight - The minimum height the ground can reach.  Optional, default value 0 -->
+	<!-- SkillForRound - The amount of skill awarded for winning the round (Max = 100, Min = 0).  Optional, default value 0 -->
+	<!-- SkillForMatch - The amount of skill awarded for winning the match (Max = 100, Min = 0).  Optional, default value 0 -->
+	<!-- SkillForResign - The amount of skill awarded for resigning (Max = 50, Min = -50).  Optional, default value 0 -->
+	<!-- MaxSkillLost - The maximum amount of skill you can lose for being killed (Max = 100, Min = 0).  Optional, default value 10 -->
+	<!-- MaxSkillGained - The maximum amount of skill you can gain for killing someone (Max = 100, Min = 0).  Optional, default value 10 -->
+	<!-- SkillForSelfKill - The amount of skill you lose for being killed by yourself (Max = 0, Min = -50).  Optional, default value -25 -->
+	<!-- SkillForTeamKill - The amount of skill you lose for killing a team memeber (Max = 0, Min = -50).  Optional, default value -25 -->
+	<!-- MoneyStarting - The money each player starts with (Max = 500000, Min = 0).  Optional, default value 10000 -->
+	<MoneyStarting>140000</MoneyStarting>
+	<!-- TeamBallance - The mode of team auto-ballancing performed for team games (possible values = [ "TeamBallanceNone"  "TeamBallanceAuto"  "TeamBallanceBotsVs"  "TeamBallanceAutoByScore"  "TeamBallanceAutoByBots" ]).  Optional, default value TeamBallanceNone -->
+	<!-- MoneyInterest - The interest awarded at the end of each round (Max = 100, Min = 0).  Optional, default value 15 -->
+	<!-- LimitPowerByHealth - Show power is limited by the amount of health a player has.  Optional, default value true -->
+	<!-- Tutorial - The tutorial to load for this game.  Optional, default value  -->
+	<!-- CycleMaps - Cycle through the maps instead of choosing them using a random probablity.  Optional, default value false -->
+	<!-- ResignMode - When does a players resign take place (possible values = [ "ResignStart"  "ResignTimed"  "ResignNone" ]).  Optional, default value ResignTimed -->
+	<!-- MovementRestriction - Where a tank is allowed to move to (possible values = [ "MovementRestrictionNone"  "MovementRestrictionLand"  "MovementRestrictionLandOrAbove" ]).  Optional, default value MovementRestrictionNone -->
+	<!-- TurnType - The player turn mode (possible values = [ "TurnSimultaneous"  "TurnSimultaneousNoWait"  "TurnSequentialLoserFirst"  "TurnSequentialRandom"  "TurnFree"  "TurnFreeTimed" ]).  Optional, default value TurnSequentialLoserFirst -->
+	<TurnType>TurnSequentialRandom</TurnType>
+	<!-- WindForce - The force of the wind (possible values = [ "WindRandom"  "WindNone"  "Wind1"  "Wind2"  "Wind3"  "Wind4"  "Wind5"  "WindBreezy"  "WindGale" ]).  Optional, default value WindRandom -->
+	<WindForce>Wind5</WindForce>
+	<!-- WindType - When the wind changes (possible values = [ "WindChangeNever"  "WindChangeSomeTimes"  "WindChangeFrequently"  "WindChangeConstantly"  "WindChangeAlways" ]).  Optional, default value WindChangeNever -->
+	<!-- WallType - The type of walls allowed (possible values = [ "WallRandom"  "WallConcrete"  "WallBouncy"  "WallWrapAround"  "WallNone"  "WallActive"  "WallInactive" ]).  Optional, default value WallRandom -->
+	<!-- WeaponScale - The scale of the weapons used (possible values = [ "ScaleSmall"  "ScaleMedium"  "ScaleLarge" ]).  Optional, default value ScaleMedium -->
+	<!-- ModDownloadSpeed - Max download speed of mods in bytes per second (0 is no mod download) (Max = 500000, Min = 0).  Optional, default value 0 -->
+	<!-- MaxAvatarSize - Max size allowed for avatars in bytes (0 is no avatars).  Optional, default value 5000 -->
+	<!-- Mod - The name of currently running Scorched3D mod.  Optional, default value none -->
+	<!-- MOTD - The message of the day.  Optional, default value Scorched3D : Copyright 2011 Gavin Camp
+For updates and news visit:
+http://www.scorched3d.co.uk -->
+	<!-- Economy - Speicifies the name of the economy to use (possible values = [ "EconomyFreeMarket"  "EconomyNone" ]).  Optional, default value EconomyFreeMarket -->
+	<!-- Landscapes - Colon seperated list of landscape names.  Optional, default value  -->
+	<Landscapes>oldstyle:hilly:ridge:islands:halfed:valley:cavern:arizona:spike:canyon:denali:ascencion:glaciation:icebergs:peak:dunes:ring:craters</Landscapes>
+	<!-- StatsLogger - The type of player stats to be logged (possible values = [ "none"  "file"  "mysql" ]).  Optional, default value none -->
+	<!-- ServerLogger - The type of server events to be logged to file (possible values = [ "none"  "file" ]).  Optional, default value none -->
+	<!-- WaitForShotsBeforeShowingScore - Wait for all shots to be played out before showing the score dialog.  Optional, default value true -->
+	<!-- BotNamePrefix - Prepend and bot name with the specified text.  Optional, default value (Bot)  -->
+	<!-- ActionSyncCheck - Gather enhanced action syncchecking.  Optional, default value false -->
+	<!-- ActionMovementSyncCheck - Gather enhanced action syncchecking for target movements.  Optional, default value false -->
+	<!-- ActionRandomSyncCheck - Gather enhanced action syncchecking for random number generation.  Optional, default value false -->
+	<!-- ActionCollisionSyncCheck - Gather enhanced action syncchecking for particle collisions.  Optional, default value false -->
+	<!-- TargetPlacementSyncCheck - Gather enhanced action syncchecking for initial target placements.  Optional, default value false -->
+	<!-- WeaponSyncCheck - Gather enhanced action syncchecking for weapon invocations.  Optional, default value false -->
+	<!-- AccessoryNameSyncCheck - Also send the accessory names when sending the tank sync check.  Optional, default value false -->
+	<!-- AutoSendSyncCheck - Automatically send a sync check at the end of each shot.  Optional, default value false -->
+	<!-- ResidualPlayers - Players that leave will have the same state when reconnecting.  Optional, default value true -->
+	<!-- DelayedDefenseActivation - Changes to shields are only seen after the aiming phase..  Optional, default value false -->
+	<!-- RandomizeBotNames - Choose random bot names instread of sequential names.  Optional, default value false -->
+	<!-- GiveAllWeapons - Start the game will all the weapons.  Optional, default value false -->
+	<GiveAllWeapons>true</GiveAllWeapons>
+	<!-- RegisteredUserNames - Only allow authenticated players to use their own player names.  Optional, default value false -->
+	<!-- AllowMultiLingualChat - Allow internaltional (non-latin) characters in chat.  Optional, default value true -->
+	<!-- AllowMultiLingualNames - Allow internaltional (non-latin) characters in names.  Optional, default value true -->
+	<!-- AuthHandler - Only allow authenticated players to connect (possible values = [ "none"  "prefered"  "forumlogin"  "minkills" ]).  Optional, default value none -->
+	<!-- AuthHandlerParam1 - First parameter for the authentication handler.  Optional, default value  -->
+	<!-- AuthHandlerParam2 - Second parameter for the authentication handler.  Optional, default value  -->
+	<!-- ServerName - The name of the server to start.  Optional, default value No Name -->
+	<!-- ServerPassword - The password for this server (empty password is no password).  Optional, default value  -->
+	<!-- PortNo - The port to start the server on.  Optional, default value 27270 -->
+	<!-- ManagementPortNo - The port to start the managament web server on (0 is management off).  Optional, default value 0 -->
+	<!-- PublishAddress - IP address to publish to scorched net clients (auto-detected if not given)..  Optional, default value AutoDetect -->
+	<!-- PublishServer - Allow other scorched net clients to see this server.  Do not use for LAN games..  Optional, default value false -->
+	<!-- UseUPnP - Try to automaticaly add external port forwarding rules using UPnP.  Optional, default value false -->
+	<!-- UseUPnPLogging - Turn on packet logging for UPnP.  Optional, default value false -->
+	<!-- AllowSameIP - Allow scorched clients from same machine/NAT router to connect..  Optional, default value true -->
+	<!-- AllowSameUniqueId - Allow scorched clients with same unique id to connect..  Optional, default value true -->
+	<!-- DebugFeatures - Set to "true" to enable debugging features such as InfoGrid.  Optional, default value false -->
+	<!-- PlayerType1 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType2 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType3 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType4 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType5 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType6 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType7 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType8 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType9 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType10 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType11 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType12 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType13 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType14 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType15 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType16 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType17 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType18 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType19 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType20 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType21 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType22 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType23 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
+	<!-- PlayerType24 - The type of the player e.g. human, computer etc...  Optional, default value Human -->
 </options>

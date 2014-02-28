@@ -65,11 +65,14 @@ public:
 
 	void sortList(std::list<Accessory *> &accList, int sortKey=SortNothing);
 
+	AccessoryRoot &getAccessoryRoot() { return accessories_; }
+	unsigned int getNextAccessoryId() { return ++nextAccessoryId_; }
+	bool accessoryCreated(Accessory *accessory, XMLNode *currentNode);
 protected:
+	AccessoryRoot accessories_;
 	unsigned int nextAccessoryId_;
 	std::set<std::string> tabGroups_;
 	std::map<unsigned int, Accessory *> accessoriesById_;
-	std::list<Accessory *> accessories_;
 	std::map<std::string, XMLNode *> parsingNodes_;
 
 };

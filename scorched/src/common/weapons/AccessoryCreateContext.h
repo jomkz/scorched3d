@@ -30,11 +30,14 @@ class OptionsScorched;
 class AccessoryStore;
 class WeaponLabel;
 class Accessory;
+class AccessoryStore;
 class AccessoryCreateContext  
 {
 public:
-	AccessoryCreateContext(ScorchedContext &context, Accessory *current);
+	AccessoryCreateContext(ScorchedContext &context);
 	virtual ~AccessoryCreateContext();
+
+	void setCurrentAccessory(Accessory *current);
 
 	Accessory *getAccessory() { return currentAccessory_; }
 	ScorchedContext &getScorchedContext() { return context_; }

@@ -41,10 +41,10 @@ void AccessoryStore::clearAccessories()
 {
 	AccessoryPart::resetAccessoryPartIds();
 	nextAccessoryId_ = 0;
-	while (!accessories_.empty())
+	while (!accessories_.getAccessoryList().getChildren().empty())
 	{
-		Accessory *accessory = accessories_.front();
-		accessories_.pop_front();
+		Accessory *accessory = accessories_.getAccessoryList().getChildren().front();
+		accessories_.getAccessoryList().getChildren().pop_front();
 		delete accessory;
 	}
 	accessoriesById_.clear();
@@ -56,72 +56,37 @@ bool AccessoryStore::parseFile(
 {
 	if (counter) counter->setNewOp(LANG_RESOURCE("LOADING_WEAPONS", "Loading Weapons"));
 
-	std::string fileName = S3D::getModFile("data/accessories/accessories.xml");
 	clearAccessories();
-
-	XMLFile file;
-	if (!file.readFile(fileName.c_str()))
-	{
-		S3D::dialogMessage("AccessoryStore", S3D::formatStringBuffer(
-					  "Failed to parse \"%s\"\n%s", 
-					  fileName.c_str(),
-					  file.getParserError()));
-		return false;
-	}
-
-	// Check file exists
-	if (!file.getRootNode())
-	{
-		S3D::dialogMessage("AccessoryStore", S3D::formatStringBuffer(
-					"Failed to find accessory file \"%s\"",
-					fileName.c_str()));
-		return false;		
-	}
-
-	// Itterate all of the accessories in the file
-	int noChildren = (int) file.getRootNode()->getChildren().size();
-	int childCount = 0;
-	XMLNode *currentNode = 0;
-	while (file.getRootNode()->getNamedChild("accessory", currentNode, false))
-	{
-		if (counter) counter->setNewPercentage(
-			float(++childCount) / float(noChildren) * 100.0f);
-
-		// Parse the accessory
-		Accessory *accessory = new Accessory(++nextAccessoryId_);
-		AccessoryCreateContext createContext(context, accessory);
-		if (!accessory->readXML(currentNode, &createContext))
-		{
-			return currentNode->returnError(
-				S3D::formatStringBuffer("Failed to create accessory \"%s\"",
-				accessory->getName()));
-		}
-
-		// Check uniqueness
-		if (findByPrimaryAccessoryName(accessory->getName()))
-		{
-			return currentNode->returnError(
-				S3D::formatStringBuffer("Accessory \"%s\" already exists",
-				accessory->getName()));
-		}
-
-		if (!accessory->getNoBuy() &&
-			accessory->getMaximumNumber() != 0)
-		{
-			tabGroups_.insert(accessory->getTabGroupName());
-		}
-
-		// Add the accessory
-		accessoriesById_[accessory->getAccessoryId()] = accessory;
-		accessories_.push_back(accessory);
-
-		// Add to the map so references can find it
-		parsingNodes_[accessory->getName()] = currentNode;
-	}
+	AccessoryCreateContext accessoryCreateContext(context);
+	bool result = accessories_.parseFile(&accessoryCreateContext);
 
 	// Clear mapping as it now contains invalid pointers
 	parsingNodes_.clear();
-	return file.getRootNode()->failChildren();
+	return result;
+}
+
+bool AccessoryStore::accessoryCreated(Accessory *accessory, XMLNode *currentNode)
+{
+	// Check uniqueness
+	Accessory *foundAccessory = findByPrimaryAccessoryName(accessory->getName());
+	if (foundAccessory != accessory)
+	{
+		return currentNode->returnError(
+			S3D::formatStringBuffer("Accessory \"%s\" already exists",
+			accessory->getName()));
+	}
+	if (!accessory->getNoBuy() &&
+		accessory->getMaximumNumber() != 0)
+	{
+		tabGroups_.insert(accessory->getTabGroupName());
+	}
+
+	// Add the accessory
+	accessoriesById_[accessory->getAccessoryId()] = accessory;
+
+	// Add to the map so references can find it
+	parsingNodes_[accessory->getName()] = currentNode;
+	return true;
 }
 
 void AccessoryStore::sortList(std::list<Accessory *> &accList, int sortKey)
@@ -192,8 +157,8 @@ void AccessoryStore::sortList(std::list<Accessory *> &accList, int sortKey)
 
 		accList.clear();
 		std::list<Accessory *>::iterator itor;
-		for (itor = accessories_.begin();
-			itor != accessories_.end();
+		for (itor = accessories_.getAccessoryList().getChildren().begin();
+			itor != accessories_.getAccessoryList().getChildren().end();
 			++itor)
 		{
 			Accessory *accessory = *itor;
@@ -210,8 +175,8 @@ std::list<Accessory *> AccessoryStore::getAllAccessoriesByTabGroup(
 {
 	std::list<Accessory *> result;
 	std::list<Accessory *>::iterator itor;
-	for (itor = accessories_.begin();
-		itor != accessories_.end();
+	for (itor = accessories_.getAccessoryList().getChildren().begin();
+		itor != accessories_.getAccessoryList().getChildren().end();
 		++itor)
 	{
 		Accessory *accessory = (*itor);
@@ -229,8 +194,8 @@ std::list<Accessory *> AccessoryStore::getAllAccessories(int sortKey)
 {
 	std::list<Accessory *> result;
 	std::list<Accessory *>::iterator itor;
-	for (itor = accessories_.begin();
-		itor != accessories_.end();
+	for (itor = accessories_.getAccessoryList().getChildren().begin();
+		itor != accessories_.getAccessoryList().getChildren().end();
 		++itor)
 	{
 		result.push_back(*itor);
@@ -243,8 +208,8 @@ std::list<Accessory *> AccessoryStore::getAllAccessories(int sortKey)
 Accessory *AccessoryStore::findByPrimaryAccessoryName(const char *name)
 {
 	std::list<Accessory *>::iterator itor;
-	for (itor = accessories_.begin();
-		itor != accessories_.end();
+	for (itor = accessories_.getAccessoryList().getChildren().begin();
+		itor != accessories_.getAccessoryList().getChildren().end();
 		++itor)
 	{
 		Accessory *accessory = (*itor);

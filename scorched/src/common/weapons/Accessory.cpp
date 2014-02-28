@@ -152,3 +152,50 @@ const char *Accessory::getActivationSound()
 	if (!activationSound_.getValue().c_str()[0]) return 0;
 	return activationSound_.getValue().c_str();
 }
+
+
+AccessoryList::AccessoryList() :
+	XMLEntryList<Accessory>("The list of accessories", 1)
+{
+}
+
+AccessoryList::~AccessoryList()
+{
+}
+
+Accessory *AccessoryList::createXMLEntry(void *xmlData)
+{
+	AccessoryCreateContext *createContext = (AccessoryCreateContext *) xmlData;
+	if (createContext)
+	{
+		Accessory *accessory = new Accessory(createContext->getAccessoryStore().getNextAccessoryId());
+		createContext->setCurrentAccessory(accessory);
+		return accessory;
+	}
+	return new Accessory(0);
+}
+
+bool AccessoryList::listEntryCreated(Accessory *newEntry, XMLNode *node, void *xmlData)
+{
+	AccessoryCreateContext *createContext = (AccessoryCreateContext *) xmlData;
+	if (createContext)
+	{
+		return createContext->getAccessoryStore().accessoryCreated(newEntry, node);
+	} 
+	return true;
+}
+
+AccessoryRoot::AccessoryRoot() :
+	XMLEntryRoot(S3D::eModLocation, 
+		"data/accessories/accessories.xml",
+		"accessories",
+		"AccessoriesFile",
+		"The file containing all of the accessory/weapon definitions",
+		true)
+{
+	addChildXMLEntry("accessory", &accessoryList_);
+}
+
+AccessoryRoot::~AccessoryRoot()
+{
+}

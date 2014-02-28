@@ -1500,6 +1500,9 @@
     <ClCompile Include="..\..\common\simactions\DestinationLoadedSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLEntryRoot.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2932,6 +2935,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\simactions\DestinationLoadedSimAction.h">
       <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLEntryRoot.h">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

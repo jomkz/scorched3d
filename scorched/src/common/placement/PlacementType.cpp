@@ -38,6 +38,8 @@ PlacementType::PlacementType(const char *typeName, const char *description) :
 	XMLEntryContainer(typeName, description),
 	placementobject(0)
 {
+	placementobject = new PlacementObjectChoice();
+	addChildXMLEntry("object", placementobject);
 }
 
 PlacementType::~PlacementType()
@@ -60,7 +62,7 @@ void PlacementType::createObjects(ScorchedContext &context,
 		++itor)
 	{
 		Position &position = *itor;
-		placementobject->createObject(
+		placementobject->getValue()->createObject(
 			context, generator, playerId, position);
 	}
 }
