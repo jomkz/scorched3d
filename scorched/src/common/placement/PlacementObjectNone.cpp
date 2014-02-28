@@ -22,17 +22,14 @@
 #include <engine/ScorchedContext.h>
 #include <landscapemap/LandscapeMaps.h>
 
-PlacementObjectNone::PlacementObjectNone()
+PlacementObjectNone::PlacementObjectNone() :
+	PlacementObject("PlacementObjectNone",
+		"Place no objects.  Used to terminate object placement without actualy placing any objects.")
 {
 }
 
 PlacementObjectNone::~PlacementObjectNone()
 {
-}
-
-bool PlacementObjectNone::readXML(XMLNode *node)
-{
-	return PlacementObject::readXML(node);
 }
 
 void PlacementObjectNone::createObject(ScorchedContext &context,

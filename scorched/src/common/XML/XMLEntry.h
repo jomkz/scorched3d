@@ -127,7 +127,7 @@ public:
 		const char *name9, XMLEntry *entry9, const char *name10, XMLEntry *entry10);
 	XMLEntryContainer *addChildXMLEntryContainer(const char *name, XMLEntryContainer *container);
 
-	std::map<std::string, XMLEntry *> &getChildren() { return xmlEntryChildren_; }
+	virtual std::map<std::string, XMLEntry *> &getChildren() { return xmlEntryChildren_; }
 
 	// XMLEntry
 	virtual bool readXML(XMLNode *node, void *xmlData);

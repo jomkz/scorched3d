@@ -24,13 +24,31 @@
 #include <placement/PlacementObject.h>
 #include <vector>
 
+class PlacementObjectHeightDefinition : public XMLEntryContainer
+{
+public:
+	PlacementObjectHeightDefinition();
+	virtual ~PlacementObjectHeightDefinition();
+
+	PlacementObjectChoice object;
+	XMLEntryFixed minheight, maxheight;
+};
+
+class PlacementObjectHeightDefinitionList : public XMLEntryList<PlacementObjectHeightDefinition>
+{
+public:
+	PlacementObjectHeightDefinitionList();
+	virtual ~PlacementObjectHeightDefinitionList();
+
+	virtual PlacementObjectHeightDefinition *createXMLEntry(void *xmlData);
+};
+
 class PlacementObjectHeight : public PlacementObject
 {
 public:
 	PlacementObjectHeight();
 	virtual ~PlacementObjectHeight();
 
-	virtual bool readXML(XMLNode *node);
 	virtual PlacementObject::Type getType() { return PlacementObject::eHeight; }
 	virtual void createObject(ScorchedContext &context,
 		RandomGenerator &generator,
@@ -38,12 +56,6 @@ public:
 		PlacementType::Position &position);
 
 protected:
-	struct HeightObject
-	{
-		PlacementObject *object;
-		fixed min;
-		fixed max;
-	};
-	std::vector<HeightObject> objects_;
+	PlacementObjectHeightDefinitionList objects_;
 };
 #endif // __INCLUDE_PlacementObjectHeighth_INCLUDE__

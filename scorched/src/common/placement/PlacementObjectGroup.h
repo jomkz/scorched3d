@@ -23,13 +23,31 @@
 
 #include <placement/PlacementObject.h>
 
+class PlacementObjectGroupDefinition : public XMLEntryContainer
+{
+public:
+	PlacementObjectGroupDefinition();
+	virtual ~PlacementObjectGroupDefinition();
+
+	PlacementObjectChoice object;
+	XMLEntryFixedVector offset;
+};
+
+class PlacementObjectGroupDefinitionList : public XMLEntryList<PlacementObjectGroupDefinition>
+{
+public:
+	PlacementObjectGroupDefinitionList();
+	virtual ~PlacementObjectGroupDefinitionList();
+
+	virtual PlacementObjectGroupDefinition *createXMLEntry(void *xmlData);
+};
+
 class PlacementObjectGroup : public PlacementObject
 {
 public:
 	PlacementObjectGroup();
 	virtual ~PlacementObjectGroup();
 
-	virtual bool readXML(XMLNode *node);
 	virtual PlacementObject::Type getType() { return PlacementObject::eGroup; }
 	virtual void createObject(ScorchedContext &context,
 		RandomGenerator &generator,
@@ -37,12 +55,7 @@ public:
 		PlacementType::Position &position);
 
 protected:
-	struct GroupObject
-	{
-		FixedVector offset;
-		PlacementObject *object;
-	};
-	std::list<GroupObject> groups_;
+	PlacementObjectGroupDefinitionList groups_;
 };
 
 #endif // __INCLUDE_PlacementObjectGrouph_INCLUDE__

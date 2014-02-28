@@ -31,16 +31,24 @@ public:
 	PlacementObjectTarget();
 	virtual ~PlacementObjectTarget();
 
-	virtual bool readXML(XMLNode *node);
 	virtual PlacementObject::Type getType() { return PlacementObject::eTarget; }
 	virtual void createObject(ScorchedContext &context,
 		RandomGenerator &generator,
 		unsigned int &playerId,
 		PlacementType::Position &position);
 
+	virtual std::map<std::string, XMLEntry *> &getChildren() { return targetDef_.getChildren(); }
+
+	// XMLEntry
+	virtual bool readXML(XMLNode *node, void *xmlData) { return targetDef_.readXML(node, xmlData); }
+	virtual void writeXML(XMLNode *node) { targetDef_.writeXML(node); }
+	virtual unsigned int getData() { return targetDef_.getData(); }
+	virtual void getTypeName(std::string &result) { targetDef_.getTypeName(result); }
+	virtual void getDescription(std::string &result) { targetDef_.getDescription(result); }
+	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
+		{ return targetDef_.generateDocumentation(generator); }
 protected:
 	TargetDefinition targetDef_;
-	ObjectGroupEntryDefinition groups_;
 };
 
 #endif // __INCLUDE_PlacementObjectTargeth_INCLUDE__

@@ -22,37 +22,50 @@
 #include <common/RandomGenerator.h>
 #include <XML/XMLParser.h>
 
-PlacementObjectHeight::PlacementObjectHeight()
+PlacementObjectHeightDefinition::PlacementObjectHeightDefinition() :
+	XMLEntryContainer("PlacementObjectHeightDefinition",
+		"A definition of a height band where objects can be placed."
+		"Incoming object positions are checked against the height band to see if they are valid."
+		"Valid heights (heights that fall within the band) are accepted and the object is placed/created, invalid heights are discarded."),
+	object(),
+	minheight("The lower/minimum height of the height band"),
+	maxheight("The upper/maximum height of the height band")
 {
+	addChildXMLEntry("object", &object);
+	addChildXMLEntry("minheight", &minheight);
+	addChildXMLEntry("maxheight", &maxheight);
+}
+
+PlacementObjectHeightDefinition::~PlacementObjectHeightDefinition()
+{
+}
+
+PlacementObjectHeightDefinitionList::PlacementObjectHeightDefinitionList() :
+	XMLEntryList<PlacementObjectHeightDefinition>("A list of height band definitions", 1)
+{
+}
+
+PlacementObjectHeightDefinitionList::~PlacementObjectHeightDefinitionList()
+{
+}
+
+PlacementObjectHeightDefinition *PlacementObjectHeightDefinitionList::createXMLEntry(void *xmlData)
+{
+	return new PlacementObjectHeightDefinition();
+}
+
+PlacementObjectHeight::PlacementObjectHeight() :
+	PlacementObject("PlacementObjectHeight", 
+			"Places objects within height bands on the landscape, the height band is given between two given values."
+			"If the landscape height at the input point falls outwith the height band, no object is placed."
+			"A small random value can be added to the height to make the bands non-uniform."),
+	objects_()
+{
+	addChildXMLEntry("heightobject", &objects_);
 }
 
 PlacementObjectHeight::~PlacementObjectHeight()
 {
-}
-
-bool PlacementObjectHeight::readXML(XMLNode *initialNode)
-{
-	XMLNode *node;
-	while (initialNode->getNamedChild("heightobject", node, false))
-	{
-		HeightObject heightObject;
-
-		if (!node->getNamedChild("minheight", heightObject.min)) return false;
-		if (!node->getNamedChild("maxheight", heightObject.max)) return false;
-
-		// Get the object
-		std::string objecttype;
-		XMLNode *objectNode;
-		if (!node->getNamedChild("object", objectNode)) return false;
-		if (!objectNode->getNamedParameter("type", objecttype)) return false;
-		if (!(heightObject.object = PlacementObject::create(objecttype.c_str()))) return false;
-		if (!heightObject.object->readXML(objectNode)) return false;
-
-		objects_.push_back(heightObject);
-	}
-	if (!node->failChildren()) return false;
-
-	return PlacementObject::readXML(node);
 }
 
 void PlacementObjectHeight::createObject(ScorchedContext &context,
@@ -63,17 +76,16 @@ void PlacementObjectHeight::createObject(ScorchedContext &context,
 	fixed offset = generator.getRandFixed("PlacementObjectHeight") * 10 - 5;
 	fixed height = position.position[2] + offset;
 
-	std::vector<HeightObject>::iterator itor;
-	for (itor = objects_.begin();
-		itor != objects_.end();
-		++itor)
+	std::list<PlacementObjectHeightDefinition *>::iterator itor = objects_.getChildren().begin(),
+		end = objects_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		HeightObject &object = (*itor);
+		PlacementObjectHeightDefinition &object = *(*itor);
 
-		if (height >= object.min &&
-			height <= object.max)
+		if (height >= object.minheight.getValue() &&
+			height <= object.maxheight.getValue())
 		{
-			PlacementObject *entry = object.object;
+			PlacementObject *entry = object.object.getValue();
 			entry->createObject(context, generator, playerId, position);
 			break;
 		}

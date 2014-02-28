@@ -22,9 +22,10 @@
 #define __INCLUDE_PlacementObjecth_INCLUDE__
 
 #include <placement/PlacementType.h>
+#include <XML/XMLEntry.h>
 
 class XMLNode;
-class PlacementObject
+class PlacementObject : public XMLEntryContainer
 {
 public:
 	enum Type
@@ -39,17 +40,24 @@ public:
 		eNone
 	};
 
-	static PlacementObject *create(const char *type);
-
-	PlacementObject();
+	PlacementObject(const char *typeName, const char *description);
 	virtual ~PlacementObject();
 
-	virtual bool readXML(XMLNode *node);
 	virtual Type getType() = 0;
 	virtual void createObject(ScorchedContext &context,
 		RandomGenerator &generator,
 		unsigned int &playerId,
 		PlacementType::Position &position) = 0;
+};
+
+class PlacementObjectChoice : public XMLEntryTypeChoice<PlacementObject>
+{
+public:
+	PlacementObjectChoice();
+	virtual ~PlacementObjectChoice();
+
+	virtual PlacementObject *createXMLEntry(const std::string &type, void *xmlData);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 #endif // __INCLUDE_PlacementObjecth_INCLUDE__

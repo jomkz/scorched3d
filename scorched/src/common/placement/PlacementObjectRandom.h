@@ -24,13 +24,32 @@
 #include <placement/PlacementObject.h>
 #include <vector>
 
+class PlacementObjectRandomDefinition : public XMLEntryContainer
+{
+public:
+	PlacementObjectRandomDefinition();
+	virtual ~PlacementObjectRandomDefinition();
+
+	PlacementObjectChoice object;
+	XMLEntryFixed weight;
+};
+
+class PlacementObjectRandomDefinitionList : public XMLEntryList<PlacementObjectRandomDefinition>
+{
+public:
+	PlacementObjectRandomDefinitionList();
+	virtual ~PlacementObjectRandomDefinitionList();
+
+	virtual PlacementObjectRandomDefinition *createXMLEntry(void *xmlData);
+};
+
 class PlacementObjectRandom : public PlacementObject
 {
 public:
 	PlacementObjectRandom();
 	virtual ~PlacementObjectRandom();
 
-	virtual bool readXML(XMLNode *node);
+	virtual bool readXML(XMLNode *node, void *xmlData);
 	virtual PlacementObject::Type getType() { return PlacementObject::eRandom; }
 	virtual void createObject(ScorchedContext &context,
 		RandomGenerator &generator,
@@ -38,12 +57,7 @@ public:
 		PlacementType::Position &position);
 
 protected:
-	struct RandomObject
-	{
-		PlacementObject *object;
-		fixed weight;
-	};
+	PlacementObjectRandomDefinitionList objects_;
 	fixed totalWeight_;
-	std::vector<RandomObject> objects_;
 };
 #endif // __INCLUDE_PlacementObjectRandomh_INCLUDE__

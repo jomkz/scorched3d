@@ -28,19 +28,15 @@
 #include <target/Target.h>
 #include <XML/XMLParser.h>
 
-PlacementObjectTarget::PlacementObjectTarget()
+PlacementObjectTarget::PlacementObjectTarget() :
+	PlacementObject("PlacementObjectTarget",
+		"Places a target at the incoming position.")
 {
+	addChildXMLEntry("target", &targetDef_);
 }
 
 PlacementObjectTarget::~PlacementObjectTarget()
 {
-}
-
-bool PlacementObjectTarget::readXML(XMLNode *node)
-{
-	if (!targetDef_.readXML(node, 0)) return false;
-	if (!groups_.readXML(node, "groupname")) return false;
-	return PlacementObject::readXML(node);
 }
 
 void PlacementObjectTarget::createObject(ScorchedContext &context,

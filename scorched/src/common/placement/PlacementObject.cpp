@@ -27,19 +27,8 @@
 #include <common/DefinesString.h>
 #include <XML/XMLParser.h>
 
-PlacementObject *PlacementObject::create(const char *type)
-{
-	if (0 == strcmp(type, "model")) return new PlacementObjectTarget;
-	if (0 == strcmp(type, "target")) return new PlacementObjectTarget;
-	if (0 == strcmp(type, "group")) return new PlacementObjectGroup;
-	if (0 == strcmp(type, "random")) return new PlacementObjectRandom;
-	if (0 == strcmp(type, "height")) return new PlacementObjectHeight;
-	if (0 == strcmp(type, "none")) return new PlacementObjectNone;
-	S3D::dialogMessage("PlacementObject", S3D::formatStringBuffer("Unknown object type %s", type));
-	return 0;
-}
-
-PlacementObject::PlacementObject()
+PlacementObject::PlacementObject(const char *typeName, const char *description) :
+	XMLEntryContainer(typeName, description)
 {
 }
 
@@ -47,7 +36,34 @@ PlacementObject::~PlacementObject()
 {
 }
 
-bool PlacementObject::readXML(XMLNode *node)
+PlacementObjectChoice::PlacementObjectChoice() :
+	XMLEntryTypeChoice<PlacementObject>("PlacementObjectChoice", 
+		"A choice of how to place objects on the landscape")
 {
-	return node->failChildren();
+}
+
+PlacementObjectChoice::~PlacementObjectChoice()
+{
+}
+
+PlacementObject *PlacementObjectChoice::createXMLEntry(const std::string &type, void *xmlData)
+{
+	if (0 == strcmp(type.c_str(), "model")) return new PlacementObjectTarget;
+	if (0 == strcmp(type.c_str(), "target")) return new PlacementObjectTarget;
+	if (0 == strcmp(type.c_str(), "group")) return new PlacementObjectGroup;
+	if (0 == strcmp(type.c_str(), "random")) return new PlacementObjectRandom;
+	if (0 == strcmp(type.c_str(), "height")) return new PlacementObjectHeight;
+	if (0 == strcmp(type.c_str(), "none")) return new PlacementObjectNone;
+	S3D::dialogMessage("PlacementObject", S3D::formatStringBuffer("Unknown object type %s", type));
+	return 0;
+}
+
+void PlacementObjectChoice::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("model");
+	allTypes.insert("target");
+	allTypes.insert("group");
+	allTypes.insert("random");
+	allTypes.insert("height");
+	allTypes.insert("none");
 }

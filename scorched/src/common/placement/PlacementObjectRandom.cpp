@@ -22,39 +22,63 @@
 #include <common/RandomGenerator.h>
 #include <XML/XMLParser.h>
 
-PlacementObjectRandom::PlacementObjectRandom() : totalWeight_(0)
+PlacementObjectRandomDefinition::PlacementObjectRandomDefinition() :
+	XMLEntryContainer("PlacementObjectRandomDefinition",
+		"A definition of a object placement and a weighting that weights the random chance it is chosen."
+		"The higher the weighting the more chance an object has of being selected."
+		"If all the objects have the same weight they all have the same chance at being chosen."),
+	object(),
+	weight("The chance/weighting that this object has."
+		"The higher the weighting the more chance an object has of being selected", 0 ,1)
 {
+	addChildXMLEntry("object", &object);
+	addChildXMLEntry("weight", &weight);
+}
+
+PlacementObjectRandomDefinition::~PlacementObjectRandomDefinition()
+{
+}
+
+PlacementObjectRandomDefinitionList::PlacementObjectRandomDefinitionList() :
+	XMLEntryList<PlacementObjectRandomDefinition>(
+		"A list of random object placements, only one will be selected from this list (randomly) each time.", 1)
+{
+}
+
+PlacementObjectRandomDefinitionList::~PlacementObjectRandomDefinitionList()
+{
+}
+
+PlacementObjectRandomDefinition *PlacementObjectRandomDefinitionList::createXMLEntry(void *xmlData)
+{
+	return new PlacementObjectRandomDefinition();
+}
+
+PlacementObjectRandom::PlacementObjectRandom() : 
+	PlacementObject("PlacementObjectRandom",
+		"A set of placements.  Once placement will be randomly chosen for each item that is to be placed."
+		"A weighting can be applied to increase or decrease the chance of being chosen."),
+	totalWeight_(0)
+{
+	addChildXMLEntry("randomobject", &objects_);
 }
 
 PlacementObjectRandom::~PlacementObjectRandom()
 {
 }
 
-bool PlacementObjectRandom::readXML(XMLNode *initialNode)
+bool PlacementObjectRandom::readXML(XMLNode *node, void *xmlData)
 {
-	XMLNode *node;
-	while (initialNode->getNamedChild("randomobject", node, false))
+	if (!PlacementObject::readXML(node, xmlData)) return false;
+
+	std::list<PlacementObjectRandomDefinition *>::iterator itor = objects_.getChildren().begin(),
+		end = objects_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		RandomObject randomObject;
-
-		// Get the weight
-		randomObject.weight = 1;
-		node->getNamedChild("weight", randomObject.weight, false);
-		totalWeight_ += randomObject.weight;
-
-		// Get the object
-		std::string objecttype;
-		XMLNode *objectNode;
-		if (!node->getNamedChild("object", objectNode)) return false;
-		if (!objectNode->getNamedParameter("type", objecttype)) return false;
-		if (!(randomObject.object = PlacementObject::create(objecttype.c_str()))) return false;
-		if (!randomObject.object->readXML(objectNode)) return false;
-
-		objects_.push_back(randomObject);
+		totalWeight_ += (*itor)->weight.getValue();
 	}
-	if (!node->failChildren()) return false;
 
-	return PlacementObject::readXML(node);
+	return true;
 }
 
 void PlacementObjectRandom::createObject(ScorchedContext &context,
@@ -65,17 +89,16 @@ void PlacementObjectRandom::createObject(ScorchedContext &context,
 	fixed totalWeight = generator.getRandFixed("PlacementObjectRandom") * totalWeight_;
 	fixed currentWeight = 0;
 
-	std::vector<RandomObject>::iterator itor;
-	for (itor = objects_.begin();
-		itor != objects_.end();
-		++itor)
+	std::list<PlacementObjectRandomDefinition *>::iterator itor = objects_.getChildren().begin(),
+		end = objects_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		RandomObject &object = (*itor);
-		currentWeight += object.weight;
+		PlacementObjectRandomDefinition *object = (*itor);
+		currentWeight += object->weight.getValue();
 
 		if (currentWeight > totalWeight)
 		{
-			PlacementObject *entry = object.object;
+			PlacementObject *entry = object->object.getValue();
 			entry->createObject(context, generator, playerId, position);
 			break;
 		}

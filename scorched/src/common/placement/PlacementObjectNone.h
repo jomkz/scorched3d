@@ -29,7 +29,6 @@ public:
 	PlacementObjectNone();
 	virtual ~PlacementObjectNone();
 
-	virtual bool readXML(XMLNode *node);
 	virtual PlacementObject::Type getType() { return PlacementObject::eNone; }
 	virtual void createObject(ScorchedContext &context,
 		RandomGenerator &generator,
