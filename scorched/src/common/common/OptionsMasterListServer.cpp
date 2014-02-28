@@ -29,8 +29,9 @@ OptionsMasterListServer *OptionsMasterListServer::instance()
 }
 
 OptionsMasterListServer::OptionsMasterListServer() :
-	XMLEntrySimpleContainer("OptionsMasterListServer", 
-		"The options that define how the Scorched3D client fetches online data"), 
+	XMLEntryRoot<XMLEntrySimpleContainer>(S3D::eSettingsLocation, "masterlistservers.xml",
+		"OptionsMasterListServer", "OptionsMasterListServer", 
+		"The options that define how the Scorched3D client fetches online data", false), 
 	masterListServer_("The master list server for scorched3d", 0, "scorched3d.sourceforge.net"),
 	masterListServerURI_("The URI on the master list server for scorched3d", 0, "/scorched"),
 	masterListBackupServer_("The backup master list server for scorched3d", 0, "www.scorched3d.co.uk"),
@@ -47,7 +48,7 @@ OptionsMasterListServer::OptionsMasterListServer() :
 	addChildXMLEntry("ChatServer", &chatServer_);
 	addChildXMLEntry("ChatServerURI", &chatServerURI_);
 
-	readFromFile(S3D::getSettingsFile("masterlistservers.xml"));
+	loadFile(false, 0);
 }
 
 OptionsMasterListServer::~OptionsMasterListServer()

@@ -189,7 +189,7 @@ AccessoryRoot::AccessoryRoot() :
 	XMLEntryRoot(S3D::eModLocation, 
 		"data/accessories/accessories.xml",
 		"accessories",
-		"AccessoriesFile",
+		"Accessories",
 		"The file containing all of the accessory/weapon definitions",
 		true)
 {

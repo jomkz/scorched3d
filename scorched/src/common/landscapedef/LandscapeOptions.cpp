@@ -21,7 +21,10 @@
 #include <landscapedef/LandscapeOptions.h>
 #include <math.h>
 
-LandscapeOptions::LandscapeOptions()
+LandscapeOptions::LandscapeOptions() :
+	OptionsGameBase("LandscapeOptions", 
+		"Scorched3D options that define properties for the game engine, this time on a per level basis",
+		true)
 {
 	required_ = false;
 }
@@ -44,5 +47,5 @@ bool LandscapeOptions::readXML(XMLNode *parentNode, void *xmlData)
 		changedOptionNames_.push_back((*itor)->getName());
 	}
 
-	return OptionsGame::readXML(parentNode, xmlData);
+	return OptionsGameBase::readXML(parentNode, xmlData);
 }

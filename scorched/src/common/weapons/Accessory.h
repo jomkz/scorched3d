@@ -109,7 +109,7 @@ private:
 	virtual bool listEntryCreated(Accessory *newEntry, XMLNode *node, void *xmlData);
 };
 
-class AccessoryRoot : public XMLEntryRoot
+class AccessoryRoot : public XMLEntryRoot<XMLEntryContainer>
 {
 public:
 	AccessoryRoot();

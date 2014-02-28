@@ -22,8 +22,9 @@
 #define __INCLUDE_OptionsMasterListServerh_INCLUDE__
 
 #include <XML/XMLEntrySimpleTypes.h>
+#include <XML/XMLEntryRoot.h>
 
-class OptionsMasterListServer : public XMLEntrySimpleContainer
+class OptionsMasterListServer : public XMLEntryRoot<XMLEntrySimpleContainer>
 {
 public:
 	static OptionsMasterListServer *instance();

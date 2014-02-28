@@ -73,14 +73,12 @@ protected:
 class XMLEntrySimpleContainer : public XMLEntryContainer
 {
 public:
-	XMLEntrySimpleContainer(const char *typeName, const char *description);
+	XMLEntrySimpleContainer(const char *typeName, const char *description, bool required = true);
 	virtual ~XMLEntrySimpleContainer();
 
 	XMLEntrySimpleType *getEntryByName(const std::string &name);
 
 	// Fns used to save or restore the state of the options
-	bool writeToFile(const std::string &filePath);
-	bool readFromFile(const std::string &filePath);
 	bool writeToBuffer(NetBuffer &buffer, bool useProtected);
 	bool readFromBuffer(NetBufferReader &reader, bool useProtected);
 	void addToArgParser(ARGParser &parser);
@@ -129,6 +127,29 @@ protected:
 	int stepValue_;
 
 };
+
+class XMLEntryUnsignedInt : public XMLEntrySimpleType
+{
+public:
+	XMLEntryUnsignedInt(const char *description);
+	XMLEntryUnsignedInt(const char *description,
+		unsigned int data,
+		unsigned int defaultValue);
+	virtual ~XMLEntryUnsignedInt();
+
+	virtual void getTypeName(std::string &result) { result = "number"; }
+	virtual void getValueAsString(std::string &result);
+	virtual void getDefaultValueAsString(std::string &result);
+	virtual bool setValueFromString(const std::string &string);
+	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleNumberType; }
+
+	virtual unsigned int getValue();
+	virtual bool setValue(unsigned int value);
+protected:
+	unsigned int defaultValue_;
+	unsigned int value_;
+};
+
 
 class XMLEntryEnum : public XMLEntryInt
 {

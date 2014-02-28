@@ -143,8 +143,8 @@ static XMLEntryStringEnum::EnumEntry authHandlerEnum[] =
 	{ "" }
 };
 
-OptionsGame::OptionsGame() :
-	XMLEntrySimpleContainer("OptionsGame", "Scorched3D options that define properties for the game engine"),
+OptionsGameBase::OptionsGameBase(const char *typeName, const char *description, bool required) :
+	XMLEntrySimpleContainer(typeName, description, required),
 	tutorial_("The tutorial to load for this game", 0, ""),
 	scorePerMoney_("The amount of score awarded for 100 money units earned", 0, 0, 0, 100, 2),
 	scorePerAssist_("The amount of score awarded for each kill assist", 0, 2, 0, 50, 1),
@@ -294,7 +294,7 @@ OptionsGame::OptionsGame() :
 	}
 }
 
-OptionsGame::~OptionsGame()
+OptionsGameBase::~OptionsGameBase()
 {
 	std::list<XMLEntry *>::iterator itor;
 	for (itor = playerTypeOptions_.begin();
@@ -304,4 +304,15 @@ OptionsGame::~OptionsGame()
 		XMLEntry *entry = *itor;
 		delete entry;
 	}
+}
+
+OptionsGame::OptionsGame() :
+	XMLEntryRoot<OptionsGameBase>(
+		S3D::eInvalidLocation, "multiple", "OptionsGame",
+		"OptionsGame", "Scorched3D options that define properties for the game engine", true)
+{
+}
+
+OptionsGame::~OptionsGame()
+{
 }

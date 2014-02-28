@@ -123,6 +123,9 @@ const std::string S3D::getLocation(FileLocation imageLocation, const std::string
 	case eAbsLocation:
 		expandedFilename = filename;
 		break;
+	case eSettingsLocation:
+		expandedFilename = S3D::getSettingsFile(filename);
+		break;
 	default:
 		S3D::dialogExit("S3D::getLocation", 
 			S3D::formatStringBuffer("Unknown imagelocation %u", imageLocation));
@@ -144,8 +147,11 @@ const char *S3D::getLocationConstant(FileLocation imageLocation)
 	case eAbsLocation:
 		return "ABSOLUTE";
 		break;
+	case eSettingsLocation:
+		return "SETTINGS";
+		break;
 	default:
-		DIALOG_ASSERT(0);
+		return "";
 		break;
 	}
 	return 0;

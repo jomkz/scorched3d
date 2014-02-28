@@ -29,7 +29,7 @@ public:
 	XMLFile(bool useContentNodes = false);
 	virtual ~XMLFile();
 
-	bool readFile(const std::string &fileName);
+	bool readFile(const std::string &fileName, bool requiredFile);
 
 	const char *getParserError() { 
 		if (fileError_.empty())

@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-class LandscapeOptions : public OptionsGame
+class LandscapeOptions : public OptionsGameBase
 {
 public:
 	LandscapeOptions();

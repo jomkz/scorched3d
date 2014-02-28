@@ -36,7 +36,7 @@ private:
 
 class FileTemplateVariables;
 class XMLEntry;
-class XMLEntryRoot;
+class XMLEntryRootI;
 class XMLEntryDocumentGenerator
 {
 public:
@@ -49,7 +49,8 @@ public:
 	bool hasType(const std::string &typeName);
 	void getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType);
 
-	void addRootTypeTags(XMLEntryRoot *coreType, std::list<std::pair<std::string, XMLEntry *> > &children,
+	void addRootTypeTags(XMLEntryRootI *rootType, XMLEntry *coreType, 
+		std::list<std::pair<std::string, XMLEntry *> > &children,
 		const std::string &sourceTypeName, const std::string &sourceFileName);
 	void addTypeTags(XMLEntry *coreType, std::list<std::pair<std::string, XMLEntry *> > &children,
 		const std::string &sourceTypeName, const std::string &sourceFileName);
@@ -94,6 +95,7 @@ public:
 	virtual void getTypeName(std::string &result) = 0;
 	virtual void getDescription(std::string &result) = 0;
 
+	virtual bool isList() { return false; }
 	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator) { XMLEntryDocumentInfo info; return info; }
 protected:
 };
@@ -244,17 +246,42 @@ protected:
 	const char *xmlTypeName_, *xmlDescription_;
 };
 
+class XMLEntryListBase : public XMLEntry
+{
+public:
+	XMLEntryListBase() {}
+	virtual ~XMLEntryListBase() {}
+
+	virtual bool isList() { return true; }
+	virtual void getListChildren(std::list<XMLEntry *> &children) = 0;
+	virtual void writeListXML(XMLNode *node, XMLEntry *listEntry) = 0;
+};
+
 template <class T>
-class XMLEntryList : public XMLEntry
+class XMLEntryList : public XMLEntryListBase
 {
 public:
 	XMLEntryList(const char *description, int minimumListNumber = 0) :
-		XMLEntry(),
 		xmlDescription_(description),
 		minimumListNumber_(minimumListNumber)
 	{
 	}
 	virtual ~XMLEntryList()
+	{
+		clear();
+	}
+	
+	std::list<T *> &getChildren() { return xmlEntryChildren_; }
+	virtual void getListChildren(std::list<XMLEntry *> &children) 
+	{ 
+		std::list<T *>::iterator itor = xmlEntryChildren_.begin(),
+			end = xmlEntryChildren_.end();
+		for (;itor!=end; ++itor)
+		{
+			children.push_back(*itor);
+		}
+	}
+	void clear() 
 	{
 		std::list<T *>::iterator itor = xmlEntryChildren_.begin(),
 			end = xmlEntryChildren_.end();
@@ -264,12 +291,9 @@ public:
 		}
 		xmlEntryChildren_.clear();
 	}
-	
-	std::list<T *> &getChildren() { return xmlEntryChildren_; }
 
 	virtual T *createXMLEntry(void *xmlData) = 0;
 
-	// XMLEntry
 	virtual unsigned int getData() 
 	{ 
 		T *entry = createXMLEntry(0); 
@@ -298,14 +322,13 @@ public:
 
 	virtual void writeXML(XMLNode *node)
 	{
-		// TODO: Fixme
-		std::list<T *>::iterator itor = xmlEntryChildren_.begin(),
-			end = xmlEntryChildren_.end();
-		for (;itor!=end; ++itor)
-		{
-			(*itor)->writeXML(node);
-		}
+		DIALOG_ASSERT(0);
 	}
+	virtual void writeListXML(XMLNode *node, XMLEntry *listEntry)
+	{
+		listEntry->writeXML(node);
+	}
+
 	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
 	{
 		T *newEntry = createXMLEntry(0);

@@ -45,7 +45,9 @@ ClientOptions *ClientOptions::instance()
 }
 
 ClientOptions::ClientOptions() :
-	XMLEntrySimpleContainer("ClientOptions", 
+	XMLEntryRoot<XMLEntrySimpleContainer>(S3D::eSettingsLocation, 
+		"display.xml", "ClientOptions", 
+		"ClientOptions", 
 		"The Scorched3D client side options, these options change aspects of the game not relating to gameplay"),
 	hostDescription_("The description of this host given to any servers for stats.", XMLEntry::eDataRWAccess | XMLEntry::eDataNoRestore, ""),
 	validateServerIp_("Checks if the server ip address matches the published address", XMLEntry::eDataRWAccess, true),
@@ -74,40 +76,13 @@ ClientOptions::~ClientOptions()
 
 bool ClientOptions::writeOptionsToFile()
 {
-	std::string path = S3D::getSettingsFile("display.xml");
-
-	// Check the options files are writeable
-	FILE *checkfile = fopen(path.c_str(), "a");
-	if (!checkfile)
-	{
-		S3D::dialogMessage(
-			"Scorched3D", S3D::formatStringBuffer(
-			"Warning: Your display settings file (%s) cannot be\n"
-			"written to.  Your settings will not be saved from one game to the next.\n\n"
-			"To fix this problem correct the permissions for this file.",
-			path.c_str()));
-	}
-	else fclose(checkfile);
-
-	return writeToFile(path);
+	checkFile();
+	return saveFile(0);
 }
 
 bool ClientOptions::readOptionsFromFile()
 {
-	std::string path = S3D::getSettingsFile("display.xml");
-
-	if (!readFromFile(path))
-	{
-		S3D::dialogMessage(
-			"Scorched3D", S3D::formatStringBuffer(
-			"Warning: Your display settings file (%s) cannot be\n"
-			"read.  This may be because it was create by an out of date version of Scorched3D.\n"
-			"If this is the case it can be safely deleted.",
-			path.c_str()));
-		return false;
-	}
-
-	return true;
+	return loadFile(0);
 }
 
 void ClientOptions::loadDefaultValues()
@@ -127,23 +102,23 @@ void ClientOptions::loadDefaultValues()
 void ClientOptions::loadSafeValues()
 {
 	std::string path = S3D::getDataFile("data/safedisplay.xml");
-	readFromFile(path);
+	loadFromFile(path, 0);
 }
 
 void ClientOptions::loadMediumValues()
 {
 	std::string path = S3D::getDataFile("data/mediumdisplay.xml");
-	readFromFile(path);
+	loadFromFile(path, 0);
 }
 
 void ClientOptions::loadFastestValues()
 {
 	std::string path = S3D::getDataFile("data/fastestdisplay.xml");
-	readFromFile(path);
+	loadFromFile(path, 0);
 }
 
 void ClientOptions::loadUltraValues()
 {
 	std::string path = S3D::getDataFile("data/ultradisplay.xml");
-	readFromFile(path);
+	loadFromFile(path, 0);
 }

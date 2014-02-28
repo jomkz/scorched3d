@@ -21,10 +21,11 @@
 #if !defined(__INCLUDE_ClientOptionsh_INCLUDE__)
 #define __INCLUDE_ClientOptionsh_INCLUDE__
 
+#include <XML/XMLEntryRoot.h>
 #include <XML/XMLEntrySimpleTypes.h>
 #include <console/ConsoleRuleOptionsAdapter.h>
 
-class ClientOptions : public XMLEntrySimpleContainer
+class ClientOptions : public XMLEntryRoot<XMLEntrySimpleContainer>
 {
 public:
 	static ClientOptions *instance();

@@ -112,7 +112,7 @@ bool ServerAuthHandlerPrefered::load()
 	if (fileTime == lastReadTime_) return true;
 
 	XMLFile file;
-	if (!file.readFile(filename))
+	if (!file.readFile(filename, false))
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to parse user file \"%s\"\n%s", 
 			filename.c_str(), file.getParserError()));

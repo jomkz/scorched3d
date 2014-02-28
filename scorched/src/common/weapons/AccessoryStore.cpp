@@ -18,7 +18,6 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <XML/XMLFile.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <weapons/AccessoryStore.h>
@@ -41,12 +40,7 @@ void AccessoryStore::clearAccessories()
 {
 	AccessoryPart::resetAccessoryPartIds();
 	nextAccessoryId_ = 0;
-	while (!accessories_.getAccessoryList().getChildren().empty())
-	{
-		Accessory *accessory = accessories_.getAccessoryList().getChildren().front();
-		accessories_.getAccessoryList().getChildren().pop_front();
-		delete accessory;
-	}
+	accessories_.getAccessoryList().clear();
 	accessoriesById_.clear();
 	tabGroups_.clear();
 }
@@ -58,7 +52,7 @@ bool AccessoryStore::parseFile(
 
 	clearAccessories();
 	AccessoryCreateContext accessoryCreateContext(context);
-	bool result = accessories_.parseFile(&accessoryCreateContext);
+	bool result = accessories_.loadFile(true, &accessoryCreateContext);
 
 	// Clear mapping as it now contains invalid pointers
 	parsingNodes_.clear();

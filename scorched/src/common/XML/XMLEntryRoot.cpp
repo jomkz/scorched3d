@@ -19,59 +19,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <XML/XMLEntryRoot.h>
-#include <XML/XMLFile.h>
 
-XMLEntryRoot::XMLEntryRoot(S3D::FileLocation fileLocation, const char *fileName, const char *rootNodeName,
-	const char *typeName, const char *description, bool required) : 
-	XMLEntryContainer(typeName, description, required),
-	fileLocation_(fileLocation),
-	fileName_(fileName), 
-	rootNodeName_(rootNodeName)
+XMLEntryRootI::XMLEntryRootI()
 {
 }
 
-XMLEntryRoot::~XMLEntryRoot()
+XMLEntryRootI::~XMLEntryRootI()
 {
-}
-
-bool XMLEntryRoot::parseFile(void *xmlData)
-{
-	std::string filePath = S3D::getLocation(fileLocation_, fileName_);
-	XMLFile file;
-	if (!file.readFile(filePath))
-	{
-		S3D::dialogMessage("Scorched3D", 
-			S3D::formatStringBuffer("ERROR: Failed to parse XML file \"%s\"\n"
-			"%s",
-			filePath.c_str(),
-			file.getParserError()));		
-		return false;
-	}
-	XMLNode *rootNode = file.getRootNode();
-	if (!rootNode) 
-	{
-		S3D::dialogMessage("Scorched3D", 
-			S3D::formatStringBuffer("ERROR: Empty XML file \"%s\"",
-			filePath.c_str()));		
-		return false;
-	}
-	if (strcmp(rootNodeName_, rootNode->getName()))
-	{
-		S3D::dialogMessage("Scorched3D", 
-			S3D::formatStringBuffer("ERROR: XML file \"%s\" has invalid root node name, expected %s",
-			filePath.c_str(),
-			rootNodeName_));		
-		return false;
-	}
-
-	if (!readXML(rootNode, xmlData)) return false;
-	return true;
-}
-
-XMLEntryDocumentInfo XMLEntryRoot::generateDocumentation(XMLEntryDocumentGenerator &generator)
-{
-	XMLEntryDocumentInfo info;
-	if (generator.hasType(xmlTypeName_)) return info;
-	generator.addRootTypeTags(this, xmlEntryChildrenList_, xmlTypeName_, "docs/XMLEntryContainer.html");
-	return info;
 }

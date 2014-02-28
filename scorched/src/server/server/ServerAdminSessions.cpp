@@ -248,7 +248,7 @@ bool ServerAdminSessions::getAllCredentials(std::list<Credential> &creds)
 			ScorchedServer::instance()->getOptionsGame().getPortNo()));
 
 	XMLFile file;
-	if (!file.readFile(fileName))
+	if (!file.readFile(fileName, false))
 	{
 		ServerCommon::serverLog( 
 			S3D::formatStringBuffer("Failed to parse \"%s\"\n%s", 

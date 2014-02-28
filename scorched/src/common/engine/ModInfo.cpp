@@ -20,7 +20,71 @@
 
 #include <engine/ModInfo.h>
 #include <common/Defines.h>
-#include <XML/XMLFile.h>
+
+ModInfoGame::ModInfoGame() :
+	XMLEntryContainer("ModInfoGame", "A game type that can be played for this mod"),
+	icon_("The icon for this game type"),
+	description_("The description of this game type"),
+	shortdescription_("The short description of this game type"),
+	gamefile_("The settings file that defines this game type")
+{
+	addChildXMLEntry("description", &description_);
+	addChildXMLEntry("shortdescription", &shortdescription_);
+	addChildXMLEntry("gamefile", &gamefile_);
+	addChildXMLEntry("icon", &icon_);
+}
+
+ModInfoGame::~ModInfoGame()
+{
+}
+
+ModInfoGameList::ModInfoGameList() :
+	XMLEntryList<ModInfoGame>("The list of game types for this mod", 0)
+{
+}
+
+ModInfoGameList::~ModInfoGameList()
+{
+}
+
+ModInfoGame *ModInfoGameList::createXMLEntry(void *xmlData)
+{
+	return new ModInfoGame();
+}
+
+ModInfoMain::ModInfoMain() :
+	XMLEntryContainer("ModInfoMainSection", "Contains the mod description"),
+	description_("The description of this mod"),
+	shortDescription_("The short description of this mod"),
+	url_("The url of the home page for this mod"),
+	protocolversion_("The protocol version of Scorched3D that mod is compatible with"),
+	icon_("The icon to display for this mod")
+
+{
+	addChildXMLEntry("protocolversion", &protocolversion_);
+	addChildXMLEntry("description", &description_);
+	addChildXMLEntry("shortdescription", &shortDescription_);
+	addChildXMLEntry("icon", &icon_);
+	addChildXMLEntry("url", &url_);
+}
+
+ModInfoMain::~ModInfoMain()
+{
+}
+
+ModInfoRoot::ModInfoRoot() :
+	XMLEntryRoot<XMLEntryContainer>(S3D::eInvalidLocation, "multiple",
+		"modinfo", "ModInfo", 
+		"Contains the description of a game modification (mod) along with any game modes it supports")
+{
+	addChildXMLEntry("main", &main_);
+	addChildXMLEntry("game", &games_);
+}
+
+ModInfoRoot::~ModInfoRoot()
+{
+
+}
 
 ModInfo::ModInfo(const std::string &name) :
 	name_(name)
@@ -34,75 +98,6 @@ ModInfo::~ModInfo()
 
 bool ModInfo::parse(const std::string &fileName)
 {
-	entries_.clear();
-	XMLFile file;
-	if (!file.readFile(fileName))
-	{
-		S3D::dialogMessage("ModInfo", S3D::formatStringBuffer(
-			"Failed to parse \"%s\":%s\n", 
-			fileName.c_str(),
-			file.getParserError()));
-		return false;
-	}
-	if (!file.getRootNode())
-	{
-		S3D::dialogMessage("ModInfo", S3D::formatStringBuffer(
-					  "Failed to find mod info definition file \"%s\"",
-					  fileName.c_str()));
-		return false;		
-	}
-
-	// Parse the main mod info
-	std::string tmpicon, tmpgamefile;
-	XMLNode *mainNode = 0;
-	if (!file.getRootNode()->getNamedChild("main", mainNode)) return false;
-	if (!mainNode->getNamedChild("description", description_)) return false;
-	if (!mainNode->getNamedChild("icon", tmpicon)) return false;
-	if (!mainNode->getNamedChild("url", url_)) return false;
-	if (!mainNode->getNamedChild("protocolversion", protocolversion_)) return false;
-	if (!mainNode->getNamedChild("shortdescription", shortDescription_, false))
-	{
-		shortDescription_ = description_;
-	}
-	if (!mainNode->failChildren()) return false;
-
-	if (S3D::fileExists(S3D::getModFile(tmpicon)))
-	{
-		icon_ = S3D::getModFile(tmpicon);
-	}
-	else
-	{
-		icon_ = S3D::getDataFile("data/images/tank2.bmp");
-	}
-
-	// Parse the mod game info
-	XMLNode *gameNode = 0;
-	while (file.getRootNode()->getNamedChild("game", gameNode, false))
-	{
-		MenuEntry entry;
-		if (!gameNode->getNamedChild("description", entry.description)) return false;
-		if (!gameNode->getNamedChild("icon", tmpicon)) return false;
-		if (!gameNode->getNamedChild("gamefile", tmpgamefile)) return false;
-		if (!gameNode->getNamedChild("shortdescription", entry.shortdescription, false))
-		{
-			entry.shortdescription = entry.description;
-		}
-
-		if (S3D::fileExists(S3D::getModFile(tmpicon))) 
-		{
-			entry.icon = S3D::getModFile(tmpicon);
-		}
-		else
-		{
-			entry.icon = S3D::getDataFile("data/images/tank2.bmp");
-		}
-	
-		entry.gamefile = S3D::getModFile(tmpgamefile);
-		if (!S3D::checkDataFile(tmpgamefile)) return false;
-
-		if (!gameNode->failChildren()) return false;
-		entries_.push_back(entry);
-	}
-
-	return file.getRootNode()->failChildren();
+	modInfo_.games_.clear();
+	return modInfo_.loadFromFile(fileName, true, 0);
 }

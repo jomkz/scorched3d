@@ -21,41 +21,72 @@
 #if !defined(__INCLUDE_ModInfoh_INCLUDE__)
 #define __INCLUDE_ModInfoh_INCLUDE__
 
-#include <string>
-#include <list>
+#include <XML/XMLEntryRoot.h>
+#include <XML/XMLEntrySimpleTypes.h>
+
+class ModInfoGame : public XMLEntryContainer
+{
+public:
+	ModInfoGame();
+	virtual ~ModInfoGame();
+
+	XMLEntryFile icon_;
+	XMLEntryFile shortdescription_;
+	XMLEntryFile description_;
+	XMLEntryFile gamefile_;
+};
+
+class ModInfoGameList : public XMLEntryList<ModInfoGame>
+{
+public:
+	ModInfoGameList();
+	virtual ~ModInfoGameList();
+
+	virtual ModInfoGame *createXMLEntry(void *xmlData);
+};
+
+class ModInfoMain : public XMLEntryContainer
+{
+public:
+	ModInfoMain();
+	virtual ~ModInfoMain();
+
+	XMLEntryString url_;
+	XMLEntryFile icon_;
+	XMLEntryString description_;
+	XMLEntryString shortDescription_;
+	XMLEntryString protocolversion_;
+};
+
+class ModInfoRoot : public XMLEntryRoot<XMLEntryContainer>
+{
+public:
+	ModInfoRoot();
+	virtual ~ModInfoRoot();
+
+	ModInfoMain main_;
+	ModInfoGameList games_;
+};
 
 class ModInfo
 {
 public:
-	struct MenuEntry
-	{
-		std::string icon;
-		std::string shortdescription;
-		std::string description;
-		std::string gamefile;
-	};
-
 	ModInfo(const std::string &name);
 	virtual ~ModInfo();
 
 	bool parse(const std::string &fileName);
 
 	const char *getName() { return name_.c_str(); }
-	const char *getUrl() { return url_.c_str(); }
-	const char *getIcon() { return icon_.c_str(); }
-	const char *getDescription() { return description_.c_str(); }
-	const char *getShortDescription() { return shortDescription_.c_str(); }
-	const char *getProtocolVersion() { return protocolversion_.c_str(); }
-	std::list<MenuEntry> &getMenuEntries() { return entries_; }
+	const char *getUrl() { return modInfo_.main_.url_.getValue().c_str(); }
+	const char *getIcon() { return modInfo_.main_.icon_.getValue().c_str(); }
+	const char *getDescription() { return modInfo_.main_.description_.getValue().c_str(); }
+	const char *getShortDescription() { return modInfo_.main_.shortDescription_.getValue().c_str(); }
+	const char *getProtocolVersion() { return modInfo_.main_.protocolversion_.getValue().c_str(); }
+	std::list<ModInfoGame *> &getMenuEntries() { return modInfo_.games_.getChildren(); }
 
 protected:
 	std::string name_;
-	std::string url_;
-	std::string icon_;
-	std::string description_;
-	std::string shortDescription_;
-	std::string protocolversion_;
-	std::list<MenuEntry> entries_;
+	ModInfoRoot modInfo_;
 };
 
 #endif // __INCLUDE_ModInfoh_INCLUDE__

@@ -23,8 +23,54 @@
 #include <common/Logger.h>
 #include <client/ClientOptions.h>
 #include <net/NetInterface.h>
-#include <XML/XMLFile.h>
 #include <stdlib.h>
+
+UniqueIdStore::Entry::Entry() :
+	XMLEntryContainer("UniqueIdStoreEntry", 
+		"Used to store the ids that uniquely identify players on remote servers", 
+		false),
+	id("The unique id that should be used for this server"),
+	published("The published IP address of the server that will be used for validation of authenticity")
+{
+	addChildXMLEntry("id", &id, "published", &published);
+}
+
+UniqueIdStore::Entry::~Entry()
+{
+}
+
+bool UniqueIdStore::Entry::readXML(XMLNode *node, void *xmlData)
+{
+	if (!XMLEntryContainer::readXML(node, xmlData)) return false;
+	ip = NetInterface::getIpAddressFromName((char *) published.getValue().c_str());
+	return true;
+}
+
+UniqueIdStore::EntryList::EntryList() :
+	XMLEntryList<Entry>("The set of ids that uniquely identify players on remote servers")
+{
+}
+
+UniqueIdStore::EntryList::~EntryList()
+{
+}
+
+UniqueIdStore::Entry *UniqueIdStore::EntryList::createXMLEntry(void *)
+{
+	return new UniqueIdStore::Entry();
+}
+
+UniqueIdStore::EntryRoot::EntryRoot() :
+	XMLEntryRoot(S3D::eSettingsLocation, "ids.xml", "ids",
+		"UniqueIdStore", "Used to store the ids that uniquely identify players on remote servers, "
+		"ids are unique for each server to avoid spoofing")
+{
+	addChildXMLEntry("id", &list_);
+}
+
+UniqueIdStore::EntryRoot::~EntryRoot()
+{
+}
 
 UniqueIdStore::UniqueIdStore()
 {
@@ -36,70 +82,27 @@ UniqueIdStore::~UniqueIdStore()
 
 bool UniqueIdStore::loadStore()
 {
-	ids_.clear();
-
-	// Parse the XML file
-	std::string idsPath = S3D::getSettingsFile("ids.xml");
-	XMLFile file;
-	if (!file.readFile(idsPath))
-	{
-		S3D::dialogMessage("Scorched3D Ids", 
-			S3D::formatStringBuffer("ERROR: Failed to parse file \"%s\"\n"
-			"%s",
-			idsPath.c_str(),
-			file.getParserError()));		
-		return false;
-	}
-
-	// return true for an empty file
-	if (!file.getRootNode()) return true;
-	
-	XMLNode *node;
-	while (file.getRootNode()->getNamedChild("id", node, false))
-	{
-		Entry entry;
-		if (!node->getNamedChild("id", entry.id)) return false;
-		if (!node->getNamedChild("published", entry.published)) return false;
-
-		entry.ip = NetInterface::getIpAddressFromName((char *) entry.published.c_str());
-		ids_.push_back(entry);
-	}
-	return file.getRootNode()->failChildren();
+	ids_.list_.clear();
+	if (!ids_.loadFile(false)) return false;
+	return true;
 }
 
 bool UniqueIdStore::saveStore()
 {
-	XMLNode idsNode("ids");
-	std::list<Entry>::iterator itor;
-	for (itor = ids_.begin();
-		itor != ids_.end();
-		++itor)
-	{
-		Entry *entry = &(*itor);
-		XMLNode *idNode = new XMLNode("id");
-		idsNode.addChild(idNode);
-		idNode->addChild(
-			new XMLNode("id", entry->id.c_str()));
-		idNode->addChild(
-			new XMLNode("published", entry->published.c_str()));
-	}
-
-	std::string idsPath = S3D::getSettingsFile("ids.xml");
-	if (!idsNode.writeToFile(idsPath)) return false;
-	return true;
+	return ids_.saveFile();
 }
 
 const char *UniqueIdStore::getUniqueId(unsigned int ip)
 {
-	std::list<Entry>::iterator itor;
-	for (itor = ids_.begin();
-		itor != ids_.end();
+	std::list<Entry *>::iterator itor;
+	for (itor = ids_.list_.getChildren().begin();
+		itor != ids_.list_.getChildren().end();
 		++itor)
 	{
-		Entry &entry = *itor;
+		Entry &entry = *(*itor);
 		if (entry.ip == ip)
 		{
-			return entry.id.c_str();
+			return entry.id.getValue().c_str();
 		}
 	}
 
@@ -134,15 +137,15 @@ bool UniqueIdStore::saveUniqueId(unsigned int ip, const char *id,
 
 	// If it does, store this id against the published name
 	bool found = false;
-	std::list<Entry>::iterator itor;
-	for (itor = ids_.begin();
-		itor != ids_.end();
+	std::list<Entry *>::iterator itor;
+	for (itor = ids_.list_.getChildren().begin();
+		itor != ids_.list_.getChildren().end();
 		++itor)
 	{
-		Entry &entry = *itor;
-		if (0 == strcmp(entry.published.c_str(), published))
+		Entry &entry = *(*itor);
+		if (0 == strcmp(entry.published.getValue().c_str(), published))
 		{
-			if (0 != strcmp(entry.id.c_str(), id))
+			if (0 != strcmp(entry.id.getValue().c_str(), id))
 			{
 				Logger::log( "Warning: Updating to new uniqueid.");
 
@@ -162,11 +165,11 @@ bool UniqueIdStore::saveUniqueId(unsigned int ip, const char *id,
 	if (!found)
 	{
 		// A new id
-		Entry entry;
-		entry.id = id;
-		entry.ip = ip;
-		entry.published = published;
-		ids_.push_back(entry);
+		Entry *entry = new Entry();
+		entry->id.setValue(id);
+		entry->ip = ip;
+		entry->published.setValue(published);
+		ids_.list_.getChildren().push_back(entry);
 	}
 
 	// Save this id

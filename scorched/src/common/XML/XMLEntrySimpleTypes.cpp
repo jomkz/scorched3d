@@ -96,8 +96,8 @@ XMLEntryDocumentInfo XMLEntrySimpleType::generateDocumentation(XMLEntryDocumentG
 	return info;
 }
 
-XMLEntrySimpleContainer::XMLEntrySimpleContainer(const char *typeName, const char *description) :
-	XMLEntryContainer(typeName, description)
+XMLEntrySimpleContainer::XMLEntrySimpleContainer(const char *typeName, const char *description, bool required) :
+	XMLEntryContainer(typeName, description, required)
 {
 }
 
@@ -192,36 +192,6 @@ bool XMLEntrySimpleContainer::readFromBuffer(NetBufferReader &reader, bool usePr
 	}
 
 	return true;
-}
-
-bool XMLEntrySimpleContainer::writeToFile(const std::string &filePath)
-{
-	XMLNode documentNode("document");
-	writeXML(&documentNode);
-	if (documentNode.getChildren().empty()) return false;
-	if (!documentNode.writeChildrenToFile(filePath.c_str())) return false;
-	return true;
-}
-
-bool XMLEntrySimpleContainer::readFromFile(const std::string &filePath)
-{
-	// Parse the XML file
-	XMLFile file;
-	if (!file.readFile(filePath.c_str()))
-	{
-		S3D::dialogMessage("Scorched3D Options", S3D::formatStringBuffer(
-			"ERROR: Failed to parse file \"%s\"\n"
-			"%s",
-			filePath.c_str(),
-			file.getParserError()));
-		return false;
-	}
-
-	// return true for an empty file
-	if (!file.getRootNode()) return true;
-
-	// Read the options from the XML node
-	return readXML(file.getRootNode(), 0);
 }
 
 void XMLEntrySimpleContainer::addToArgParser(ARGParser &parser)
@@ -323,6 +293,52 @@ bool XMLEntryBoundedInt::setValue(int value)
 {
 	if (value < minValue_ || value > maxValue_) return false;
 	return XMLEntryInt::setValue(value);
+}
+
+XMLEntryUnsignedInt::XMLEntryUnsignedInt(const char *description) :
+	XMLEntrySimpleType(description, XMLEntrySimpleType::eDataRequired), 
+	value_(0), defaultValue_(0)
+{
+}
+
+XMLEntryUnsignedInt::XMLEntryUnsignedInt(const char *description, unsigned int data, unsigned int value) :
+	XMLEntrySimpleType(description, data), 
+	value_(value), defaultValue_(value)
+{
+	
+}
+
+XMLEntryUnsignedInt::~XMLEntryUnsignedInt()
+{
+
+}
+
+void XMLEntryUnsignedInt::getValueAsString(std::string &result)
+{
+	result = S3D::formatStringBuffer("%u", value_);
+}
+
+void XMLEntryUnsignedInt::getDefaultValueAsString(std::string &result)
+{
+	result = S3D::formatStringBuffer("%u", defaultValue_);
+}
+
+bool XMLEntryUnsignedInt::setValueFromString(const std::string &string)
+{
+	int val;
+	if (sscanf(string.c_str(), "%u", &val) != 1) return false;
+	return setValue(val);
+}
+
+unsigned int XMLEntryUnsignedInt::getValue() 
+{
+	return value_;
+}
+
+bool XMLEntryUnsignedInt::setValue(unsigned int value)
+{
+	value_ = value;
+	return true;
 }
 
 XMLEntryEnum::XMLEntryEnum(const char *description,

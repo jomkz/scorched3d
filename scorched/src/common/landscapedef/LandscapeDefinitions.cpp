@@ -117,7 +117,7 @@ bool LandscapeDefinitions::readLandscapeDefinitions()
 	// Read blank landscape definiton
 	{
 		XMLFile file;
-		if (!file.readFile(S3D::getModFile("data/landscapes/landscapeblank.xml")) ||
+		if (!file.readFile(S3D::getModFile("data/landscapes/landscapeblank.xml"), true) ||
 			!file.getRootNode())
 		{
 			S3D::dialogMessage("Scorched Landscape", S3D::formatStringBuffer(

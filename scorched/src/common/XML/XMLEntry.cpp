@@ -137,17 +137,18 @@ void XMLEntryDocumentGenerator::writeDocumentation()
 	FileTemplate::writeTemplateToFile("docs/index.html", indexVariables, documentLocation_ + "/index.html");	
 }
 
-void XMLEntryDocumentGenerator::addRootTypeTags(XMLEntryRoot *coreType, std::list<std::pair<std::string, XMLEntry *> > &children,
+void XMLEntryDocumentGenerator::addRootTypeTags(XMLEntryRootI *rootType, XMLEntry *coreType, 
+		std::list<std::pair<std::string, XMLEntry *> > &children,
 		const std::string &sourceTypeName, const std::string &sourceFileName)
 {
 	addTypeTags(coreType, children, sourceTypeName, sourceFileName);
 	std::map<std::string, TypeEntry>::iterator itor = types_.find(sourceTypeName);
 	DIALOG_ASSERT(itor != types_.end());
 	itor->second.root = true;
-	itor->second.variables->addVariableValue("TYPE_ROOT_FILENAME", coreType->getRootFileName());
-	itor->second.variables->addVariableValue("TYPE_ROOT_NODENAME", coreType->getRootNodeName());
+	itor->second.variables->addVariableValue("TYPE_ROOT_FILENAME", rootType->getRootFileName());
+	itor->second.variables->addVariableValue("TYPE_ROOT_NODENAME", rootType->getRootNodeName());
 	itor->second.variables->addVariableValue("TYPE_ROOT_FILELOCATION", 
-		S3D::getLocationConstant(coreType->getRootFileLocation()));
+		S3D::getLocationConstant(rootType->getRootFileLocation()));
 }
 
 void XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType,
@@ -387,10 +388,27 @@ void XMLEntryContainer::writeXML(XMLNode *parentNode)
 			S3D::formatStringBuffer("%s", description.c_str()), 
 			XMLNode::XMLCommentType));
 
-		// Add the actual node
-		XMLNode *newNode = new XMLNode(itor->first.c_str());
-		parentNode->addChild(newNode);
-		itor->second->writeXML(newNode);
+		if (itor->second->isList())
+		{
+			XMLEntryListBase *list = (XMLEntryListBase*) itor->second;
+			std::list<XMLEntry *> children;
+			list->getListChildren(children);
+			std::list<XMLEntry *>::iterator listItor = children.begin(), endList = children.end();
+			for (;listItor != endList; ++listItor)
+			{
+				// Add the actual node
+				XMLNode *newNode = new XMLNode(itor->first.c_str());
+				parentNode->addChild(newNode);
+				list->writeListXML(newNode, (*listItor));
+			}
+		}
+		else
+		{
+			// Add the actual node
+			XMLNode *newNode = new XMLNode(itor->first.c_str());
+			parentNode->addChild(newNode);
+			itor->second->writeXML(newNode);
+		}
 	}
 }
 

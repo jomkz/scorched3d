@@ -31,7 +31,8 @@ namespace S3D
 		eInvalidLocation = 0,
 		eAbsLocation,
 		eDataLocation,
-		eModLocation
+		eModLocation,
+		eSettingsLocation
 	};
 
 	void fileDos2Unix(std::string &file);

@@ -30,19 +30,24 @@ XMLFile::~XMLFile()
 {
 }
 
-bool XMLFile::readFile(const std::string &fileName)
+bool XMLFile::readFile(const std::string &fileName, bool requiredFile)
 {
 	parser_.setSource(fileName);
+	if (!S3D::fileExists(fileName))
+	{
+		if (requiredFile)
+		{
+			fileError_ = std::string("Failed to find file \"") + fileName + "\"";
+			return false;
+		}
+		else return true;
+	}
+
 	FileLines lines;
 	// Load the file
 	// Failing to find the file is not an error
 	if (!lines.readFile(fileName)) 
 	{
-		if (!S3D::fileExists(fileName))
-		{
-			fileError_ = std::string("Failed to find file \"") + fileName + "\"";
-		}
-
 		return false;
 	}
 

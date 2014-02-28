@@ -21,18 +21,38 @@
 #if !defined(__INCLUDE_UniqueIdStoreh_INCLUDE__)
 #define __INCLUDE_UniqueIdStoreh_INCLUDE__
 
-#include <list>
-#include <string>
+#include <XML/XMLEntrySimpleTypes.h>
+#include <XML/XMLEntryRoot.h>
 
 class UniqueIdStore
 {
 public:
-	class Entry
+	class Entry : public XMLEntryContainer
 	{
 	public:
+		Entry();
+		virtual ~Entry();
+
+		virtual bool readXML(XMLNode *node, void *xmlData);
+
 		unsigned int ip;
-		std::string id;
-		std::string published;
+		XMLEntryString id, published;
+	};
+	class EntryList : public XMLEntryList<Entry>
+	{
+	public:
+		EntryList();
+		virtual ~EntryList();
+
+		virtual Entry *createXMLEntry(void *xmlData);
+	};
+	class EntryRoot : public XMLEntryRoot<XMLEntryContainer>
+	{
+	public:
+		EntryRoot();
+		virtual ~EntryRoot();
+
+		EntryList list_;
 	};
 
 	UniqueIdStore();
@@ -45,10 +65,10 @@ public:
 	bool saveUniqueId(unsigned int ip, const char *id,
 		const char *published);
 
-	std::list<Entry> &getIds() { return ids_; }
+	EntryRoot &getIds() { return ids_; }
 
 protected:
-	std::list<Entry> ids_;
+	EntryRoot ids_;
 };
 
 #endif // __INCLUDE_UniqueIdStoreh_INCLUDE__

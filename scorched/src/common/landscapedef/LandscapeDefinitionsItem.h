@@ -78,7 +78,7 @@ public:
 			}
 
 			XMLFile file;
-			if (!file.readFile(dataFile.c_str()) ||
+			if (!file.readFile(dataFile.c_str(), true) ||
 				!file.getRootNode())
 			{
 				S3D::dialogMessage("Scorched Landscape", 

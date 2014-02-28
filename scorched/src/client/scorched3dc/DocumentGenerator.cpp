@@ -21,8 +21,12 @@
 #include <scorched3dc/DocumentGenerator.h>
 #include <landscapedef/LandscapeTex.h>
 #include <landscapedef/LandscapeDefn.h>
+#include <common/OptionsMasterListServer.h>
 #include <common/OptionsGame.h>
+#include <engine/ModInfo.h>
 #include <weapons/Accessory.h>
+#include <client/UniqueIdStore.h>
+#include <client/ClientOptions.h>
 
 void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
@@ -37,6 +41,14 @@ void DocumentGenerator::generatDocumentation(const std::string &directory)
 
 	AccessoryRoot accessory;
 	accessory.generateDocumentation(documentGenerator);
+	UniqueIdStore::EntryRoot uniqueIdStore;
+	uniqueIdStore.generateDocumentation(documentGenerator);
+
+	ClientOptions::instance()->generateDocumentation(documentGenerator);
+	OptionsMasterListServer::instance()->generateDocumentation(documentGenerator);
+	
+	ModInfoRoot modInfo;
+	modInfo.generateDocumentation(documentGenerator);
 
 	documentGenerator.writeDocumentation();
 }

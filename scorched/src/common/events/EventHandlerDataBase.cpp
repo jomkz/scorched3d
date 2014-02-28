@@ -125,7 +125,7 @@ bool EventHandlerDataBase::connect()
 		ScorchedServer::instance()->getOptionsGame().getPortNo()));
 
 	std::string host, port, user, passwd, db, prefix;
-	if (!file.readFile(fileName) ||
+	if (!file.readFile(fileName, true) ||
 		!file.getRootNode())
 	{
 		S3D::dialogExit("Stats Logging",

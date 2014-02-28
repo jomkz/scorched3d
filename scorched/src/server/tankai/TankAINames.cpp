@@ -37,7 +37,7 @@ bool TankAINames::loadAIs(std::list<std::string> &ais)
 {
 	// Load key definition file
 	XMLFile file;
-	if (!file.readFile(S3D::getModFile("data/tankais.xml")))
+	if (!file.readFile(S3D::getModFile("data/tankais.xml"), true))
 	{
 		S3D::dialogMessage("TankAIStore", 
 					  S3D::formatStringBuffer("Failed to parse \"%s\"\n%s", 

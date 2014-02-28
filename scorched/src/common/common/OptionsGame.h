@@ -22,12 +22,13 @@
 #define __INCLUDE_OptionsGameh_INCLUDE__
 
 #include <XML/XMLEntrySimpleTypes.h>
+#include <XML/XMLEntryRoot.h>
 
-class OptionsGame : public XMLEntrySimpleContainer
+class OptionsGameBase : public XMLEntrySimpleContainer
 {
 public:
-	OptionsGame();
-	virtual ~OptionsGame();
+	OptionsGameBase(const char *typeName, const char *description, bool required);
+	virtual ~OptionsGameBase();
 
 	enum ScoreType
 	{
@@ -536,6 +537,13 @@ protected:
 	XMLEntryBool allowSameIP_;
 	XMLEntryBool allowSameUniqueId_;
 	XMLEntryBool debugFeatures_;
+};
+
+class OptionsGame : public XMLEntryRoot<OptionsGameBase>
+{
+public:
+	OptionsGame();
+	virtual ~OptionsGame();
 };
 
 #endif

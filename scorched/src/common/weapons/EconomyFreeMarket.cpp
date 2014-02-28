@@ -60,7 +60,7 @@ bool EconomyFreeMarket::loadPrices()
 {
 	// Parse the file containing the last used prices
 	XMLFile file;
-	if (!file.readFile(getEconomyFileName()))
+	if (!file.readFile(getEconomyFileName(), false))
 	{
 		Logger::log(S3D::formatStringBuffer("Failed to parse freemarket.xml file : %s", file.getParserError()));
 		return true;
