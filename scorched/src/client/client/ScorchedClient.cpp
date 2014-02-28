@@ -37,6 +37,7 @@
 #include <common/ThreadUtils.h>
 #include <common/Logger.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <landscapedef/LandscapeDefinitions.h>
 #include <server/ScorchedServer.h>
 #include <server/ScorchedServerSettings.h>
 
@@ -56,6 +57,28 @@ ScorchedClient *ScorchedClient::instance()
 	DIALOG_ASSERT(instance_);
 	DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
 	return instance_;
+}
+
+void ScorchedClient::startClientForDebug()
+{
+	DIALOG_ASSERT(!instance_ && !instanceLock);
+	creationMutex.lock();
+	clientStopped = false;
+	instanceLock = new ScorchedClient;
+	instance_ = instanceLock;
+	instanceLock = 0;
+
+	thread_id = boost::this_thread::get_id();
+	instance_->getLandscapes().readLandscapeDefinitions();
+	LandscapeDefinition defn = instance_->getLandscapes().getRandomLandscapeDefn(
+		instance_->getOptionsGame(),
+		instance_->getTargetContainer());
+	instance_->getLandscapeMaps().generateMaps(
+		instance_->getContext(),
+		defn,
+		0);
+
+	creationMutex.unlock();
 }
 
 void ScorchedClient::startClient(ProgressCounter *counter)
@@ -111,13 +134,6 @@ ScorchedClient::ScorchedClient() :
 		clientSimulator_, &ClientSimulator::processNetStatMessage,
 		ComsNetStatMessage::ComsNetStatMessageType,
 		getComsMessageHandler());
-
-	// Calculate how many particles we can see
-	int numberOfBilboards = 6000;
-	if (OptionsDisplay::instance()->getEffectsDetail() == 0) 
-		numberOfBilboards = 100;
-	else if (OptionsDisplay::instance()->getEffectsDetail() == 2) 
-		numberOfBilboards = 10000;
 }
 
 ScorchedClient::~ScorchedClient()

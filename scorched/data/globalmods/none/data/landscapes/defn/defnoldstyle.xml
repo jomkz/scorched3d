@@ -26,7 +26,7 @@
 		<landpeakheight>
 			<min>0.5</min><max>1.5</max>
 		</landpeakheight>
-		<landsmoothing>0.04</landsmoothing>
+		<landsmoothing>0.2</landsmoothing>
 		<levelsurround>true</levelsurround>
 	</heightmap>
 </defn>

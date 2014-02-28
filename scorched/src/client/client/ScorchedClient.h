@@ -37,6 +37,7 @@ class ScorchedClient : public ScorchedContext
 {
 public:
 	static ScorchedClient *instance();
+	static void startClientForDebug();
 
 	static void startClient(ProgressCounter *counter);
 	static void stopClient();

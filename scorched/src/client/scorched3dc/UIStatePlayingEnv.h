@@ -35,6 +35,8 @@ public:
 
 	void update(float frameTime);
 
+	Hydrax::Hydrax *getHydraX() { return hydraX_; }
+
 	Ogre::Real getWaterHeight() { return hydraX_->getPosition()[1]; }
 	Ogre::Light *getSunLight() { return sunLight_; }
 	Ogre::Light *getShadowLight() { return shadowLight_; }

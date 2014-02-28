@@ -24,10 +24,10 @@
 #include <scorched3dc/InputManager.h>
 #include <engine/ThreadCallback.h>
 #include <common/Clock.h>
-
 #include <common/Logger.h>
 #include <common/FileLogger.h>
 #include <lang/Lang.h>
+#include <client/ScorchedClient.h>
 
 ScorchedUI *ScorchedUI::instance_(0);
 
@@ -74,8 +74,12 @@ bool ScorchedUI::go()
 	// Create CEGUI
 	if (!ogreSystem_->createUI()) return false;
 
+	// Do some stuff to display the level early
+	ScorchedClient::startClientForDebug();
+	uiState_->setState(UIState::StatePlaying);
+
 	// Create the first scene
-	uiState_->setState(UIState::StatePlaying);//UIState::StateMainMenu);
+	//uiState_->setState(UIState::StateMainMenu);
 
 	Clock timer;
 	while(!quit_)

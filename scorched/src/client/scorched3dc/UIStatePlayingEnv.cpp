@@ -205,7 +205,7 @@ void UIStatePlayingEnv::updateLighting()
 	hydraX_->setSunPosition(sunPos);
 
 	sunLight_->setPosition(camera_->getDerivedPosition() - lightDir*skyX_->getMeshManager()->getSkydomeRadius(camera_)*0.02f);
-	shadowLight_->setDirection(lightDir);
+	shadowLight_->setDirection(-lightDir);
 
 	Ogre::Vector3 sunCol = sunGradient_.getColor(point);
 	sunLight_->setSpecularColour(sunCol.x, sunCol.y, sunCol.z);

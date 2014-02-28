@@ -21,14 +21,8 @@
 #include <scorched3dc/UIStatePlayingLand.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
-
-// should be a static local function
-static void getTerrainImage(bool flipX, bool flipY, Ogre::Image& img)
-{
-    img.load("Island.png", "Landscape");
-    if (flipX)   img.flipAroundY();
-    if (flipY)   img.flipAroundX();
-}
+#include <client/ScorchedClient.h>
+#include <landscapemap/LandscapeMaps.h>
 
 static void initBlendMaps(Ogre::Terrain* terrain)
 {
@@ -67,9 +61,11 @@ UIStatePlayingLand::UIStatePlayingLand(
 	Ogre::SceneManager* sceneMgr, 
 	Ogre::Camera* camera,
 	Ogre::Light *sunLight,
-	Ogre::Light *shadowLight) : 
+	Ogre::Light *shadowLight,
+	Hydrax::Hydrax *hydrax) : 
 	sceneMgr_(sceneMgr), camera_(camera), 
-	sunLight_(sunLight), shadowLight_(shadowLight)
+	sunLight_(sunLight), shadowLight_(shadowLight),
+	hydrax_(hydrax)
 {
 	create();
 }
@@ -85,24 +81,28 @@ void UIStatePlayingLand::create()
 
 	// Create the terrain objects
 	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 129, 3000.0f);
-    terrainGroup_->setFilenameConvention(Ogre::String("Scorched3DO-Cache"), Ogre::String("dat"));
     terrainGroup_->setOrigin(Ogre::Vector3::ZERO);
 
 	// Load terrain data
-	terrainsImported_ = false;
 	defineOptions();
-	defineTerrain(0, 0);
+	int landscapeWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
+	int landscapeHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
+	for (int x=0; x<landscapeWidth/128; x++)
+	{
+		for (int y=0; y<landscapeHeight/128; y++)
+		{
+			defineTerrain(x, y);
+		}
+	}
 
 	// Generate the terrain
 	terrainGroup_->loadAllTerrains(true);
-	if (terrainsImported_)
+	Ogre::TerrainGroup::TerrainIterator ti = terrainGroup_->getTerrainIterator();
+	while(ti.hasMoreElements())
 	{
-		Ogre::TerrainGroup::TerrainIterator ti = terrainGroup_->getTerrainIterator();
-		while(ti.hasMoreElements())
-		{
-			Ogre::Terrain* t = ti.getNext()->instance;
-			initBlendMaps(t);
-		}
+		Ogre::Terrain* terrain = ti.getNext()->instance;
+		initBlendMaps(terrain);
+		hydrax_->getMaterialManager()->addDepthTechnique(terrain->getMaterial()->createTechnique());
 	}
 
 	terrainGroup_->updateDerivedData(true);
@@ -126,7 +126,7 @@ void UIStatePlayingLand::defineOptions()
     // Configure default import settings for if we use imported image
     Ogre::Terrain::ImportData& defaultimp = terrainGroup_->getDefaultImportSettings();
     defaultimp.terrainSize = 129; 
-    defaultimp.worldSize = 3000.0f;      // Set up for island.cfg
+    defaultimp.worldSize = 3000.0f;   
     defaultimp.inputScale = 200; 
     defaultimp.minBatchSize = 33;
     defaultimp.maxBatchSize = 65;
@@ -144,20 +144,25 @@ void UIStatePlayingLand::defineOptions()
 	defaultimp.layerList[2].textureNames.push_back("growth_weirdfungus-03_normalheight.dds");
 }
 
-void UIStatePlayingLand::defineTerrain(long x, long y)
+void UIStatePlayingLand::defineTerrain(long tx, long ty)
 {
-    Ogre::String filename = terrainGroup_->generateFilename(x, y);
-    if (Ogre::ResourceGroupManager::getSingleton().resourceExists(terrainGroup_->getResourceGroup(), filename))
-    {
-        terrainGroup_->defineTerrain(x, y, filename);
-    }
-    else
-    {
-        Ogre::Image img;
-        getTerrainImage(x % 2 != 0, y % 2 != 0, img);
-        terrainGroup_->defineTerrain(x, y, &img);
-        terrainsImported_ = true;
-    }
+	int startX = tx * 128;
+	int startY = ty * 128;
+
+	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
+	float *heightData = new float[129 * 129];
+	float *currentPoint = heightData;
+	for (int y=0; y<129; y++)
+	{
+		for (int x=0; x<129; x++)
+		{
+			float height = map.getHeight(startX + x, startY + y).asFloat();
+			*currentPoint = height / 8.0f;
+			currentPoint++;
+		}
+	}
+	
+	terrainGroup_->defineTerrain(tx, ty, heightData);
 }
 
 Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)

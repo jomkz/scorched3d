@@ -23,6 +23,7 @@
 
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
+#include <Hydrax/Hydrax.h>
 
 class UIStatePlayingLand
 {
@@ -30,7 +31,8 @@ public:
 	UIStatePlayingLand(Ogre::SceneManager* sceneMgr,
 		Ogre::Camera* camera,
 		Ogre::Light *sunLight,
-		Ogre::Light *shadowLight);
+		Ogre::Light *shadowLight,
+		Hydrax::Hydrax *hydrax);
 	virtual ~UIStatePlayingLand();
 
 	Ogre::Real getHeight(const Ogre::Vector3 &position);
@@ -41,7 +43,7 @@ protected:
 	Ogre::TerrainGlobalOptions *terrainGlobalOptions_;
 	Ogre::TerrainGroup *terrainGroup_;
 	Ogre::Light *sunLight_, *shadowLight_;
-	bool terrainsImported_;
+	Hydrax::Hydrax *hydrax_;
 
 	void create();
 	void defineOptions();

@@ -67,7 +67,11 @@ void UIStatePlaying::createState()
 	// Create the land
 	Ogre::LogManager::getSingletonPtr()->logMessage("*** Creating Landscape ***");
 	land_ = new UIStatePlayingLand(sceneMgr_, cameraController_->getCamera(), 
-		env_->getSunLight(), env_->getShadowLight());
+		env_->getSunLight(), env_->getShadowLight(), env_->getHydraX());
+
+	// Bloom compositor
+	Ogre::CompositorManager::getSingleton().addCompositor(vp, "Bloom2");
+	Ogre::CompositorManager::getSingleton().setCompositorEnabled(vp, "Bloom2", false);
 }
 
 void UIStatePlaying::destroyState()
