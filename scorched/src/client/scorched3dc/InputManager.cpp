@@ -36,11 +36,14 @@ InputManager::InputManager() :
 	inputManager_(0), mouse_(0), keyboard_(0),
 	mouseDownButton_(-1), mouseDragging_(false)
 {
+	keyDownState_ = new bool[256];
+	memset(keyDownState_, false, sizeof(bool) * 256);
 }
 
 InputManager::~InputManager()
 {
 	windowClosed(0);
+	delete [] keyDownState_;
 	//Ogre::WindowEventUtilities::removeWindowEventListener(ogreWindow_, this);
 }
 
@@ -101,15 +104,27 @@ bool InputManager::frameRenderingQueued(const Ogre::FrameEvent& evt)
 bool InputManager::keyPressed(const OIS::KeyEvent &arg)
 {
 	CEGUI::System &sys = CEGUI::System::getSingleton();
-	sys.getDefaultGUIContext().injectKeyDown((CEGUI::Key::Scan) arg.key);
-	sys.getDefaultGUIContext().injectChar(arg.text);
+	if (!sys.getDefaultGUIContext().injectKeyDown((CEGUI::Key::Scan) arg.key) &&
+		!sys.getDefaultGUIContext().injectChar(arg.text))
+	{
+		if (arg.key < 255) keyDownState_[arg.key] = true;
+	}
 	return true;
 }
 
 bool InputManager::keyReleased(const OIS::KeyEvent &arg)
 {
-	CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan) arg.key);
+	if (!CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan) arg.key))
+	{
+		if (arg.key < 255) keyDownState_[arg.key] = false;
+	}
 	return true;
+}
+
+bool InputManager::isKeyDown(CEGUI::Key::Scan key)
+{
+	if (key < 255) return keyDownState_[key];
+	return false;
 }
 
 bool InputManager::mouseMoved(const OIS::MouseEvent &arg)

@@ -39,7 +39,7 @@ public:
 	void addMouseHandler(InputHandlerMouse *handler);
 	void removeMouseHandler(InputHandlerMouse *handler);
 
-	OIS::Keyboard* getKeyboard() { return keyboard_; }
+	bool isKeyDown(CEGUI::Key::Scan key);
 
 	// Ogre::FrameListener
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -58,6 +58,8 @@ public:
 	virtual void windowClosed(Ogre::RenderWindow* rw);	
 
 protected:
+	bool *keyDownState_;
+
 	// OIS Input devices
 	OIS::InputManager* inputManager_;
 	OIS::Mouse* mouse_;

@@ -79,44 +79,43 @@ void CameraController::scroll(Ogre::Real distance, Ogre::Real rotation)
 
 void CameraController::update(float elapsedTime)
 {
-	OIS::Keyboard *keyboard = ScorchedUI::instance()->getInputManager().getKeyboard();
-	if (!keyboard) return;
-	if (keyboard->isKeyDown(OIS::KC_W))
+	InputManager &inputManager = ScorchedUI::instance()->getInputManager();
+	if (inputManager.isKeyDown(CEGUI::Key::W))
 	{
 		Ogre::Real distance = elapsedTime * zoom_ / -5.0f;
 		scroll(distance, 0.0f);
 	} 
-	else if (keyboard->isKeyDown(OIS::KC_S))
+	else if (inputManager.isKeyDown(CEGUI::Key::S))
 	{
 		Ogre::Real distance = elapsedTime * zoom_ / 5.0f;
 		scroll(distance, 0.0f);
 	}
-	if (keyboard->isKeyDown(OIS::KC_A))
+	if (inputManager.isKeyDown(CEGUI::Key::A))
 	{
 		Ogre::Real distance = elapsedTime * zoom_ / -5.0f;
 		scroll(distance, 1.57f);
 	} 
-	else if (keyboard->isKeyDown(OIS::KC_D))
+	else if (inputManager.isKeyDown(CEGUI::Key::D))
 	{
 		Ogre::Real distance = elapsedTime * zoom_ / 5.0f;
 		scroll(distance, 1.57f);
 	}
-	if (keyboard->isKeyDown(OIS::KC_R))
+	if (inputManager.isKeyDown(CEGUI::Key::R))
 	{
 		zoom_ += -1000.0f * elapsedTime;
 		calculateWantedPosition();
 	} 
-	else if (keyboard->isKeyDown(OIS::KC_F))
+	else if (inputManager.isKeyDown(CEGUI::Key::F))
 	{
 		zoom_ += 1000.0f * elapsedTime;
 		calculateWantedPosition();
 	}
-	if (keyboard->isKeyDown(OIS::KC_Q))
+	if (inputManager.isKeyDown(CEGUI::Key::Q))
 	{
 		rotationRound_ += 3.14f / 4.0f * elapsedTime;
 		calculateWantedPosition();
 	} 
-	else if (keyboard->isKeyDown(OIS::KC_E))
+	else if (inputManager.isKeyDown(CEGUI::Key::E))
 	{
 		rotationRound_ += 3.14f / -4.0f * elapsedTime;
 		calculateWantedPosition();
