@@ -60,7 +60,8 @@ TankAICurrentMove::TankAICurrentMove() :
 	sniperMovementFactor_(4.0f),
 	projectileStartDistance_(10.0f), projectileEndDistance_(5.0f),
 	projectileMinDecrement_(1.0f), projectileMaxDecrement_(4.0f),
-	projectileMovementFactor_(10.0f), projectileMinDistance_(10.0f)
+	projectileMovementFactor_(10.0f), projectileMinDistance_(10.0f),
+	currentWeapon_(0)
 {
 }
 
@@ -267,6 +268,8 @@ void TankAICurrentMove::playMoveInternal(Tanket *tanket,
 bool TankAICurrentMove::shootAtTank(Tanket *tanket, Tanket *targetTanket, 
 	TankAICurrentMoveWeapons &weapons, MoveData &moveData)
 {
+	currentWeapon_ = 0;
+
 	// Try to make a sniper shot
 	if (makeSniperShot(tanket, targetTanket, weapons, moveData)) return true;
 
@@ -1060,7 +1063,8 @@ void TankAICurrentMove::setWeapon(Tanket *tanket, Accessory *accessory)
 		Logger::log(S3D::formatStringBuffer("TankAI - setting weapon %s", accessory->getName()));
 	}
 
-	tanket->getAccessories().getWeapons().setWeapon(accessory);
+	// Todo check this weapon is valid
+	currentWeapon_ = accessory;
 }
 
 void TankAICurrentMove::skipMove(Tanket *tanket, MoveData &moveData)
@@ -1098,9 +1102,7 @@ void TankAICurrentMove::fireShot(Tanket *tanket, MoveData &moveData, TankAIAimRe
 		Logger::log(S3D::formatStringBuffer("TankAI - shooting at tank %s", tanket->getCStrName().c_str()));
 	}
 
-	Accessory *currentWeapon = 
-		tanket->getAccessories().getWeapons().getCurrent();
-	if (currentWeapon)
+	if (currentWeapon_)
 	{
 		if (TankAI::getTankAILogging())
 		{
@@ -1111,7 +1113,7 @@ void TankAICurrentMove::fireShot(Tanket *tanket, MoveData &moveData, TankAIAimRe
 			moveData.moveId, 
 			ComsPlayedMoveMessage::eShot);
 		message.setShot(
-			currentWeapon->getAccessoryId(),
+			currentWeapon_->getAccessoryId(),
 			result.rotation_,
 			result.elevation_,
 			result.power_,

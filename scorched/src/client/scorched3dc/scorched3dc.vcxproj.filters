@@ -849,9 +849,6 @@
     <ClCompile Include="..\..\common\tanket\TanketTypes.cpp">
       <Filter>tanket</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\tanket\TanketWeapon.cpp">
-      <Filter>tanket</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\target\Target.cpp">
       <Filter>target</Filter>
     </ClCompile>
@@ -1449,9 +1446,6 @@
     <ClCompile Include="..\uiactions\UITankWeaponSwitcher.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
-    <ClCompile Include="UITankControl.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\server\tankai\TankAIAimResult.cpp">
       <Filter>tankai</Filter>
     </ClCompile>
@@ -1466,6 +1460,12 @@
     </ClCompile>
     <ClCompile Include="..\..\common\tanket\TanketShotPath.cpp">
       <Filter>tanket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dialogs\GUITankInfo.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UITankWeapon.cpp">
+      <Filter>uiactions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2252,9 +2252,6 @@
     <ClInclude Include="..\..\common\tanket\TanketTypes.h">
       <Filter>tanket</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\tanket\TanketWeapon.h">
-      <Filter>tanket</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\target\Target.h">
       <Filter>target</Filter>
     </ClInclude>
@@ -2852,9 +2849,6 @@
     <ClInclude Include="..\uiactions\UITankWeaponSwitcher.h">
       <Filter>uiactions</Filter>
     </ClInclude>
-    <ClInclude Include="UITankControl.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\server\tankai\TankAIAimResult.h">
       <Filter>tankai</Filter>
     </ClInclude>
@@ -2869,6 +2863,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\tanket\TanketShotPath.h">
       <Filter>tanket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dialogs\GUITankInfo.h">
+      <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UITankWeapon.h">
+      <Filter>uiactions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

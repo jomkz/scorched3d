@@ -93,6 +93,7 @@ void TankStartMoveSimAction::startClientGame()
 		//ScorchedClient::instance()->getGameState().stimulate(
 		//	ClientState::StimPlaying);
 
+		/*
 		Accessory *currentWeapon = current->getAccessories().getWeapons().getCurrent();
 		if (currentWeapon && 
 			currentWeapon->getPositionSelect() != Accessory::ePositionSelectNone)
@@ -102,6 +103,7 @@ void TankStartMoveSimAction::startClientGame()
 			if (!entries.empty()) currentWeapon = entries.front();
 		}
 		current->getAccessories().getWeapons().setWeapon(currentWeapon);
+		*/
 
 		// Tell UI to show the tank
 		UIActiveTankAction *activeTankAction = new UIActiveTankAction(tank->getPlayerId());

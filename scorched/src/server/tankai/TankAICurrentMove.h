@@ -57,6 +57,7 @@ protected:
 	};
 
 	std::map<Tanket *, ShotRecord> shotRecords_;
+	Accessory *currentWeapon_;
 	TankAICurrentTarget targets_;
 	float totalDamageBeforeMove_;
 	bool useResign_, useFuel_;

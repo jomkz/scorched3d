@@ -22,7 +22,6 @@
 #define AFX_TanketAccessories_H__60850A18_DED2_4BB0_B104_CB0941EF6D1D__INCLUDED_
 
 #include <weapons/AccessoryPart.h>
-#include <tanket/TanketWeapon.h>
 #include <tanket/TanketAutoDefense.h>
 #include <tanket/TanketBatteries.h>
 #include <lang/LangString.h>
@@ -52,7 +51,6 @@ public:
 	std::list<Accessory *> &getAllAccessoriesByGroup(
 		const char *groupName);
 
-	TanketWeapon &getWeapons() { return tankWeapon_; }
 	TanketAutoDefense &getAutoDefense() { return tankAuto_; }
 	TanketBatteries &getBatteries() { return tankBatteries_; }
 
@@ -65,7 +63,6 @@ public:
 
 protected:
 	ScorchedContext &context_;
-	TanketWeapon tankWeapon_;
 	TanketAutoDefense tankAuto_;
 	TanketBatteries tankBatteries_;
 	Tanket *tanket_;

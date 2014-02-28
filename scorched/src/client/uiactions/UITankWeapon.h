@@ -18,35 +18,51 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITankControlh_INCLUDE__)
-#define __INCLUDE_UITankControlh_INCLUDE__
+#if !defined(__INCLUDE_UITankWeaponh_INCLUDE__)
+#define __INCLUDE_UITankWeaponh_INCLUDE__
 
+#include <vector>
 #include <client/ClientUISync.h>
-#include <uiactions/UITankRenderer.h>
 #include <uiactions/UITankShotHistory.h>
 
-class UITankControlSyncActionFireShot : public ClientUISyncAction 
+class UITankWeaponSyncActionFireShot : public ClientUISyncAction 
 {
 public:
-	UITankControlSyncActionFireShot(UITankShotHistory::ShotEntry &entry, unsigned int playerId);
-	virtual ~UITankControlSyncActionFireShot();
+	UITankWeaponSyncActionFireShot(UITankShotHistory::ShotEntry &entry, 
+		unsigned int playerId, unsigned int accessoryId);
+	virtual ~UITankWeaponSyncActionFireShot();
 
 	// ClientUISyncAction
 	virtual void performUIAction();
 
 protected:
 	UITankShotHistory::ShotEntry entry_;
-	unsigned int playerId_;
+	unsigned int playerId_, accessoryId_;
 };
 
-class UITankControl 
+class Tank;
+class Accessory;
+class UITankRenderer;
+class UITankWeapon
 {
 public:
-	static void fireShot(UITankRenderer *tankRenderer);
+	UITankWeapon();
+	virtual ~UITankWeapon();
 
-private:
-	UITankControl();
-	virtual ~UITankControl();
+	void setCurrentWeapon(Accessory *accessory);
+	Accessory *getCurrentWeapon();
+
+	void fireWeapon();
+	void nextWeapon();
+
+	void setWeapons(Tank *tank);
+	void setTankRenderer(UITankRenderer *tankRenderer) { tankRenderer_ = tankRenderer; }
+
+protected:
+	UITankRenderer *tankRenderer_;
+	Accessory *currentWeapon_;
+	std::vector<Accessory *> tankAccessories_;
 };
 
-#endif // __INCLUDE_UITankControlh_INCLUDE__
+#endif
+

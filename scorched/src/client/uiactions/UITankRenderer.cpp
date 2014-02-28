@@ -19,19 +19,22 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <uiactions/UITankRenderer.h>
+#include <dialogs/GUITankInfo.h>
 #include <tanket/TanketShotInfo.h>
 #include <tanket/TanketShotPath.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
 #include <client/ScorchedClient.h>
+#include <weapons/Accessory.h>
 #include <OgreManualObject.h>
 #include <OgreBillboardChain.h>
 
 UITankRenderer::UITankRenderer(Tank *tank) :
 	UITargetRenderer(tank), 
-	gunBone_(0), turretBone_(0),
+	gunBone_(0), turretBone_(0), shotPathNode_(0),
 	active_(false)
 {
+	tankWeapon_.setTankRenderer(this);
 	rotationChangedRegisterable_ = 
 		new ClientUISyncActionRegisterableAdapter<UITankRenderer>(this, &UITankRenderer::rotationChangedSync, false);
 }
@@ -88,6 +91,17 @@ void UITankRenderer::setActive(bool active)
 	if (active_)
 	{
 		rotationChangedRegisterable_->registerCallback();
+		Tank *tank = (Tank *) target_;
+		getTankWeapon().setWeapons(tank);
+		Accessory *currentWeapon = getTankWeapon().getCurrentWeapon();
+
+		GUITankInfo::instance()->setVisible(tank->getCStrName());
+		GUITankInfo::instance()->setWeaponName(currentWeapon->getName());
+	}
+	else
+	{
+		if (shotPathNode_) OgreSystem::destroySceneNode(shotPathNode_);
+		GUITankInfo::instance()->setInvisible();
 	}
 }
 
@@ -112,15 +126,13 @@ void UITankRenderer::rotationChangedSync()
 		result))
 	{
 		Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
-		Ogre::SceneNode *shotPathNode = sceneManager->getRootSceneNode()->createChildSceneNode();
+		Ogre::ManualObject* manual = sceneManager->createManualObject();
+		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
 
-		Ogre::BillboardChain *bbchain = sceneManager->createBillboardChain();
-		
-		//Ogre::ManualObject* manual = sceneManager->createManualObject();
-		//manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
-		bbchain->setNumberOfChains(1);
-		bbchain->setMaxChainElements(shotPath.getPositions().size());
-		bbchain->setFaceCamera(true);
+		//Ogre::BillboardChain *bbchain = sceneManager->createBillboardChain();
+		//bbchain->setNumberOfChains(1);
+		//bbchain->setMaxChainElements(shotPath.getPositions().size());
+		//bbchain->setFaceCamera(true);
 
 		std::vector<FixedVector>::iterator itor = shotPath.getPositions().begin();
 		std::vector<FixedVector>::iterator end_itor = shotPath.getPositions().end();
@@ -130,11 +142,15 @@ void UITankRenderer::rotationChangedSync()
 				OgreSystem::OGRE_WORLD_SCALE_FIXED * (*itor)[0].getInternalData(), 
 				OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED * (*itor)[2].getInternalData(), 
 				OgreSystem::OGRE_WORLD_SCALE_FIXED * (*itor)[1].getInternalData());
-			Ogre::BillboardChain::Element element(position, 10, 0, Ogre::ColourValue(1, 0, 0), Ogre::Quaternion());
-			bbchain->addChainElement(0, element);
+			//Ogre::BillboardChain::Element element(position, 10, 0, Ogre::ColourValue(1, 0, 0), Ogre::Quaternion());
+			//bbchain->addChainElement(0, element);
+			manual->position(position);
 		}
 
-		//manual->end();
-		shotPathNode->attachObject(bbchain);	
+		manual->end();
+
+		if (shotPathNode_) OgreSystem::destroySceneNode(shotPathNode_);
+		shotPathNode_ = sceneManager->getRootSceneNode()->createChildSceneNode();
+		shotPathNode_->attachObject(manual);
 	}
 }

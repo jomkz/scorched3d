@@ -28,7 +28,6 @@
 
 TanketAccessories::TanketAccessories(ScorchedContext &context) :
 	context_(context),
-	tankWeapon_(context),
 	tankAuto_(context),
 	tankBatteries_(context)
 {
@@ -42,7 +41,6 @@ TanketAccessories::~TanketAccessories()
 void TanketAccessories::setTanket(Tanket *tanket)
 {
 	tanket_ = tanket;
-	tankWeapon_.setTanket(tanket);
 	tankAuto_.setTanket(tanket);
 	tankBatteries_.setTanket(tanket);
 }
@@ -51,7 +49,6 @@ void TanketAccessories::newMatch()
 {
 	clearAccessories();
 
-	tankWeapon_.newMatch();
 	tankAuto_.newMatch();
 	tankBatteries_.newMatch();
 
@@ -369,7 +366,6 @@ void TanketAccessories::changed()
 {
 	// Tell the appropriate container that the count has changed
 	tankAuto_.changed();
-	tankWeapon_.changed();
 	tankBatteries_.changed();
 }
 

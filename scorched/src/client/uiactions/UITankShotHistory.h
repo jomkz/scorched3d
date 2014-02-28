@@ -24,8 +24,6 @@
 #include <net/NetBuffer.h>
 #include <vector>
 
-class Tank;
-class ScorchedContext;
 class UITankShotHistory
 {
 public:

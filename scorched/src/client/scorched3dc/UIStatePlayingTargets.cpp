@@ -22,10 +22,10 @@
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/InputManager.h>
 #include <scorched3dc/OgreSystem.h>
-#include <scorched3dc/UITankControl.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientOptions.h>
 #include <uiactions/UITankRenderer.h>
+#include <uiactions/UITankWeapon.h>
 
 UIStatePlayingTargets::UIStatePlayingTargets(Ogre::SceneManager* sceneMgr) :
 	sceneMgr_(sceneMgr), tankRenderer_(0)
@@ -95,12 +95,17 @@ void UIStatePlayingTargets::update(float frameTime)
 
 void UIStatePlayingTargets::keyPressed(const OIS::KeyEvent &arg)
 {
-	if (arg.key == OIS::KC_SPACE)
+	if (tankRenderer_)
 	{
-		if (tankRenderer_)
+		switch (arg.key)
 		{
-			UITankControl::fireShot(tankRenderer_);
-			setCurrentTank(0);
+			case OIS::KC_SPACE:
+				tankRenderer_->getTankWeapon().fireWeapon();
+				setCurrentTank(0);
+				break;
+			case OIS::KC_TAB:
+				tankRenderer_->getTankWeapon().nextWeapon();
+				break;
 		}
 	}
 }

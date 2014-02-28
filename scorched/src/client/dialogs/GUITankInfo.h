@@ -18,37 +18,28 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITankRendererh_INCLUDE__)
-#define __INCLUDE_UITankRendererh_INCLUDE__
+#if !defined(AFX_GUITankInfo_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#define AFX_GUITankInfo_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
-#include <uiactions/UITargetRenderer.h>
-#include <uiactions/UITankShotHistory.h>
-#include <uiactions/UITankWeapon.h>
-#include <tank/Tank.h>
-
-class UITankRenderer : public UITargetRenderer
+class GUITankInfo
 {
 public:
-	UITankRenderer(Tank *tank);
-	virtual ~UITankRenderer();
+	static GUITankInfo *instance();
 
-	UITankShotHistory &getShotHistory() { return shotHistory_; }
-	UITankWeapon &getTankWeapon() { return tankWeapon_; }
-	void setRotations();
-	void setActive(bool active);
+	void setVisible(const CEGUI::String &tankName);
+	void setInvisible();
+
+	void setWeaponName(const CEGUI::String &weaponName);
 
 protected:
-	bool active_;
-	ClientUISyncActionRegisterable *rotationChangedRegisterable_;
-	UITankShotHistory shotHistory_;
-	UITankWeapon tankWeapon_;
-	Ogre::Bone *gunBone_, *turretBone_;
-	Ogre::Entity *activeTankMarkerEntity_;
-	Ogre::SceneNode *shotPathNode_;
+	void create();   
+ 
+	CEGUI::Window *window_;
+	CEGUI::Window *tankName_, *weaponName_;
+private:
+	GUITankInfo();
+	virtual ~GUITankInfo();
 
-	void rotationChangedSync();  // Synced (UI and Client Thread)
-	virtual void create();
-	virtual void performUIActionAlive();
 };
 
-#endif
+#endif // !defined(AFX_GUITankInfo_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
