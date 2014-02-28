@@ -23,7 +23,6 @@
 
 #include <list>
 #include <lang/LangString.h>
-#include <common/Vector.h>
 #include <common/FixedVector4.h>
 #include <common/FileLines.h>
 #include <common/NumberParser.h>
@@ -47,13 +46,9 @@ public:
 		NodeType = XMLNode::XMLNodeType);
 	XMLNode(const char *name, NumberParser &content,
 		NodeType = XMLNode::XMLNodeType);
-	XMLNode(const char *name, float content, 
-		NodeType = XMLNode::XMLNodeType);
 	XMLNode(const char *name, bool content, 
 		NodeType = XMLNode::XMLNodeType);
 	XMLNode(const char *name, int content, 
-		NodeType = XMLNode::XMLNodeType);
-	XMLNode(const char *name, Vector &content, 
 		NodeType = XMLNode::XMLNodeType);
 	XMLNode(const char *name, unsigned int content, 
 		NodeType = XMLNode::XMLNodeType);
@@ -94,15 +89,11 @@ public:
 		bool failOnError = true, bool remove = true);
 	bool getNamedChild(const char *name, NumberParser &value,
 		bool failOnError = true, bool remove = true);
-	bool getNamedChild(const char *name, float &value,
-		bool failOnError = true, bool remove = true);
 	bool getNamedChild(const char *name, int &value,
 		bool failOnError = true, bool remove = true);
 	bool getNamedChild(const char *name, unsigned int &value,
 		bool failOnError = true, bool remove = true);
 	bool getNamedChild(const char *name, fixed &value,
-		bool failOnError = true, bool remove = true);
-	bool getNamedChild(const char *name, Vector &value,
 		bool failOnError = true, bool remove = true);
 	bool getNamedChild(const char *name, FixedVector &value,
 		bool failOnError = true, bool remove = true);

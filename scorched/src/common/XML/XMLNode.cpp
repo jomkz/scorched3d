@@ -101,14 +101,6 @@ XMLNode::XMLNode(const char *name, const LangString &langStringContent, NodeType
 	addContent(content.c_str(), (int) content.size());
 }
 
-XMLNode::XMLNode(const char *name, float content, NodeType type) :
-	name_(name), parent_(0), type_(type), useContentNodes_(false)
-{
-	char buffer[20];
-	snprintf(buffer, 20, "%.2f", content);
-	addContent(buffer, (int) strlen(buffer));
-}
-
 XMLNode::XMLNode(const char *name, int content, NodeType type) :
 	name_(name), parent_(0), type_(type), useContentNodes_(false)
 {
@@ -182,27 +174,6 @@ XMLNode::XMLNode(const char *name, FixedVector4 &content, NodeType type) :
 
 	buffer = content[3].asString();
 	nodeD->addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
-}
-
-XMLNode::XMLNode(const char *name, Vector &content, NodeType type) :
-	name_(name), parent_(0), type_(type), useContentNodes_(false)
-{
-	XMLNode *nodeA = new XMLNode("a");
-	addChild(nodeA);
-	XMLNode *nodeB = new XMLNode("b");
-	addChild(nodeB);
-	XMLNode *nodeC = new XMLNode("c");
-	addChild(nodeC);
-
-	char buffer[20];
-	snprintf(buffer, 20, "%.2f", content[0]);
-	nodeA->addContent(buffer, (int) strlen(buffer));
-
-	snprintf(buffer, 20, "%.2f", content[1]);
-	nodeB->addContent(buffer, (int) strlen(buffer));
-
-	snprintf(buffer, 20, "%.2f", content[2]);
-	nodeC->addContent(buffer, (int) strlen(buffer));
 }
 
 XMLNode::~XMLNode()
@@ -390,7 +361,7 @@ bool XMLNode::getNamedChild(const char *name, XMLNode *&value,
 
 	if (failOnError)
 	{
-		returnError(S3D::formatStringBuffer("Failed to find \"%s\" node", name));
+		returnError(S3D::formatStringBuffer("Failed to find required node \"%s\"", name));
 	}
 	return false;
 }
@@ -418,7 +389,7 @@ bool XMLNode::getNamedParameter(const char *name, XMLNode *&value,
 
 	if (failOnError)
 	{
-		returnError(S3D::formatStringBuffer("Failed to find \"%s\" parameter", name));
+		returnError(S3D::formatStringBuffer("Failed to find required parameter \"%s\"", name));
 	}
 	return false;
 }
@@ -487,17 +458,6 @@ bool XMLNode::getNamedChild(const char *name, NumberParser &value,
 	return true;
 }
 
-bool XMLNode::getNamedChild(const char *name, float &value,
-	bool failOnError, bool remove)
-{
-	XMLNode *node;
-	if (!getNamedChild(name, node, failOnError, remove)) return false;
-
-	if (sscanf(node->getContent(), "%f", &value) != 1) 
-		return node->returnError("Failed to parse float value");
-	return true;
-}
-
 bool XMLNode::getNamedChild(const char *name, int &value,
 	bool failOnError, bool remove)
 {
@@ -559,37 +519,6 @@ bool XMLNode::getNamedChild(const char *name, FixedVector &value,
 	value[0] = fixed(a.c_str());
 	value[1] = fixed(b.c_str());
 	value[2] = fixed(c.c_str());
-	return true;
-}
-
-bool XMLNode::getNamedChild(const char *name, Vector &value, 
-	bool failOnError, bool remove)
-{
-	XMLNode *node;
-	if (!getNamedChild(name, node, failOnError, remove)) return false;
-
-	Vector tmpValue;
-	if (!node->getNamedChild("A", tmpValue[0], false, true) &&
-		!node->getNamedChild("a", tmpValue[0], false, true))
-	{
-		if (failOnError) node->returnError("Failed to find a node");
-		return false;
-	}
-	if (!node->getNamedChild("B", tmpValue[1], false, true) &&
-		!node->getNamedChild("b", tmpValue[1], false, true))
-	{
-		if (failOnError) node->returnError("Failed to find b node");
-		return false;
-	}
-	if (!node->getNamedChild("C", tmpValue[2], false, true) &&
-		!node->getNamedChild("c", tmpValue[2], false, true))
-	{
-		if (failOnError) node->returnError("Failed to find c node");
-		return false;
-	}
-	if (failOnError && !node->failChildren()) return false;
-
-	value = tmpValue;
 	return true;
 }
 

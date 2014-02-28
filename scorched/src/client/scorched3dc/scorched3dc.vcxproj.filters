@@ -1482,6 +1482,12 @@
     <ClCompile Include="..\uiactions\UINapalmRenderer.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLEntry.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLEntrySimpleTypes.cpp">
+      <Filter>XML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2899,6 +2905,12 @@
     </ClInclude>
     <ClInclude Include="..\uiactions\UINapalmRenderer.h">
       <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLEntry.h">
+      <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLEntrySimpleTypes.h">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

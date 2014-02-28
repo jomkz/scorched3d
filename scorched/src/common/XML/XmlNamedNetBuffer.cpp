@@ -106,11 +106,6 @@ void XmlNamedNetBuffer::addToBufferNamed(const char *name, const int add)
 	currentNode_->addChild(new XMLNode(formName(name), add));
 }
 
-void XmlNamedNetBuffer::addToBufferNamed(const char *name, const float add)
-{ 
-	currentNode_->addChild(new XMLNode(formName(name), add));
-}
-
 void XmlNamedNetBuffer::addToBufferNamed(const char *name, const bool add)
 { 
 	currentNode_->addChild(new XMLNode(formName(name), add));

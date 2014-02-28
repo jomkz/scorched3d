@@ -49,7 +49,6 @@ public:
 	virtual void addToBufferNamed(const char *name, const char add);
 	virtual void addToBufferNamed(const char *name, const unsigned char add);
 	virtual void addToBufferNamed(const char *name, const int add);
-	virtual void addToBufferNamed(const char *name, const float add);
 	virtual void addToBufferNamed(const char *name, const bool add);
 	virtual void addToBufferNamed(const char *name, const unsigned int add);
 	virtual void addToBufferNamed(const char *name, const fixed add);
