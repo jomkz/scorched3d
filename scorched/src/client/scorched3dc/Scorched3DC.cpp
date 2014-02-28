@@ -1,15 +1,28 @@
-#include "StdAfx.h"
+////////////////////////////////////////////////////////////////////////////////
+//    Scorched3D (c) 2000-2013
+//
+//    This file is part of Scorched3D.
+//
+//    Scorched3D is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    Scorched3D is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License along
+//    with this program; if not, write to the Free Software Foundation, Inc.,
+//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/Scorched3DC.h>
-#include <scorched3dc/UIProgressCounter.h>
+#include <scorched3dc/UIState.h>
 
 #include <common/Logger.h>
 #include <common/FileLogger.h>
-#include <client/ClientState.h>
-#include <client/ClientParams.h>
-#include <client/ScorchedClient.h>
-#include <client/ClientJoinGameThreadCallback.h>
-#include <net/NetInterface.h>
 #include <lang/Lang.h>
 
 static CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
@@ -33,7 +46,7 @@ Scorched3DC *Scorched3DC::instance()
 Scorched3DC::Scorched3DC() : 
 	ogreRoot_(0), ogreWindow_(0),
 	inputManager_(0), mouse_(0), keyboard_(0),
-	guiRenderer_(0), sceneMgr_(0), camera_(0),
+	guiRenderer_(0),
 	quit_(false)
 {
 	instance_ = this;
@@ -53,7 +66,8 @@ Scorched3DC::~Scorched3DC()
 
 bool Scorched3DC::loadPlugin(const Ogre::String &pluginName, const Ogre::String &requiredName)
 {
-	Ogre::LogManager::getSingletonPtr()->logMessage("*** Loading Plugins ***");
+	Ogre::LogManager::getSingletonPtr()->logMessage(
+		Ogre::String("Loading Plugin : ") + pluginName);
 
 	// Load plugin
 #ifdef _DEBUG
@@ -68,11 +82,17 @@ bool Scorched3DC::loadPlugin(const Ogre::String &pluginName, const Ogre::String 
 	Ogre::Root::PluginInstanceList ip = ogreRoot_->getInstalledPlugins();
 	for (Ogre::Root::PluginInstanceList::iterator k = ip.begin(); k != ip.end(); k++)
 	{
-		if ((*k)->getName() == requiredName)
+		Ogre::String actualName = (*k)->getName();
+		if (actualName == requiredName)
 		{
 			found = true;
 			break;
 		}
+	}
+	if (!found)
+	{
+		Ogre::LogManager::getSingletonPtr()->logMessage(
+			Ogre::String("Failed to find plugin : ") + pluginName + " named " + requiredName);
 	}
 	return found;
 }
@@ -86,16 +106,23 @@ bool Scorched3DC::createWindow()
 	Ogre::RenderSystem* rs = ogreRoot_->getRenderSystemByName("OpenGL Rendering Subsystem");
 	if(!(rs->getName() == "OpenGL Rendering Subsystem"))
 	{
+		Ogre::LogManager::getSingletonPtr()->logMessage("No OpenGL Rendering Subsystem found");
 		return false; //No RenderSystem found
 	}
 
 	// configure our RenderSystem
 	rs->setConfigOption("Full Screen", "No");
 	rs->setConfigOption("VSync", "No");
+	rs->setConfigOption("FSAA", "0");
 	rs->setConfigOption("Video Mode", "1024 x 768 @ 32-bit");
 	ogreRoot_->setRenderSystem(rs);
 
 	ogreWindow_ = ogreRoot_->initialise(true, "Scorched3D");
+	if (!ogreRoot_->isInitialised())
+	{
+		Ogre::LogManager::getSingletonPtr()->logMessage("Failed to initialize ogre root");
+		return false;
+	}
 
 	// Setup some defaults
 	Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
@@ -223,19 +250,17 @@ void Scorched3DC::windowClosed(Ogre::RenderWindow* rw)
 
 void Scorched3DC::loadResources()
 {
-	// setup resources
-	// Only add the minimally required resource locations to load up SDKTrays and the Ogre head mesh
-    /*
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("I:\\OgreSDK_vc10_v1-8-1\\media\\materials\\scripts", "FileSystem", "General");
-    Ogre::ResourceGroupManager::getSingleton().addResourceLocation("I:\\OgreSDK_vc10_v1-8-1\\media\\materials\\textures", "FileSystem", "General");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("I:\\OgreSDK_vc10_v1-8-1\\media\\materials\\programs", "FileSystem", "General");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("I:\\OgreSDK_vc10_v1-8-1\\media\\models", "FileSystem", "General");
-	*/
+	// HydraX
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/hydrax", "FileSystem", "Hydrax");
 
+	// CEGUI
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/imagesets", "FileSystem", "Imagesets");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/fonts", "FileSystem", "Fonts");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/schemes", "FileSystem", "Schemes");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/looknfeel", "FileSystem", "LookNFeel");
+
+	// SkyX
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/skyx", "FileSystem", "SkyX");
 
 	// load resources
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
@@ -256,117 +281,28 @@ bool Scorched3DC::createUI()
 	return true;
 }
 
-bool Scorched3DC::quit(const CEGUI::EventArgs &e)
-{
-	quit_ = true;
-	return true;
-}
-
-bool Scorched3DC::start(const CEGUI::EventArgs &e)
-{
-	ClientParams::instance()->setStartCustom(true);
-	ScorchedClient::startClient(UIProgressCounter::instance());
-	return true;
-}
-
-bool Scorched3DC::join(const CEGUI::EventArgs &e)
-{
-	ScorchedClient::getThreadCallback().addCallback(new ClientJoinGameThreadCallback());
-	return true;
-}
-
-void Scorched3DC::createScene()
-{
-	// Create scene manager
-	sceneMgr_ = ogreRoot_->createSceneManager(Ogre::ST_GENERIC);
-
-	// Create the camera
-	camera_ = sceneMgr_->createCamera("PlayerCam");
-
-	// Position it at 500 in Z direction
-	camera_->setPosition(Ogre::Vector3(0,0,80));
-	// Look back along -Z
-	camera_->lookAt(Ogre::Vector3(0,0,-300));
-	camera_->setNearClipDistance(5);
-
-	// Create one viewport, entire window
-	Ogre::Viewport* vp = ogreWindow_->addViewport(camera_);
-	vp->setBackgroundColour(Ogre::ColourValue(0,0,0));
-
-	// Alter the camera aspect ratio to match the viewport
-	camera_->setAspectRatio(
-		Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
-
-    // Set ambient light
-    sceneMgr_->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
-
-    // Create a light
-    Ogre::Light* l = sceneMgr_->createLight("MainLight");
-    l->setPosition(20,80,50);
-
-	// Window
-	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-
-	{
-		CEGUI::Window *quit = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/QuitButton");
-		quit->setText("Quit");
-		quit->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
-		quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::quit, this));
-		sheet->addChildWindow(quit);
-	}
-	{
-		CEGUI::Window *start = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/StartButton");
-		start->setText("Start");
-		start->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
-		start->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
-		start->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::start, this));
-		sheet->addChildWindow(start);
-	}
-	{
-		CEGUI::Window *join = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/JoinButton");
-		join->setText("Join");
-		join->setPosition(CEGUI::UVector2(CEGUI::UDim(0.3f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
-		join->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
-		join->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::join, this));
-		sheet->addChildWindow(join);
-	}
-	{
-		CEGUI::DefaultWindow* staticText = static_cast<CEGUI::DefaultWindow*>(wmgr.createWindow("OgreTray/StaticText", "StaticText"));
-		staticText->setText("Red Static Text");
-		// Colours are specified as aarrggbb in Hexadecimal
-		// Where aa is alpha, rr is red, gg is green, and bb is blue 
-		// tl: top left,  tr: top right,  bl: bottom left,  br: bottom right
-		staticText->setProperty("TextColours", "tl:FFFF0000 tr:FFFF0000 bl:FFFF0000 br:FFFF0000");
-		staticText->setProperty("VertFormatting", "TopAligned"); // TopAligned, BottomAligned, VertCentred
-		staticText->setProperty("HorzFormatting", "HorzCentred"); // LeftAligned, RightAligned, HorzCentred
-			// HorzJustified, WordWrapLeftAligned, WordWrapRightAligned, WordWrapCentred, WordWrapJustified
-		staticText->setTooltipText("This is a StaticText widget");
-		staticText->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f), CEGUI::UDim(0.15f, 0.0f)));
-		staticText->setSize(CEGUI::UVector2(CEGUI::UDim(0.6f, 0.0f), CEGUI::UDim(0.1f, 0.0f)));
-		sheet->addChildWindow(staticText);
-
-		CEGUI::ProgressBar* progressBar = static_cast<CEGUI::ProgressBar*>(wmgr.createWindow("OgreTray/ProgressBar", "ProgressBar"));
-		progressBar->setProgress(0.0f); // Initial progress of 25%
-		progressBar->setStepSize(0.10f); // Calling step() will increase the progress by 10%
-		progressBar->setPosition(CEGUI::UVector2(CEGUI::UDim(0.1f, 0.0f), CEGUI::UDim(0.5f, 0.0f)));
-		progressBar->setSize(CEGUI::UVector2(CEGUI::UDim(0.8f, 0.0f), CEGUI::UDim(0.3f, 0.0f)));
-		staticText->addChildWindow(progressBar);
-	}
-
-	CEGUI::System::getSingleton().setGUISheet(sheet);
-}
-
 bool Scorched3DC::go()
 {
+	// Setup S3D logger
+	Logger::addLogger(new FileLogger("Scorched3D.log", ".", false), false);
+	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
+		S3D::ScorchedVersion.c_str(), 
+		S3D::ScorchedProtocolVersion.c_str(), 
+		S3D::ScorchedBuildTime.c_str()));
+
 	// Create ogre not specifying any configuration (.cfg) files to read
 	ogreRoot_ = new Ogre::Root("", "");
 
 	// Load the OpenGL RenderSystem and the SceneManager plugins
+	Ogre::LogManager::getSingletonPtr()->logMessage("*** Loading Plugins ***");
 	if (!loadPlugin(Ogre::String("RenderSystem_GL"), 
 		Ogre::String("GL RenderSystem"))) return false;
 	if (!loadPlugin(Ogre::String("Plugin_OctreeSceneManager"), 
 		Ogre::String("Octree Scene Manager"))) return false;
+	if (!loadPlugin(Ogre::String("Plugin_CgProgramManager"), 
+		Ogre::String("Cg Program Manager"))) return false;
+	if (!loadPlugin(Ogre::String("Plugin_ParticleFX"), 
+		Ogre::String("ParticleFX"))) return false;
 
 	// Create the window, initialize openGL
 	if (!createWindow()) return false;
@@ -379,14 +315,8 @@ bool Scorched3DC::go()
 	// Create the CEGUI UI
 	if (!createUI()) return false;
 
-	createScene();
-
-	// Setup S3D logger
-	Logger::addLogger(new FileLogger("Scorched3D.log", ".", false), false);
-	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
-		S3D::ScorchedVersion.c_str(), 
-		S3D::ScorchedProtocolVersion.c_str(), 
-		S3D::ScorchedBuildTime.c_str()));
+	// Create the first scene
+	UIState::instance()->setState(UIState::StatePlaying);//UIState::StateMainMenu);
 
 	while(!quit_)
 	{
@@ -399,7 +329,7 @@ bool Scorched3DC::go()
 		}
 
 		// Update UI
-		uiThreadCallback_.processCallbacks();
+		UIState::instance()->getUIThreadCallback().processCallbacks();
  
 		// Render a frame
 		if(!ogreRoot_->renderOneFrame()) 

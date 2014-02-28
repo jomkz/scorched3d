@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2011
+//    Scorched3D (c) 2000-2013
 //
 //    This file is part of Scorched3D.
 //
@@ -38,6 +38,7 @@
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
 #include <scorched3dc/UIProgressCounter.h>
+#include <scorched3dc/UIState.h>
 
 ClientStateLoadLevel::ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler) : initialLevel_(true)
 {
@@ -225,6 +226,12 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 			PlayerInitialDialog::instance()->displayDialog();
 		}
 		*/
+
+		UIState::instance()->setStateNonUIThread(UIState::StateJoining);
+	}
+	else
+	{
+		UIState::instance()->setStateNonUIThread(UIState::StatePlaying);
 	}
 
 	// Tell the server we have finished processing the landscape

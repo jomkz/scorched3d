@@ -1,7 +1,25 @@
-#pragma once
+////////////////////////////////////////////////////////////////////////////////
+//    Scorched3D (c) 2000-2013
+//
+//    This file is part of Scorched3D.
+//
+//    Scorched3D is free software; you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation; either version 2 of the License, or
+//    (at your option) any later version.
+//
+//    Scorched3D is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License along
+//    with this program; if not, write to the Free Software Foundation, Inc.,
+//    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+////////////////////////////////////////////////////////////////////////////////
 
-#include "StdAfx.h"
-#include <engine/ThreadCallback.h>
+#if !defined(__INCLUDE_Scorched3DCh_INCLUDE__)
+#define __INCLUDE_Scorched3DCh_INCLUDE__
 
 class Scorched3DC : 
 	public Ogre::FrameListener, 
@@ -17,7 +35,8 @@ public:
 
 	bool go();
 
-	ThreadCallback &getUIThreadCallback() { return uiThreadCallback_; }
+	Ogre::Root *getOgreRoot() { return ogreRoot_; }
+	Ogre::RenderWindow *getOgreRenderWindow() { return ogreWindow_; }
 
 	// Ogre::FrameListener
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -37,12 +56,9 @@ public:
 
 protected:
 	static Scorched3DC *instance_;
-	ThreadCallback uiThreadCallback_;
 	bool quit_;
 	Ogre::Root *ogreRoot_;
 	Ogre::RenderWindow* ogreWindow_;
-	Ogre::Camera* camera_;
-	Ogre::SceneManager* sceneMgr_;
 
 	// CEGUI
 	CEGUI::OgreRenderer* guiRenderer_;
@@ -52,13 +68,11 @@ protected:
 	OIS::Mouse* mouse_;
 	OIS::Keyboard* keyboard_;
 
-	bool quit(const CEGUI::EventArgs &e);
-	bool start(const CEGUI::EventArgs &e);
-	bool join(const CEGUI::EventArgs &e);
 	bool loadPlugin(const Ogre::String &pluginName, const Ogre::String &requiredName);
 	bool createWindow();
 	bool createInput();
 	bool createUI();
 	void loadResources();
-	void createScene();
 };
+
+#endif // __INCLUDE_Scorched3DCh_INCLUDE__

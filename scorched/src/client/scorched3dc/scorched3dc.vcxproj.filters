@@ -1389,6 +1389,24 @@
     <ClCompile Include="..\client\ClientJoinGameThreadCallback.cpp">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="UIState.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="UIStateMainMenu.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="UIStateI.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="UIStateProgress.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="UIStateJoining.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="UIStatePlaying.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2719,6 +2737,24 @@
     </ClInclude>
     <ClInclude Include="..\client\ClientJoinGameThreadCallback.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="UIState.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="UIStateMainMenu.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="UIStateI.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="UIStateProgress.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="UIStateJoining.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="UIStatePlaying.h">
+      <Filter>scorched3dc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

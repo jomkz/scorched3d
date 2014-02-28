@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-//    Scorched3D (c) 2000-2011
+//    Scorched3D (c) 2000-2013
 //
 //    This file is part of Scorched3D.
 //
@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/UIProgressCounter.h>
-#include <scorched3dc/Scorched3DC.h>
+#include <scorched3dc/UIState.h>
 #include <common/Logger.h>
 
 UIProgressThreadCallback::UIProgressThreadCallback(const LangString &op, const float percentage) :
@@ -76,6 +76,6 @@ void UIProgressCounter::progressChange(const LangString &op, const float percent
 	{
 		lastTime_ = currentTime;
 		UIProgressThreadCallback *callback = new UIProgressThreadCallback(op, percentage);
-		Scorched3DC::instance()->getUIThreadCallback().addCallback(callback);
+		UIState::instance()->getUIThreadCallback().addCallback(callback);
 	}
 }
