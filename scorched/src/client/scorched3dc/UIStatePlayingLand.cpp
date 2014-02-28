@@ -34,7 +34,8 @@ UIStatePlayingLand::UIStatePlayingLand(
 	Hydrax::Hydrax *hydrax) : 
 	sceneMgr_(sceneMgr), camera_(camera), 
 	sunLight_(sunLight), shadowLight_(shadowLight),
-	hydrax_(hydrax)
+	hydrax_(hydrax),
+	worldSize_(6000.0f)
 {
 	create();
 }
@@ -49,7 +50,7 @@ void UIStatePlayingLand::create()
 	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
 	// Create the terrain objects
-	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 129, 3000.0f);
+	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 129, worldSize_);
     terrainGroup_->setOrigin(Ogre::Vector3::ZERO);
 
 	// Load terrain data
@@ -87,7 +88,7 @@ void UIStatePlayingLand::defineOptions()
 	// Configure global
 	terrainGlobalOptions_ = new Ogre::TerrainGlobalOptions();
     terrainGlobalOptions_->setMaxPixelError(8);
-    terrainGlobalOptions_->setCompositeMapDistance(3000);       // testing composite map
+    terrainGlobalOptions_->setCompositeMapDistance(10000);       // testing composite map
 	terrainGlobalOptions_->setDefaultResourceGroup("Landscape");
 
     // Important to set these so that the terrain knows what to use for derived (non-realtime) data
@@ -98,8 +99,8 @@ void UIStatePlayingLand::defineOptions()
     // Configure default import settings for if we use imported image
     Ogre::Terrain::ImportData& defaultimp = terrainGroup_->getDefaultImportSettings();
     defaultimp.terrainSize = 129; 
-    defaultimp.worldSize = 3000.0f;   
-    defaultimp.inputScale = 200; 
+    defaultimp.worldSize = worldSize_;   
+    defaultimp.inputScale = 50; 
     defaultimp.minBatchSize = 33;
     defaultimp.maxBatchSize = 65;
 
@@ -128,19 +129,22 @@ void UIStatePlayingLand::defineTerrain(long tx, long ty)
 	int startY = ty * 128;
 
 	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
-	float *heightData = new float[129 * 129];
+	float *heightData = OGRE_ALLOC_T(float, 129*129, Ogre::MEMCATEGORY_GEOMETRY);
 	float *currentPoint = heightData;
 	for (int y=0; y<129; y++)
 	{
-		for (int x=0; x<129; x++)
+		for (int x=0; x<129; x++, currentPoint++)
 		{
 			float height = map.getHeight(startX + x, startY + y).asFloat();
-			*currentPoint = height / 8.0f;
-			currentPoint++;
+			*currentPoint = height;
 		}
 	}
 	
-	terrainGroup_->defineTerrain(tx, ty, heightData);
+	Ogre::Terrain::ImportData newImport(terrainGroup_->getDefaultImportSettings());
+	newImport.inputFloat = heightData;
+	newImport.deleteInputData = false;
+
+	terrainGroup_->defineTerrain(tx, ty, &newImport);
 }
 
 Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
@@ -160,6 +164,7 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
 {
 	unsigned int seed = ScorchedClient::instance()->getLandscapeMaps().getDefinitions().getSeed();
 
+	/*
 	// Try enabling a color map for color variation
 	Ogre::Image colourMapImage;
 	colourMapImage.load("colormap.jpg", terrain->getResourceGroup());
@@ -168,6 +173,7 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
 	terrain->setGlobalColourMapEnabled(true, colourMapImage.getWidth());
 	Ogre::TexturePtr colourMap  = terrain->getGlobalColourMap();
 	colourMap->loadImage(colourMapImage);
+	*/
 
 	// Generate a noise map for the base map
 	// This is like the detail map that adds texture variation across the terrain
@@ -244,7 +250,7 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, long tx, long ty)
 			// Get height and normal information
 			HeightMap::HeightData &data = hMap.getHeightData(hx, hy);
 			float normal = data.normal[2].asFloat();
-			float offSetHeight = (1.0f + differenceMapHeightMap.GetValue(x, y)) * maxOffsetHeight;
+			float offSetHeight = (differenceMapHeightMap.GetValue(x, y)) * maxOffsetHeight;
 			float height = data.height.asFloat() - offSetHeight;
 
 			// Find the index of the current texture by deviding the height into strips

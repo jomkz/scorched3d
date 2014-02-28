@@ -2,9 +2,7 @@
 	<minplayers>0</minplayers>
 	<maxplayers>24</maxplayers>
 	<landscapewidth>256</landscapewidth>
-	<landscapeheight>512</landscapeheight>
-  <arenawidth>128</arenawidth>
-  <arenaheight>256</arenaheight>
+	<landscapeheight>256</landscapeheight>
 	<roof type="sky"></roof>
 	<tankstart type="height">
 		<startcloseness>20</startcloseness>
@@ -12,7 +10,7 @@
 		<startmask>data/landscapes/textures/test-mask.png</startmask>
 	</tankstart>
 	<heightmap type="file">
-    	<file>data/landscapes/textures/test.png</file>
+    	<file>data/test.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
 </defn>

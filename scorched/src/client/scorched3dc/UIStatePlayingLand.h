@@ -44,6 +44,7 @@ protected:
 	Ogre::TerrainGroup *terrainGroup_;
 	Ogre::Light *sunLight_, *shadowLight_;
 	Hydrax::Hydrax *hydrax_;
+	float worldSize_;
 
 	void create();
 	void defineOptions();
