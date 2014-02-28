@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <landscapedef/LandscapeInclude.h>
-#include <landscapedef/LandscapeEvents.h>
+#include <landscapedef/LandscapeEvent.h>
 #include <landscapedef/LandscapeMovement.h>
 #include <landscapedef/LandscapeSound.h>
 #include <landscapedef/LandscapeMusic.h>

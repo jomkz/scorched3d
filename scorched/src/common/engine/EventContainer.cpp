@@ -22,7 +22,7 @@
 #include <engine/ScorchedContext.h>
 #include <landscapedef/LandscapeDefn.h>
 #include <landscapedef/LandscapeTex.h>
-#include <landscapedef/LandscapeEvents.h>
+#include <landscapedef/LandscapeEvent.h>
 #include <landscapemap/LandscapeMaps.h>
 
 EventContainer::EventContainer()
@@ -72,13 +72,15 @@ void EventContainer::addEvent(ScorchedContext &context,
 		itor != events.end();
 		++itor)
 	{
-		LandscapeEvent *event = (*itor);
+		LandscapeEvent *evt = (*itor);
+		LandscapeEventCondition *condition = (LandscapeEventCondition *)
+			evt->condition.getValue();
 
 		EventEntry entry;
 		entry.eventNumber = 0;
 		entry.eventTime = 
-			event->condition->getNextEventTime(context, ++entry.eventNumber);
-		entry.event = event;
+			condition->getNextEventTime(context, ++entry.eventNumber);
+		entry.event = evt;
 		events_.push_back(entry);
 	}
 }
@@ -92,14 +94,19 @@ void EventContainer::simulate(fixed frameTime, ScorchedContext &context)
 	{
 		EventEntry &entry = (*itor);
 		
-		LandscapeEvent *event = entry.event;
+		LandscapeEvent *evt = entry.event;
+		LandscapeEventCondition *condition = (LandscapeEventCondition *)
+			evt->condition.getValue();
+
 		entry.eventTime -= frameTime;
-		if (event->condition->fireEvent(context, 
+		if (condition->fireEvent(context, 
 			entry.eventTime, entry.eventNumber))
 		{
-			event->action->fireAction(context);
+			LandscapeEventAction *action = (LandscapeEventAction *)
+				evt->action.getValue();
+			action->fireAction(context);
 			entry.eventTime = 
-				event->condition->getNextEventTime(
+				condition->getNextEventTime(
 					context, ++entry.eventNumber);
 		}
 	}	

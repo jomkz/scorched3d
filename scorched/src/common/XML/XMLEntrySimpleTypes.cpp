@@ -40,15 +40,18 @@ bool XMLEntrySimpleType::readXML(XMLNode *parentNode)
 {
 	bool required = data_ & eRequired;
 	XMLNode *foundNode = 0;
-	if (!parentNode->getNamedChild(name_.c_str(), foundNode, required) && required) 
+	if (parentNode->getNamedChild(name_.c_str(), foundNode, required)) 
+	{
+		if (!setValueFromString(foundNode->getContent()))
+		{
+			return foundNode->returnError(S3D::formatStringBuffer(
+				"Failed to set XML etry \"%s\" with \"%s\"",
+				name_.c_str(), foundNode->getContent()));
+		}
+	}
+	else if (required)
 	{
 		return false;
-	}
-	if (!setValueFromString(foundNode->getContent()))
-	{
-		return foundNode->returnError(S3D::formatStringBuffer(
-			"Failed to set XML etry \"%s\" with \"%s\"",
-			name_.c_str(), foundNode->getContent()));
 	}
 	return true;
 }
@@ -288,6 +291,14 @@ bool XMLEntryBool::setValue(bool value)
 bool XMLEntryBool::getValue()
 {
 	return ((value_==0)?false:true);
+}
+
+XMLEntryString::XMLEntryString(const std::string &name,
+	const std::string &description) :
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
+	value_(""), defaultValue_(""), multiline_(false)
+{
+
 }
 
 XMLEntryString::XMLEntryString(const std::string &name, 

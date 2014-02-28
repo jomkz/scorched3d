@@ -28,6 +28,55 @@ XMLEntry::~XMLEntry()
 {
 }
 
+XMLEntryTypeChoice::XMLEntryTypeChoice(const std::string &name, const std::string &description) :
+	name_(name), description_(description), factory_(0), value_(0)
+{
+}
+
+XMLEntryTypeChoice::~XMLEntryTypeChoice()
+{
+	delete value_;
+	value_ = 0;
+}
+
+bool XMLEntryTypeChoice::readXML(XMLNode *parentNode)
+{
+	XMLNode *child = 0;
+	if (!parentNode->getNamedChild(name_.c_str(), child))
+	{
+		return false;
+	}
+	if (child->getNamedParameter("type", type_)) 
+	{
+		return false;
+	}
+	value_ = factory_->createXMLEntry(type_);
+	if (!value_)
+	{
+		return child->returnError(S3D::formatStringBuffer(
+			"Failed to create the type : \"%s\"", type_.c_str()));
+	}
+	if (!value_->readXML(child)) return false;
+
+	return true;
+}
+
+void XMLEntryTypeChoice::writeXML(XMLNode *parentNode)
+{
+	// Add the comments for this node
+	parentNode->addChild(new XMLNode("", 
+		S3D::formatStringBuffer("%s", description_.c_str()), 
+		XMLNode::XMLCommentType));
+
+	// Add the actual node
+	XMLNode *newNode = new XMLNode(name_.c_str());
+	parentNode->addChild(newNode);
+	newNode->addParameter(new XMLNode("type", type_, XMLNode::XMLParameterType));
+
+	// Add contents
+	value_->writeXML(newNode);
+}
+
 XMLEntryContainer::XMLEntryContainer()
 {
 }
@@ -162,8 +211,17 @@ void XMLEntryContainer::writeXML(XMLNode *parentNode)
 	}
 }
 
-XMLEntryGroup::XMLEntryGroup(const std::string &name, const std::string &description) :
+XMLEntryNamedContainer::XMLEntryNamedContainer(const std::string &name, const std::string &description) :
 	xmlEntryName_(name), xmlEntryDescription_(description)
+{
+}
+
+XMLEntryNamedContainer::~XMLEntryNamedContainer()
+{
+}
+
+XMLEntryGroup::XMLEntryGroup(const std::string &name, const std::string &description) :
+	XMLEntryNamedContainer(name, description)
 {
 }
 

@@ -159,6 +159,8 @@ class XMLEntryString : public XMLEntrySimpleType
 {
 public:
 	XMLEntryString(const std::string &name,
+		const std::string &description);
+	XMLEntryString(const std::string &name,
 		const std::string &description,
 		unsigned int data,
 		const std::string &defaultValue,

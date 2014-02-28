@@ -543,9 +543,6 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefnTankStart.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\landscapedef\LandscapeEvents.cpp">
-      <Filter>landscapedef</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\landscapedef\LandscapeInclude.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
@@ -1488,6 +1485,15 @@
     <ClCompile Include="..\..\common\XML\XMLEntrySimpleTypes.cpp">
       <Filter>XML</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeEvent.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeEventAction.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeEventCondition.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1962,9 +1968,6 @@
       <Filter>landscapedef</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefnTankStart.h">
-      <Filter>landscapedef</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\landscapedef\LandscapeEvents.h">
       <Filter>landscapedef</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeInclude.h">
@@ -2911,6 +2914,15 @@
     </ClInclude>
     <ClInclude Include="..\..\common\XML\XMLEntrySimpleTypes.h">
       <Filter>XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeEvent.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeEventAction.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeEventCondition.h">
+      <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

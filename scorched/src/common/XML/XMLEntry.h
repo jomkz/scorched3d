@@ -34,6 +34,32 @@ public:
 protected:
 };
 
+class XMLEntryFactory
+{
+public:
+	virtual XMLEntry *createXMLEntry(const std::string &type) = 0;
+};
+
+class XMLEntryTypeChoice : public XMLEntry
+{
+public:
+	XMLEntryTypeChoice(const std::string &name, const std::string &description);
+	virtual ~XMLEntryTypeChoice();
+
+	void setXMLEntryFactory(XMLEntryFactory *factory) { factory_ = factory; }
+	XMLEntry *getValue() { return value_; }
+
+	// XMLEntry
+	virtual bool readXML(XMLNode *parentNode);
+	virtual void writeXML(XMLNode *parentNode);
+
+protected:
+	std::string type_;
+	XMLEntry *value_;
+	XMLEntryFactory *factory_;
+	std::string name_, description_;
+};
+
 class XMLEntryContainer : public XMLEntry
 {
 public:
@@ -65,7 +91,17 @@ private:
 	std::list<XMLEntry *> xmlEntryChildren_;
 };
 
-class XMLEntryGroup : public XMLEntryContainer
+class XMLEntryNamedContainer : public XMLEntryContainer
+{
+public:
+	XMLEntryNamedContainer(const std::string &name, const std::string &description);
+	virtual ~XMLEntryNamedContainer();
+
+protected:
+	std::string xmlEntryName_, xmlEntryDescription_;
+};
+
+class XMLEntryGroup : public XMLEntryNamedContainer
 {
 public:
 	XMLEntryGroup(const std::string &name, const std::string &description);
@@ -74,9 +110,6 @@ public:
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode);
 	virtual void writeXML(XMLNode *parentNode);
-
-private:
-	std::string xmlEntryName_, xmlEntryDescription_;
 };
 
 #endif
