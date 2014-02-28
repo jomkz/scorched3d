@@ -34,7 +34,7 @@ WeaponGivePower::WeaponGivePower() :
 	WeaponCallback("WeaponGivePower", "Sets the player's maximum shot power to the specified amount. "),
 	power_("WeaponGivePower::power", "What to set the player's max shot power to.  Must be set over 1000 to give a maximum power above 1000")
 {
-	addChildXMLEntry("power", &power_)
+	addChildXMLEntry("power", &power_);
 }
 
 WeaponGivePower::~WeaponGivePower()

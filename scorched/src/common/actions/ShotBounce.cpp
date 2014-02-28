@@ -47,16 +47,12 @@ void ShotBounce::init()
 {
 	PhysicsParticleInfo info(ParticleTypeBounce, weaponContext_.getPlayerId(), this);
 	getPhysics().setPhysics(info, *context_, startPosition_, velocity_);
-	getPhysics().setForces(weapon_->getWindFactor(*context_), weapon_->getGravityFactor(*context_));
+	getPhysics().setDefinition(*context_, weapon_->getParticleDefinition());
 	getPhysics().setOptionRotateOnCollision(weapon_->getRoll());
-	getPhysics().setOptionStickyShields(weapon_->getStickyShields());
-	getPhysics().setOptionLandscapeCollision(getWeapon()->getLandscapeCollision());
-	getPhysics().setOptionShieldCollision(getWeapon()->getShieldCollision());
 
 	stepSize_ = weapon_->getStepSize() * 
 		fixed(true, context_->getOptionsGame().getWeaponSpeed());
 	weaponTime_ = weapon_->getTime(*context_);
-	scale_ = weapon_->getScale(*context_).asFloat();
 
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 

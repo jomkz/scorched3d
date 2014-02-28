@@ -22,8 +22,18 @@
 
 REGISTER_ACCESSORY_SOURCE(ShieldSquare);
 
-ShieldSquare::ShieldSquare()
+ShieldSquare::ShieldSquare() :
+	Shield("ShieldSquare", "A square shield centered on the tank"),
+	size_("The size in x,y,z coordinates of the square shield")
 {
+	addChildXMLEntry("size", &size_);
+}
+
+ShieldSquare::ShieldSquare(const char *typeName, const char *description) :
+	Shield(typeName, description),
+	size_("The size in x,y,z coordinates of the square shield")
+{
+	addChildXMLEntry("size", &size_);
 }
 
 ShieldSquare::~ShieldSquare()
@@ -38,27 +48,15 @@ Shield::ShieldType ShieldSquare::getShieldType()
 bool ShieldSquare::inShield(FixedVector &offset)
 {
 	return 
-		offset[0] > -size_[0] &&
-		offset[0] < size_[0] &&
-		offset[1] > -size_[1] &&
-		offset[1] < size_[1] &&
-		offset[2] > -size_[2] &&
-		offset[2] < size_[2];
+		offset[0] > -size_.getValue()[0] &&
+		offset[0] < size_.getValue()[0] &&
+		offset[1] > -size_.getValue()[1] &&
+		offset[1] < size_.getValue()[1] &&
+		offset[2] > -size_.getValue()[2] &&
+		offset[2] < size_.getValue()[2];
 }
 
 bool ShieldSquare::tankInShield(FixedVector &offset)
 {
 	return inShield(offset);
 }
-
-bool ShieldSquare::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Shield::parseXML(context, accessoryNode)) return false;
-
-	// Get the size
-	if (!accessoryNode->getNamedChild("size", size_)) return false;
-
-	return true;
-}
-
-

@@ -71,7 +71,7 @@ Accessory::Accessory(unsigned int accessoryId) :
 	name_("The name of this accessory, as displayed in the game."), description_("The description of this accessory, as displayed in the game.", 0, ""), 
 	price_("The cost of this accessory to buy, this accessory can be bought in multiples defined by the bundle size", 0, 0), 
 	bundle_("The number of these accessories that will be purchased for the buying price", 0, 1),
-	modelId_("The 3D model of the accessory", false),
+	modelId_(false),
 	startingNumber_("The number of these accessories a player will start each new match with", 0, 0),
 	useNumber_("The number of this acessory that will be used when a player actives the accessory", 0, 1),
 	maximumNumber_("The maximum number of these accessories that a player can hold", 0, 0),

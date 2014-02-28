@@ -48,6 +48,23 @@ XMLEntryParticleID::~XMLEntryParticleID()
 {
 }
 
+XMLEntrySoundID::XMLEntrySoundID(bool required) :
+	XMLEntryContainer("SoundID", "A reference to an OpenAL sound definition", required),
+	soundFile("The filename of the sound file"),
+	gain("The gain (volume) of the sound", 0, 1),
+	rollOff("The rolloff as used by the attenuation calculations"),
+	referenceDistance("The reference distance as used by the attenuation calculations")
+{
+	addChildXMLEntry("soundfile", &soundFile);
+	addChildXMLEntry("gain", &gain);
+	addChildXMLEntry("rolloff", &rollOff);
+	addChildXMLEntry("referencedistance", &referenceDistance);
+}
+
+XMLEntrySoundID::~XMLEntrySoundID()
+{
+}
+
 XMLEntryNumberParser::XMLEntryNumberParser(const char *parserName, const char *description) :
 	description_(description), data_(XMLEntrySimpleType::eDataRequired),
 	value_(parserName)
@@ -74,6 +91,10 @@ fixed XMLEntryNumberParser::getValue(ScorchedContext &context)
 	return value_.getValue(context);
 }
 
+void XMLEntryNumberParser::setValue(const std::string &value)
+{
+	value_.setExpression(value.c_str());
+}
 
 bool XMLEntryNumberParser::readXML(XMLNode *node, void *xmlData)
 {

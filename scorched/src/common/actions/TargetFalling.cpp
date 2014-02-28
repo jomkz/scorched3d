@@ -77,7 +77,9 @@ void TargetFalling::init()
 		FixedVector velocity(0, 0, 0);
 		PhysicsParticleInfo info(ParticleTypeFalling, fallingPlayerId_, this);
 		getPhysics().setPhysics(info, *context_, tankStartPosition_, velocity);
-		getPhysics().setForces(0, 1);
+		PhysicsParticleObjectDefinition definition;
+		definition.windFactor_.setValue("0");
+		getPhysics().setDefinition(*context_, definition);
 	}
 	else
 	{

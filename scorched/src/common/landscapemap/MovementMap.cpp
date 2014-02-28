@@ -243,19 +243,19 @@ bool MovementMap::movementProof(ScorchedContext &context, Target *target, Tanket
 			}
 		}
 		break;
-	case Shield::ShieldMovementTeam1:
+	case Shield::ShieldMovementTeamRed:
 		if (tanket->getTeam() == 1 ||
 			tanket->getTeam() == 0) movementProof = false;
 		break;
-	case Shield::ShieldMovementTeam2:
+	case Shield::ShieldMovementTeamBlue:
 		if (tanket->getTeam() == 2 ||
 			tanket->getTeam() == 0) movementProof = false;
 		break;
-	case Shield::ShieldMovementTeam3:
+	case Shield::ShieldMovementTeamGreen:
 		if (tanket->getTeam() == 3 ||
 			tanket->getTeam() == 0) movementProof = false;
 		break;
-	case Shield::ShieldMovementTeam4:
+	case Shield::ShieldMovementTeamYellow:
 		if (tanket->getTeam() == 4 ||
 			tanket->getTeam() == 0) movementProof = false;
 		break;

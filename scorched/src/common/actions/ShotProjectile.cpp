@@ -54,7 +54,6 @@ ShotProjectile::ShotProjectile(FixedVector &startPosition, FixedVector &velocity
 
 void ShotProjectile::init()
 {
-	fixed weaponScale = weapon_->getScale(*context_);
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
@@ -77,11 +76,7 @@ void ShotProjectile::init()
 
 	PhysicsParticleInfo info(ParticleTypeShot, weaponContext_.getPlayerId(), this);
 	getPhysics().setPhysics(info, *context_, startPosition_, velocity_);
-	getPhysics().setForces(weapon_->getWindFactor(*context_), weapon_->getGravityFactor(*context_));
-	getPhysics().setOptionUnderGroundCollision(getWeapon()->getUnder());
-	getPhysics().setOptionWallCollision(getWeapon()->getWallCollision());
-	getPhysics().setOptionLandscapeCollision(getWeapon()->getLandscapeCollision());
-	getPhysics().setOptionShieldCollision(getWeapon()->getShieldCollision());
+	getPhysics().setDefinition(*context_, weapon_->getParticleDefinition());
 
 	thrustTime_ = getWeapon()->getThrustTime(*context_);
 	thrustAmount_ = getWeapon()->getThrustAmount(*context_);

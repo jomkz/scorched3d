@@ -61,7 +61,7 @@ void WeaponGiveScore::weaponCallback(
 	if (!tank) return;
 
 	int score = score_.getValue();
-	tank->getScore().setScore(tank->getScore().getScore() + score_);
+	tank->getScore().setScore(tank->getScore().getScore() + score_.getValue());
 	if (tank->getTeam() > 0)
 	{
 		context.getTankTeamScore().addScore(score, tank->getTeam());

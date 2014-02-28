@@ -27,7 +27,7 @@
 #include <math.h>
 #include <stdio.h>
 
-AccessoryStore::AccessoryStore() : muzzleFlash_(0)
+AccessoryStore::AccessoryStore()
 {
 
 }
@@ -41,8 +41,6 @@ void AccessoryStore::clearAccessories()
 {
 	AccessoryPart::resetAccessoryPartIds();
 	nextAccessoryId_ = 0;
-	muzzleFlash_ = 0;
-	deathAnimation_ = 0;
 	while (!accessories_.empty())
 	{
 		Accessory *accessory = accessories_.front();

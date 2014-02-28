@@ -22,22 +22,15 @@
 
 REGISTER_ACCESSORY_SOURCE(ShieldRoundReflective);
 
-ShieldRoundReflective::ShieldRoundReflective()
+ShieldRoundReflective::ShieldRoundReflective() :
+	ShieldRound("ShieldRoundReflective", "A spherical shield centered on the tank.  Reflective shields protect the player by reflecting direct hits in addition to absorbing damage like regular shields."),
+	deflectFactor_("Intensity of the projectile deflection.  Straightforward multiplier for the bounce velocity")
 {
+	addChildXMLEntry("deflectfactor", &deflectFactor_);
 }
 
 ShieldRoundReflective::~ShieldRoundReflective()
 {
-}
-
-bool ShieldRoundReflective::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!ShieldRound::parseXML(context, accessoryNode)) return false;
-
-	// Get the half size
-	if (!accessoryNode->getNamedChild("deflectfactor", deflectFactor_)) return false;
-
-	return true;
 }
 
 Shield::ShieldType ShieldRoundReflective::getShieldType()

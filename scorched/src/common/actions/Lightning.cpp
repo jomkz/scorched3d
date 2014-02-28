@@ -78,27 +78,6 @@ std::string Lightning::getActionDetails()
 
 void Lightning::simulate(fixed frameTime, bool &remove)
 {
-#ifndef S3D_SERVER
-	if (!context_->getServerMode())
-	{   
-		if (firstTime_)
-		{ 
-			firstTime_ = false;
-			if (weapon_->getSound() &&
-				0 != strcmp("none", weapon_->getSound()))
-			{
-				/*
-				SoundBuffer *expSound =
-					Sound::instance()->fetchOrCreateBuffer(
-						S3D::getModFile(weapon_->getSound()));
-				SoundUtils::playAbsoluteSound(VirtualSoundPriority::eAction,
-					expSound, position_.asVector());
-				*/
-			}
-		} 
-	}
-#endif // #ifndef S3D_SERVER
-
 	totalTime_ += frameTime;
 	remove = (totalTime_ > weapon_->getTotalTime());
 	Action::simulate(frameTime, remove);

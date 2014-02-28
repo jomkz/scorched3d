@@ -29,9 +29,6 @@ public:
 	AutoDefense();
 	virtual ~AutoDefense();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	REGISTER_ACCESSORY_HEADER(AutoDefense, AccessoryPart::AccessoryAutoDefense);
 };
 

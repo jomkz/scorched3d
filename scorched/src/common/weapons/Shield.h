@@ -22,6 +22,7 @@
 #define AFX_SHIELD_H__F9BCDF39_FB62_4BB4_9D64_C70215669F9C__INCLUDED_
 
 #include <weapons/AccessoryPart.h>
+#include <XML/XMLEntryComplexTypes.h>
 #include <common/Vector.h>
 
 class Shield : public AccessoryPart
@@ -40,10 +41,10 @@ public:
 		ShieldMovementAll,
 		ShieldMovementNone,
 		ShieldMovementSame,
-		ShieldMovementTeam1,
-		ShieldMovementTeam2,
-		ShieldMovementTeam3,
-		ShieldMovementTeam4
+		ShieldMovementTeamRed,
+		ShieldMovementTeamBlue,
+		ShieldMovementTeamGreen,
+		ShieldMovementTeamYellow
 	};
 	enum ShieldLaserProofType
 	{
@@ -52,19 +53,15 @@ public:
 		ShieldLaserProofTotal
 	};
 
-	Shield();
+	Shield(const char *typeName, const char *description);
 	virtual ~Shield();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// Shield attributes
-	const char *getCollisionSound();
-	fixed getHitRemovePower() { return removePower_; }
-	fixed getHitPenetration() { return penetration_; }
-	fixed getPower() { return power_; }
-	ShieldLaserProofType getLaserProof() { return laserProof_; }
-	ShieldMovementType getMovementProof() { return movementProof_; }
+	fixed getHitRemovePower() { return removePower_.getValue(); }
+	fixed getHitPenetration() { return penetration_.getValue(); }
+	fixed getPower() { return power_.getValue(); }
+	ShieldLaserProofType getLaserProof() { return (ShieldLaserProofType) laserProof_.getValue(); }
+	ShieldMovementType getMovementProof() { return (ShieldMovementType) movementProof_.getValue(); }
 
 	virtual fixed getBoundingSize() = 0;
 	virtual bool inShield(FixedVector &offset) = 0;
@@ -73,12 +70,11 @@ public:
 	virtual bool getRound() = 0;
 
 protected:
-	std::string collisionSound_;
-	fixed removePower_;
-	fixed penetration_;
-	fixed power_;
-	ShieldLaserProofType laserProof_;
-	ShieldMovementType movementProof_;
+	XMLEntryFixed removePower_;
+	XMLEntryFixed penetration_;
+	XMLEntryFixed power_;
+	XMLEntryEnum laserProof_;
+	XMLEntryEnum movementProof_;
 };
 
 #endif // !defined(AFX_SHIELD_H__F9BCDF39_FB62_4BB4_9D64_C70215669F9C__INCLUDED_)

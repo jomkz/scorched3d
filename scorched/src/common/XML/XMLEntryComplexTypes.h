@@ -45,6 +45,18 @@ public:
 	XMLEntryString particleName;
 };
 
+class XMLEntrySoundID : public XMLEntryContainer
+{
+public:
+	XMLEntrySoundID(bool required = true);
+	virtual ~XMLEntrySoundID();
+
+	XMLEntryString soundFile;
+	XMLEntryFixed gain;
+	XMLEntryFixed rollOff;
+	XMLEntryFixed referenceDistance;
+};
+
 class XMLEntryNumberParser : public XMLEntry
 {
 public:
@@ -55,6 +67,7 @@ public:
 	virtual ~XMLEntryNumberParser();
 
 	virtual fixed getValue(ScorchedContext &context);
+	void setValue(const std::string &value);
 
 	// XMLEntry
 	virtual bool readXML(XMLNode *node, void *xmlData);

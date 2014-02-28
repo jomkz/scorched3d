@@ -23,15 +23,12 @@
 
 REGISTER_ACCESSORY_SOURCE(Battery);
 
-Battery::Battery()
+Battery::Battery() :
+	AccessoryPart("Battery",
+		"Batteries are used to regenerate the player's power or health.")
 {
 }
 
 Battery::~Battery()
 {
-}
-
-bool Battery::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	return true;
 }

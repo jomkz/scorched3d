@@ -24,15 +24,12 @@
 
 REGISTER_ACCESSORY_SOURCE(AutoDefense);
 
-AutoDefense::AutoDefense()
+AutoDefense::AutoDefense() :
+	AccessoryPart("AutoDefense", "Auto defense can be used to activate shields and parachutes during the end of the buying phase instead of at the beginning of their turn."
+		"This is mainly useful in sequential games where you would have to wait until your turn to activate your defenses.")
 {
 }
 
 AutoDefense::~AutoDefense()
 {
-}
-
-bool AutoDefense::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	return true;
 }

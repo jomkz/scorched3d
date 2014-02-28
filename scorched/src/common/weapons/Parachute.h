@@ -22,6 +22,7 @@
 #define AFX_PARACHUTE_H__F934B35F_3195_45F7_A6B4_D10CCDB296BD__INCLUDED_
 
 #include <weapons/AccessoryPart.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class Parachute : public AccessoryPart
 {
@@ -29,15 +30,11 @@ public:
 	Parachute();
 	virtual ~Parachute();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
-	FixedVector &getSlowForce() { return slowForce_; }
+	FixedVector &getSlowForce() { return slowForce_.getValue(); }
 
 	REGISTER_ACCESSORY_HEADER(Parachute, AccessoryPart::AccessoryParachute);
-
 protected:
-	FixedVector slowForce_;
+	XMLEntryFixedVector slowForce_;
 };
 
 #endif // !defined(AFX_PARACHUTE_H__F934B35F_3195_45F7_A6B4_D10CCDB296BD__INCLUDED_)

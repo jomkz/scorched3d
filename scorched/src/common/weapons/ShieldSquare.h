@@ -27,24 +27,21 @@ class ShieldSquare : public Shield
 {
 public:
 	ShieldSquare();
+	ShieldSquare(const char *typeName, const char *description);
 	virtual ~ShieldSquare();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// ShieldSquare attributes
-	FixedVector &getSize() { return size_; }
+	FixedVector &getSize() { return size_.getValue(); }
 
 	virtual bool inShield(FixedVector &offset);
 	virtual bool tankInShield(FixedVector &offset);
 	virtual ShieldType getShieldType();
 	virtual bool getRound() { return false; }
-	virtual fixed getBoundingSize() { return size_.Max(); }
+	virtual fixed getBoundingSize() { return size_.getValue().Max(); }
 
 	REGISTER_ACCESSORY_HEADER(ShieldSquare, AccessoryPart::AccessoryShield);
-
 protected:
-	FixedVector size_;
+	XMLEntryFixedVector size_;
 };
 
 #endif // !defined(AFX_ShieldSquare_H__F9BCDF39_FB62_4BB4_9D64_C70215669F9C__INCLUDED_)

@@ -22,22 +22,15 @@
 
 REGISTER_ACCESSORY_SOURCE(ShieldRoundMag);
 
-ShieldRoundMag::ShieldRoundMag()
+ShieldRoundMag::ShieldRoundMag() :
+	ShieldRound("ShieldRoundReflective", "A conal shield centered on the tank.  Mag shields protect the player by 'pushing' away projectiles that travel above the player in addition to absorbing damage like regular shields."),
+	deflectPower_("Intensity of the projectile deflection.  Straightforward multiplier for the bounce velocity")
 {
+	addChildXMLEntry("deflectpower", &deflectPower_);
 }
 
 ShieldRoundMag::~ShieldRoundMag()
 {
-}
-
-bool ShieldRoundMag::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!ShieldRound::parseXML(context, accessoryNode)) return false;
-
-	// Get the half size
-	if (!accessoryNode->getNamedChild("deflectpower", deflectPower_)) return false;
-
-	return true;
 }
 
 Shield::ShieldType ShieldRoundMag::getShieldType()

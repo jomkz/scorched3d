@@ -31,9 +31,9 @@ REGISTER_ACCESSORY_SOURCE(WeaponScatterDirection);
 WeaponScatterDirection::WeaponScatterDirection() :
 	Weapon("WeaponScatterDirection", 
 		"Changes the direction to a specific direction with a random offset"),
-	direction_("X, Y and Z direction to aim the weapon in",
+	direction_("X, Y and Z direction to aim the weapon in"),
 	directionOffset_("maximum X, Y, and Z amounts to offset the direction by. "
-           "For example, 10,10,9 will offset the direction with a random factor of +/- 10 degrees in each the x and y directions"),
+           "For example, 10,10,9 will offset the direction with a random factor of +/- 10 degrees in each the x and y directions")
 {
 	addChildXMLEntry("direction", &direction_);
 	addChildXMLEntry("directionoffset", &directionOffset_);
@@ -50,13 +50,12 @@ void WeaponScatterDirection::fireWeapon(ScorchedContext &context,
 {
 	RandomGenerator &random = context.getSimulator().getRandomGenerator();
 	FixedVector vel;
-	vel[0] += direction_[0] - directionOffset_[0] + 
-		directionOffset_[0] * 2 * random.getRandFixed("WeaponScatterDirection");
-	vel[1] += direction_[1] - directionOffset_[1] + 
-		directionOffset_[1] * 2 * random.getRandFixed("WeaponScatterDirection");
-	vel[2] += direction_[2] - directionOffset_[2] + 
-		directionOffset_[2] * 2 * random.getRandFixed("WeaponScatterDirection");
+	vel[0] += direction_.getValue()[0] - directionOffset_.getValue()[0] + 
+		directionOffset_.getValue()[0] * 2 * random.getRandFixed("WeaponScatterDirection");
+	vel[1] += direction_.getValue()[1] - directionOffset_.getValue()[1] + 
+		directionOffset_.getValue()[1] * 2 * random.getRandFixed("WeaponScatterDirection");
+	vel[2] += direction_.getValue()[2] - directionOffset_.getValue()[2] + 
+		directionOffset_.getValue()[2] * 2 * random.getRandFixed("WeaponScatterDirection");
 
-	aimedWeapon_->fire(context, weaponContext, position, vel);
-
+	aimedWeapon_.getValue()->fire(context, weaponContext, position, vel);
 }

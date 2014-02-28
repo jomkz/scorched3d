@@ -26,39 +26,29 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponSound);
 
-WeaponSound::WeaponSound() : 
-	gain_(1), relative_(false),
-	rolloff_(1), referenceDistance_(75)
+WeaponSoundList::WeaponSoundList() :
+	XMLEntryList<XMLEntrySoundID>("A list of sound definitions", 1)
 {
+}
 
+WeaponSoundList::~WeaponSoundList()
+{
+}
+
+XMLEntrySoundID *WeaponSoundList::createXMLEntry()
+{
+	return new XMLEntrySoundID(false);
+}
+
+WeaponSound::WeaponSound() :
+	Weapon("WeaponSound", "Plays a random sound from the list of given sound definitions")
+{
+	addChildXMLEntry("SoundID", &soundList_);
 }
 
 WeaponSound::~WeaponSound()
 {
 
-}
-
-const char *WeaponSound::getSound()
-{
-	std::string &sound = sounds_[rand() % sounds_.size()];
-	return sound.c_str();
-}
-
-bool WeaponSound::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	std::string sound;
-	while (accessoryNode->getNamedChild("sound", sound, false))
-	{
-		if (!S3D::checkDataFile(sound.c_str())) return false;
-		sounds_.push_back(sound);
-	}
-	accessoryNode->getNamedChild("gain", gain_, false);
-	accessoryNode->getNamedChild("rolloff", rolloff_, false);
-	accessoryNode->getNamedChild("referencedistance", referenceDistance_, false);
-	accessoryNode->getNamedChild("relative", relative_, false);
-	return true;
 }
 
 void WeaponSound::fireWeapon(ScorchedContext &context,

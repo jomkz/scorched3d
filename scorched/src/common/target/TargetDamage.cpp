@@ -210,7 +210,7 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 				// Calculate money won for not killing this tank
 				int moneyPerHit = 
 					context.getOptionsGame().getMoneyWonPerHitPoint() *
-						weapon->getArmsLevel();
+						weapon->getParent()->getArmsLevel();
 				if (context.getOptionsGame().getMoneyPerHealthPoint()) 
 					moneyPerHit = (moneyPerHit * damage.asInt()) / 100;
 				if (selfKill || teamKill) moneyPerHit *= -1;
@@ -222,7 +222,7 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 			{
 				int moneyPerKill = 
 					context.getOptionsGame().getMoneyWonPerKillPoint() *
-						weapon->getArmsLevel();
+						weapon->getParent()->getArmsLevel();
 				if (!selfKill && !teamKill)
 				{
 					// Note this is done before turn kills is updated
@@ -230,7 +230,7 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 					// i.e. no multikill bonus for 1st kill
 					moneyPerKill +=
 						context.getOptionsGame().getMoneyWonPerMultiKillPoint() *
-						weapon->getArmsLevel() *
+						weapon->getParent()->getArmsLevel() *
 						weaponContext.getInternalContext().getKillCount();
 				}
 				if (context.getOptionsGame().getMoneyPerHealthPoint()) 
@@ -239,7 +239,7 @@ void TargetDamage::damageTarget(ScorchedContext &context,
 
 				int moneyPerAssist = 
 					context.getOptionsGame().getMoneyWonPerAssistPoint() *
-						weapon->getArmsLevel();
+						weapon->getParent()->getArmsLevel();
 				int scorePerAssist = context.getOptionsGame().getScorePerAssist();
 
 				// Update kills and score
@@ -487,7 +487,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 		if (damagedPlayerId == firedPlayerId)
 		{
 			int skillChange = context.getOptionsGame().getSkillForSelfKill();
-			fixed weight = (fixed(weapon->getArmsLevel()) / 10) + 1;
+			fixed weight = (fixed(weapon->getParent()->getArmsLevel()) / 10) + 1;
 			skillChange = (fixed(skillChange) * weight).asInt();
 
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
@@ -508,7 +508,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 				(firedTank->getTeam() == killedTank->getTeam())) 
 		{
 			int skillChange = context.getOptionsGame().getSkillForTeamKill();
-			fixed weight = (fixed(weapon->getArmsLevel()) / 10) + 1;
+			fixed weight = (fixed(weapon->getParent()->getArmsLevel()) / 10) + 1;
 			skillChange = (fixed(skillChange) * weight).asInt();
 
 			firedTank->getScore().setSkill(firedTank->getScore().getSkill() + skillChange);
@@ -559,7 +559,7 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 
 				//$vbonus = $vskill if $vbonus > $vskill;
 				//$kbonus = $kskill if $kbonus > $kskill;
-				fixed weight = (fixed(weapon->getArmsLevel()) / 10) + 5;
+				fixed weight = (fixed(weapon->getParent()->getArmsLevel()) / 10) + 5;
 				kbonus = (fixed(kbonus) * weight).asInt();
 				vbonus = (fixed(vbonus) * weight).asInt();
 			}

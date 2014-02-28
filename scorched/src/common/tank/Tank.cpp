@@ -133,7 +133,7 @@ Accessory *Tank::getDeathAction()
 		}
 	}
 
-	return context_.getAccessoryStore().getDeathAnimation();
+	return Target::getDeathAction();
 }
 
 FixedVector &Tank::getColor()

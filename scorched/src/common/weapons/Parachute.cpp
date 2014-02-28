@@ -24,17 +24,14 @@
 
 REGISTER_ACCESSORY_SOURCE(Parachute);
 
-Parachute::Parachute()
+Parachute::Parachute() : 
+	AccessoryPart("Parachute", "Parachutes protect the player from falling damage. You can configure how fast an object using them will fall."),
+	slowForce_("The force to apply against a falling object in x,y,z coordinates."
+          "Very sensative, 0.1 will slow by half, -0.1 will double the speed")
 {
+	addChildXMLEntry("slowforce", &slowForce_);
 }
 
 Parachute::~Parachute()
 {
-}
-
-bool Parachute::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	accessoryNode->getNamedChild("slowforce", slowForce_, false);
-
-	return accessoryNode->failChildren();
 }

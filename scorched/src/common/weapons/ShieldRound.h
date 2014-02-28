@@ -27,28 +27,25 @@ class ShieldRound : public Shield
 {
 public:
 	ShieldRound();
+	ShieldRound(const char *typeName, const char *description);
 	virtual ~ShieldRound();
 
 	virtual bool parseXML(AccessoryCreateContext &context,
 		XMLNode *accessoryNode);
 
 	// ShieldRound attributes
-	fixed getActualRadius() { return radius_; }
-	bool getHalfShield() { return halfShield_; }
-	bool getGlow() { return glow_; }
+	fixed getActualRadius() { return radius_.getValue(); }
 
 	virtual bool inShield(FixedVector &offset);
 	virtual bool tankInShield(FixedVector &offset);
 	virtual ShieldType getShieldType();
 	virtual bool getRound() { return true; }
-	virtual fixed getBoundingSize() { return radius_; }
+	virtual fixed getBoundingSize() { return radius_.getValue(); }
 
 	REGISTER_ACCESSORY_HEADER(ShieldRound, AccessoryPart::AccessoryShield);
 
 protected:
-	fixed radius_;
-	bool halfShield_;
-	bool glow_;
+	XMLEntryFixed radius_;
 };
 
 #endif // !defined(AFX_ShieldRound_H__F9BCDF39_FB62_4BB4_9D64_C70215669F9C__INCLUDED_)

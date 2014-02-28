@@ -25,9 +25,18 @@
 
 REGISTER_ACCESSORY_SOURCE(ShieldRound);
 
-ShieldRound::ShieldRound() : 
-	glow_(true)
+ShieldRound::ShieldRound() :
+	Shield("ShieldRound", "Normal shields protect the player by simply absorbing the damage."),
+	radius_("The circumference of the shield")
 {
+	addChildXMLEntry("radius", &radius_);
+}
+
+ShieldRound::ShieldRound(const char *typeName, const char *description) :
+	Shield(typeName, description),
+	radius_("The circumference of the shield")
+{
+	addChildXMLEntry("radius", &radius_);
 }
 
 ShieldRound::~ShieldRound()
@@ -41,41 +50,19 @@ Shield::ShieldType ShieldRound::getShieldType()
 
 bool ShieldRound::inShield(FixedVector &offset)
 {
-	if (offset.Magnitude() <= radius_)
-	{
-		if (!halfShield_) return true;
-
-		FixedVector normal = offset.Normalize();
-		FixedVector up(0, 0, 1);
-		if (normal.dotP(up) > fixed(true, 7000))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-bool ShieldRound::tankInShield(FixedVector &offset)
-{
-	if (offset.Magnitude() <= radius_)
+	if (offset.Magnitude() <= radius_.getValue())
 	{
 		return true;
 	}
 	return false;
 }
 
-bool ShieldRound::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
+bool ShieldRound::tankInShield(FixedVector &offset)
 {
-	if (!Shield::parseXML(context, accessoryNode)) return false;
-
-	// Get the penetration
-	if (!accessoryNode->getNamedChild("radius", radius_)) return false;
-	if (radius_ <= 0) return accessoryNode->returnError("ShieldRound radius must be > 0");
-
-	// Get the half size
-	if (!accessoryNode->getNamedChild("halfshield", halfShield_)) return false;
-
-	accessoryNode->getNamedChild("glow", glow_, false);
-
-	return true;
+	if (offset.Magnitude() <= radius_.getValue())
+	{
+		return true;
+	}
+	return false;
 }
+

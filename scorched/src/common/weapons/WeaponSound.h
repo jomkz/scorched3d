@@ -22,7 +22,16 @@
 #define __INCLUDE_WeaponSoundh_INCLUDE__
 
 #include <weapons/Weapon.h>
-#include <vector>
+#include <XML/XMLEntryComplexTypes.h>
+
+class WeaponSoundList : public XMLEntryList<XMLEntrySoundID>
+{
+public:
+	WeaponSoundList();
+	virtual ~WeaponSoundList();
+
+	virtual XMLEntrySoundID *createXMLEntry();
+};
 
 class WeaponSound : public Weapon
 {
@@ -30,26 +39,13 @@ public:
 	WeaponSound();
 	virtual ~WeaponSound();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
-	const char *getSound();
-	fixed getGain() { return gain_; }
-	fixed getRolloff() { return rolloff_; }
-	fixed getReferenceDistance() { return referenceDistance_; }
-	bool getRelative() { return relative_; }
-
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
 
 	REGISTER_ACCESSORY_HEADER(WeaponSound, AccessoryPart::AccessoryWeapon);
 protected:
-	std::vector<std::string> sounds_;
-	fixed gain_;
-	fixed rolloff_;
-	fixed referenceDistance_;
-	bool relative_;
+	WeaponSoundList soundList_;
 };
 
 #endif // __INCLUDE_WeaponSoundh_INCLUDE__

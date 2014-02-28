@@ -49,7 +49,6 @@ protected:
 		bool endsegment;
 		fixed size;
 	};
-	bool firstTime_;
 	fixed totalTime_;
 	std::list<Segment> segments_;
 

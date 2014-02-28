@@ -34,8 +34,7 @@ TargetState::TargetState() :
 	displayDamage_(true), displayShadow_(true),
 	noDamageBurn_(false), noCollision_(false), noFalling_(false),
 	movement_(0), noFallingDamage_(false), 
-	driveOverToDestroy_(false), flattenDestroy_(false),
-	displayHardwareShadow_(true)
+	driveOverToDestroy_(false), flattenDestroy_(false)
 {
 }
 

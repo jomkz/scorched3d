@@ -29,11 +29,7 @@ public:
 	Battery();
 	virtual ~Battery();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	REGISTER_ACCESSORY_HEADER(Battery, AccessoryPart::AccessoryBattery);
-
 };
 
 #endif // !defined(AFX_BATTERY_H__F9BCDF39_FB62_4BB4_9D64_C70215669F9C__INCLUDED_)
