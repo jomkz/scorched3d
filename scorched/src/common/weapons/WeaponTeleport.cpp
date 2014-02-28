@@ -59,15 +59,8 @@ void WeaponTeleport::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	// Mininum height
-	fixed allowedHeight = 0;
 	LandscapeTex &tex = *context.getLandscapeMaps().getDefinitions().getTex();
-		if (tex.border->getType() == LandscapeTexType::eWater)
-	{
-		LandscapeTexBorderWater *water = 
-			(LandscapeTexBorderWater *) tex.border;
-
-		allowedHeight = water->height;
-	}
+	fixed allowedHeight = S3D_MAX(fixed(0), tex.getWaterHeight());
 
 	int arenaX = context.getLandscapeMaps().getGroundMaps().getArenaX();
 	int arenaY = context.getLandscapeMaps().getGroundMaps().getArenaY();

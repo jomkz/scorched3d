@@ -66,11 +66,11 @@ bool LandscapeDefinitionsBase::readLandscapeDefinitions()
 {
 	// Load landscape definition file
 	XMLFile file;
-	if (!file.readFile(S3D::getModFile("data/landscapes.xml")) ||
+	if (!file.readFile(S3D::getModFile("data/landscapes/landscapes.xml")) ||
 		!file.getRootNode())
 	{
 		S3D::dialogMessage("Scorched Landscape", S3D::formatStringBuffer(
-					  "Failed to parse \"data/landscapes.xml\"\n%s", 
+					  "Failed to parse \"data/landscapes/landscapes.xml\"\n%s", 
 					  file.getParserError()));
 		return false;
 	}

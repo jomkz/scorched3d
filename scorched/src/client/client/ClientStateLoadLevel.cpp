@@ -30,7 +30,6 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/ChannelManager.h>
-#include <image/ImageFactory.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <lang/LangResource.h>
@@ -99,9 +98,9 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 		message.getLandscapeDefinition().getName());
 	if (landscapeDefinition)
 	{
-		Image image = ImageFactory::loadImage(S3D::eModLocation,
-			S3D::formatStringBuffer("data/landscapes/%s", 
-			landscapeDefinition->picture.c_str()));
+		//Image image = ImageFactory::loadImage(S3D::eModLocation,
+		//	S3D::formatStringBuffer("data/landscapes/%s", 
+		//	landscapeDefinition->picture.c_str()));
 		// TODO
 		//ProgressDialog::instance()->setIcon(image);
 	}

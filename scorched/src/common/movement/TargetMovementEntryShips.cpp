@@ -47,13 +47,7 @@ void TargetMovementEntryShips::generate(ScorchedContext &context,
 	LandscapeTex &tex = *context.getLandscapeMaps().getDefinitions().getTex();
 
 	// Get the water height (if water is on)
-	fixed waterHeight = 0;
-	if (tex.border->getType() == LandscapeTexType::eWater)
-	{
-		LandscapeTexBorderWater *water = 
-			(LandscapeTexBorderWater *) tex.border;
-       	waterHeight = water->height;
-	}
+	fixed waterHeight = tex.getWaterHeight();
 
 	// Create the spline path the ships will move on
 	// Do this from the set of control points specified in the xml file

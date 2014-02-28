@@ -50,15 +50,8 @@ TankAICurrentMoveWeapons::TankAICurrentMoveWeapons(Tanket *tanket,
 	uncover = weapons->getTankAccessoryByType(tanket, "uncover");
 
 	// Check for being under water
-	fixed waterHeight = -10;
 	LandscapeTex &tex = *ScorchedServer::instance()->getLandscapeMaps().getDefinitions().getTex();
-	if (tex.border->getType() == LandscapeTexType::eWater)
-	{
-		LandscapeTexBorderWater *water = 
-			(LandscapeTexBorderWater *) tex.border;
-
-		waterHeight = water->height;
-	}
+	fixed waterHeight = tex.getWaterHeight();
 	napalm = 0;
 	if (targetTanket->getLife().getTargetPosition()[2] > waterHeight)
 	{

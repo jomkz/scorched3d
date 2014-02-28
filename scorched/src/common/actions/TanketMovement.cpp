@@ -336,14 +336,8 @@ void TanketMovement::moveTanket(Tanket *tanket)
 		context_->getOptionsGame().getMovementRestriction() ==
 		OptionsGame::MovementRestrictionLandOrAbove)
 	{
-		fixed waterHeight = -10;
 		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
-		if (tex.border->getType() == LandscapeTexType::eWater)
-		{
-			LandscapeTexBorderWater *water = 
-				(LandscapeTexBorderWater *) tex.border;
-			waterHeight = water->height;
-		}
+		fixed waterHeight = tex.getWaterHeight();
 
 		if (context_->getOptionsGame().getMovementRestriction() ==
 			OptionsGame::MovementRestrictionLandOrAbove)

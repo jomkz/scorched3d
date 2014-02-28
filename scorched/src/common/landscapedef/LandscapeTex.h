@@ -28,97 +28,6 @@
 #include <vector>
 
 class ScorchedContext;
-class LandscapeTexType
-{
-public:
-	enum TexType
-	{
-		eNone,
-		ePrecipitationRain,
-		ePrecipitationSnow,
-		eWater,
-		eTextureGenerate,
-		eTextureFile
-	};
-
-	virtual bool readXML(XMLNode *node) = 0;
-	virtual TexType getType() = 0;
-};
-
-class LandscapeTexTypeNone : public LandscapeTexType
-{
-public:
-	virtual bool readXML(XMLNode *node);
-	virtual TexType getType() { return eNone; }
-};
-
-class LandscapeTexPrecipitation : public LandscapeTexType
-{
-public:
-	int particles;
-
-	virtual bool readXML(XMLNode *node);
-};
-
-class LandscapeTexPrecipitationRain : public LandscapeTexPrecipitation
-{
-public:
-	virtual TexType getType() { return ePrecipitationRain; }
-};
-
-class LandscapeTexPrecipitationSnow : public LandscapeTexPrecipitation
-{
-public:
-	virtual TexType getType() { return ePrecipitationSnow; }
-};
-
-class LandscapeTexBorderWater : public LandscapeTexType
-{
-public:
-	// Non-shader
-	std::string reflection;
-	std::string texture;
-	std::string foam;
-
-	// Shader
-	Vector wavetopa;
-	Vector wavetopb;
-	Vector wavebottoma;
-	Vector wavebottomb;
-	Vector wavelight;
-
-	// Both
-	fixed height;
-	float waterTransparency;
-	
-	virtual bool readXML(XMLNode *node);
-	virtual TexType getType() { return eWater; }
-};
-
-class LandscapeTexTextureGenerate : public LandscapeTexType
-{
-public:
-	std::string roof;
-	std::string rockside;
-	std::string shore;
-	std::string texture0;
-	std::string texture1;
-	std::string texture2;
-	std::string texture3;
-
-	virtual bool readXML(XMLNode *node);
-	virtual TexType getType() { return eTextureGenerate; }
-};
-
-class LandscapeTexTextureFile : public LandscapeTexType
-{
-public:
-	std::string texture;
-	std::string surroundTexture;
-
-	virtual bool readXML(XMLNode *node);
-	virtual TexType getType() { return eTextureFile; }
-};
 
 class LandscapeTex
 {
@@ -127,32 +36,8 @@ public:
 	virtual ~LandscapeTex();
 
 	unsigned int seed;
-	std::string detail;
-	std::string magmasmall;
-	std::string scorch;
-	Vector fog;
-	Vector suncolor;
-	bool nosunfog;
-	bool nohorizonglow;
-	bool nosunblend;
-	std::string suntexture;
-	std::string suntexturemask;
-	float fogdensity;
-	std::string skytexture;
-	std::string skytexturestatic;
-	std::string skytexturemask;
-	std::string skycolormap;
-	std::string skyline;
-	std::string skylinemask;
-	int skytimeofday;
-	float skysunxy;
-	float skysunyz;
-	Vector skydiffuse;
-	Vector skyambience;
+	fixed getWaterHeight() { return -10; }
 
-	LandscapeTexType *border;
-	LandscapeTexType *texture;
-	LandscapeTexType *precipitation;
 	LandscapeTexDefn texDefn;
 
 	bool readXML(LandscapeDefinitions *definitions, XMLNode *node);

@@ -166,15 +166,8 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 	if (!remove &&
 		getWeapon()->getWaterCollision())
 	{
-		fixed waterHeight = -10;
 		LandscapeTex &tex = *context_->getLandscapeMaps().getDefinitions().getTex();
-		if (tex.border->getType() == LandscapeTexType::eWater)
-		{
-			LandscapeTexBorderWater *water = 
-				(LandscapeTexBorderWater *) tex.border;
-
-			waterHeight = water->height;
-		}
+		fixed waterHeight = tex.getWaterHeight();
 
 		if (getPhysics().getPosition()[2] < waterHeight)
 		{

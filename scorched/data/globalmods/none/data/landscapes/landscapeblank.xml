@@ -1,0 +1,12 @@
+<landscape>
+  <name>blank</name>
+  <description></description>
+  <picture>oldstyle-pic.bmp</picture>
+  <weight>100</weight>
+  <defn>
+    <item>data/landscapes/defn/defnblank.xml</item>
+  </defn>
+  <tex>
+    <item>data/landscapes/tex/texblank.xml</item>
+  </tex>
+</landscape>
