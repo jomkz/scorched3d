@@ -29,9 +29,6 @@ public:
 	WeaponTankVelocity();
 	virtual ~WeaponTankVelocity();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
@@ -39,7 +36,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponTankVelocity, AccessoryPart::AccessoryWeapon);
 
 protected:
-	Weapon *aimedWeapon_;
+	XMLEntryWeaponChoice aimedWeapon_;
 };
 
 #endif // !defined(AFX_WeaponTankVelocity_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

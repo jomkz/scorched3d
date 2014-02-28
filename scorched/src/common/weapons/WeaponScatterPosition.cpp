@@ -29,39 +29,20 @@
 REGISTER_ACCESSORY_SOURCE(WeaponScatterPosition);
 
 WeaponScatterPosition::WeaponScatterPosition() :
-	aimedWeapon_(0), scatterpercentage_("WeaponScatterPosition::scatterpercentage")
+	Weapon("WeaponScatterPosition", 
+		"Randomly offsets the current position by a percentage of the landscape size."),
+	scatterpercentage_("WeaponScatterPosition::scatterpercentage", "Percentage of landscape size to randomize the weapon's position by."),
+	landonly_("Weapon cannot occur over water"),
+	landheight_("Weapon is snapped to landscape height")
 {
-
+	addChildXMLEntry("aimedweapon", &aimedWeapon_);
+	addChildXMLEntry("landonly", &landonly_);
+	addChildXMLEntry("landheight", &landheight_);
+	addChildXMLEntry("scatterpercentage", &scatterpercentage_);
 }
 
 WeaponScatterPosition::~WeaponScatterPosition()
 {
-	delete aimedWeapon_;
-	aimedWeapon_ = 0;
-}
-
-bool WeaponScatterPosition::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	aimedWeapon_ = (Weapon*) accessory;
-
-	if (!accessoryNode->getNamedChild("landonly", landonly_)) return false;
-	if (!accessoryNode->getNamedChild("landheight", landheight_)) return false;
-	if (!accessoryNode->getNamedChild("scatterpercentage", scatterpercentage_)) return false;
-
-	return true;
 }
 
 void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
@@ -88,13 +69,13 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 		pos[0] = p[0] + (random.getRandFixed("WeaponScatterPosition") * scatterWidth) - (scatterWidth / 2);
 		pos[1] = p[1] + (random.getRandFixed("WeaponScatterPosition") * scatterHeight) - (scatterHeight / 2);
 		pos[2] = p[2];
-		if (landheight_)
+		if (landheight_.getValue())
 		{
 			pos[2] = context.getLandscapeMaps().getGroundMaps().getInterpHeight(
 				pos[0], pos[1]);
 		}
 
-		if (landonly_)
+		if (landonly_.getValue())
 		{
 			if (pos[2] < allowedHeight)
 			{
@@ -104,6 +85,6 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 		}
 	}
 
-	aimedWeapon_->fire(context, weaponContext, pos, velocity);
+	aimedWeapon_.getValue()->fire(context, weaponContext, pos, velocity);
 }
 

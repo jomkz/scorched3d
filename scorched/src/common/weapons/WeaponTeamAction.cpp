@@ -26,50 +26,55 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponTeamAction);
 
-WeaponTeamAction::WeaponTeamAction()
+static XMLEntryEnum::EnumEntry teamEnum[] =
+{
+	{ "TeamNone", WeaponTeamActionEntry::TeamNone },
+	{ "TeamRed", WeaponTeamActionEntry::TeamRed },
+	{ "TeamBlue", WeaponTeamActionEntry::TeamBlue },
+	{ "TeamGreen", WeaponTeamActionEntry::TeamGreen },
+	{ "TeamYellow", WeaponTeamActionEntry::TeamYellow },
+	{ "", -1 }
+};
+
+WeaponTeamActionEntry::WeaponTeamActionEntry() :
+	XMLEntryContainer("WeaponTeamActionEntry", 
+		"A weapon that will be activated if the firing tank matches the given team"),
+	team_("The team that the firing tank must match to activate the weapon", teamEnum),
+	weapon_()
+{
+	addChildXMLEntry("team", &team_);
+	addChildXMLEntry("weapon", &weapon_);
+}
+
+WeaponTeamActionEntry::~WeaponTeamActionEntry()
+{
+}
+
+WeaponTeamActionEntryList::WeaponTeamActionEntryList() :
+	XMLEntryList<WeaponTeamActionEntry>(
+		"A choice of weapons that will only be activated if the firing tank matches the given team", 1)
+{
+}
+
+WeaponTeamActionEntryList::~WeaponTeamActionEntryList()
+{
+}
+
+WeaponTeamActionEntry *WeaponTeamActionEntryList::createXMLEntry()
+{
+	return new WeaponTeamActionEntry();
+}
+
+WeaponTeamAction::WeaponTeamAction() :
+	WeaponCallback("WeaponTeamAction", 
+		"Used to activate different events based on which team the firing tank is on.  "
+		"You can define different events for all 4 teams.")
 {
 }
 
 WeaponTeamAction::~WeaponTeamAction()
 {
-	for (int i=0; i<5; i++)
-	{
-		delete action_[i];
-		action_[i] = 0;
-	}
-}
 
-bool WeaponTeamAction::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	bool actions = false;
-	for (int i=0; i<5; i++)
-	{
-		action_[i] = 0;
-
-		XMLNode *subNode = 0;
-		std::string nodeName = S3D::formatStringBuffer("team%i", i);
-		if (accessoryNode->getNamedChild(nodeName.c_str(), subNode, false))
-		{
-			// Check next weapon is correct type
-			AccessoryPart *accessory = context.getAccessoryStore().
-				createAccessoryPart(context, parent_, subNode);
-			if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-			{
-				return subNode->returnError("Failed to find sub weapon, not a weapon");
-			}
-			action_[i] = (Weapon*) accessory;
-			actions = true;
-		}
-	}
-
-	if (!actions)
-	{
-		return accessoryNode->returnError("No actions defined");
-	}
-
-	return true;
 }
 
 void WeaponTeamAction::fireWeapon(ScorchedContext &context,
@@ -88,10 +93,16 @@ void WeaponTeamAction::weaponCallback(
 	Tank *tank = context.getTargetContainer().getTankById(weaponContext.getPlayerId());
 	if (!tank) return;
 
-	Weapon *action = action_[tank->getTeam()];
-	if (action)
+	std::list<WeaponTeamActionEntry *>::iterator itor = actions_.getChildren().begin(),
+		end = actions_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		action->fire(context, weaponContext, position, velocity);
+		if ((*itor)->team_.getValue() == tank->getTeam())
+		{
+			Weapon *action = (*itor)->weapon_.getValue();
+			action->fire(context, weaponContext, position, velocity);
+			break;
+		}
 	}
 }
 

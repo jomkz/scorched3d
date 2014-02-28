@@ -22,15 +22,13 @@
 #define AFX_WeaponTankPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
 class WeaponTankPosition : public Weapon
 {
 public:
 	WeaponTankPosition();
 	virtual ~WeaponTankPosition();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,8 +37,8 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponTankPosition, AccessoryPart::AccessoryWeapon);
 
 protected:
-	Weapon *aimedWeapon_;
-	bool sightPos_;
+	XMLEntryWeaponChoice aimedWeapon_;
+	XMLEntryBool sightPos_;
 };
 
 #endif // !defined(AFX_WeaponTankPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

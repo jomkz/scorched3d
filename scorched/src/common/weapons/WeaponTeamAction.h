@@ -22,15 +22,41 @@
 #define __INCLUDE_WeaponTeamActionh_INCLUDE__
 
 #include <actions/CallbackWeapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
+
+class WeaponTeamActionEntry : public XMLEntryContainer
+{
+public:
+	enum TeamType
+	{
+		TeamNone = 0,
+		TeamRed = 1,
+		TeamBlue = 2,
+		TeamGreen = 3,
+		TeamYellow = 4
+	};
+
+	WeaponTeamActionEntry();
+	virtual ~WeaponTeamActionEntry();
+
+	XMLEntryEnum team_;
+	XMLEntryWeaponChoice weapon_;
+};
+
+class WeaponTeamActionEntryList : public XMLEntryList<WeaponTeamActionEntry>
+{
+public:
+	WeaponTeamActionEntryList();
+	virtual ~WeaponTeamActionEntryList();
+
+	WeaponTeamActionEntry *createXMLEntry();
+};
 
 class WeaponTeamAction : public WeaponCallback
 {
 public:
 	WeaponTeamAction();
 	virtual ~WeaponTeamAction();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -45,7 +71,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponTeamAction, AccessoryPart::AccessoryWeapon);
 
 protected:
-	Weapon *action_[5];
+	WeaponTeamActionEntryList actions_;
 };
 
 #endif // __INCLUDE_WeaponTeamActionh_INCLUDE__

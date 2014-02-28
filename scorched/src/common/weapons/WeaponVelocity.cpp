@@ -24,40 +24,21 @@
 REGISTER_ACCESSORY_SOURCE(WeaponVelocity);
 
 WeaponVelocity::WeaponVelocity() :
-	velocityChange_("WeaponVelocity::velocityChange", 0), abs_(false),
-	aimedWeapon_(0)
+	Weapon("WeaponVelocity", 
+		"Changes the velocity of the current weapon either relative to its current velocity or to a pre-defined velocity."),
+	velocityChange_("WeaponVelocity::velocityChange", 
+			"Amount to change the velocity."
+           "If abs is false: 0.5 = 50%, 1.5 = 150%, etc."
+		   "If abs is true: 0.5 = 500 power, 1.0 = 1000 power, etc."), 
+	abs_("Whether or not the velocity change is absolute", 0, false)
 {
-
+	addChildXMLEntry("aimedweapon", &aimedWeapon_);
+	addChildXMLEntry("velocitychange", &velocityChange_);
+	addChildXMLEntry("abs", &abs_);
 }
 
 WeaponVelocity::~WeaponVelocity()
 {
-	delete aimedWeapon_;
-	aimedWeapon_ = 0;
-}
-
-bool WeaponVelocity::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	aimedWeapon_ = (Weapon*) accessory;
-
-	if (!accessoryNode->getNamedChild("velocitychange", velocityChange_)) return false;
-
-	accessoryNode->getNamedChild("abs", abs_, false);
-
-	return true;
 }
 
 void WeaponVelocity::fireWeapon(ScorchedContext &context,
@@ -66,15 +47,15 @@ void WeaponVelocity::fireWeapon(ScorchedContext &context,
 	// Add a shot that will fall where the original was aimed
 	// but with altered velocity
 	FixedVector newVelocity;
-	if (abs_)
+	if (abs_.getValue())
 	{
 		newVelocity = velocity.Normalize() * 50 * velocityChange_.getValue(context); 
-		aimedWeapon_->fire(context, weaponContext, position, newVelocity);
+		aimedWeapon_.getValue()->fire(context, weaponContext, position, newVelocity);
 	}
 	else
 	{
 		newVelocity = velocity * velocityChange_.getValue(context);
-		aimedWeapon_->fire(context, weaponContext, position, newVelocity);
+		aimedWeapon_.getValue()->fire(context, weaponContext, position, newVelocity);
 	}
 }
 

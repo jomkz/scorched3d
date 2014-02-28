@@ -28,35 +28,15 @@
 REGISTER_ACCESSORY_SOURCE(WeaponSelectPosition);
 
 WeaponSelectPosition::WeaponSelectPosition() :
-	aimedWeapon_(0)
+	Weapon("WeaponSelectPosition", 
+		"Allows the player click where the weapon will be placed. "
+		"There are various types of position selections available that can be defined in the accessory's header area.")
 {
-
+	addChildXMLEntry("aimedweapon", &aimedWeapon_);
 }
 
 WeaponSelectPosition::~WeaponSelectPosition()
 {
-	delete aimedWeapon_;
-	aimedWeapon_ = 0;
-}
-
-bool WeaponSelectPosition::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	aimedWeapon_ = (Weapon*) accessory;
-
-	return true;
 }
 
 void WeaponSelectPosition::fireWeapon(ScorchedContext &context,
@@ -72,7 +52,7 @@ void WeaponSelectPosition::fireWeapon(ScorchedContext &context,
 			weaponContext.getInternalContext().getSelectPositionX(),
 			weaponContext.getInternalContext().getSelectPositionY());
 
-		aimedWeapon_->fire(context, weaponContext, newPosition, velocity);
+		aimedWeapon_.getValue()->fire(context, weaponContext, newPosition, velocity);
 	}
 }
 

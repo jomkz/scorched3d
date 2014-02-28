@@ -25,39 +25,18 @@
 REGISTER_ACCESSORY_SOURCE(WeaponRepeat);
 
 WeaponRepeat::WeaponRepeat() : 
-	delay_("WeaponRepeat::delay", 0), repeatWeapon_(0)
+	WeaponCallback("WeaponRepeat", 
+		"Performs the given xml a specified number of times with a specified delay in between. "),
+	delay_("WeaponRepeat::delay", "Number of seconds to delay between repeats", 0, "0"), 
+	repeat_("The number of times to repeat the action")
 {
-
+	addChildXMLEntry("repeat", &repeat_);
+	addChildXMLEntry("delay", &delay_);
+	addChildXMLEntry("repeatweapon", &repeatWeapon_);
 }
 
 WeaponRepeat::~WeaponRepeat()
 {
-	delete repeatWeapon_;
-	repeatWeapon_ = 0;
-}
-
-bool WeaponRepeat::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("repeatweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	repeatWeapon_ = (Weapon*) accessory;
-
-	if (!accessoryNode->getNamedChild("repeat", repeat_)) return false;
-
-	accessoryNode->getNamedChild("delay", delay_, false);
-
-	return true;
 }
 
 void WeaponRepeat::fireWeapon(ScorchedContext &context,
@@ -65,14 +44,14 @@ void WeaponRepeat::fireWeapon(ScorchedContext &context,
 {
 	if (delay_.getValue(context) == 0)
 	{
-		for (int i=0; i<repeat_; i++)
+		for (int i=0; i<repeat_.getValue(); i++)
 		{
-			repeatWeapon_->fire(context, weaponContext, position, velocity);
+			repeatWeapon_.getValue()->fire(context, weaponContext, position, velocity);
 		}
 	}
 	else
 	{
-		weaponCallback(context, weaponContext, position, velocity, repeat_);
+		weaponCallback(context, weaponContext, position, velocity, repeat_.getValue());
 	}
 }
 
@@ -81,7 +60,7 @@ void WeaponRepeat::weaponCallback(
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity,
 	unsigned int userData)
 {
-	repeatWeapon_->fire(context, weaponContext, position, velocity);
+	repeatWeapon_.getValue()->fire(context, weaponContext, position, velocity);
 
 	if (userData > 1)
 	{

@@ -21,16 +21,33 @@
 #if !defined(__INCLUDE_WeaponTypeActionh_INCLUDE__)
 #define __INCLUDE_WeaponTypeActionh_INCLUDE__
 
+#include <XML/XMLEntrySimpleTypes.h>
 #include <actions/CallbackWeapon.h>
+
+class WeaponTypeActionEntry : public XMLEntryContainer
+{
+public:
+	WeaponTypeActionEntry();
+	virtual ~WeaponTypeActionEntry();
+
+	XMLEntryWeaponChoice weapon_;
+	XMLEntryString type_;
+};
+
+class WeaponTypeActionEntryList : public XMLEntryList<WeaponTypeActionEntry>
+{
+public:
+	WeaponTypeActionEntryList();
+	virtual ~WeaponTypeActionEntryList();
+
+	virtual WeaponTypeActionEntry *createXMLEntry();
+};
 
 class WeaponTypeAction : public WeaponCallback
 {
 public:
 	WeaponTypeAction();
 	virtual ~WeaponTypeAction();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -45,7 +62,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponTypeAction, AccessoryPart::AccessoryWeapon);
 
 protected:
-	std::map<std::string, Weapon *> actions_;
+	WeaponTypeActionEntryList actions_;
 };
 
 #endif // __INCLUDE_WeaponTypeActionh_INCLUDE__

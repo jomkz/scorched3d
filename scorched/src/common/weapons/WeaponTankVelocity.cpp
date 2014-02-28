@@ -29,35 +29,14 @@
 REGISTER_ACCESSORY_SOURCE(WeaponTankVelocity);
 
 WeaponTankVelocity::WeaponTankVelocity() :
-	aimedWeapon_(0)
+	Weapon("WeaponTankVelocity", "Sets the next action's velocity to the player's current shot velocitiy.")
 {
-
+	addChildXMLEntry("aimedweapon", &aimedWeapon_);
 }
 
 WeaponTankVelocity::~WeaponTankVelocity()
 {
-	delete aimedWeapon_;
-	aimedWeapon_ = 0;
-}
 
-bool WeaponTankVelocity::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	aimedWeapon_ = (Weapon*) accessory;
-
-	return true;
 }
 
 void WeaponTankVelocity::fireWeapon(ScorchedContext &context,
@@ -67,7 +46,7 @@ void WeaponTankVelocity::fireWeapon(ScorchedContext &context,
 	if (tanket && tanket->getAlive())
 	{
 		FixedVector newVelocity = weaponContext.getInternalContext().getVelocityVector();
-		aimedWeapon_->fire(context, weaponContext, position, newVelocity);
+		aimedWeapon_.getValue()->fire(context, weaponContext, position, newVelocity);
 	}
 }
 

@@ -28,26 +28,18 @@
 REGISTER_ACCESSORY_SOURCE(WeaponTeleport);
 
 WeaponTeleport::WeaponTeleport() : 
-	groundOnly_(true), delay_("WeaponTeleport::delay")
+	Weapon("WeaponTeleport",
+		"Teleports the user to the weapons current position."),
+	groundOnly_("Teleports to landscape height", 0, true), 
+	delay_("WeaponTeleport::delay", "Number of seconds to delay before teleporting")
 {
-
+	addChildXMLEntry("groundonly", &groundOnly_);
+	addChildXMLEntry("delay", &delay_);
 }
 
 WeaponTeleport::~WeaponTeleport()
 {
 
-}
-
-bool WeaponTeleport::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-	if (!accessoryNode->getNamedChild("delay", delay_)) return false;
-	if (!accessoryNode->getNamedChild("sound", sound_)) return false;
-	accessoryNode->getNamedChild("groundonly", groundOnly_, false);
-	
-	if (!S3D::checkDataFile(getSound())) return false;
-
-	return true;
 }
 
 fixed WeaponTeleport::getDelay(ScorchedContext &context)

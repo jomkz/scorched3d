@@ -27,53 +27,44 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponTypeAction);
 
-WeaponTypeAction::WeaponTypeAction()
+WeaponTypeActionEntry::WeaponTypeActionEntry() :
+	XMLEntryContainer("WeaponTypeActionEntry", 
+		"A weapon that will only be activated if fired by the matching tank type", 
+		false),
+	type_("The tank type that must match for the weapon to activate"),
+	weapon_()
+{
+	addChildXMLEntry("type", &type_);
+	addChildXMLEntry("weapon", &weapon_);
+}
+
+WeaponTypeActionEntry::~WeaponTypeActionEntry()
+{
+}
+
+WeaponTypeActionEntryList::WeaponTypeActionEntryList() :
+	XMLEntryList<WeaponTypeActionEntry>("A set of weapons that will only be activated when fired by a tank of the matching type", 1)
+{
+}
+
+WeaponTypeActionEntryList::~WeaponTypeActionEntryList()
+{
+}
+
+WeaponTypeActionEntry *WeaponTypeActionEntryList::createXMLEntry()
+{
+	return new WeaponTypeActionEntry();
+}
+
+WeaponTypeAction::WeaponTypeAction() :
+	WeaponCallback("WeaponTypeAction", 
+		"Used to trigger different events based on which tank type the player is using.")
 {
 }
 
 WeaponTypeAction::~WeaponTypeAction()
 {
-	std::map<std::string, Weapon *>::iterator itor;
-	for (itor = actions_.begin();
-		itor != actions_.end();
-		++itor)
-	{
-		delete itor->second;
-	}
-	actions_.clear();
-}
 
-bool WeaponTypeAction::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	std::list<XMLNode *> children = accessoryNode->getChildren(); // Copy
-	std::list<XMLNode *>::iterator itor;
-	for (itor = children.begin();
-		itor != children.end();
-		++itor)
-	{
-		XMLNode *node = (*itor);
-
-		XMLNode *tmpNode = 0;
-		accessoryNode->getNamedChild(node->getName(), tmpNode); // Just to remove child
-
-		// Check next weapon is correct type
-		AccessoryPart *accessory = context.getAccessoryStore().
-			createAccessoryPart(context, parent_, node);
-		if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-		{
-			return node->returnError("Failed to find sub weapon, not a weapon");
-		}
-		actions_[node->getName()] = (Weapon*) accessory;
-	}
-
-	if (actions_.empty())
-	{
-		return accessoryNode->returnError("No actions defined");
-	}
-
-	return true;
 }
 
 void WeaponTypeAction::fireWeapon(ScorchedContext &context,
@@ -92,14 +83,15 @@ void WeaponTypeAction::weaponCallback(
 	Tanket *tanket = context.getTargetContainer().getTanketById(weaponContext.getPlayerId());
 	if (!tanket) return;
 
-	std::map<std::string, Weapon *>::iterator itor = 
-		actions_.find(tanket->getTanketType()->getName());
-	if (itor == actions_.end()) return;
-
-	Weapon *action = (*itor).second;
-	if (action)
+	std::list<WeaponTypeActionEntry *>::iterator itor = actions_.getChildren().begin(),
+		end = actions_.getChildren().end();
+	for (;itor!=end;++itor)
 	{
-		action->fire(context, weaponContext, position, velocity);
+		if ((*itor)->type_.getValue() == tanket->getTanketType()->getName())
+		{
+			(*itor)->weapon_.getValue()->fire(context, weaponContext, position, velocity);
+			break;
+		}
 	}
 }
 

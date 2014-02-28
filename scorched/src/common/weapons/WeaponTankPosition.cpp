@@ -29,37 +29,17 @@
 REGISTER_ACCESSORY_SOURCE(WeaponTankPosition);
 
 WeaponTankPosition::WeaponTankPosition() : 
-	sightPos_(false), aimedWeapon_(0)
+	Weapon("WeaponTankPosition", 
+		"Moves the next action to the player's current position. This can be used for firing from a moving tank. "),
+	sightPos_("If true, the tank's gun position is used", 0, false)
 {
+	addChildXMLEntry("sightpos", &sightPos_);
+	addChildXMLEntry("aimedweapon", &aimedWeapon_);
 
 }
 
 WeaponTankPosition::~WeaponTankPosition()
 {
-	delete aimedWeapon_;
-	aimedWeapon_ = 0;
-}
-
-bool WeaponTankPosition::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	aimedWeapon_ = (Weapon*) accessory;
-
-	accessoryNode->getNamedChild("sightpos", sightPos_, false);
-
-	return true;
 }
 
 void WeaponTankPosition::fireWeapon(ScorchedContext &context,
@@ -72,12 +52,12 @@ void WeaponTankPosition::fireWeapon(ScorchedContext &context,
 	if (tanket && tanket->getAlive())
 	{
 		FixedVector newPosition = tanket->getLife().getTargetPosition();
-		if (sightPos_)
+		if (sightPos_.getValue())
 		{
 			tanket->getLife().getTankTurretPosition(newPosition);
 		}
 
-		aimedWeapon_->fire(context, weaponContext, newPosition, velocity);
+		aimedWeapon_.getValue()->fire(context, weaponContext, newPosition, velocity);
 	}
 }
 

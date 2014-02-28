@@ -22,6 +22,7 @@
 #define AFX_WeaponTeleport_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponTeleport : public Weapon
 {
@@ -29,11 +30,7 @@ public:
 	WeaponTeleport();
 	virtual ~WeaponTeleport();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
-	const char *getSound() { return sound_.c_str(); }
-	bool getGroundOnly() { return groundOnly_; }
+	bool getGroundOnly() { return groundOnly_.getValue(); }
 	fixed getDelay(ScorchedContext &context);
 
 	// Inherited from Weapon
@@ -43,9 +40,8 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponTeleport, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser delay_;
-	std::string sound_;
-	bool groundOnly_;
+	XMLEntryNumberParser delay_;
+	XMLEntryBool groundOnly_;
 };
 
 #endif // !defined(AFX_WeaponTeleport_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

@@ -29,15 +29,11 @@ public:
 	WeaponSkyFlash();
 	virtual ~WeaponSkyFlash();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
 
 	REGISTER_ACCESSORY_HEADER(WeaponSkyFlash, AccessoryPart::AccessoryWeapon);
-
 protected:
 
 };

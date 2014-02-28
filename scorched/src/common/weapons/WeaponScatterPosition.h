@@ -22,15 +22,13 @@
 #define AFX_WeaponScatterPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponScatterPosition : public Weapon
 {
 public:
 	WeaponScatterPosition();
 	virtual ~WeaponScatterPosition();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,9 +37,9 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponScatterPosition, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser scatterpercentage_;
-	bool landonly_, landheight_;
-	Weapon *aimedWeapon_;
+	XMLEntryNumberParser scatterpercentage_;
+	XMLEntryBool landonly_, landheight_;
+	XMLEntryWeaponChoice aimedWeapon_;
 };
 
 #endif // !defined(AFX_WeaponScatterPosition_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

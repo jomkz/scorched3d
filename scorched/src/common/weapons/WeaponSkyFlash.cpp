@@ -24,7 +24,8 @@
 
 REGISTER_ACCESSORY_SOURCE(WeaponSkyFlash);
 
-WeaponSkyFlash::WeaponSkyFlash()
+WeaponSkyFlash::WeaponSkyFlash() :
+	Weapon("WeaponSkyFlash", "Used to illuminate the sky for lightning. ")
 {
 
 }
@@ -32,12 +33,6 @@ WeaponSkyFlash::WeaponSkyFlash()
 WeaponSkyFlash::~WeaponSkyFlash()
 {
 
-}
-
-bool WeaponSkyFlash::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-	return true;
 }
 
 void WeaponSkyFlash::fireWeapon(ScorchedContext &context,

@@ -22,17 +22,13 @@
 #define AFX_WeaponTranslate_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponTranslate : public Weapon
 {
 public:
 	WeaponTranslate();
 	virtual ~WeaponTranslate();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
-	Weapon *getNextAction() { return nextAction_; }
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -41,8 +37,8 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponTranslate, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser translateDist_;
-	Weapon *nextAction_;
+	XMLEntryNumberParser translateDist_;
+	XMLEntryWeaponChoice nextAction_;
 };
 
 #endif // !defined(AFX_WeaponTranslate_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

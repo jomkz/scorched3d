@@ -21,6 +21,7 @@
 #if !defined(__INCLUDE_WeaponRepeath_INCLUDE__)
 #define __INCLUDE_WeaponRepeath_INCLUDE__
 
+#include <XML/XMLEntryComplexTypes.h>
 #include <actions/CallbackWeapon.h>
 
 class WeaponRepeat : public WeaponCallback
@@ -28,9 +29,6 @@ class WeaponRepeat : public WeaponCallback
 public:
 	WeaponRepeat();
 	virtual ~WeaponRepeat();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -44,9 +42,9 @@ public:
 		unsigned int userData);
 
 protected:
-	Weapon *repeatWeapon_;
-	NumberParser delay_;
-	int repeat_;
+	XMLEntryWeaponChoice repeatWeapon_;
+	XMLEntryNumberParser delay_;
+	XMLEntryInt repeat_;
 
 };
 #endif // __INCLUDE_WeaponRepeath_INCLUDE__

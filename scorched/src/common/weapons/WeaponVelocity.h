@@ -22,15 +22,13 @@
 #define AFX_WeaponVelocity_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntryComplexTypes.h>
 
 class WeaponVelocity : public Weapon
 {
 public:
 	WeaponVelocity();
 	virtual ~WeaponVelocity();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,9 +37,9 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponVelocity, AccessoryPart::AccessoryWeapon);
 
 protected:
-	NumberParser velocityChange_;
-	Weapon *aimedWeapon_;
-	bool abs_;
+	XMLEntryNumberParser velocityChange_;
+	XMLEntryWeaponChoice aimedWeapon_;
+	XMLEntryBool abs_;
 };
 
 #endif // !defined(AFX_WeaponVelocity_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

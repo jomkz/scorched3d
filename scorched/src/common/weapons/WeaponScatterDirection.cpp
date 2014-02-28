@@ -29,38 +29,20 @@
 REGISTER_ACCESSORY_SOURCE(WeaponScatterDirection);
 
 WeaponScatterDirection::WeaponScatterDirection() :
-	aimedWeapon_(0)
+	Weapon("WeaponScatterDirection", 
+		"Changes the direction to a specific direction with a random offset"),
+	direction_("X, Y and Z direction to aim the weapon in",
+	directionOffset_("maximum X, Y, and Z amounts to offset the direction by. "
+           "For example, 10,10,9 will offset the direction with a random factor of +/- 10 degrees in each the x and y directions"),
 {
-
+	addChildXMLEntry("direction", &direction_);
+	addChildXMLEntry("directionoffset", &directionOffset_);
+	addChildXMLEntry("aimedweapon", &aimedWeapon_);
 }
 
 WeaponScatterDirection::~WeaponScatterDirection()
 {
-	delete aimedWeapon_;
-	aimedWeapon_ = 0;
-}
 
-bool WeaponScatterDirection::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("aimedweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	aimedWeapon_ = (Weapon*) accessory;
-
-	if (!accessoryNode->getNamedChild("direction", direction_)) return false;
-	if (!accessoryNode->getNamedChild("directionoffset", directionOffset_)) return false;
-
-	return true;
 }
 
 void WeaponScatterDirection::fireWeapon(ScorchedContext &context,

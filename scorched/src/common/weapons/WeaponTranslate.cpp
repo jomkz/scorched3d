@@ -25,37 +25,16 @@
 REGISTER_ACCESSORY_SOURCE(WeaponTranslate);
 
 WeaponTranslate::WeaponTranslate() :
-	translateDist_("WeaponTranslate::translateDist", 0), nextAction_(0)
+	Weapon("WeaponTranslate", 
+		"Moves the projectile or other weapon to a further point along the current trajectory by a specified distance."),
+	translateDist_("WeaponTranslate::translateDist", "distance to move along the axis before performing next action", 0, "0")
 {
-
+	addChildXMLEntry("translatedist", &translateDist_);
+	addChildXMLEntry("nextaction", &nextAction_);
 }
 
 WeaponTranslate::~WeaponTranslate()
 {
-	delete nextAction_;
-	nextAction_ = 0;
-}
-
-bool WeaponTranslate::parseXML(AccessoryCreateContext &context,XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("translatedist", translateDist_)) return false;
-
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("nextaction", subNode)) return false;
-	
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-
-	nextAction_ = (Weapon*) accessory;
-
-	return true;
 }
 
 void WeaponTranslate::fireWeapon(ScorchedContext &context,
@@ -64,7 +43,6 @@ void WeaponTranslate::fireWeapon(ScorchedContext &context,
 	FixedVector newVelocity = velocity.Normalize() * translateDist_.getValue(context);
 	FixedVector newPosition = position + newVelocity;
 	
-	nextAction_->fire(context, weaponContext, newPosition, velocity);
-	
+	nextAction_.getValue()->fire(context, weaponContext, newPosition, velocity);
 }
 
