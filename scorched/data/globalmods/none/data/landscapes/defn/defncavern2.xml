@@ -15,12 +15,12 @@
     <width>300</width>
     <height>125</height>
     <heightmap type="file">
-      <file>data/landscapes/textures/circle.bmp</file>
+      <file>data/landscapes/textures/circle.png</file>
       <levelsurround>true</levelsurround>
     </heightmap>
   </roof>
 	<heightmap type="file">
-    	<file>data/landscapes/textures/circle.bmp</file>
+    	<file>data/landscapes/textures/circle.png</file>
     	<levelsurround>true</levelsurround>
   </heightmap>
 </defn>

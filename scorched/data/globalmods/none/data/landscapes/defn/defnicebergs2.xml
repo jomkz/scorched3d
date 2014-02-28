@@ -33,7 +33,7 @@
     	<startmask></startmask>
     </tankstart>
     <heightmap type="file">
-    	<file>data/landscapes/textures/icebergs002.bmp</file>
+    	<file>data/landscapes/textures/icebergs002.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
 </defn>

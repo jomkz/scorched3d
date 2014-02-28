@@ -39,6 +39,7 @@
 #include <engine/ModFiles.h>
 #include <engine/ActionController.h>
 #include <engine/SaveGame.h>
+#include <engine/ThreadCallback.h>
 #include <events/EventHandlerDataBase.h>
 #include <events/EventHandlerAchievementNumberRankKills.h>
 #include <events/EventController.h>
@@ -63,6 +64,7 @@ static ScorchedServer *instanceLock = 0;
 static boost::thread::id thread_id;
 bool ScorchedServer::started_ = false;
 TargetSpace *ScorchedServer::targetSpace_ = new TargetSpace();
+ThreadCallback *ScorchedServer::threadCallback_ = new ThreadCallback();
 
 ScorchedServer *ScorchedServer::instance()
 {

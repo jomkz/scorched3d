@@ -34,6 +34,7 @@
 #include <common/OptionsTransient.h>
 #include <engine/Simulator.h>
 #include <engine/ModFiles.h>
+#include <engine/ThreadCallback.h>
 #include <landscapedef/LandscapeDefinitions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <tankai/TankAIAdder.h>
@@ -149,13 +150,14 @@ bool serverLoop(fixed timeDifference)
 		Logger::log(S3D::formatStringBuffer("Warning: Server loop took %.2f seconds", 
 			timeDifference.asFloat()));
 	}
+	ScorchedServer::instance()->getThreadCallback().processCallbacks();
 
 	return processed;
 }
 
 static boost::thread *clientServerThread;
 static bool clientServerStopped = true;
-static void clientServerLoop(ScorchedServerSettings *settings, ProgressCounter *progressCounter)
+static void clientServerLoop(ScorchedServerSettings *settings, ProgressCounter *progressCounter, ThreadCallbackI *endCallback)
 {
 	if (!ScorchedServer::startServer(
 		*settings,
@@ -167,6 +169,8 @@ static void clientServerLoop(ScorchedServerSettings *settings, ProgressCounter *
 			false);
 		return;
 	}
+	endCallback->callbackInvoked();
+	delete endCallback;
 
 	serverTimer.reset();
 	while (!clientServerStopped)
@@ -183,11 +187,11 @@ static void clientServerLoop(ScorchedServerSettings *settings, ProgressCounter *
 	ScorchedServer::instance()->stopServer();
 }
 
-void startClientServer(ScorchedServerSettings *settings, ProgressCounter *progressCounter)
+void startClientServer(ScorchedServerSettings *settings, ProgressCounter *progressCounter, ThreadCallbackI *endCallback)
 {
 	DIALOG_ASSERT(clientServerStopped && !clientServerThread);
 	clientServerStopped = false;
-	clientServerThread = new boost::thread(clientServerLoop, settings, progressCounter);
+	clientServerThread = new boost::thread(clientServerLoop, settings, progressCounter, endCallback);
 }
 
 void stopClientServer()

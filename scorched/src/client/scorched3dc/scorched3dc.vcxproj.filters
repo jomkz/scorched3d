@@ -507,9 +507,6 @@
     <ClCompile Include="..\..\common\image\Image.cpp">
       <Filter>image</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\image\ImageData.cpp">
       <Filter>image</Filter>
     </ClCompile>
@@ -517,12 +514,6 @@
       <Filter>image</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\image\ImageID.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageJpgFactory.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\image\ImageLuminanceFactory.cpp">
       <Filter>image</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\image\ImagePngFactory.cpp">
@@ -1383,6 +1374,9 @@
     <ClCompile Include="..\..\common\common\snprintf.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\engine\ThreadCallback.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1826,9 +1820,6 @@
     <ClInclude Include="..\..\common\image\Image.h">
       <Filter>image</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageBitmapFactory.h">
-      <Filter>image</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\image\ImageData.h">
       <Filter>image</Filter>
     </ClInclude>
@@ -1836,12 +1827,6 @@
       <Filter>image</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\image\ImageID.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageJpgFactory.h">
-      <Filter>image</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\image\ImageLuminanceFactory.h">
       <Filter>image</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\image\ImagePngFactory.h">
@@ -2704,6 +2689,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\net\NetServerTCP3Send.h">
       <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ThreadCallback.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\engine\ThreadCallbackI.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

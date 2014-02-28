@@ -46,8 +46,7 @@ Image ImagePngFactory::loadFromFile(const char *filename, bool readalpha)
 	Image result = loadFromBuffer(netBuffer, readalpha);
 	if (!result.getBits())
 	{
-		Logger::log(
-			S3D::formatStringBuffer("Failed to load PNG file \"%s\"", filename));
+		Logger::log(S3D::formatStringBuffer("ImagePngFactory: Failed to load PNG file \"%s\"", filename));
 	}
 	return result;
 }
@@ -62,11 +61,13 @@ struct user_read_struct
 
 static void user_png_error(png_structp png_ptr, png_const_charp msg) 
 {
+	Logger::log(S3D::formatStringBuffer("ImagePngFactory: Error failed loading png file %s", msg));
 	longjmp(png_jmpbuf(png_ptr),1);
 }
 
 static void user_png_warning(png_structp png_ptr, png_const_charp msg) 
 {
+	Logger::log(S3D::formatStringBuffer("ImagePngFactory: Warning while loading png file %s", msg));
 }
 
 static void user_read_fn(png_structp png_ptr,
@@ -152,10 +153,27 @@ Image ImagePngFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 	png_byte channels = png_get_channels(png_ptr, info_ptr);
 
 	Image result;
-	if (coltype == (readalpha?PNG_COLOR_TYPE_RGB_ALPHA:PNG_COLOR_TYPE_RGB) &&
-		bitdepth == 8 &&
-		channels == (readalpha?4:3) &&
-		(bytes / width) == (readalpha?4:3))
+	if (coltype != (readalpha?PNG_COLOR_TYPE_RGB_ALPHA:PNG_COLOR_TYPE_RGB)) 
+	{
+		Logger::log(S3D::formatStringBuffer(
+			"ImagePngFactory: Invalid PNG format, expected %s", readalpha?"PNG_COLOR_TYPE_RGB_ALPHA":"PNG_COLOR_TYPE_RGB"));
+	}
+	else if (bitdepth != 8)
+	{
+		Logger::log(S3D::formatStringBuffer(
+			"ImagePngFactory: Invalid PNG bit depth, expected 8 got %i", bitdepth));
+	}
+	else if (channels != (readalpha?4:3))
+	{
+		Logger::log(S3D::formatStringBuffer(
+			"ImagePngFactory: Invalid PNG channel size, expected %i got %i", (readalpha?4:3), channels));
+	}
+	else if ((bytes / width) != (readalpha?4:3))
+	{
+		Logger::log(S3D::formatStringBuffer(
+			"ImagePngFactory: Invalid byte row size, expected %i got %i", (readalpha?4:3), (bytes / width)));
+	}
+	else 
 	{
 		png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr);
 
@@ -165,18 +183,6 @@ Image ImagePngFactory::loadFromBuffer(NetBuffer &buffer, bool readalpha)
 		{
 			memcpy(result.getBits() + bytes * h, row_pointers[h], bytes);
 		}
-	}
-	else
-	{
-		png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) 0);
-
-		Logger::log(S3D::formatStringBuffer(
-			"Invalid PNG format.\n"
-			"width %d, hei %d, rowbytes %d, bitd %d, "
-			"colt %d, channels %d\n",
-            (int)width,(int)height,(int)bytes,(int)bitdepth,
-            (int)coltype,(int)channels));
-		return Image();
 	}
 
 	// END NEW CODE

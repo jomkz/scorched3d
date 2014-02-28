@@ -25,12 +25,14 @@
 #include <client/ClientChannelManager.h>
 #include <client/ClientHandlers.h>
 #include <client/ClientOptions.h>
+#include <engine/ThreadCallback.h>
 #include <target/TargetSpace.h>
 #include <coms/ComsSimulateMessage.h>
 #include <coms/ComsNetStatMessage.h>
 #include <landscapemap/LandscapeMaps.h>
 
 TargetSpace *ScorchedClient::targetSpace_ = new TargetSpace();
+ThreadCallback *ScorchedClient::threadCallback_ = new ThreadCallback();
 
 ScorchedClient *ScorchedClient::instance_ = 0;
 static ScorchedClient *instanceLock = 0;

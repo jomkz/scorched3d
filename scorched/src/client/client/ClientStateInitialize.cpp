@@ -35,6 +35,7 @@
 #include <common/Logger.h>
 #include <engine/ModFiles.h>
 #include <engine/ModFileEntryLoader.h>
+#include <engine/ThreadCallback.h>
 #include <coms/ComsConnectMessage.h>
 #include <coms/ComsMessageSender.h>
 #include <coms/ComsMessageHandler.h>
@@ -212,22 +213,38 @@ void ClientStateInitialize::connectToServer()
 		}
 
 		ProgressCounter *progressCounter = new ProgressCounter();
-		startClientServer(settings, progressCounter);
+		ThreadCallbackI *callback = new ThreadCallbackIAdapter<ClientStateInitialize>(
+			this, &ClientStateInitialize::startTryRemoteConnectionServer);
+		startClientServer(settings, progressCounter, callback);
 	}
-
-	// Do in a thread so connect can block if it wants!
-	//remoteConnectionThread_ = new boost::thread(ClientStateInitialize::tryRemoteConnection, this);
+	else
+	{
+		startTryRemoteConnection();
+	}
 }
 
-int ClientStateInitialize::tryRemoteConnection(void *th)
+void ClientStateInitialize::startTryRemoteConnectionServer()
 {
-	ClientStateInitialize *clientStateInitialize = (ClientStateInitialize *) th;
+	// This method is called by the server thread so switch flow to the client thread
+	ThreadCallbackI *callback = new ThreadCallbackIAdapter<ClientStateInitialize>(
+		this, &ClientStateInitialize::startTryRemoteConnection);
+	ScorchedClient::getThreadCallback().addCallback(callback);
+}
 
+void ClientStateInitialize::startTryRemoteConnection()
+{
+	// Do in a thread so connect can block if it wants!
+	remoteConnectionThread_ = new boost::thread(ClientStateInitialize::tryRemoteConnection, 
+		&ScorchedClient::instance()->getNetInterface());
+}
+
+int ClientStateInitialize::tryRemoteConnection(NetInterface *clientNetInterface)
+{
 	// Try to connect to the server
 	std::string host;
 	int port;
-	clientStateInitialize->getHost(host, port);
-	ScorchedClient::instance()->getNetInterface().connect(host.c_str(), port);
+	getHost(host, port);
+	clientNetInterface->connect(host.c_str(), port);
 	return 0;
 }
 
@@ -294,8 +311,7 @@ void ClientStateInitialize::sendAuth()
 	if (ClientParams::instance()->getConnectedToServer())
 	{
 		unsigned int ipAddress = NetInterface::getIpAddressFromName(hostName.c_str());
-		// TODO
-		uniqueId = "";//ConnectDialog::instance()->getIdStore().getUniqueId(ipAddress);
+		uniqueId = getIdStore().getUniqueId(ipAddress);
 
 		SecureID MakeKey;
 		SUI = MakeKey.getSecureID(ipAddress);

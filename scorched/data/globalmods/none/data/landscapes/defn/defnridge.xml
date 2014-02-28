@@ -10,7 +10,7 @@
 		<startmask></startmask>
 	</tankstart>
 	<heightmap type="generate">
-		<mask>data/landscapes/textures/ridge-mask.bmp</mask>
+		<mask>data/landscapes/textures/ridge-mask.png</mask>
 		<landhills>
 			<min>60</min><max>80</max>
 		</landhills>

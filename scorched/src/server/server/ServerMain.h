@@ -24,7 +24,8 @@
 #include <common/fixed.h>
 class ScorchedServerSettings;
 class ProgressCounter;
-void startClientServer(ScorchedServerSettings *settings, ProgressCounter *progressCounter);
+class ThreadCallbackI;
+void startClientServer(ScorchedServerSettings *settings, ProgressCounter *progressCounter, ThreadCallbackI *endCallback);
 void stopClientServer();
 
 void consoleServer();

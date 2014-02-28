@@ -127,6 +127,7 @@
     <ClCompile Include="..\..\common\engine\ScorchedCollisionIds.cpp" />
     <ClCompile Include="..\..\common\engine\ScorchedContext.cpp" />
     <ClCompile Include="..\..\common\engine\Simulator.cpp" />
+    <ClCompile Include="..\..\common\engine\ThreadCallback.cpp" />
     <ClCompile Include="..\..\common\engine\Wind.cpp" />
     <ClCompile Include="..\..\common\events\EventController.cpp" />
     <ClCompile Include="..\..\common\events\EventHandler.cpp" />
@@ -137,12 +138,9 @@
     <ClCompile Include="..\..\common\events\EventHandlerDataBaseMySQL.cpp" />
     <ClCompile Include="..\..\common\events\EventHandlerDataBasePGSQL.cpp" />
     <ClCompile Include="..\..\common\image\Image.cpp" />
-    <ClCompile Include="..\..\common\image\ImageBitmapFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageData.cpp" />
     <ClCompile Include="..\..\common\image\ImageFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageID.cpp" />
-    <ClCompile Include="..\..\common\image\ImageJpgFactory.cpp" />
-    <ClCompile Include="..\..\common\image\ImageLuminanceFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImagePngFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageStore.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefinition.cpp" />
@@ -571,6 +569,8 @@
     <ClInclude Include="..\..\common\engine\ScorchedContext.h" />
     <ClInclude Include="..\..\common\engine\Simulator.h" />
     <ClInclude Include="..\..\common\engine\SimulatorI.h" />
+    <ClInclude Include="..\..\common\engine\ThreadCallback.h" />
+    <ClInclude Include="..\..\common\engine\ThreadCallbackI.h" />
     <ClInclude Include="..\..\common\engine\Wind.h" />
     <ClInclude Include="..\..\common\events\EventController.h" />
     <ClInclude Include="..\..\common\events\EventHandler.h" />
@@ -581,12 +581,9 @@
     <ClInclude Include="..\..\common\events\EventHandlerDataBaseMySQL.h" />
     <ClInclude Include="..\..\common\events\EventHandlerDataBasePGSQL.h" />
     <ClInclude Include="..\..\common\image\Image.h" />
-    <ClInclude Include="..\..\common\image\ImageBitmapFactory.h" />
     <ClInclude Include="..\..\common\image\ImageData.h" />
     <ClInclude Include="..\..\common\image\ImageFactory.h" />
     <ClInclude Include="..\..\common\image\ImageID.h" />
-    <ClInclude Include="..\..\common\image\ImageJpgFactory.h" />
-    <ClInclude Include="..\..\common\image\ImageLuminanceFactory.h" />
     <ClInclude Include="..\..\common\image\ImagePngFactory.h" />
     <ClInclude Include="..\..\common\image\ImageStore.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefinition.h" />
@@ -943,7 +940,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;zlib_d.lib;jpeg_d.lib;libpng_d.lib;expat_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;zlib_d.lib;libpng_d.lib;expat_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

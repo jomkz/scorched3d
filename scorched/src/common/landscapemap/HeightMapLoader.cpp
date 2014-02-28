@@ -102,7 +102,7 @@ bool HeightMapLoader::generateTerrain(
 		if (!image.getBits())
 		{
 			S3D::dialogMessage("HeightMapLoader", S3D::formatStringBuffer(
-				"Error: Unable to find landscape map \"%s\"",
+				"Error: Unable to find image data in landscape map \"%s\"",
 				file->file.c_str()));
 			return false;
 		}

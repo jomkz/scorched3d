@@ -10,7 +10,7 @@
 		<startmask></startmask>
 	</tankstart>
 	<heightmap type="file">
-    	<file>data/landscapes/textures/fjords.bmp</file>
+    	<file>data/landscapes/textures/fjords.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
 </defn>

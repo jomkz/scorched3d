@@ -28,6 +28,7 @@
 class ProgressCounter;
 class TankDeadContainer;
 class TankAIStore;
+class ThreadCallback;
 class EconomyStore;
 class ServerSimulator;
 class ServerDestinations;
@@ -81,11 +82,13 @@ public:
 	ServerFileServer &getServerFileServer() { return *serverFileServer_; }
 	EconomyStore &getEconomyStore() { return *economyStore_; }
 	EventHandlerDataBase *getEventHandlerDataBase() { return eventHandlerDataBase_; }
+	static ThreadCallback &getThreadCallback() { return *threadCallback_; }
 
 protected:
 	static ScorchedServer *instance_;
 	static bool started_;
 	static TargetSpace *targetSpace_;
+	static ThreadCallback *threadCallback_;
 	
 	TankDeadContainer *deadContainer_;
 	TankAIStore *tankAIStore_;

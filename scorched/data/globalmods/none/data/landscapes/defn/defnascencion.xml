@@ -10,7 +10,7 @@
 		<startmask></startmask>
 	</tankstart>
 	<heightmap type="file">
-    	<file>data/landscapes/textures/ascencion.bmp</file>
+    	<file>data/landscapes/textures/ascencion.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
 </defn>

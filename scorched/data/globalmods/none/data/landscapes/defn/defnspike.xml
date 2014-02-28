@@ -10,7 +10,7 @@
 		<startmask></startmask>
 	</tankstart>
 	<heightmap type="file">
-    	<file>data/landscapes/textures/spike.bmp</file>
+    	<file>data/landscapes/textures/spike.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
 </defn>

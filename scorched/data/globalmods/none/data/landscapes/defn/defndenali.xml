@@ -10,7 +10,7 @@
 		<startmask></startmask>
 	</tankstart>
 	<heightmap type="file">
-    	<file>data/landscapes/textures/denali.bmp</file>
+    	<file>data/landscapes/textures/denali.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
 </defn>

@@ -25,6 +25,7 @@
 #include <client/ClientParams.h>
 #include <client/ClientSimulator.h>
 #include <server/ServerMain.h>
+#include <engine/ThreadCallback.h>
 #include <engine/Simulator.h>
 #include <common/Logger.h>
 #include <client/ClientOptions.h>
@@ -125,6 +126,7 @@ bool ClientState::clientEventLoop()
 			}
 		}
 	}
+	ScorchedClient::instance()->getThreadCallback().processCallbacks();
 
 	return !stopped_;
 }

@@ -9,10 +9,10 @@
 	<tankstart type="height">
 		<startcloseness>20</startcloseness>
 		<height><min>5.5</min><max>300</max></height>
-		<startmask>data/landscapes/textures/test-mask.bmp</startmask>
+		<startmask>data/landscapes/textures/test-mask.png</startmask>
 	</tankstart>
 	<heightmap type="file">
-    	<file>data/landscapes/textures/test.bmp</file>
+    	<file>data/landscapes/textures/test.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
 </defn>

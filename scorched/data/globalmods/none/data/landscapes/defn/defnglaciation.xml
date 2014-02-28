@@ -11,7 +11,7 @@
 		<flatness>0.5</flatness>
 	</tankstart>
 	<heightmap type="file">
-    	<file>data/landscapes/textures/glaciation.bmp</file>
+    	<file>data/landscapes/textures/glaciation.png</file>
     	<levelsurround>true</levelsurround>
     </heightmap>
 </defn>

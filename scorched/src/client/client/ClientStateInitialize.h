@@ -26,6 +26,7 @@
 
 class NetMessage;
 class NetBufferReader;
+class NetInterface;
 class UniqueIdStore;
 class ComsMessageHandler;
 class ClientStateInitialize  
@@ -47,9 +48,11 @@ protected:
 	UniqueIdStore *idStore_;
 	unsigned int totalBytes_;
 
-	void getHost(std::string &host, int &port);
+	static void getHost(std::string &host, int &port);
 	void tryConnection();
-	static int tryRemoteConnection(void *);
+	static int tryRemoteConnection(NetInterface *clientNetInterface);
+	void startTryRemoteConnectionServer();
+	void startTryRemoteConnection();
 	void finishedTryingConnection();
 	void finished();
 	void connectToServer();

@@ -19,8 +19,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <image/ImageFactory.h>
-#include <image/ImageBitmapFactory.h>
-#include <image/ImageJpgFactory.h>
 #include <image/ImagePngFactory.h>
 #include <string>
 
@@ -74,14 +72,12 @@ Image ImageFactory::loadImageInternal(S3D::FileLocation imageLocation, const std
 	{
 		return ImagePngFactory::loadFromFile(expandedFilename.c_str(), loadAlpha);
 	}
-	else if (strstr(filename.c_str(), ".jpg"))
+	else 
 	{
-		return ImageJpgFactory::loadFromFile(expandedFilename.c_str(), loadAlpha);
+		S3D::dialogExit("ImageFactory", 
+			S3D::formatStringBuffer("Only PNG image types are supported : %s", expandedFilename.c_str()));
 	}
-	else
-	{
-		return ImageBitmapFactory::loadFromFile(expandedFilename.c_str(), loadAlpha);
-	}
+	return Image();
 }
 
 Image ImageFactory::combineImage(Image bitmap, Image alpha, bool invert)

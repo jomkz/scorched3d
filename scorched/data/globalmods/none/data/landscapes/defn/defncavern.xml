@@ -35,7 +35,7 @@
     </deform>
 	</roof>
 	<heightmap type="generate">
-		<mask>data/landscapes/textures/valley-mask.bmp</mask>
+		<mask>data/landscapes/textures/valley-mask.png</mask>
 		<landhills>
 			<min>30</min><max>30</max>
 		</landhills>
@@ -56,7 +56,7 @@
 	</heightmap>
   <!--
   <deform type="file">
-    <file>data/landscapes/craters1.bmp</file>
+    <file>data/landscapes/craters1.png</file>
     <levelsurround>true</levelsurround>
   </deform>
   -->
