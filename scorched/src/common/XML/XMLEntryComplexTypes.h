@@ -24,16 +24,42 @@
 #include <XML/XMLEntrySimpleTypes.h>
 #include <common/NumberParser.h>
 
-class XMLEntryModelID : public XMLEntryContainer
+class XMLEntryModelSpec : public XMLEntryContainer
 {
 public:
-	XMLEntryModelID(bool required = true);
-	virtual ~XMLEntryModelID();
+	XMLEntryModelSpec(const char *typeName, const char *description);
+	virtual ~XMLEntryModelSpec();
+};
+
+class XMLEntryModelSpecDefinition : public XMLEntryModelSpec
+{
+public:
+	XMLEntryModelSpecDefinition();
+	virtual ~XMLEntryModelSpecDefinition();
 
 	XMLEntryString meshName;
 	XMLEntryFixed scale;
 	XMLEntryFixed rotation;
 	XMLEntryFixed brightness;
+};
+
+class XMLEntryModelSpecReference : public XMLEntryModelSpec
+{
+public:
+	XMLEntryModelSpecReference();
+	virtual ~XMLEntryModelSpecReference();
+
+	XMLEntryString modelName;
+};
+
+class XMLEntryModel : public XMLEntryTypeChoice<XMLEntryModelSpec>
+{
+public:
+	XMLEntryModel();
+	virtual ~XMLEntryModel();
+
+	virtual XMLEntryModelSpec *createXMLEntry(const std::string &type, void *xmlData);
+	virtual void getAllTypes(std::set<std::string> &allTypes);
 };
 
 class XMLEntryParticleID : public XMLEntryContainer

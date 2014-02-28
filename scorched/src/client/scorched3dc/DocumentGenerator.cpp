@@ -34,6 +34,7 @@
 #include <tankai/TankAIWeaponSets.h>
 #include <tanket/TanketTypes.h>
 #include <tank/TankModelStore.h>
+#include <models/ModelStore.h>
 
 void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
@@ -74,6 +75,9 @@ void DocumentGenerator::generatDocumentation(const std::string &directory)
 
 	TankModelStore tankModelStore;
 	tankModelStore.generateDocumentation(documentGenerator);
+
+	ModelStore modelStore;
+	modelStore.generateDocumentation(documentGenerator);
 
 	documentGenerator.writeDocumentation();
 }

@@ -43,7 +43,6 @@
 #include <tank/TankModelContainer.h>
 #include <tanket/TanketAccessories.h>
 #include <tank/TankViewPoints.h>
-#include <tank/TankModelStore.h>
 #include <target/TargetDamage.h>
 #include <target/TargetLife.h>
 #include <target/TargetState.h>

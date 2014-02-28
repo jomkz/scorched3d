@@ -23,9 +23,9 @@
 #include <client/ScorchedClient.h>
 #include <target/TargetContainer.h>
 #include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/UIState.h>
-#include <scorched3dc/UIStatePlaying.h>
-#include <scorched3dc/UIStatePlayingTargets.h>
+#include <uistate/UIState.h>
+#include <uistate/UIStatePlaying.h>
+#include <uistate/UIStatePlayingTargets.h>
 
 UIRotateTankAction::UIRotateTankAction(unsigned int playerId, fixed rotation, fixed elevation) :
 	playerId_(playerId), rotation_(rotation), elevation_(elevation)

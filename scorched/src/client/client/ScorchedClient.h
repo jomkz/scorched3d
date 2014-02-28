@@ -40,6 +40,7 @@ class ClientChannelManager;
 class ClientAdmin;
 class Console;
 class ProgressCounter;
+class ModelStore;
 class ScorchedClient : public ScorchedContext
 {
 public:
@@ -63,6 +64,7 @@ public:
 	Console &getConsole() { return *console_; }
 	ClientUISyncFromClient &getClientUISync();
 	ClientAdmin &getClientAdmin() { return *clientAdmin_; }
+	ModelStore &getModelStore() { return *modelStore_;  }
 	static ClientUISyncFromUI &getClientUISyncExternal();
 
 protected:
@@ -76,6 +78,7 @@ protected:
 	ClientHandlers *clientHandlers_;
 	ClientMessageHandler *clientMessageHandler_;
 	ClientChannelManager *channelManager_;
+	ModelStore *modelStore_;
 	Console *console_;
 
 	ComsMessageHandlerI *processComsSimulateMessageAdapter_;

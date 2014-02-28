@@ -18,10 +18,10 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <scorched3dc/UIStatePlaying.h>
-#include <scorched3dc/UIStatePlayingEnv.h>
-#include <scorched3dc/UIStatePlayingLand.h>
-#include <scorched3dc/UIStatePlayingTargets.h>
+#include <uistate/UIStatePlaying.h>
+#include <uistate/UIStatePlayingEnv.h>
+#include <uistate/UIStatePlayingLand.h>
+#include <uistate/UIStatePlayingTargets.h>
 #include <scorched3dc/CameraController.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>

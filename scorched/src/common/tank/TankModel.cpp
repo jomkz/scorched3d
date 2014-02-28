@@ -79,7 +79,7 @@ TankModel::TankModel() :
 {
 	catagories_.getChildren().push_back(new XMLEntryString("", 0, "ALL"));
 	addChildXMLEntry("name", &modelName_);
-	addChildXMLEntry("model", &modelId_);
+	addChildXMLEntry("model", &model_);
 	addChildXMLEntry("type", &tankTypes_);
 	addChildXMLEntry("catagory", &catagories_);
 	addChildXMLEntry("team", &teams_);

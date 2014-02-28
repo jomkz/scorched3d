@@ -18,25 +18,23 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStateIh_INCLUDE__)
-#define __INCLUDE_UIStateIh_INCLUDE__
+#if !defined(AFX_ModelInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#define AFX_ModelInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
-#include <scorched3dc/UIState.h>
+#include <XML/XMLEntryComplexTypes.h>
 
-class UIStateI
+class ModelInstance
 {
 public:
-	UIStateI(UIState::State thisState);
-	virtual ~UIStateI();
+	ModelInstance();
+	virtual ~ModelInstance();
 
-	virtual void createState() = 0;
-	virtual void destroyState() = 0;
-	virtual void updateState(float frameTime) {}
+	void create(XMLEntryModel &model);
+	Ogre::SceneNode *getSceneNode() { return sceneNode_;  }
 
-	UIState::State getState() { return thisState_; }
-
+	bool isCreated() { return sceneNode_ != 0; }
 protected:
-	UIState::State thisState_;
+	Ogre::SceneNode *sceneNode_;
 };
 
-#endif // __INCLUDE_UIStateIh_INCLUDE__
+#endif // !defined(AFX_ModelInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)

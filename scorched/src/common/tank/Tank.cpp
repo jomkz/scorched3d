@@ -21,7 +21,6 @@
 #include <math.h>
 #include <tank/Tank.h>
 #include <tank/TankColorGenerator.h>
-#include <tank/TankModelStore.h>
 #include <tank/TankScore.h>
 #include <tank/TankState.h>
 #include <tank/TankModelContainer.h>

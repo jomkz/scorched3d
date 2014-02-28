@@ -19,12 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/UIState.h>
-#include <scorched3dc/UIStateI.h>
-#include <scorched3dc/UIStateMainMenu.h>
-#include <scorched3dc/UIStateProgress.h>
-#include <scorched3dc/UIStateJoining.h>
-#include <scorched3dc/UIStatePlaying.h>
+#include <uistate/UIState.h>
+#include <uistate/UIStateI.h>
+#include <uistate/UIStateMainMenu.h>
+#include <uistate/UIStateProgress.h>
+#include <uistate/UIStateJoining.h>
+#include <uistate/UIStatePlaying.h>
 #include <client/ScorchedClient.h>
 
 UIState::UIState() : currentState_(0)

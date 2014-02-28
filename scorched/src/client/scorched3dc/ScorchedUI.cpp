@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/UIState.h>
+#include <uistate/UIState.h>
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/InputManager.h>
 #include <dialogs/GUIProgressCounter.h>

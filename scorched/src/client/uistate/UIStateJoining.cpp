@@ -19,46 +19,46 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/UIStateMainMenu.h>
+#include <uistate/UIStateJoining.h>
 #include <dialogs/GUIProgressCounter.h>
-#include <client/ClientState.h>
-#include <client/ClientParams.h>
+#include <engine/ThreadCallback.h>
 #include <client/ScorchedClient.h>
+#include <uiactions/UIJoinGameAction.h>
 
-UIStateMainMenu::UIStateMainMenu() : UIStateI(UIState::StateMainMenu)
+UIStateJoining::UIStateJoining() : UIStateI(UIState::StateJoining)
 {
 }
 
-UIStateMainMenu::~UIStateMainMenu()
+UIStateJoining::~UIStateJoining()
 {
 }
 
-void UIStateMainMenu::createState()
+void UIStateJoining::createState()
 {
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	{
-		CEGUI::Window *start = wmgr.createWindow("OgreTray/Button", "StartButton");
-		start->setText("Start");
-		start->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
-		start->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
-		start->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&UIStateMainMenu::start, this));
+		CEGUI::Window *join = wmgr.createWindow("OgreTray/Button", "JoinButton");
+		join->setText("Join");
+		join->setPosition(CEGUI::UVector2(CEGUI::UDim(0.3f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
+		join->setSize(CEGUI::USize(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
+		join->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&UIStateJoining::join, this));
 
 		CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
-		root->addChild(start);
+		root->addChild(join);
 	}
 }
 
-bool UIStateMainMenu::start(const CEGUI::EventArgs &e)
+bool UIStateJoining::join(const CEGUI::EventArgs &e)
 {
 	ScorchedUI::instance()->getUIState().setState(UIState::StateProgress);
-	ClientParams::instance()->setStartCustom(true);
-	ScorchedClient::startClient(GUIProgressCounter::instance());
+	GUIProgressCounter::instance()->setNewOp(LANG_STRING("Waiting for server..."));
+	ScorchedClient::getClientUISyncExternal().addActionFromUI(new UIJoinGameAction());
 	return true;
 }
 
-void UIStateMainMenu::destroyState()
+void UIStateJoining::destroyState()
 {
 	CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	wmgr.destroyWindow(root->getChild("StartButton"));
+	wmgr.destroyWindow(root->getChild("JoinButton"));
 }

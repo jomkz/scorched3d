@@ -59,7 +59,7 @@ protected:
 	XMLEntryString removeaction_;
 	XMLEntryString burnaction_;
 	XMLEntryString collisionaction_;
-	XMLEntryModelID modelId_;
+	XMLEntryModel model_;
 	ObjectGroupEntryDefinition groups_;
 };
 

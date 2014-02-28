@@ -79,6 +79,9 @@
     <Filter Include="models">
       <UniqueIdentifier>{fe0c7fa2-6c64-4789-9c15-6f7ce6894625}</UniqueIdentifier>
     </Filter>
+    <Filter Include="uistate">
+      <UniqueIdentifier>{237edc6c-2649-4262-9263-cdec1b32232a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1323,30 +1326,6 @@
     <ClCompile Include="..\..\common\common\ThreadUtils.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="UIState.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
-    <ClCompile Include="UIStateMainMenu.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
-    <ClCompile Include="UIStateI.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
-    <ClCompile Include="UIStateProgress.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
-    <ClCompile Include="UIStateJoining.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
-    <ClCompile Include="UIStatePlaying.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
-    <ClCompile Include="UIStatePlayingEnv.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
-    <ClCompile Include="UIStatePlayingLand.cpp">
-      <Filter>scorched3dc</Filter>
-    </ClCompile>
     <ClCompile Include="CameraController.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
@@ -1373,9 +1352,6 @@
     </ClCompile>
     <ClCompile Include="..\console\ConsoleRuleOptionsAdapter.cpp">
       <Filter>console</Filter>
-    </ClCompile>
-    <ClCompile Include="UIStatePlayingTargets.cpp">
-      <Filter>scorched3dc</Filter>
     </ClCompile>
     <ClCompile Include="..\dialogs\GUIConsole.cpp">
       <Filter>dialogs</Filter>
@@ -1500,8 +1476,38 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeDescriptionsBase.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
-    <ClCompile Include="..\models\ModelFactory.cpp">
+    <ClCompile Include="..\models\ModelInstance.cpp">
       <Filter>models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\models\ModelStore.cpp">
+      <Filter>models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIState.cpp">
+      <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIStateI.cpp">
+      <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIStateJoining.cpp">
+      <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIStateMainMenu.cpp">
+      <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIStatePlaying.cpp">
+      <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIStatePlayingEnv.cpp">
+      <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIStatePlayingLand.cpp">
+      <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIStatePlayingTargets.cpp">
+      <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uistate\UIStateProgress.cpp">
+      <Filter>uistate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2753,30 +2759,6 @@
     <ClInclude Include="..\..\common\common\ThreadUtils.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="UIState.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
-    <ClInclude Include="UIStateMainMenu.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
-    <ClInclude Include="UIStateI.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
-    <ClInclude Include="UIStateProgress.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
-    <ClInclude Include="UIStateJoining.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
-    <ClInclude Include="UIStatePlaying.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
-    <ClInclude Include="UIStatePlayingEnv.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
-    <ClInclude Include="UIStatePlayingLand.h">
-      <Filter>scorched3dc</Filter>
-    </ClInclude>
     <ClInclude Include="CameraController.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
@@ -2803,9 +2785,6 @@
     </ClInclude>
     <ClInclude Include="..\console\ConsoleRuleOptionsAdapter.h">
       <Filter>console</Filter>
-    </ClInclude>
-    <ClInclude Include="UIStatePlayingTargets.h">
-      <Filter>scorched3dc</Filter>
     </ClInclude>
     <ClInclude Include="..\dialogs\GUIConsole.h">
       <Filter>dialogs</Filter>
@@ -2933,8 +2912,38 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeDescriptionsItem.h">
       <Filter>landscapedef</Filter>
     </ClInclude>
-    <ClInclude Include="..\models\ModelFactory.h">
+    <ClInclude Include="..\models\ModelInstance.h">
       <Filter>models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\models\ModelStore.h">
+      <Filter>models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIState.h">
+      <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIStateI.h">
+      <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIStateJoining.h">
+      <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIStateMainMenu.h">
+      <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIStatePlaying.h">
+      <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIStatePlayingEnv.h">
+      <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIStatePlayingLand.h">
+      <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIStatePlayingTargets.h">
+      <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uistate\UIStateProgress.h">
+      <Filter>uistate</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

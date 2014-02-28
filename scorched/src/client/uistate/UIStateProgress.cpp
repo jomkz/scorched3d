@@ -18,12 +18,23 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <scorched3dc/UIStateI.h>
+#include <uistate/UIStateProgress.h>
+#include <dialogs/GUIProgressCounter.h>
 
-UIStateI::UIStateI(UIState::State thisState) : thisState_(thisState)
+UIStateProgress::UIStateProgress() : UIStateI(UIState::StateProgress)
 {
 }
 
-UIStateI::~UIStateI()
+UIStateProgress::~UIStateProgress()
 {
+}
+
+void UIStateProgress::createState()
+{
+	GUIProgress::instance()->setVisible(true);
+}
+
+void UIStateProgress::destroyState()
+{
+	GUIProgress::instance()->setVisible(false);
 }

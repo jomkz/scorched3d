@@ -57,7 +57,7 @@ public:
 	fixed getWobbleSpin(ScorchedContext &context) { return wobbleSpin_.getValue(context); }
 	fixed getWobbleAmount(ScorchedContext &context) { return wobbleAmount_.getValue(context); }
 	WeaponCameraTrack &getCameraTrack() { return cameraTrack_; }
-	XMLEntryModelID &getModelID() { return modelId_; }
+	XMLEntryModel &getModel() { return model_; }
 	ObjectGroupEntryDefinition &getLocalGroups() { return localGroups_; }
 	ObjectGroupEntryDefinition &getGlobalGroups() { return globalGroups_; }
 	PhysicsParticleObjectDefinition &getParticleDefinition() { return particleDefinition_; }
@@ -82,7 +82,7 @@ protected:
 	XMLEntryNumberParser wobbleAmount_;
 	XMLEntryFixed stepSize_;
 	XMLEntryWeaponChoice collisionAction_;
-	XMLEntryModelID modelId_;
+	XMLEntryModel model_;
 };
 
 #endif // !defined(AFX_WEAPONPROJECTILE_H__70119A64_2064_4066_8EE5_FD6A3E24D5FC__INCLUDED_)

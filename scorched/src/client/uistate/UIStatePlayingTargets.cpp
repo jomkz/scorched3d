@@ -18,7 +18,7 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <scorched3dc/UIStatePlayingTargets.h>
+#include <uistate/UIStatePlayingTargets.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/InputManager.h>
 #include <scorched3dc/OgreSystem.h>

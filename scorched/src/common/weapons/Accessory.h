@@ -67,7 +67,7 @@ public:
 	const char *getGroupName() { return groupName_.getValue().c_str(); }
 	const char *getTabGroupName() { return tabGroupName_.getValue().c_str(); }
 	AccessoryPart *getAction() { return accessoryAction_.getValue(); }
-	XMLEntryModelID &getModel() { return modelId_; }
+	XMLEntryModel &getModel() { return model_; }
 
 	AccessoryPart::AccessoryType getType() { return accessoryAction_.getValue()->getType(); }
 
@@ -89,7 +89,7 @@ protected:
 	XMLEntryInt price_, bundle_;
 	XMLEntryInt startingNumber_, useNumber_, maximumNumber_;
 	XMLEntryBool botOnly_, noBuy_;
-	XMLEntryModelID modelId_;
+	XMLEntryModel model_;
 	XMLEntryString iconName_, groupName_, tabGroupName_;
 	XMLEntryString activationSound_;
 	XMLEntryEnum positionSelect_;

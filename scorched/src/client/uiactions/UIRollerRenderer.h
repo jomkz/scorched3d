@@ -23,6 +23,7 @@
 
 #include <client/ClientUISync.h>
 #include <actions/Action.h>
+#include <models/ModelInstance.h>
 
 class ShotBounce;
 class UIRollerRenderer : public ClientUISyncActionRegisterable, public ActionRenderer
@@ -39,9 +40,7 @@ public:
 	virtual void deleteThis();
 protected:
 	ShotBounce *shotBounce_;
-	Ogre::SceneNode *projectileNode_;
-
-	void create();
+	ModelInstance projectileInstance_;
 };
 
 #endif

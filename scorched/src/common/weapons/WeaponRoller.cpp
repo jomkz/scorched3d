@@ -52,7 +52,7 @@ WeaponRoller::WeaponRoller() :
 	addChildXMLEntry("timeout", &timeoutExp_);
 	addChildXMLEntry("numberrollers", &numberRollers_);
 	addChildXMLEntry("collisionaction", &collisionAction_);
-	addChildXMLEntry("rollermodel", &rollerModelId_);
+	addChildXMLEntry("rollermodel", &rollerModel_);
 	addChildXMLEntry("shieldhurtfactor", &shieldHurtFactorExp_);
 	addChildXMLEntry("dampenvelocity", &dampenVelocityExp_);
 	addChildXMLEntry("maintainvelocity", &maintainVelocity_);

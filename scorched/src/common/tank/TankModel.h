@@ -60,7 +60,7 @@ public:
 	virtual ~TankModel();
 
 	const char *getName() { return modelName_.getValue().c_str(); }
-	XMLEntryModelID &getTankModelID() { return modelId_; }
+	XMLEntryModel &getTankModel() { return model_; }
 
 	bool isOfCatagory(const char *catagory);
 	bool isOfAi(bool ai);
@@ -74,7 +74,7 @@ public:
 protected:
 	XMLEntryBool aiOnly_;
 	XMLEntryString modelName_;
-	XMLEntryModelID modelId_;
+	XMLEntryModel model_;
 	TankModelTypeList tankTypes_;
 	TankModelCatagoryList catagories_;
 	TankModelTeamList teams_;

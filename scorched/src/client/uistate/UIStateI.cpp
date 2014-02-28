@@ -18,18 +18,12 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_GUITankInfo_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
-#define AFX_GUITankInfo_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
+#include <uistate/UIStateI.h>
 
-#include <XML/XMLEntryComplexTypes.h>
-
-class ModelFactory
+UIStateI::UIStateI(UIState::State thisState) : thisState_(thisState)
 {
-public:
-	static void attachModel(Ogre::SceneNode *sceneNode, XMLEntryModelID &modelId);
-private:
-	ModelFactory();
-	virtual ~ModelFactory();
-};
+}
 
-#endif // !defined(AFX_GUITankInfo_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+UIStateI::~UIStateI()
+{
+}

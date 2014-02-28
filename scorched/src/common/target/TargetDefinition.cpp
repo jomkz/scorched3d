@@ -62,10 +62,9 @@ TargetDefinition::TargetDefinition() :
 	removeaction_("The accessory name to fire when this target is removed (destroyed)", 0, ""),
 	burnaction_("The accessory name to fire when this target is burned", 0, ""),
 	collisionaction_("The accessory name to fire when a projectile collides with this target", 0, ""),
-	groups_(),
-	modelId_("The model of the target")
+	groups_()
 {
-	addChildXMLEntry("model", &modelId_);
+	addChildXMLEntry("model", &model_);
 	addChildXMLEntry("name", &name_);
 	addChildXMLEntry("life", &life_);
 	addChildXMLEntry("boundingsphere", &boundingsphere_);

@@ -18,22 +18,25 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStateJoiningh_INCLUDE__)
-#define __INCLUDE_UIStateJoiningh_INCLUDE__
+#if !defined(__INCLUDE_UIStateIh_INCLUDE__)
+#define __INCLUDE_UIStateIh_INCLUDE__
 
-#include <scorched3dc/UIStateI.h>
+#include <uistate/UIState.h>
 
-class UIStateJoining : public UIStateI
+class UIStateI
 {
 public:
-	UIStateJoining();
-	virtual ~UIStateJoining();
+	UIStateI(UIState::State thisState);
+	virtual ~UIStateI();
 
-	virtual void createState();
-	virtual void destroyState();
+	virtual void createState() = 0;
+	virtual void destroyState() = 0;
+	virtual void updateState(float frameTime) {}
+
+	UIState::State getState() { return thisState_; }
 
 protected:
-	bool join(const CEGUI::EventArgs &e);
+	UIState::State thisState_;
 };
 
-#endif // __INCLUDE_UIStateJoiningh_INCLUDE__
+#endif // __INCLUDE_UIStateIh_INCLUDE__

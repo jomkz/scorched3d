@@ -33,6 +33,7 @@
 #include <net/NetServerTCP3.h>
 #include <net/NetLoopBack.h>
 #include <engine/ThreadCallback.h>
+#include <models/ModelStore.h>
 #include <target/TargetSpace.h>
 #include <target/TargetContainer.h>
 #include <coms/ComsSimulateMessage.h>
@@ -140,6 +141,7 @@ ScorchedClient::ScorchedClient() :
 	clientSimulator_ = new ClientSimulator();
 	clientSimulator_->setScorchedContext(this);
 	clientAdmin_ = new ClientAdmin(*console_);
+	modelStore_ = new ModelStore();
 
 	processComsSimulateMessageAdapter_ = new ComsMessageHandlerIAdapter<ClientSimulator>(
 		clientSimulator_, &ClientSimulator::processComsSimulateMessage,
@@ -159,6 +161,7 @@ ScorchedClient::~ScorchedClient()
 	delete clientState_;
 	delete clientSimulator_;
 	delete clientAdmin_;
+	delete modelStore_;
 	delete processComsSimulateMessageAdapter_;
 	delete processNetStatMessageAdapter_;
 	delete console_;

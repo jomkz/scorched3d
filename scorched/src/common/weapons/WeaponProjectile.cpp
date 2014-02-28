@@ -50,7 +50,7 @@ WeaponProjectile::WeaponProjectile() :
 	addChildXMLEntry("wobbleamount", &wobbleAmount_);
 	addChildXMLEntry("spinspeed", &spinSpeed_);
 	addChildXMLEntry("spinaxis", &spinAxis_);
-	addChildXMLEntry("projectilemodel", &modelId_);
+	addChildXMLEntry("projectilemodel", &model_);
 	addChildXMLEntry("drag", &drag_);
 	addChildXMLEntry("stepsize", &stepSize_);
 	addChildXMLEntry("thrusttime", &thrustTime_);

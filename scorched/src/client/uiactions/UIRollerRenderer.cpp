@@ -22,22 +22,15 @@
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <actions/ShotBounce.h>
-#include <models/ModelFactory.h>
 
 UIRollerRenderer::UIRollerRenderer(ShotBounce *shotBounce) :
 	ClientUISyncActionRegisterable(true),
-	shotBounce_(shotBounce), projectileNode_(0)
+	shotBounce_(shotBounce)
 {
 }
 
 UIRollerRenderer::~UIRollerRenderer()
 {
-	ENSURE_UI_THREAD
-	if (projectileNode_)
-	{
-		OgreSystem::destroySceneNode(projectileNode_);
-		projectileNode_ = 0;
-	}
 }
 
 void UIRollerRenderer::performUIAction()
@@ -49,16 +42,16 @@ void UIRollerRenderer::performUIAction()
 		delete this;
 		return;
 	}
-	if (!projectileNode_) create();
+	if (!projectileInstance_.isCreated()) projectileInstance_.create(shotBounce_->getWeapon()->getRollerModel());
 
 	FixedVector &position = shotBounce_->getPhysics().getPosition();
-	projectileNode_->setPosition(
+	projectileInstance_.getSceneNode()->setPosition(
 		position[0].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED, 
 		position[2].getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED, 
 		position[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED);
 
 	FixedVector4 &quat = shotBounce_->getPhysics().getRotationQuat();
-	projectileNode_->setOrientation(quat[0].asFloat(), quat[1].asFloat(), 
+	projectileInstance_.getSceneNode()->setOrientation(quat[0].asFloat(), quat[1].asFloat(),
 		quat[2].asFloat(), quat[3].asFloat());
 }
 
@@ -71,12 +64,4 @@ void UIRollerRenderer::deleteThis()
 {
 	shotBounce_ = 0;
 	registerCallback();
-}
-
-void UIRollerRenderer::create()
-{
-	Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
-
-	projectileNode_ = sceneManager->getRootSceneNode()->createChildSceneNode();
-	ModelFactory::attachModel(projectileNode_, shotBounce_->getWeapon()->getRollerModelID());
 }

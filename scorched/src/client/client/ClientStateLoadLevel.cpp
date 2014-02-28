@@ -37,7 +37,7 @@
 #include <target/TargetContainer.h>
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
-#include <scorched3dc/UIState.h>
+#include <uistate/UIState.h>
 #include <dialogs/GUIProgressCounter.h>
 
 ClientStateLoadLevel::ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler) : initialLevel_(true)

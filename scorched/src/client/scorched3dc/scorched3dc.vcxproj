@@ -451,7 +451,8 @@
     <ClCompile Include="..\dialogs\GUIFrameTimer.cpp" />
     <ClCompile Include="..\dialogs\GUIProgressCounter.cpp" />
     <ClCompile Include="..\dialogs\GUITankInfo.cpp" />
-    <ClCompile Include="..\models\ModelFactory.cpp" />
+    <ClCompile Include="..\models\ModelInstance.cpp" />
+    <ClCompile Include="..\models\ModelStore.cpp" />
     <ClCompile Include="..\uiactions\UIActiveTankAction.cpp" />
     <ClCompile Include="..\uiactions\UIJoinGameAction.cpp" />
     <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp" />
@@ -467,6 +468,15 @@
     <ClCompile Include="..\uiactions\UITankWeapon.cpp" />
     <ClCompile Include="..\uiactions\UITargetModel.cpp" />
     <ClCompile Include="..\uiactions\UITargetRenderer.cpp" />
+    <ClCompile Include="..\uistate\UIState.cpp" />
+    <ClCompile Include="..\uistate\UIStateI.cpp" />
+    <ClCompile Include="..\uistate\UIStateJoining.cpp" />
+    <ClCompile Include="..\uistate\UIStateMainMenu.cpp" />
+    <ClCompile Include="..\uistate\UIStatePlaying.cpp" />
+    <ClCompile Include="..\uistate\UIStatePlayingEnv.cpp" />
+    <ClCompile Include="..\uistate\UIStatePlayingLand.cpp" />
+    <ClCompile Include="..\uistate\UIStatePlayingTargets.cpp" />
+    <ClCompile Include="..\uistate\UIStateProgress.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="DocumentGenerator.cpp" />
     <ClCompile Include="InputHandlerKeyboard.cpp" />
@@ -479,15 +489,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="UIState.cpp" />
-    <ClCompile Include="UIStateI.cpp" />
-    <ClCompile Include="UIStateJoining.cpp" />
-    <ClCompile Include="UIStateMainMenu.cpp" />
-    <ClCompile Include="UIStatePlaying.cpp" />
-    <ClCompile Include="UIStatePlayingEnv.cpp" />
-    <ClCompile Include="UIStatePlayingLand.cpp" />
-    <ClCompile Include="UIStatePlayingTargets.cpp" />
-    <ClCompile Include="UIStateProgress.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\actions\Action.h" />
@@ -934,7 +935,8 @@
     <ClInclude Include="..\dialogs\GUIFrameTimer.h" />
     <ClInclude Include="..\dialogs\GUIProgressCounter.h" />
     <ClInclude Include="..\dialogs\GUITankInfo.h" />
-    <ClInclude Include="..\models\ModelFactory.h" />
+    <ClInclude Include="..\models\ModelInstance.h" />
+    <ClInclude Include="..\models\ModelStore.h" />
     <ClInclude Include="..\uiactions\UIActiveTankAction.h" />
     <ClInclude Include="..\uiactions\UIJoinGameAction.h" />
     <ClInclude Include="..\uiactions\UILandscapeDeformAction.h" />
@@ -950,6 +952,15 @@
     <ClInclude Include="..\uiactions\UITankWeapon.h" />
     <ClInclude Include="..\uiactions\UITargetModel.h" />
     <ClInclude Include="..\uiactions\UITargetRenderer.h" />
+    <ClInclude Include="..\uistate\UIState.h" />
+    <ClInclude Include="..\uistate\UIStateI.h" />
+    <ClInclude Include="..\uistate\UIStateJoining.h" />
+    <ClInclude Include="..\uistate\UIStateMainMenu.h" />
+    <ClInclude Include="..\uistate\UIStatePlaying.h" />
+    <ClInclude Include="..\uistate\UIStatePlayingEnv.h" />
+    <ClInclude Include="..\uistate\UIStatePlayingLand.h" />
+    <ClInclude Include="..\uistate\UIStatePlayingTargets.h" />
+    <ClInclude Include="..\uistate\UIStateProgress.h" />
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="DocumentGenerator.h" />
     <ClInclude Include="InputHandlerKeyboard.h" />
@@ -958,15 +969,6 @@
     <ClInclude Include="OgreSystem.h" />
     <ClInclude Include="ScorchedUI.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="UIState.h" />
-    <ClInclude Include="UIStateI.h" />
-    <ClInclude Include="UIStateJoining.h" />
-    <ClInclude Include="UIStateMainMenu.h" />
-    <ClInclude Include="UIStatePlaying.h" />
-    <ClInclude Include="UIStatePlayingEnv.h" />
-    <ClInclude Include="UIStatePlayingLand.h" />
-    <ClInclude Include="UIStatePlayingTargets.h" />
-    <ClInclude Include="UIStateProgress.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F27B2892-60F6-40E6-81AA-953B53D433B7}</ProjectGuid>

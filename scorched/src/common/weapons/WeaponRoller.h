@@ -34,7 +34,7 @@ public:
 	virtual ~WeaponRoller();
 
 	Weapon *getCollisionAction() { return collisionAction_.getValue(); }
-	XMLEntryModelID &getRollerModelID() { return rollerModelId_; }
+	XMLEntryModel &getRollerModel() { return rollerModel_; }
 	bool getRoll() { return roll_.getValue(); }
 	WeaponCameraTrack &getCameraTrack() { return cameraTrack_; }
 	fixed getShieldHurtFactor(ScorchedContext &context) { return shieldHurtFactorExp_.getValue(context); }
@@ -55,7 +55,7 @@ public:
 protected:
 	XMLEntryNumberParser numberRollers_;
 	XMLEntryWeaponChoice collisionAction_;
-	XMLEntryModelID rollerModelId_;
+	XMLEntryModel rollerModel_;
 	XMLEntryNumberParser dampenVelocityExp_;
 	XMLEntryNumberParser shieldHurtFactorExp_;
 	XMLEntryNumberParser timeExp_, timeoutExp_;

@@ -23,6 +23,7 @@
 
 #include <client/ClientUISync.h>
 #include <actions/Action.h>
+#include <models/ModelInstance.h>
 
 class ShotProjectile;
 class UIProjectileRenderer : public ClientUISyncActionRegisterable, public ActionRenderer
@@ -38,9 +39,9 @@ public:
 	virtual void simulate(Action *action, float frametime, bool &removeAction);
 	virtual void deleteThis();
 protected:
+	ModelInstance projectileInstance_;
 	ParticleUniverse::ParticleSystem* pSys_;
 	ShotProjectile *shotProjectile_;
-	Ogre::SceneNode *projectileNode_;
 
 	void create();
 };

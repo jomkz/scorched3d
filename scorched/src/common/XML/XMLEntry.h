@@ -281,7 +281,7 @@ public:
 			children.push_back(*itor);
 		}
 	}
-	void clear() 
+	virtual void clear() 
 	{
 		std::list<T *>::iterator itor = xmlEntryChildren_.begin(),
 			end = xmlEntryChildren_.end();

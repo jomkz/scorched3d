@@ -20,7 +20,7 @@
 
 #include <scorched3dc/ScorchedUI.h>
 #include <dialogs/GUIProgressCounter.h>
-#include <scorched3dc/UIState.h>
+#include <uistate/UIState.h>
 #include <common/Logger.h>
 
 GUIProgress *GUIProgress::instance()

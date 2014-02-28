@@ -18,19 +18,40 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStateProgressh_INCLUDE__)
-#define __INCLUDE_UIStateProgressh_INCLUDE__
+#if !defined(__INCLUDE_UIStatePlayingh_INCLUDE__)
+#define __INCLUDE_UIStatePlayingh_INCLUDE__
 
-#include <scorched3dc/UIStateI.h>
+#include <uistate/UIStateI.h>
+#include <scorched3dc/CameraController.h>
 
-class UIStateProgress : public UIStateI
+class UIStatePlayingEnv;
+class UIStatePlayingLand;
+class UIStatePlayingTargets;
+class CameraController;
+class UIStatePlaying : public UIStateI, public CameraControllerHeightProvider
 {
 public:
-	UIStateProgress();
-	virtual ~UIStateProgress();
+	UIStatePlaying();
+	virtual ~UIStatePlaying();
 
+	void updateHeight(int x, int y, int w, int h);
+
+	UIStatePlayingTargets *getTargets() { return targets_; }
+
+	// UIStateI
 	virtual void createState();
 	virtual void destroyState();
+	virtual void updateState(float frameTime);
+
+	// CameraControllerHeightProvider
+	virtual Ogre::Real getHeight(const Ogre::Vector3 &position);
+	virtual bool getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition);
+protected:
+	Ogre::SceneManager* sceneMgr_;
+	CameraController *cameraController_;
+	UIStatePlayingEnv *env_;
+	UIStatePlayingLand *land_;
+	UIStatePlayingTargets *targets_;
 };
 
-#endif // __INCLUDE_UIStateProgressh_INCLUDE__
+#endif // __INCLUDE_UIStatePlayingh_INCLUDE__

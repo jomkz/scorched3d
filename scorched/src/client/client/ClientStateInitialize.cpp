@@ -51,10 +51,11 @@
 #include <net/NetLoopBack.h>
 #include <server/ScorchedServer.h>
 #include <server/ServerMain.h>
+#include <models/ModelStore.h>
 #include <target/TargetContainer.h>
-#include <tank/TankModelStore.h>
 #include <tankai/TankAIStrings.h>
 #include <tanket/TanketTypes.h>
+#include <tank/TankModelStore.h>
 #include <weapons/AccessoryStore.h>
 #include <landscapedef/LandscapeDescriptions.h>
 #include <dialogs/GUIProgressCounter.h>
@@ -467,6 +468,12 @@ bool ClientStateInitialize::initializeMod()
 		loadTanketTypes(ScorchedClient::instance()->getContext())) {
 
 		S3D::dialogMessage("Scorched 3D", "Failed to load tank types");
+		return false;
+	}
+
+	if (!ScorchedClient::instance()->getModelStore().loadModels())
+	{
+		S3D::dialogMessage("Scorched 3D", "Failed to load all models");
 		return false;
 	}
 

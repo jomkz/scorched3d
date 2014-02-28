@@ -22,11 +22,10 @@
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <actions/ShotProjectile.h>
-#include <models/ModelFactory.h>
 
 UIProjectileRenderer::UIProjectileRenderer(ShotProjectile *shotProjectile) :
 	ClientUISyncActionRegisterable(true),
-	shotProjectile_(shotProjectile), projectileNode_(0)
+	shotProjectile_(shotProjectile)
 {
 }
 
@@ -56,15 +55,15 @@ void UIProjectileRenderer::performUIAction()
 		delete this;
 		return;
 	}
-	if (!projectileNode_) create();
+	if (!projectileInstance_.isCreated()) projectileInstance_.create(shotProjectile_->getWeapon()->getModel());
 
 	FixedVector &position = shotProjectile_->getPhysics().getPosition();
-	projectileNode_->setPosition(
+	projectileInstance_.getSceneNode()->setPosition(
 		position[0].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED, 
 		position[2].getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED, 
 		position[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED);
 	FixedVector &velocity = shotProjectile_->getPhysics().getVelocity();
-	projectileNode_->setDirection(
+	projectileInstance_.getSceneNode()->setDirection(
 		velocity[0].asFloat(),
 		velocity[2].asFloat(),
 		velocity[1].asFloat(),

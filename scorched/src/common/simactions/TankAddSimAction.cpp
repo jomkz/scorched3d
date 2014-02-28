@@ -25,8 +25,8 @@
 #include <tank/Tank.h>
 #include <tank/TankAvatar.h>
 #include <tank/TankState.h>
-#include <tank/TankScore.h>
 #include <tank/TankModelStore.h>
+#include <tank/TankScore.h>
 #include <tank/TankColorGenerator.h>
 #include <tank/TankModelContainer.h>
 #include <tanket/TanketType.h>

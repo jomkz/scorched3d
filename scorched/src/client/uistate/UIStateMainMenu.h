@@ -18,40 +18,22 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStatePlayingh_INCLUDE__)
-#define __INCLUDE_UIStatePlayingh_INCLUDE__
+#if !defined(__INCLUDE_UIStateMainMenuh_INCLUDE__)
+#define __INCLUDE_UIStateMainMenuh_INCLUDE__
 
-#include <scorched3dc/UIStateI.h>
-#include <scorched3dc/CameraController.h>
+#include <uistate/UIStateI.h>
 
-class UIStatePlayingEnv;
-class UIStatePlayingLand;
-class UIStatePlayingTargets;
-class CameraController;
-class UIStatePlaying : public UIStateI, public CameraControllerHeightProvider
+class UIStateMainMenu : public UIStateI
 {
 public:
-	UIStatePlaying();
-	virtual ~UIStatePlaying();
+	UIStateMainMenu();
+	virtual ~UIStateMainMenu();
 
-	void updateHeight(int x, int y, int w, int h);
-
-	UIStatePlayingTargets *getTargets() { return targets_; }
-
-	// UIStateI
 	virtual void createState();
 	virtual void destroyState();
-	virtual void updateState(float frameTime);
 
-	// CameraControllerHeightProvider
-	virtual Ogre::Real getHeight(const Ogre::Vector3 &position);
-	virtual bool getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition);
 protected:
-	Ogre::SceneManager* sceneMgr_;
-	CameraController *cameraController_;
-	UIStatePlayingEnv *env_;
-	UIStatePlayingLand *land_;
-	UIStatePlayingTargets *targets_;
+	bool start(const CEGUI::EventArgs &e);
 };
 
-#endif // __INCLUDE_UIStatePlayingh_INCLUDE__
+#endif // __INCLUDE_UIStateMainMenuh_INCLUDE__

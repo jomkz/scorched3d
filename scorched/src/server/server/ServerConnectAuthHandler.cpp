@@ -29,7 +29,6 @@
 #include <server/ServerAuthHandler.h>
 #include <server/ServerState.h>
 #include <engine/SaveGame.h>
-#include <tank/TankModelStore.h>
 #include <tank/TankColorGenerator.h>
 #include <target/TargetContainer.h>
 #include <tank/TankDeadContainer.h>

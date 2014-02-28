@@ -20,8 +20,17 @@
 
 #include <XML/XMLEntryComplexTypes.h>
 
-XMLEntryModelID::XMLEntryModelID(bool required) :
-	XMLEntryContainer("ModelID", "A reference to an ogre mesh", required),
+XMLEntryModelSpec::XMLEntryModelSpec(const char *typeName, const char *description) :
+	XMLEntryContainer(typeName, description)
+{
+}
+
+XMLEntryModelSpec::~XMLEntryModelSpec()
+{
+}
+
+XMLEntryModelSpecDefinition::XMLEntryModelSpecDefinition() :
+	XMLEntryModelSpec("XMLEntryModelSpecDefinition", "A reference to an ogre mesh"),
 	meshName("The ogre mesh resource name, this mesh must already be loaded in the ogre resources"),
 	scale("The scale of the mesh, a scale of 1.0 is an unchanged scale", 0, fixed(1)),
 	rotation("The rotation of the mesh around the blah axis TODO", 0, fixed(1)),
@@ -33,8 +42,42 @@ XMLEntryModelID::XMLEntryModelID(bool required) :
 	addChildXMLEntry("brightness", &brightness);
 }
 
-XMLEntryModelID::~XMLEntryModelID()
+XMLEntryModelSpecDefinition::~XMLEntryModelSpecDefinition()
 {
+}
+
+XMLEntryModelSpecReference::XMLEntryModelSpecReference() :
+	XMLEntryModelSpec("XMLEntryModelSpecReference", "A reference to an existing model definition"),
+	modelName("A reference to an existing model name")
+{
+	addChildXMLEntry("", &modelName);
+}
+
+XMLEntryModelSpecReference::~XMLEntryModelSpecReference()
+{
+
+}
+
+XMLEntryModel::XMLEntryModel() :
+	XMLEntryTypeChoice<XMLEntryModelSpec>("XMLEntryModel", "A model specification")
+{
+}
+
+XMLEntryModel::~XMLEntryModel()
+{
+}
+
+XMLEntryModelSpec *XMLEntryModel::createXMLEntry(const std::string &type, void *xmlData)
+{
+	if (type == "definition") return new XMLEntryModelSpecDefinition;
+	else if (type == "reference") return new XMLEntryModelSpecReference;
+	return 0;
+}
+
+void XMLEntryModel::getAllTypes(std::set<std::string> &allTypes)
+{
+	allTypes.insert("definition");
+	allTypes.insert("reference");
 }
 
 XMLEntryParticleID::XMLEntryParticleID(bool required) :
