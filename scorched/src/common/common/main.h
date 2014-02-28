@@ -22,6 +22,10 @@
 
 #include <windows.h>
 #include <cstdlib>
+#include <common/ARGParser.h>
+#include <common/Defines.h>
+#include <common/OptionEntry.h>
+#include <common/OptionsParameters.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -29,14 +33,6 @@
 
 static ARGParser aParser;
 char scorched3dAppName[128];
-
-// Compilers from Borland report floating-point exceptions in a manner 
-// that is incompatible with Microsoft Direct3D.
-int _matherr(struct _exception  *e)
-{
-    e;               // Dummy reference to catch the warning.
-    return 1;        // Error has been handled.
-}
 
 void _no_storage()
 {
@@ -75,10 +71,16 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 	S3D::setSettingsDir(params.getSettingsDir());
 
 	// Check we are in the correct directory
-	std::string fileName = S3D::getDataFile("data/autoexec.xml");
-	FILE *checkfile = fopen(fileName.c_str(), "r");
-	if (!checkfile)
+	if (!S3D::dirExists(S3D::getDataFile("data")))
 	{
+		char currentDir[1024];
+#ifdef _WIN32
+		GetCurrentDirectory(sizeof(currentDir), currentDir);
+#else
+		getcwd(currentDir, sizeof(currentDir));
+#endif // _WIN32
+		std::string dataDir = S3D::getDataFile("");
+
 		// Perhaps we can get the directory from the executables path name
 		std::string path = argv[0];
 		S3D::fileDos2Unix(path);
@@ -94,34 +96,25 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 		}
 
 		// Now try again for the correct directory
-		std::string execFile = S3D::getDataFile("data/autoexec.xml");
-		checkfile = fopen(execFile.c_str(), "r");
-		if (!checkfile)
+		if (!S3D::dirExists(S3D::getDataFile("data")))
 		{	
-			static char currentDir[1024];
-#ifdef _WIN32
-			GetCurrentDirectory(sizeof(currentDir), currentDir);
-#else
-			getcwd(currentDir, sizeof(currentDir));
-#endif // _WIN32
-			std::string dataPath = S3D::getDataFile("data");
 			S3D::dialogExit(
 				scorched3dAppName, S3D::formatStringBuffer(
 				"Error: This game requires the Scorched3D data directory to run.\n"
 				"Your machine does not appear to have the Scorched3D data directory in\n"
-				"the required location.\n"
-				"The data directory is set to \"%s\" which does not exist.\n"
-				"(Current working directory %s)\n\n"
+				"the required location.\n\n"
+				"Checked path, current working directory : %s\n"
+				"Checked path, binary directory : %s\n"
+				"Checked path, data directory : %s\n\n"
 				"If Scorched3D does not run please re-install Scorched3D.",
-				dataPath.c_str(), currentDir));
+				currentDir, path.c_str(), dataDir.c_str()));
 		}
 	}
-	else fclose(checkfile);
 
 	// Check that the mods are uptodate with the current scorched3d
 	// version
-	ModDirs dirs;
-	dirs.loadModDirs();
+	//ModDirs dirs;
+	//dirs.loadModDirs();
 
 #ifndef _WIN32
 	// Tells Linux not to issue a sig pipe when writting to a closed socket

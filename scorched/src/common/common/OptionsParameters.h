@@ -30,7 +30,6 @@ public:
 	virtual ~OptionsParameters();
 
 	const char *getSettingsDir() { return settingsdir_.getValue(); }
-	bool getAllowExceptions() { return allowexceptions_.getValue(); }
 	bool getWriteFullOptions() { return writefulloptions_.getValue(); }
 	bool getRewriteOptions() { return rewriteoptions_.getValue(); }
 
@@ -42,7 +41,6 @@ protected:
 	std::list<OptionEntry *> nonParamOptions_;
 
 	OptionEntryString settingsdir_;
-	OptionEntryBool allowexceptions_;
 	OptionEntryBool writefulloptions_;
 	OptionEntryBool rewriteoptions_;
 };
