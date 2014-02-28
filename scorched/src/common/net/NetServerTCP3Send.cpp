@@ -21,6 +21,7 @@
 #include <net/NetServerTCP3Send.h>
 #include <net/NetMessagePool.h>
 #include <common/Logger.h>
+#include <common/ThreadUtils.h>
 
 NetServerTCP3Send::NetServerTCP3Send(
 	boost::asio::ip::tcp::socket *socket, 
@@ -35,6 +36,7 @@ NetServerTCP3Send::NetServerTCP3Send(
 	sendMessageHandler_.setMessageHandler(this);
 	sendThread_ = new boost::thread(
 		NetServerTCP3Send::sendThreadFunc, (void *) this);
+	ThreadUtils::setThreadName(sendThread_->native_handle(), "NetServerTCP3::sendThread");
 	if (sendThread_ == 0)
 	{
 		Logger::log(

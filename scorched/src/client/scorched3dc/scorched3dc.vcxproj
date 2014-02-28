@@ -74,6 +74,7 @@
     <ClCompile Include="..\..\common\common\snprintf.cpp" />
     <ClCompile Include="..\..\common\common\SplineCurve.cpp" />
     <ClCompile Include="..\..\common\common\SplinePath.cpp" />
+    <ClCompile Include="..\..\common\common\ThreadUtils.cpp" />
     <ClCompile Include="..\..\common\common\ToolTip.cpp" />
     <ClCompile Include="..\..\common\common\ToolTipResource.cpp" />
     <ClCompile Include="..\..\common\common\Triangle.cpp" />
@@ -516,6 +517,7 @@
     <ClInclude Include="..\..\common\common\SplineCurve.h" />
     <ClInclude Include="..\..\common\common\SplinePath.h" />
     <ClInclude Include="..\..\common\common\StdVectorPtr.h" />
+    <ClInclude Include="..\..\common\common\ThreadUtils.h" />
     <ClInclude Include="..\..\common\common\ToolTip.h" />
     <ClInclude Include="..\..\common\common\ToolTipResource.h" />
     <ClInclude Include="..\..\common\common\Triangle.h" />

@@ -24,13 +24,15 @@
 #include <common/Defines.h>
 #include <common/Logger.h>
 #include <common/Clock.h>
+#include <common/ThreadUtils.h>
 
 NetServerTCP::NetServerTCP(NetServerTCPProtocol *protocol) : 
 	firstDestination_(0),
 	server_(0), protocol_(protocol), checkDeleted_(false),
 	lastId_(0)
 {
-	new boost::thread(NetServerTCP::threadFunc, (void *) this);
+	boost::thread *thread = new boost::thread(NetServerTCP::threadFunc, (void *) this);
+	ThreadUtils::setThreadName(thread->native_handle(), "NetServerTCP");
 }
 
 NetServerTCP::~NetServerTCP()

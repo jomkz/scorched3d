@@ -91,7 +91,6 @@ bool ComsMessageSender::sendToServer(
 bool ComsMessageSender::sendToMultipleClients(
 	ComsMessage &message, std::list<unsigned int> sendDestinations, unsigned int flags)
 {
-	if (!ScorchedServer::serverStarted()) return false;
 	if (sendDestinations.empty()) return true;
 	if (!formMessage(message, flags)) return false;
 

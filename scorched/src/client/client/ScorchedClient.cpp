@@ -47,11 +47,23 @@ ScorchedClient *ScorchedClient::instance()
 
 void ScorchedClient::startClient()
 {
+	stopClient();
+
 	DIALOG_ASSERT(!instanceLock);
 	instanceLock = new ScorchedClient;
 	thread_id = boost::this_thread::get_id();
 	instance_ = instanceLock;
 	instanceLock = 0;
+}
+
+void ScorchedClient::stopClient()
+{
+	if (instance_)
+	{
+		delete instance_;
+		instance_ = 0;
+	}
+	//started_ = false;
 }
 
 ScorchedClient::ScorchedClient() : 

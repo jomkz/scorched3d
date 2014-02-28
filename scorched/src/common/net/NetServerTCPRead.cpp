@@ -25,6 +25,7 @@
 #include <common/Clock.h>
 #include <common/Logger.h>
 #include <common/Defines.h>
+#include <common/ThreadUtils.h>
 
 NetServerTCPRead::NetServerTCPRead(unsigned int id,
 							 boost::asio::ip::tcp::socket *socket,
@@ -68,10 +69,13 @@ void NetServerTCPRead::start()
 
 	recvThread_ = new boost::thread(
 		NetServerTCPRead::recvThreadFunc, (void *) this);
+	ThreadUtils::setThreadName(recvThread_->native_handle(), "NetServerTCPRead::recvThread");
 	sendThread_ = new boost::thread(
 		NetServerTCPRead::sendThreadFunc, (void *) this);
+	ThreadUtils::setThreadName(sendThread_->native_handle(), "NetServerTCPRead::sendThread");
 	ctrlThread_ = new boost::thread(
 		NetServerTCPRead::ctrlThreadFunc, (void *) this);
+	ThreadUtils::setThreadName(ctrlThread_->native_handle(), "NetServerTCPRead::ctrlThread");
 }
 
 void NetServerTCPRead::addMessage(NetMessage *message)

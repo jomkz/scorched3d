@@ -23,6 +23,7 @@
 
 #include <engine/ScorchedContext.h>
 #include <server/ScorchedServerSettings.h>
+#include <common/fixed.h>
 #include <string>
 
 class ProgressCounter;
@@ -47,16 +48,16 @@ class ServerSyncCheck;
 class ServerMessageHandler;
 class ServerFileServer;
 class EventHandlerDataBase;
+class ThreadCallbackI;
 
 class ScorchedServer : public ScorchedContext
 {
 public:
 	static ScorchedServer *instance();
 
-	static bool startServer(const ScorchedServerSettings &settings, 
-		bool local, ProgressCounter *counter);
+	static void startServer(const ScorchedServerSettings &settings, 
+		ProgressCounter *counter, ThreadCallbackI *endCallback);
 	static void stopServer();
-	static bool serverStarted() { return started_; }
 
 	virtual bool getServerMode() { return true; }
 
@@ -86,7 +87,6 @@ public:
 
 protected:
 	static ScorchedServer *instance_;
-	static bool started_;
 	static TargetSpace *targetSpace_;
 	static ThreadCallback *threadCallback_;
 	
@@ -110,8 +110,11 @@ protected:
 	EventHandlerDataBase *eventHandlerDataBase_;
 
 	void checkSettings();
-	bool startServerInternal(const ScorchedServerSettings &settings, 
-		bool local, ProgressCounter *counter);
+	static void startServerInternalStatic(ScorchedServer *instance, 
+		const ScorchedServerSettings &settings, 
+		ProgressCounter *counter, ThreadCallbackI *endCallback);
+	void startServerInternal(const ScorchedServerSettings &settings, ProgressCounter *counter, ThreadCallbackI *endCallback);
+	bool serverLoop(fixed timeDifference);
 
 private:
 	ScorchedServer();

@@ -24,6 +24,7 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Defines.h>
+#include <common/ThreadUtils.h>
 #include <net/NetInterface.h>
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
@@ -54,6 +55,7 @@ ServerBrowserInfo::~ServerBrowserInfo()
 bool ServerBrowserInfo::start()
 {
 	boost::thread newThread(ServerBrowserInfo::threadFunc);
+	ThreadUtils::setThreadName(newThread.native_handle(), "ServerBrowserInfo");
 	return true;
 }
 

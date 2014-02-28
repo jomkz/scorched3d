@@ -1380,6 +1380,9 @@
     <ClCompile Include="..\client\ClientServerAccess.cpp">
       <Filter>client</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\common\ThreadUtils.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2701,6 +2704,9 @@
     </ClInclude>
     <ClInclude Include="..\client\ClientServerAccess.h">
       <Filter>client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\common\ThreadUtils.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

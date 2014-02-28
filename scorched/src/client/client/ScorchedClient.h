@@ -36,6 +36,7 @@ class ScorchedClient : public ScorchedContext
 public:
 	static ScorchedClient *instance();
 	static void startClient();
+	static void stopClient();
 
 	virtual bool getServerMode() { return false; }
 

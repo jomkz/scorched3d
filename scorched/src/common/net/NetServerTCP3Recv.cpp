@@ -21,6 +21,7 @@
 #include <net/NetServerTCP3Recv.h>
 #include <net/NetMessagePool.h>
 #include <common/Logger.h>
+#include <common/ThreadUtils.h>
 
 NetServerTCP3Recv::NetServerTCP3Recv(
 	boost::asio::ip::tcp::socket *socket, 
@@ -34,6 +35,7 @@ NetServerTCP3Recv::NetServerTCP3Recv(
 {
 	recvThread_ = new boost::thread(
 		NetServerTCP3Recv::recvThreadFunc, (void *) this);
+	ThreadUtils::setThreadName(recvThread_->native_handle(), "NetServerTCP3::recvThread");
 	if (recvThread_ == 0)
 	{
 		Logger::log(

@@ -36,6 +36,8 @@
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Logger.h>
+#include <common/ThreadUtils.h>
+#include <common/Clock.h>
 #include <engine/ModFiles.h>
 #include <engine/ActionController.h>
 #include <engine/SaveGame.h>
@@ -60,9 +62,12 @@
 #include <net/NetLoopBack.h>
 
 ScorchedServer *ScorchedServer::instance_ = 0;
+static Clock serverTimer;
 static ScorchedServer *instanceLock = 0;
+static boost::thread *serverThread;
 static boost::thread::id thread_id;
-bool ScorchedServer::started_ = false;
+static boost::mutex creationMutex;
+static bool serverStopped = false;
 TargetSpace *ScorchedServer::targetSpace_ = new TargetSpace();
 ThreadCallback *ScorchedServer::threadCallback_ = new ThreadCallback();
 
@@ -73,29 +78,35 @@ ScorchedServer *ScorchedServer::instance()
 	return instance_;
 }
 
-bool ScorchedServer::startServer(const ScorchedServerSettings &settings, 
-	bool local, ProgressCounter *counter)
+void ScorchedServer::startServer(const ScorchedServerSettings &settings, ProgressCounter *counter, ThreadCallbackI *endCallback)
 {
-	stopServer();
-
-	DIALOG_ASSERT(!instanceLock);
+	DIALOG_ASSERT(!instance_ && !instanceLock);
+	creationMutex.lock();
+	serverStopped = false;
 	instanceLock = new ScorchedServer;
-	thread_id = boost::this_thread::get_id();
 	instance_ = instanceLock;
 	instanceLock = 0;
-
-	started_ = instance_->startServerInternal(settings, local, counter);
-	return started_;
+	serverThread = new boost::thread(ScorchedServer::startServerInternalStatic, instance_, settings, counter, endCallback);
+	ThreadUtils::setThreadName(serverThread->native_handle(), "ServerThread");
+	creationMutex.unlock();
 }
 
 void ScorchedServer::stopServer()
 {
+	creationMutex.lock();
+	serverStopped = true;
+	if (serverThread)
+	{
+		serverThread->join();
+		delete serverThread;
+		serverThread = 0;
+	}
 	if (instance_)
 	{
 		delete instance_;
 		instance_ = 0;
 	}
-	started_ = false;
+	creationMutex.unlock();
 }
 
 ScorchedServer::ScorchedServer() : 
@@ -165,13 +176,23 @@ ServerConnectAuthHandler &ScorchedServer::getServerConnectAuthHandler()
 	return serverHandlers_->getServerConnectAuthHandler();
 }
 
-bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings, 
-	bool local, ProgressCounter *counter)
+void ScorchedServer::startServerInternalStatic(ScorchedServer *instance, 
+		const ScorchedServerSettings &settings, 
+		ProgressCounter *counter, ThreadCallbackI *endCallback)
+{
+	thread_id = boost::this_thread::get_id();
+	instance->startServerInternal(settings, counter, endCallback);
+}
+
+void ScorchedServer::startServerInternal(const ScorchedServerSettings &settings, 
+	ProgressCounter *counter, ThreadCallbackI *endCallback)
 {
 	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
 		S3D::ScorchedVersion.c_str(), 
 		S3D::ScorchedProtocolVersion.c_str(), 
 		S3D::ScorchedBuildTime.c_str()));
+	std::string startTime = S3D::getStartTime();
+	Logger::log(S3D::formatStringBuffer("Server started : %s", startTime.c_str()));
 
 	std::string settingsType = ((ScorchedServerSettings &) settings).type();
 	if (settingsType == "FILE")
@@ -206,16 +227,13 @@ bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 	}
 
 	// Setup the message handling classes
-	if (local)
-	{
-		setNetInterface(new NetLoopBack(true));
-	}
-	else
-	{
-		// Only create a net server for the actual multiplayer case
-		// A loopback is created by the client for a single player game 
-		setNetInterface(new NetServerTCP3());
-	}
+#ifndef S3D_SERVER
+	setNetInterface(new NetLoopBack(true));
+#else
+	// Only create a net server for the actual multiplayer case
+	// A loopback is created by the client for a single player game 
+	setNetInterface(new NetServerTCP3());
+#endif
 
 	getOptionsGame().updateChangeSet();
 	getNetInterface().setMessageHandler(&getComsMessageHandler());
@@ -225,21 +243,34 @@ bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 
 	// Load mod
 #ifdef S3D_SERVER
-	{
-		if (!getModFiles().loadModFiles(getOptionsGame().getMod(), false, counter)) return false;
-	}
-#endif
+	if (!getModFiles().loadModFiles(getOptionsGame().getMod(), false, counter)) return false;
+#endif	
 	
 	// Parse config
-	if (!getAccessoryStore().parseFile(getContext(), counter)) return false;
-	if (!getTanketTypes().loadTanketTypes(getContext())) return false;
-	if (!getTankModels().loadTankMeshes(getContext(), 2, counter)) return false;
+	if (!getAccessoryStore().parseFile(getContext(), counter)) 
+	{
+		S3D::dialogExit("Scorched3D", "Cannot load accessory store");
+	}
+	if (!getTanketTypes().loadTanketTypes(getContext()))
+	{
+		S3D::dialogExit("Scorched3D", "Cannot load tanket types");
+	}
+	if (!getTankModels().loadTankMeshes(getContext(), 2, counter)) 
+	{
+		S3D::dialogExit("Scorched3D", "Cannot load tank meshes");
+	}
 	getOptionsTransient().reset();
-	if (!getLandscapes().readLandscapeDefinitions()) return false;
+	if (!getLandscapes().readLandscapeDefinitions()) 
+	{
+		S3D::dialogExit("Scorched3D", "Cannot read landscape definitions");
+	}
 
 	// Add the server side bots
 	// Add any new AIs
-	if (!getTankAIs().loadAIs()) return false;
+	if (!getTankAIs().loadAIs()) 
+	{
+		S3D::dialogExit("Scorched3D", "Cannot load AIs");
+	}
 	TankAIAdder::addTankAIs(*this);
 	getTankAIStrings().load();
 
@@ -253,7 +284,89 @@ bool ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 	}
 	getEventController().addEventHandler(new EventHandlerAchievementNumberRankKills(eventHandlerDataBase_));
 
-	return true;
+	// Callback the end of initialization
+	if (endCallback)
+	{
+		endCallback->callbackInvoked();
+		delete endCallback;
+	}
+
+#ifdef S3D_SERVER
+	// Try to start the server
+	if (!getNetInterface().start(getOptionsGame().getPortNo()) ||
+		!ServerBrowserInfo::instance()->start())
+	{
+		S3D::dialogExit("Scorched3D Server", 
+			S3D::formatStringBuffer("Failed to start the server.\n\n"
+			"Could not bind to the server ports.\n"
+			"Ensure the specified ports (%i, %i) do not conflict with any other program.",
+			getOptionsGame().getPortNo(),
+			getOptionsGame().getPortNo() + 1));
+	}
+
+	// Contact the registration server
+ 	if (getOptionsGame().getPublishServer()) 
+	{
+		ServerRegistration::instance()->start();
+	}
+
+	if (getOptionsGame().getManagementPortNo() > 0)
+	{
+		ServerWebServer::instance()->start(getOptionsGame().getManagementPortNo());
+
+		Logger::log(S3D::formatStringBuffer("Management server running on url http://127.0.0.1:%i",
+			getOptionsGame().getManagementPortNo()));
+	}
+	ServerLog::instance();
+#endif
+
+	// The server loop
+	serverTimer.reset();
+	while (!serverStopped)
+	{
+		unsigned int ticksDifference = serverTimer.getTicksDifference();
+		fixed timeDifference(true, ticksDifference * 10);
+
+		if (!serverLoop(timeDifference))
+		{
+			boost::this_thread::sleep(boost::posix_time::milliseconds(10));
+		}
+	}
+}
+
+bool ScorchedServer::serverLoop(fixed timeDifference)
+{
+	Logger::processLogEntries();
+
+	if (!getNetInterfaceValid())
+	{
+		return false;
+	}
+		
+	bool processed = getNetInterface().processMessages() > 0;
+#ifdef S3D_SERVER
+	{
+		ServerBrowserInfo::instance()->processMessages();
+		ServerWebServer::instance()->processMessages();
+	}
+#endif
+
+	getSimulator().simulate();
+	getServerState().simulate(timeDifference);
+
+	getServerConnectAuthHandler().processMessages();
+	getServerFileServer().simulate();
+	getServerChannelManager().simulate(timeDifference);
+	getTimedMessage().simulate();
+
+	if (timeDifference > fixed(5))
+	{
+		Logger::log(S3D::formatStringBuffer("Warning: Server loop took %.2f seconds", 
+			timeDifference.asFloat()));
+	}
+	getThreadCallback().processCallbacks();
+
+	return processed;
 }
 
 void ScorchedServer::checkSettings()

@@ -22,6 +22,7 @@
 #include <net/NetMessagePool.h>
 #include <common/Logger.h>
 #include <common/Clock.h>
+#include <common/ThreadUtils.h>
 #include <limits.h>
 
 NetServerTCP3::NetServerTCP3() : 
@@ -120,6 +121,7 @@ bool NetServerTCP3::startProcessing()
 	// Create the processing thread
 	sendRecvThread_ = new boost::thread(
 		NetServerTCP3::sendRecvThreadFunc, (void *) this);
+	ThreadUtils::setThreadName(sendRecvThread_->native_handle(), "NetServerTCP3::sendRecvThread");
 	return true;
 }
 

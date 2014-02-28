@@ -25,6 +25,7 @@
 #include <common/OptionsMasterListServer.h>
 #include <common/OptionsScorched.h>
 #include <common/Defines.h>
+#include <common/ThreadUtils.h>
 
 ServerRegistration *ServerRegistration::instance_ = 0;
 
@@ -87,7 +88,8 @@ ServerRegistrationEntry::~ServerRegistrationEntry()
 
 void ServerRegistrationEntry::start()
 {
-	boost::thread(ServerRegistrationEntry::threadFunc, (void *) this);
+	boost::thread newThread(ServerRegistrationEntry::threadFunc, (void *) this);
+	ThreadUtils::setThreadName(newThread.native_handle(), "ServerRegistrationEntry");
 }
 
 int ServerRegistrationEntry::threadFunc(void *param)

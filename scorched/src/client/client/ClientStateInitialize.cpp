@@ -33,6 +33,7 @@
 #include <common/ProgressCounter.h>
 #include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
+#include <common/ThreadUtils.h>
 #include <common/Logger.h>
 #include <engine/ModFiles.h>
 #include <engine/ModFileEntryLoader.h>
@@ -185,12 +186,14 @@ void ClientStateInitialize::connectToServer()
 	// Start the server (if required)
 	if (!ClientParams::instance()->getConnectedToServer())
 	{
-		ScorchedServerSettings *settings = 0;
+		ThreadCallbackI *callback = new ThreadCallbackIAdapter<ClientStateInitialize>(
+			this, &ClientStateInitialize::startTryRemoteConnectionServer);
 
 		if (ClientParams::instance()->getSaveFile()[0])
 		{
 			// Load the saved game state (settings)
-			settings = new ScorchedServerSettingsSave(ClientParams::instance()->getSaveFile());
+			ScorchedServerSettingsSave settings(ClientParams::instance()->getSaveFile());
+			ScorchedServer::startServer(settings, 0, callback);
 		}
 		else
 		{
@@ -208,15 +211,11 @@ void ClientStateInitialize::connectToServer()
 					clientFile.c_str()));
 			}
 
-			settings = new ScorchedServerSettingsOptions(clientFile,
+			ScorchedServerSettingsOptions settings(clientFile,
 				ClientParams::instance()->getRewriteOptions(),
 				ClientParams::instance()->getWriteFullOptions());
+			ScorchedServer::startServer(settings, 0, callback);
 		}
-
-		ProgressCounter *progressCounter = new ProgressCounter();
-		ThreadCallbackI *callback = new ThreadCallbackIAdapter<ClientStateInitialize>(
-			this, &ClientStateInitialize::startTryRemoteConnectionServer);
-		startClientServer(settings, progressCounter, callback);
 	}
 	else
 	{
@@ -237,6 +236,7 @@ void ClientStateInitialize::startTryRemoteConnection()
 	// Do in a thread so connect can block if it wants!
 	remoteConnectionThread_ = new boost::thread(ClientStateInitialize::tryRemoteConnection, 
 		&ScorchedClient::instance()->getNetInterface());
+	ThreadUtils::setThreadName(remoteConnectionThread_->native_handle(), "RemoteConnectionThread");
 }
 
 int ClientStateInitialize::tryRemoteConnection(NetInterface *clientNetInterface)
