@@ -56,7 +56,23 @@ GUIConsoleTabCompleteUISyncAction::~GUIConsoleTabCompleteUISyncAction()
 
 void GUIConsoleTabCompleteUISyncAction::performUIAction()
 {
-	ScorchedClient::instance()->getConsole().matchRule(currentText_);
+	std::vector<ConsoleRule *> matches;
+	CEGUI::String result = ScorchedClient::instance()->getConsole().matchRule(currentText_, matches);
+	if (result.length() > 0)
+	{
+		GUIConsole::instance()->setText(result);
+	}
+
+	GUIConsole::instance()->outputText("-------------------", false);
+	std::vector<ConsoleRule *>::iterator itor;
+	for (itor = matches.begin();
+		itor != matches.end();
+		++itor)
+	{
+		std::string text = (*itor)->toString();
+		GUIConsole::instance()->outputText(text.c_str(), false);
+	}
+	
 	delete this;
 }
 
@@ -181,12 +197,14 @@ void GUIConsole::tabComplete()
 
 void GUIConsole::setText(const CEGUI::String &text)
 {
+	ENSURE_UI_THREAD
 	editBox_->setText(text);
 	editBox_->setCaretIndex(text.length());
 }
 
 void GUIConsole::outputText(const CEGUI::String &inMsg, bool command)
 { 
+	ENSURE_UI_THREAD
 	const CEGUI::Colour red = CEGUI::Colour(0xFF0000FF);
 	const CEGUI::Colour white  = CEGUI::Colour(0xFF3333FF);
 

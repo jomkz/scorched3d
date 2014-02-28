@@ -22,6 +22,7 @@
 #define AFX_Console_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
 #include <console/ConsoleRule.h>
+#include <vector>
 
 class Console
 {
@@ -30,7 +31,7 @@ public:
 	virtual void removeRule(ConsoleRule *rule) = 0;
 
 	virtual void addLine(bool parse, const CEGUI::String &line) = 0;
-	virtual void matchRule(const CEGUI::String &line) = 0;
+	virtual CEGUI::String matchRule(const CEGUI::String &line, std::vector<ConsoleRule *> &matches) = 0;
 
 	virtual void help() = 0;
 };
