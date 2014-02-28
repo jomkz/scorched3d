@@ -24,6 +24,8 @@
 #include <engine/ScorchedContext.h>
 #include <common/fixed.h>
 
+#define ENSURE_CLIENT_THREAD ScorchedClient::ensureClientThread();
+
 class ComsMessageHandlerI;
 class ParticleEngine;
 class SimulatorGameState;
@@ -42,8 +44,9 @@ class ScorchedClient : public ScorchedContext
 {
 public:
 	static ScorchedClient *instance();
-	static void startClientForDebug();
+	static void ensureClientThread();
 
+	static void startClientForDebug();
 	static void startClient(ProgressCounter *counter);
 	static void stopClient();
 

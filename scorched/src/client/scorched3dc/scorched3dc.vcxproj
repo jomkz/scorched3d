@@ -452,10 +452,12 @@
     <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp" />
     <ClCompile Include="..\uiactions\UIProjectileRenderer.cpp" />
     <ClCompile Include="..\uiactions\UIRotateTankAction.cpp" />
+    <ClCompile Include="..\uiactions\UITankActiveModel.cpp" />
+    <ClCompile Include="..\uiactions\UITankModel.cpp" />
     <ClCompile Include="..\uiactions\UITankRenderer.cpp" />
     <ClCompile Include="..\uiactions\UITankShotHistory.cpp" />
     <ClCompile Include="..\uiactions\UITankWeapon.cpp" />
-    <ClCompile Include="..\uiactions\UITankWeaponSwitcher.cpp" />
+    <ClCompile Include="..\uiactions\UITargetModel.cpp" />
     <ClCompile Include="..\uiactions\UITargetRenderer.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="InputHandlerKeyboard.cpp" />
@@ -925,10 +927,12 @@
     <ClInclude Include="..\uiactions\UILandscapeDeformAction.h" />
     <ClInclude Include="..\uiactions\UIProjectileRenderer.h" />
     <ClInclude Include="..\uiactions\UIRotateTankAction.h" />
+    <ClInclude Include="..\uiactions\UITankActiveModel.h" />
+    <ClInclude Include="..\uiactions\UITankModel.h" />
     <ClInclude Include="..\uiactions\UITankRenderer.h" />
     <ClInclude Include="..\uiactions\UITankShotHistory.h" />
     <ClInclude Include="..\uiactions\UITankWeapon.h" />
-    <ClInclude Include="..\uiactions\UITankWeaponSwitcher.h" />
+    <ClInclude Include="..\uiactions\UITargetModel.h" />
     <ClInclude Include="..\uiactions\UITargetRenderer.h" />
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="InputHandlerKeyboard.h" />

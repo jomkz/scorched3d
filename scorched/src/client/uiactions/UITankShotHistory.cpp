@@ -19,9 +19,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <uiactions/UITankShotHistory.h>
+#include <uiactions/UITankRenderer.h>
+#include <uiactions/UITankActiveModel.h>
 #include <common/Defines.h>
 
 UITankShotHistory::UITankShotHistory() :
+	tankRenderer_(0),
 	oldValues_(1000, 0, 45), currentValues_(1000, 0, 45)
 {
 }
@@ -113,6 +116,7 @@ fixed UITankShotHistory::rotateGunXY(fixed angle, bool diff)
 	if (currentValues_.rot <= 0) currentValues_.rot = currentValues_.rot + 360;
 	else if (currentValues_.rot > 360) currentValues_.rot = currentValues_.rot - 360;
 
+	settingsChanged();
 	return currentValues_.rot;
 }
 
@@ -124,6 +128,7 @@ fixed UITankShotHistory::rotateGunYZ(fixed angle, bool diff)
 	if (currentValues_.ele < 0) currentValues_.ele = 0;
 	else if (currentValues_.ele > 90) currentValues_.ele = 90;
 
+	settingsChanged();
 	return currentValues_.ele;
 }
 
@@ -135,6 +140,7 @@ fixed UITankShotHistory::changePower(fixed power, bool diff)
 	if (currentValues_.power < 0) currentValues_.power = 0;
 	if (currentValues_.power > maxPower_) currentValues_.power = maxPower_;
 
+	settingsChanged();
 	return currentValues_.power;
 }
 
@@ -142,6 +148,13 @@ void UITankShotHistory::setMaxPower(fixed maxPower)
 { 
 	maxPower_ = maxPower; 
 	changePower(0);
+}
+
+void UITankShotHistory::settingsChanged()
+{
+	tankRenderer_->updateRotation();
+	UITankActiveModel *activeModel = tankRenderer_->getActiveModel();
+	if (activeModel) activeModel->rotationOrPowerChanged();
 }
 
 std::string UITankShotHistory::getRotationString()

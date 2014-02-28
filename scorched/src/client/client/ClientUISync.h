@@ -132,9 +132,7 @@ public:
 
 	bool currentlySynching() { return currentlySynching_; }
 protected:
-	ClientUISyncActionBuffers firstBuffers_, secondBuffers_;
-	ClientUISyncActionBuffers *currentBuffers_;
-	bool pointingToFirstBuffers_;
+	ClientUISyncActionBuffers currentBuffers_;
 	bool currentlySynching_;
 	boost::mutex syncMutex_;
 	boost::condition_variable syncCond_;

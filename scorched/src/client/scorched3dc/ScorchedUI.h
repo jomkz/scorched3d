@@ -21,6 +21,8 @@
 #if !defined(__INCLUDE_ScorchedUIh_INCLUDE__)
 #define __INCLUDE_ScorchedUIh_INCLUDE__
 
+#define ENSURE_UI_THREAD ScorchedUI::ensureUIThread();
+
 class InputManager;
 class OgreSystem;
 class UIState;
@@ -31,6 +33,8 @@ public:
 	virtual ~ScorchedUI();
 
 	static ScorchedUI *instance();
+
+	static void ensureUIThread();
 
 	bool go();
 

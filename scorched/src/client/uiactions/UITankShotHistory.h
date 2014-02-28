@@ -24,6 +24,7 @@
 #include <net/NetBuffer.h>
 #include <vector>
 
+class UITankRenderer;
 class UITankShotHistory
 {
 public:
@@ -65,10 +66,15 @@ public:
 	std::string getElevationString();
 	std::string getPowerString();
 
+	void setTankRenderer(UITankRenderer *tankRenderer) { tankRenderer_ = tankRenderer; }
+
 protected:
+	UITankRenderer *tankRenderer_;
 	ShotEntry oldValues_, currentValues_;
 	std::vector<ShotEntry> oldShots_;
 	fixed maxPower_;
+
+	void settingsChanged();
 };
 
 #endif

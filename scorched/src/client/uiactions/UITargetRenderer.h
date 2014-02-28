@@ -23,8 +23,9 @@
 
 #include <client/ClientUISync.h>
 #include <target/TargetRenderer.h>
-#include <target/Target.h>
 
+class Target;
+class UITargetModel;
 class UITargetRenderer : public TargetRenderer
 {
 public:
@@ -38,18 +39,14 @@ public:
 	virtual void targetBurnt();
 	virtual void shieldHit();
 	virtual void fired();
-
+	virtual void deleteThis();
 protected:
-	ClientUISyncActionRegisterable *targetChangedRegisterable_;
-	Ogre::SceneNode *targetNode_;
-	Ogre::Entity *targetEntity_;
+	ClientUISyncActionRegisterable *deleteRegisterable_;
+	UITargetModel *targetModel_;
 	Target *target_;
 
-	
-	void targetChangedSync(); // Synced (UI and Client Thread)
-	virtual void performUIActionAlive();
-	virtual void performUIActionDead();
-	virtual void create();
+	void deleteSync();
+	virtual UITargetModel *createModel();
 };
 
 #endif

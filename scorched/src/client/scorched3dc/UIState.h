@@ -44,7 +44,7 @@ public:
 	};
 
 	void setState(State nextState);
-	void setStateNonUIThread(State nextState);
+	static void setStateNonUIThread(State nextState);
 	void updateState(float frameTime);
 
 	State getState();

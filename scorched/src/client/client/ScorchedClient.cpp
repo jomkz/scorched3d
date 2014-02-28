@@ -61,9 +61,14 @@ ScorchedClient *ScorchedClient::instance()
 	DIALOG_ASSERT(instance_);
 	if (!instance_->clientUISync_->currentlySynching())
 	{
-		DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
+		ensureClientThread();
 	}
 	return instance_;
+}
+
+void ScorchedClient::ensureClientThread()
+{
+	DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
 }
 
 void ScorchedClient::startClientForDebug()

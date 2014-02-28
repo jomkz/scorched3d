@@ -21,6 +21,7 @@
 #include <client/ScorchedClient.h>
 #include <uiactions/UITankWeapon.h>
 #include <uiactions/UITankRenderer.h>
+#include <uiactions/UITankActiveModel.h>
 #include <tanket/TanketAccessories.h>
 #include <tanket/TanketShotInfo.h>
 #include <target/TargetContainer.h>
@@ -85,6 +86,9 @@ void UITankWeapon::setCurrentWeapon(Accessory *accessory)
 	{
 		currentWeapon_ = accessory;
 	}
+
+	UITankActiveModel *activeModel = tankRenderer_->getActiveModel();
+	if (activeModel) activeModel->weaponChanged();
 }
 
 Accessory *UITankWeapon::getCurrentWeapon()
@@ -135,6 +139,8 @@ void UITankWeapon::nextWeapon()
 
 void UITankWeapon::fireWeapon()
 {
+	if (!tankRenderer_->getTarget()) return;
+
 	Accessory *accessory = getCurrentWeapon();
 	if (!accessory) return;
 

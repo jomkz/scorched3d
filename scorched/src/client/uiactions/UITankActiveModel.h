@@ -18,34 +18,27 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITankRendererh_INCLUDE__)
-#define __INCLUDE_UITankRendererh_INCLUDE__
+#if !defined(__INCLUDE_UITankActiveModelh_INCLUDE__)
+#define __INCLUDE_UITankActiveModelh_INCLUDE__
 
-#include <uiactions/UITargetRenderer.h>
-#include <uiactions/UITankShotHistory.h>
-#include <uiactions/UITankWeapon.h>
-#include <tank/Tank.h>
+#include <client/ClientUISync.h>
 
-class UITankActiveModel;
-class UITankRenderer : public UITargetRenderer
+class UITankRenderer;
+class UITankActiveModel
 {
 public:
-	UITankRenderer(Tank *tank);
-	virtual ~UITankRenderer();
+	UITankActiveModel(UITankRenderer *tankRenderer);
+	virtual ~UITankActiveModel();
 
-	UITankShotHistory &getShotHistory();
-	UITankWeapon &getTankWeapon();
-	UITankActiveModel *getActiveModel();
-	void updateRotation();
-	void setActive();
-	void setInactive();
+	void rotationOrPowerChanged();
+	void weaponChanged();
 
 protected:
-	UITankActiveModel *activeModel_;
-	UITankShotHistory shotHistory_;
-	UITankWeapon tankWeapon_;
-	
-	virtual UITargetModel *createModel();
+	UITankRenderer *tankRenderer_;
+	ClientUISyncActionRegisterable *rotationChangedRegisterable_;
+	Ogre::SceneNode *shotPathNode_;
+
+	void rotationChangedSync();  // Synced (UI and Client Thread)
 };
 
 #endif

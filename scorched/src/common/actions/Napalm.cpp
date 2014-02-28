@@ -41,8 +41,6 @@
 #include <common/OptionsScorched.h>
 
 static const int deformSize = 3;
-static boost::mutex deformMutex;
-static DeformLandscape::DeformPoints deformMap;
 static bool deformCreated = false;
 
 #define XY_TO_UINT(x, y) ((((unsigned int) x) << 16) | (((unsigned int) y) & 0xffff))
@@ -77,31 +75,6 @@ Napalm::~Napalm()
 
 void Napalm::init()
 {
-	if (!deformCreated)
-	{
-		deformMutex.lock();
-		if (!deformCreated)
-		{
-			deformCreated = true;
-
-			Vector center(deformSize + 1, deformSize + 1);
-			for (int a=0; a<(deformSize + 1) * 2; a++)
-			{
-				for (int b=0; b<(deformSize + 1) * 2; b++)
-				{
-					Vector pos(a, b);
-					float dist = (center - pos).Magnitude();
-					dist /= deformSize;
-					dist = 1.0f - S3D_MIN(1.0f, dist);
-
-					DIALOG_ASSERT(a < 100 && b < 100);
-					deformMap.map[a][b] = fixed::fromFloat(dist);
-				}
-			}
-		}
-		deformMutex.unlock();
-	}
-
 	edgePoints_.insert(XY_TO_UINT(startX_, startY_));
 
 #ifndef S3D_SERVER

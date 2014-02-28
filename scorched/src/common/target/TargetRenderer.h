@@ -33,6 +33,8 @@ public:
 	virtual void targetBurnt() = 0;
 	virtual void shieldHit() = 0;
 	virtual void fired() = 0;
+
+	virtual void deleteThis() = 0;
 };
 
 #endif // __INCLUDE_TargetRendererh_INCLUDE__

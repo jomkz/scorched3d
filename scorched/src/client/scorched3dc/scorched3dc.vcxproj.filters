@@ -1443,9 +1443,6 @@
     <ClCompile Include="..\uiactions\UITankShotHistory.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
-    <ClCompile Include="..\uiactions\UITankWeaponSwitcher.cpp">
-      <Filter>uiactions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\server\tankai\TankAIAimResult.cpp">
       <Filter>tankai</Filter>
     </ClCompile>
@@ -1465,6 +1462,15 @@
       <Filter>dialogs</Filter>
     </ClCompile>
     <ClCompile Include="..\uiactions\UITankWeapon.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UITargetModel.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UITankModel.cpp">
+      <Filter>uiactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\uiactions\UITankActiveModel.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2846,9 +2852,6 @@
     <ClInclude Include="..\uiactions\UITankShotHistory.h">
       <Filter>uiactions</Filter>
     </ClInclude>
-    <ClInclude Include="..\uiactions\UITankWeaponSwitcher.h">
-      <Filter>uiactions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\server\tankai\TankAIAimResult.h">
       <Filter>tankai</Filter>
     </ClInclude>
@@ -2868,6 +2871,15 @@
       <Filter>dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\uiactions\UITankWeapon.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UITargetModel.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UITankModel.h">
+      <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\uiactions\UITankActiveModel.h">
       <Filter>uiactions</Filter>
     </ClInclude>
   </ItemGroup>

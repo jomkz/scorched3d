@@ -85,11 +85,6 @@ void UIStatePlayingTargets::update(float frameTime)
 			changedValues = true;
 			tankRenderer_->getShotHistory().changePower(fixedFrameTime * -100, true);
 		}
-
-		if (changedValues)
-		{
-			tankRenderer_->setRotations();
-		}
 	}
 }
 
@@ -112,9 +107,9 @@ void UIStatePlayingTargets::keyPressed(const OIS::KeyEvent &arg)
 
 void UIStatePlayingTargets::setCurrentTank(UITankRenderer *tankRenderer)
 {
-	if (tankRenderer_) tankRenderer_->setActive(false);
+	if (tankRenderer_) tankRenderer_->setInactive();
 	tankRenderer_ = tankRenderer;
-	if (tankRenderer_) tankRenderer_->setActive(true);
+	if (tankRenderer_) tankRenderer_->setActive();
 }
 
 void UIStatePlayingTargets::create()

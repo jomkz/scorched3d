@@ -18,34 +18,26 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITankRendererh_INCLUDE__)
-#define __INCLUDE_UITankRendererh_INCLUDE__
+#if !defined(__INCLUDE_UITankModelh_INCLUDE__)
+#define __INCLUDE_UITankModelh_INCLUDE__
 
-#include <uiactions/UITargetRenderer.h>
-#include <uiactions/UITankShotHistory.h>
-#include <uiactions/UITankWeapon.h>
-#include <tank/Tank.h>
+#include <uiactions/UITargetModel.h>
 
-class UITankActiveModel;
-class UITankRenderer : public UITargetRenderer
+class UITankRenderer;
+class UITankModel : public UITargetModel
 {
 public:
-	UITankRenderer(Tank *tank);
-	virtual ~UITankRenderer();
+	UITankModel(UITankRenderer *tankRenderer);
+	virtual ~UITankModel();
 
-	UITankShotHistory &getShotHistory();
-	UITankWeapon &getTankWeapon();
-	UITankActiveModel *getActiveModel();
-	void updateRotation();
-	void setActive();
-	void setInactive();
+	void setRotations();
 
 protected:
-	UITankActiveModel *activeModel_;
-	UITankShotHistory shotHistory_;
-	UITankWeapon tankWeapon_;
-	
-	virtual UITargetModel *createModel();
+	UITankRenderer *tankRenderer_;
+	Ogre::Bone *gunBone_, *turretBone_;
+		
+	virtual void performUIActionAlive();
+	virtual void create();
 };
 
 #endif

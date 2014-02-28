@@ -30,11 +30,6 @@ class ProgressCounter;
 class DeformLandscape
 {
 public:
-	struct DeformPoints
-	{
-		fixed map[100][100];
-	};
-
 	static void deformLandscape(
 		ScorchedContext &context,
 		FixedVector &pos, fixed radius, 
@@ -50,7 +45,7 @@ private:
 	static bool deformLandscapeInternal(
 		ScorchedContext &context,
 		FixedVector &pos, fixed radius, 
-		bool down, DeformPoints &map,
+		bool down, 
 		bool setNormals, fixed depthScale);
 	static bool deformRoofInternal(
 		ScorchedContext &context,

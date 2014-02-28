@@ -61,7 +61,7 @@ Target::~Target()
 {
 	life_->setLife(0);
 
-	delete renderer_; renderer_ = 0;
+	if (renderer_) renderer_->deleteThis(); renderer_ = 0;
 	delete life_; life_ = 0;
 	delete shield_; shield_ = 0;
 	delete group_; group_ = 0;

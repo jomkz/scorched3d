@@ -18,20 +18,29 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_UITankWeaponSwitcher_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_)
-#define AFX_UITankWeaponSwitcher_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_
+#if !defined(__INCLUDE_UITargetModelh_INCLUDE__)
+#define __INCLUDE_UITargetModelh_INCLUDE__
 
-#include <engine/ScorchedContext.h>
+#include <client/ClientUISync.h>
 
-class Tanket;
-class Accessory;
-class UITankWeaponSwitcher 
+class UITargetRenderer;
+class UITargetModel
 {
 public:
-	UITankWeaponSwitcher();
-	virtual ~UITankWeaponSwitcher();
+	UITargetModel(UITargetRenderer *targetRenderer);
+	virtual ~UITargetModel();
 
-	virtual void switchWeapon(ScorchedContext &context, Tanket *tanket, Accessory *currentWeapon, Accessory *newWeapon);
+	void updateStateAndPosition();
+protected:
+	ClientUISyncActionRegisterable *positionChangedRegisterable_;
+	Ogre::SceneNode *targetNode_;
+	Ogre::Entity *targetEntity_;
+	UITargetRenderer *targetRenderer_;
+		
+	void positionChangedSync(); // Synced (UI and Client Thread)
+	virtual void performUIActionAlive();
+	virtual void performUIActionDead();
+	virtual void create();
 };
 
-#endif // !defined(AFX_TANKBBATTERIES_H__83501862_9536_4108_A7E6_2377AD98EB72__INCLUDED_)
+#endif

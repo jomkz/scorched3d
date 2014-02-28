@@ -19,138 +19,64 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <uiactions/UITankRenderer.h>
-#include <dialogs/GUITankInfo.h>
-#include <tanket/TanketShotInfo.h>
-#include <tanket/TanketShotPath.h>
+#include <uiactions/UITankModel.h>
+#include <uiactions/UITankActiveModel.h>
 #include <scorched3dc/ScorchedUI.h>
-#include <scorched3dc/OgreSystem.h>
 #include <client/ScorchedClient.h>
-#include <weapons/Accessory.h>
-#include <OgreManualObject.h>
-#include <OgreBillboardChain.h>
 
 UITankRenderer::UITankRenderer(Tank *tank) :
-	UITargetRenderer(tank), 
-	gunBone_(0), turretBone_(0), shotPathNode_(0),
-	active_(false)
+	UITargetRenderer(tank),
+	activeModel_(0)
 {
 	tankWeapon_.setTankRenderer(this);
-	rotationChangedRegisterable_ = 
-		new ClientUISyncActionRegisterableAdapter<UITankRenderer>(this, &UITankRenderer::rotationChangedSync, false);
+	shotHistory_.setTankRenderer(this);
 }
 
 UITankRenderer::~UITankRenderer()
 {
-	delete rotationChangedRegisterable_;
+	ENSURE_CLIENT_THREAD
+	delete activeModel_;
+	activeModel_ = 0;
 }
 
-void UITankRenderer::setRotations()
-{
-	turretBone_->resetToInitialState();
-	turretBone_->yaw(Ogre::Degree(-getShotHistory().getCurrentValues().rot.asFloat()), Ogre::Node::TS_WORLD);
-	gunBone_->resetToInitialState();
-	gunBone_->pitch(Ogre::Degree(getShotHistory().getCurrentValues().ele.asFloat()), Ogre::Node::TS_LOCAL);
-
-	if (active_)
-	{
-		rotationChangedRegisterable_->registerCallback();
-	}
+UITankShotHistory &UITankRenderer::getShotHistory() 
+{ 
+	ENSURE_UI_THREAD
+	return shotHistory_; 
 }
 
-void UITankRenderer::create()
-{
-	UITargetRenderer::create();
-
-	Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
-
-	std::string entityName = S3D::formatStringBuffer("ActiveTankMarker%u", target_->getPlayerId());
-	std::string nodeName = S3D::formatStringBuffer("ActiveTankMarkerNode%u", target_->getPlayerId());
-	activeTankMarkerEntity_ = sceneManager->createEntity(entityName.c_str(), "cone.mesh", "Models");
-	activeTankMarkerEntity_->setVisibilityFlags(OgreSystem::VisibiltyMaskTargets);
-	Ogre::SceneNode *activeTankMarkerNode = targetNode_->createChildSceneNode(nodeName);
-	activeTankMarkerNode->attachObject(activeTankMarkerEntity_);
-	activeTankMarkerNode->setInheritScale(false);
-	activeTankMarkerNode->setPosition(0.0f, 2.0f, 0.0f);
-	activeTankMarkerNode->setScale(30.0f, 30.0f, 30.0f);
-
-	Ogre::SkeletonInstance* skel = targetEntity_->getSkeleton();
-	gunBone_ = skel->getBone("Gun");
-	gunBone_->setManuallyControlled(true);
-	gunBone_->setInitialState();
-	turretBone_ = skel->getBone("Turret");
-	turretBone_->setManuallyControlled(true);
-	turretBone_->setInitialState();
-	
-	setRotations();
+UITankWeapon &UITankRenderer::getTankWeapon() 
+{ 
+	ENSURE_UI_THREAD
+	return tankWeapon_; 
 }
 
-void UITankRenderer::setActive(bool active)
-{
-	activeTankMarkerEntity_->setVisible(active);
-	active_ = active;
-	if (active_)
-	{
-		rotationChangedRegisterable_->registerCallback();
-		Tank *tank = (Tank *) target_;
-		getTankWeapon().setWeapons(tank);
-		Accessory *currentWeapon = getTankWeapon().getCurrentWeapon();
-
-		GUITankInfo::instance()->setVisible(tank->getCStrName());
-		GUITankInfo::instance()->setWeaponName(currentWeapon->getName());
-	}
-	else
-	{
-		if (shotPathNode_) OgreSystem::destroySceneNode(shotPathNode_);
-		GUITankInfo::instance()->setInvisible();
-	}
+UITankActiveModel *UITankRenderer::getActiveModel() 
+{ 
+	ENSURE_UI_THREAD
+	return activeModel_; 
 }
 
-void UITankRenderer::performUIActionAlive()
+void UITankRenderer::updateRotation()
 {
-	UITargetRenderer::performUIActionAlive();
-
-	Tank *tank = (Tank *) target_;
-	fixed maxPower = tank->getShotInfo().getMaxOverallPower();
-
-	getShotHistory().setMaxPower(maxPower);
-	setRotations();
+	ENSURE_UI_THREAD
+	((UITankModel *) targetModel_)->setRotations();
 }
 
-void UITankRenderer::rotationChangedSync()
+void UITankRenderer::setActive()
 {
-	FixedVector result;
-	TanketShotPath shotPath(ScorchedClient::instance()->getContext(), (Tanket *) target_, true);
-	if (shotPath.makeShot(getShotHistory().getCurrentValues().rot, 
-		getShotHistory().getCurrentValues().ele, 
-		getShotHistory().getCurrentValues().power, 
-		result))
-	{
-		Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
-		Ogre::ManualObject* manual = sceneManager->createManualObject();
-		manual->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
+	ENSURE_UI_THREAD
+	activeModel_ = new UITankActiveModel(this);
+}
 
-		//Ogre::BillboardChain *bbchain = sceneManager->createBillboardChain();
-		//bbchain->setNumberOfChains(1);
-		//bbchain->setMaxChainElements(shotPath.getPositions().size());
-		//bbchain->setFaceCamera(true);
+void UITankRenderer::setInactive()
+{
+	ENSURE_UI_THREAD
+	delete activeModel_;
+	activeModel_ = 0;
+}
 
-		std::vector<FixedVector>::iterator itor = shotPath.getPositions().begin();
-		std::vector<FixedVector>::iterator end_itor = shotPath.getPositions().end();
-		for (;itor!=end_itor;++itor)
-		{
-			Ogre::Vector3 position(
-				OgreSystem::OGRE_WORLD_SCALE_FIXED * (*itor)[0].getInternalData(), 
-				OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED * (*itor)[2].getInternalData(), 
-				OgreSystem::OGRE_WORLD_SCALE_FIXED * (*itor)[1].getInternalData());
-			//Ogre::BillboardChain::Element element(position, 10, 0, Ogre::ColourValue(1, 0, 0), Ogre::Quaternion());
-			//bbchain->addChainElement(0, element);
-			manual->position(position);
-		}
-
-		manual->end();
-
-		if (shotPathNode_) OgreSystem::destroySceneNode(shotPathNode_);
-		shotPathNode_ = sceneManager->getRootSceneNode()->createChildSceneNode();
-		shotPathNode_->attachObject(manual);
-	}
+UITargetModel *UITankRenderer::createModel()
+{
+	return new UITankModel(this);
 }

@@ -33,10 +33,17 @@
 #include <server/ScorchedServer.h>
 
 ScorchedUI *ScorchedUI::instance_(0);
+static boost::thread::id thread_id;
 
 ScorchedUI *ScorchedUI::instance()
 {
+	ensureUIThread();
 	return instance_;
+}
+
+void ScorchedUI::ensureUIThread()
+{
+	DIALOG_ASSERT(thread_id == boost::this_thread::get_id());
 }
 
 ScorchedUI::ScorchedUI() : 
@@ -59,6 +66,8 @@ ScorchedUI::~ScorchedUI()
 
 bool ScorchedUI::go()
 {
+	thread_id = boost::this_thread::get_id();
+
 	// Setup S3D logger
 	Logger::addLogger(new FileLogger("Scorched3D.log", ".", false), false);
 	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",

@@ -122,10 +122,6 @@ void DeformLandscape::deformLandscape(
 				radius.asQuickString(), (down?"Down":"Up")));
 	}
 
-	static DeformPoints serverDeformMap;
-	static DeformPoints clientDeformMap;
-	DeformPoints &deformMap = context.getServerMode()?serverDeformMap:clientDeformMap;
-
 	if (down && context.getLandscapeMaps().getRoofMaps().getRoofOn())
 	{
 		bool hits = deformRoofInternal(context, pos, radius, depthScale, true);
@@ -140,27 +136,25 @@ void DeformLandscape::deformLandscape(
 #endif
 	}
 
-	bool hits = deformLandscapeInternal(context, pos, radius, down, deformMap, true, depthScale);
+	bool hits = deformLandscapeInternal(context, pos, radius, down, true, depthScale);
 #ifndef S3D_SERVER
 	if (hits && !context.getServerMode() && deformTexture)
 	{
-		/*
-		Landscape::instance()->recalculateLandscape();
-		VisibilityPatchGrid::instance()->recalculateLandscapeErrors(pos, radius);
-
-		DeformTextures::deformLandscape(
-			pos.asVector(), 
-			radius.asFloat(),  
-			ExplosionTextures::instance()->getScorchBitmap(deformTexture),
-			deformMap);
-		*/
+		if (!context.getServerMode())
+		{
+			int sizei = radius.asInt();
+			ScorchedClient::instance()->getClientUISync().addActionFromClient(
+				new UILandscapeDeformAction(
+					pos[0].asInt() - sizei, pos[1].asInt() - sizei, 
+					sizei * 2, sizei * 2));
+		}
 	}
 #endif
 }
 
 bool DeformLandscape::deformLandscapeInternal(
 	ScorchedContext &context,
-	FixedVector &pos, fixed radius, bool down, DeformPoints &map, 
+	FixedVector &pos, fixed radius, bool down, 
 	bool setNormals, fixed depthScale)
 {
 	HeightMap &hmap = context.getLandscapeMaps().getGroundMaps().getHeightMap();
@@ -240,8 +234,6 @@ bool DeformLandscape::deformLandscapeInternal(
 					}
 				}
 			}
-
-			map.map[x+iradius][y+iradius] = *explosionDistance;
 		}
 	}
 

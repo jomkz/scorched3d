@@ -20,6 +20,7 @@
 
 #include <client/ClientUISync.h>
 #include <client/ScorchedClient.h>
+#include <scorched3dc/ScorchedUI.h>
 #include <common/DefinesAssert.h>
 
 ClientUISyncAction::ClientUISyncAction()
@@ -105,9 +106,8 @@ void ClientUISyncActionBuffer::removeClientUISyncAction(int position)
 }
 
 ClientUISync::ClientUISync() : 
-	currentlySynching_(false), pointingToFirstBuffers_(true)
+	currentlySynching_(false)
 {
-	currentBuffers_ = &firstBuffers_;
 }
 
 ClientUISync::~ClientUISync()
@@ -116,28 +116,33 @@ ClientUISync::~ClientUISync()
 
 int ClientUISync::addActionFromClient(ClientUISyncAction *action)
 {
-	return currentBuffers_->actionsFromClient.addClientUISyncAction(action);
+	ENSURE_CLIENT_THREAD
+	return currentBuffers_.actionsFromClient.addClientUISyncAction(action);
 }
 
 void ClientUISync::removeActionFromClient(int position)
 {
-	currentBuffers_->actionsFromClient.removeClientUISyncAction(position);
+	ENSURE_CLIENT_THREAD
+	currentBuffers_.actionsFromClient.removeClientUISyncAction(position);
 }
 
 int ClientUISync::addActionFromUI(ClientUISyncAction *action)
 {
-	return currentBuffers_->actionsFromUI.addClientUISyncAction(action);
+	ENSURE_UI_THREAD
+	return currentBuffers_.actionsFromUI.addClientUISyncAction(action);
 }
 
 void ClientUISync::removeActionFromUI(int position)
 {
-	currentBuffers_->actionsFromUI.removeClientUISyncAction(position);
+	ENSURE_UI_THREAD
+	currentBuffers_.actionsFromUI.removeClientUISyncAction(position);
 }
 
 void ClientUISync::checkForSyncFromClient()
 {
-	if (!currentBuffers_->actionsFromClient.getActionCount() &&
-		!currentBuffers_->actionsFromUI.getActionCount()) return;
+	ENSURE_CLIENT_THREAD
+	if (!currentBuffers_.actionsFromClient.getActionCount() &&
+		!currentBuffers_.actionsFromUI.getActionCount()) return;
 
 	{
 		boost::unique_lock<boost::mutex> lock(syncMutex_);
@@ -151,33 +156,39 @@ void ClientUISync::checkForSyncFromClient()
 
 void ClientUISync::checkForSyncFromUI()
 {
+	ENSURE_UI_THREAD
 	if (!currentlySynching_) return;
 
 	{
 		boost::unique_lock<boost::mutex> lock(syncMutex_);
 
-		// Swap buffers, so the actions themselves can add new actions
-		// without needing to synchronize the buffers
-		ClientUISyncActionBuffers *iterationBuffers = currentBuffers_;
-		if (pointingToFirstBuffers_) currentBuffers_ = &secondBuffers_;
-		else currentBuffers_ = &firstBuffers_;
-		pointingToFirstBuffers_ = !pointingToFirstBuffers_;
-
 		{
-			ClientUISyncAction **currentAction = iterationBuffers->actionsFromClient.getActions();
-			for (int i=0; i<iterationBuffers->actionsFromClient.getActionCount(); ++i, ++currentAction)
+			ClientUISyncAction **startAction = currentBuffers_.actionsFromClient.getActions();
+			ClientUISyncAction **currentAction = startAction;
+			for (int i=0; i<currentBuffers_.actionsFromClient.getActionCount(); ++i, ++currentAction)
 			{
 				if (*currentAction) (*currentAction)->performUIAction();
+				if (startAction != currentBuffers_.actionsFromClient.getActions())
+				{
+					startAction = currentBuffers_.actionsFromClient.getActions();
+					currentAction = &startAction[i];
+				}
 			}
-			iterationBuffers->actionsFromClient.resetCount();
+			currentBuffers_.actionsFromClient.resetCount();
 		}
 		{
-			ClientUISyncAction **currentAction = iterationBuffers->actionsFromUI.getActions();
-			for (int i=0; i<iterationBuffers->actionsFromUI.getActionCount(); ++i, ++currentAction)
+			ClientUISyncAction **startAction = currentBuffers_.actionsFromUI.getActions();
+			ClientUISyncAction **currentAction = startAction;
+			for (int i=0; i<currentBuffers_.actionsFromUI.getActionCount(); ++i, ++currentAction)
 			{
 				if (*currentAction) (*currentAction)->performUIAction();
+				if (startAction != currentBuffers_.actionsFromUI.getActions())
+				{
+					startAction = currentBuffers_.actionsFromUI.getActions();
+					currentAction = &startAction[i];
+				}
 			}
-			iterationBuffers->actionsFromUI.resetCount();
+			currentBuffers_.actionsFromUI.resetCount();
 		}
 
 		currentlySynching_ = false;
