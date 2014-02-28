@@ -240,6 +240,7 @@
     <ClCompile Include="..\..\common\tanket\TanketAutoDefense.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketBatteries.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketShotInfo.cpp" />
+    <ClCompile Include="..\..\common\tanket\TanketShotPath.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketType.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketTypes.cpp" />
     <ClCompile Include="..\..\common\tanket\TanketWeapon.cpp" />
@@ -712,6 +713,7 @@
     <ClInclude Include="..\..\common\tanket\TanketAutoDefense.h" />
     <ClInclude Include="..\..\common\tanket\TanketBatteries.h" />
     <ClInclude Include="..\..\common\tanket\TanketShotInfo.h" />
+    <ClInclude Include="..\..\common\tanket\TanketShotPath.h" />
     <ClInclude Include="..\..\common\tanket\TanketType.h" />
     <ClInclude Include="..\..\common\tanket\TanketTypes.h" />
     <ClInclude Include="..\..\common\tanket\TanketWeapon.h" />

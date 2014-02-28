@@ -30,10 +30,14 @@
 UITargetRenderer::UITargetRenderer(Target *target) :
 	target_(target), targetNode_(0), targetEntity_(0)
 {
+	targetChangedRegisterable_ = 
+		new ClientUISyncActionRegisterableAdapter<UITargetRenderer>(this, &UITargetRenderer::targetChangedSync, true);
 }
 
 UITargetRenderer::~UITargetRenderer()
 {
+	delete targetChangedRegisterable_;
+	targetChangedRegisterable_ = 0;
 	if (targetNode_)
 	{
 		OgreSystem::destroySceneNode(targetNode_);
@@ -42,7 +46,7 @@ UITargetRenderer::~UITargetRenderer()
 	}
 }
 
-void UITargetRenderer::performUIAction()
+void UITargetRenderer::targetChangedSync()
 {
 	if (!targetNode_) create();
 
@@ -54,8 +58,6 @@ void UITargetRenderer::performUIAction()
 	{
 		performUIActionDead();
 	}
-
-	ClientUISyncActionRegisterable::performUIAction();
 }
 
 void UITargetRenderer::performUIActionAlive()
@@ -76,7 +78,7 @@ void UITargetRenderer::performUIActionDead()
 
 void UITargetRenderer::changed()
 {
-	registerCallback();
+	targetChangedRegisterable_->registerCallback();
 }
 
 void UITargetRenderer::targetBurnt()

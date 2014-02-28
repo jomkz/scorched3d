@@ -18,38 +18,36 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UITargetRendererh_INCLUDE__)
-#define __INCLUDE_UITargetRendererh_INCLUDE__
+#if !defined(__INCLUDE_TanketShotPathh_INCLUDE__)
+#define __INCLUDE_TanketShotPathh_INCLUDE__
 
-#include <client/ClientUISync.h>
-#include <target/TargetRenderer.h>
-#include <target/Target.h>
+#include <engine/PhysicsParticleObject.h>
+#include <engine/ScorchedContext.h>
+#include <tanket/Tanket.h>
+#include <vector>
 
-class UITargetRenderer : public TargetRenderer
+class TanketShotPath : public PhysicsParticleObjectHandler
 {
 public:
-	UITargetRenderer(Target *target);
-	virtual ~UITargetRenderer();
+	TanketShotPath(ScorchedContext &context, Tanket *tanket, bool keepPath = false);
+	virtual ~TanketShotPath();
 
-	Target *getTarget() { return target_; }
+	bool makeShot(fixed rotation, fixed elevation, fixed power, FixedVector &result);
 
-	// TargetRenderer (Client Thread)
-	virtual void changed();
-	virtual void targetBurnt();
-	virtual void shieldHit();
-	virtual void fired();
+	std::vector<FixedVector> &getPositions() { return positions_; }
 
+	// PhysicsParticleObjectHandler
+	virtual void collision(PhysicsParticleObject &position, 
+		ScorchedCollisionId collisionId);
+	virtual void wallCollision(PhysicsParticleObject &position,
+		ScorchedCollisionId collisionId);
 protected:
-	ClientUISyncActionRegisterable *targetChangedRegisterable_;
-	Ogre::SceneNode *targetNode_;
-	Ogre::Entity *targetEntity_;
-	Target *target_;
-
-	
-	void targetChangedSync(); // Synced (UI and Client Thread)
-	virtual void performUIActionAlive();
-	virtual void performUIActionDead();
-	virtual void create();
+	bool keepPath_;
+	std::vector<FixedVector> positions_;
+	FixedVector resultPosition_;
+	bool collision_;
+	Tanket *tanket_;
+	ScorchedContext &context_;
 };
 
 #endif

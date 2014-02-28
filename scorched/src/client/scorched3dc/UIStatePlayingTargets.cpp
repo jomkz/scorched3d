@@ -56,23 +56,23 @@ void UIStatePlayingTargets::update(float frameTime)
 		if (inputManager.isKeyDown(OIS::KC_LEFT))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * 45, true);
+			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * -45, true);
 		}
 		else if (inputManager.isKeyDown(OIS::KC_RIGHT))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * -45, true);
+			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * 45, true);
 		}
 
 		if (inputManager.isKeyDown(OIS::KC_UP))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * 20, true);
+			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * -20, true);
 		}
 		else if (inputManager.isKeyDown(OIS::KC_DOWN))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * -20, true);
+			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * 20, true);
 		}
 
 		if (inputManager.isKeyDown(OIS::KC_EQUALS))

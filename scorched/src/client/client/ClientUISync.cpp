@@ -30,7 +30,8 @@ ClientUISyncAction::~ClientUISyncAction()
 {
 }
 
-ClientUISyncActionRegisterable::ClientUISyncActionRegisterable() : registered_(-1)
+ClientUISyncActionRegisterable::ClientUISyncActionRegisterable(bool calledFromClient) : 
+	registered_(-1), calledFromClient_(calledFromClient)
 {
 }
 
@@ -38,7 +39,14 @@ ClientUISyncActionRegisterable::~ClientUISyncActionRegisterable()
 {
 	if (registered_ != -1)
 	{
-		ScorchedClient::instance()->getClientUISync().removeActionFromClient(registered_);
+		if (calledFromClient_)
+		{
+			ScorchedClient::instance()->getClientUISync().removeActionFromClient(registered_);
+		}
+		else
+		{
+			ScorchedClient::getClientUISyncExternal().removeActionFromUI(registered_);
+		}
 	}
 }
 
@@ -51,7 +59,14 @@ void ClientUISyncActionRegisterable::registerCallback()
 {
 	if (registered_ == -1)
 	{
-		registered_ = ScorchedClient::instance()->getClientUISync().addActionFromClient(this);
+		if (calledFromClient_)
+		{
+			registered_ = ScorchedClient::instance()->getClientUISync().addActionFromClient(this);
+		}
+		else
+		{
+			registered_ = ScorchedClient::getClientUISyncExternal().addActionFromUI(this);
+		}
 	}
 }
 

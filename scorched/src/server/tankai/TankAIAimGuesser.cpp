@@ -21,6 +21,7 @@
 #include <tankai/TankAIAimGuesser.h>
 #include <tanket/Tanket.h>
 #include <tanket/TanketShotInfo.h>
+#include <tanket/TanketShotPath.h>
 #include <tank/TankLib.h>
 #include <target/TargetLife.h>
 #include <common/OptionsScorched.h>
@@ -47,11 +48,12 @@ bool TankAIAimGuesser::guess(Tanket *tanket, Vector &target,
 	// Make an initial randomish shot up
 	initialShot(tanket, target, result);
 
+	TanketShotPath shotPath(context_, tanket);
 	for (int i=0;;i++)
 	{
 		// Find out where this may land
-		getCurrentGuess(tanket, result);
-		if (!collision_)
+		FixedVector currentGuess;
+		if (!shotPath.makeShot(result.rotation_, result.elevation_, result.power_, currentGuess))
 		{
 			// No collision
 			// A bad thing
@@ -59,8 +61,8 @@ bool TankAIAimGuesser::guess(Tanket *tanket, Vector &target,
 		}
 
 		// Its landed
-		actualPosition = currentGuess_.getPosition().asVector();
-		Vector direction = currentGuess_.getPosition().asVector() - target;
+		actualPosition = currentGuess.asVector();
+		Vector direction = currentGuess.asVector() - target;
 		float actualDistance = 
 			float(sqrt(direction[0]*direction[0] + direction[1]*direction[1]));
 		if (actualDistance < distance)
@@ -78,7 +80,7 @@ bool TankAIAimGuesser::guess(Tanket *tanket, Vector &target,
 		}
 
 		// Not close
-		refineShot(tanket, currentGuess_.getPosition().asVector(), target, result);
+		refineShot(tanket, currentGuess.asVector(), target, result);
 	}
 
 	// Never gets here
@@ -137,52 +139,4 @@ void TankAIAimGuesser::refineShot(Tanket *tanket,
 	fixed power = result.power_ * fixed::fromFloat(wantedPower) / 
 		fixed::fromFloat(currentPower);
 	result.power_ = power;
-}
-
-void TankAIAimGuesser::collision(PhysicsParticleObject &position, 
-	ScorchedCollisionId collisionId)
-{
-	currentGuess_ = position;
-	collision_ = true;
-}
-
-void TankAIAimGuesser::wallCollision(PhysicsParticleObject &position,
-	ScorchedCollisionId collisionId)
-{
-	// For now the AIs cannot cope with bouncy and wrap walls.
-	// So they will count the shot end where they hit the wall
-	currentGuess_ = position;
-	collision_ = true;
-}
-
-void TankAIAimGuesser::getCurrentGuess(Tanket *tanket, TankAIAimResult &result)
-{
-	bool actionSyncCheck = context_.getOptionsGame().
-		getMainOptions().getActionSyncCheck();
-	context_.getOptionsGame().getMainOptions().
-		getActionSyncCheckEntry().setValue(false);
-
-	FixedVector shotVelocity;
-	TankLib::getVelocityVector(shotVelocity, result.rotation_, result.elevation_);
-	shotVelocity *=	(result.power_ + 1);
-	FixedVector tankTurretPosition;
-	tanket->getLife().getTankTurretPosition(tankTurretPosition);
-	FixedVector shotPosition;
-	TankLib::getTankGunPosition(shotPosition, tankTurretPosition,
-		result.rotation_, result.elevation_);
-
-	PhysicsParticleObject particleObject;
-	PhysicsParticleInfo info(ParticleTypeShot, tanket->getPlayerId(), 0);
-	particleObject.setPhysics(info, context_,
-		shotPosition, shotVelocity);
-	particleObject.setHandler(this);
-
-	collision_ = false;
-	for (int i=0; i<10000 && !collision_; i++)
-	{
-		particleObject.simulate(1);
-	}
-
-	context_.getOptionsGame().getMainOptions().
-		getActionSyncCheckEntry().setValue(actionSyncCheck);
 }

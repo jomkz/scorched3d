@@ -24,6 +24,8 @@
 #include <client/ClientUISync.h>
 #include <common/fixed.h>
 
+// Called by other tanks not from the current client 
+// to show this client their rotation
 class UIRotateTankAction : public ClientUISyncAction
 {
 public:

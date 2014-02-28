@@ -206,23 +206,24 @@ void TankLib::getShotTowardsPosition(ScorchedContext &context,
 
 void TankLib::getVelocityVector(FixedVector &diff, fixed xy, fixed yz)
 {
-	diff = FixedVector(
-		(-xy / fixed(180) * fixed::XPI).sin() * (yz / fixed(180) * fixed::XPI).cos(),
-		(-xy / fixed(180) * fixed::XPI).cos() * (yz / fixed(180) * fixed::XPI).cos(),
-		( yz / fixed(180) * fixed::XPI).sin());	
+	fixed rotRad = (-xy * fixed::DEGTORAD);
+	fixed eleRad = (yz * fixed::DEGTORAD);
+	fixed eleMult = eleRad.cos();
+	diff[0] = rotRad.sin() * eleMult,
+	diff[1] = rotRad.cos() * eleMult,
+	diff[2] = eleRad.sin();	
 	diff /= 20;
 	diff *= fixed(true, 12000);
 }
 
 void TankLib::getGunPosition(FixedVector &pos, fixed xy, fixed yz)
 {
-	fixed gunLength = 1;
-	fixed degToRad = fixed(180) * fixed::XPI;
-	pos[0] = gunLength * (xy / degToRad).sin() * 
-		((fixed(90) - yz) / degToRad).sin();
-	pos[1] = gunLength * (xy / degToRad).cos() * 
-		((fixed(90) - yz) / degToRad).sin();
-	pos[2] = gunLength * ((fixed(90) - yz) / degToRad).cos();
+	fixed rotRad = (-xy * fixed::DEGTORAD);
+	fixed eleRad = (yz * fixed::DEGTORAD);
+	fixed eleMult = eleRad.cos();
+	pos[0] = rotRad.sin() * eleMult,
+	pos[1] = rotRad.cos() * eleMult,
+	pos[2] = eleRad.sin();	
 }
 
 void TankLib::getTankGunPosition(FixedVector &tankGunPosition, FixedVector &tankTurretPosition, fixed xy, fixed yz)

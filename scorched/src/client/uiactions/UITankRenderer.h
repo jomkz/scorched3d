@@ -36,10 +36,13 @@ public:
 	void setActive(bool active);
 
 protected:
+	bool active_;
+	ClientUISyncActionRegisterable *rotationChangedRegisterable_;
 	UITankShotHistory shotHistory_;
 	Ogre::Bone *gunBone_, *turretBone_;
 	Ogre::Entity *activeTankMarkerEntity_;
 
+	void rotationChangedSync();  // Synced (UI and Client Thread)
 	virtual void create();
 	virtual void performUIActionAlive();
 };

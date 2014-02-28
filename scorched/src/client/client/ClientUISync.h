@@ -33,7 +33,7 @@ public:
 class ClientUISyncActionRegisterable : public ClientUISyncAction
 {
 public:
-	ClientUISyncActionRegisterable();
+	ClientUISyncActionRegisterable(bool calledFromClient);
 	virtual ~ClientUISyncActionRegisterable();
 
 	// ClientUISyncAction
@@ -41,7 +41,32 @@ public:
 
 	void registerCallback();
 protected:
+	bool calledFromClient_;
 	int registered_;
+};
+
+template<class T>
+class ClientUISyncActionRegisterableAdapter : public ClientUISyncActionRegisterable
+{
+public:
+	ClientUISyncActionRegisterableAdapter(T *inst, void (T::*call)(), bool calledFromClient) :
+		ClientUISyncActionRegisterable(calledFromClient), inst_(inst), call_(call)
+	{
+	};
+	virtual ~ClientUISyncActionRegisterableAdapter()
+	{	
+		inst_ = 0;
+		call_ = 0;
+	};
+
+	virtual void performUIAction()
+	{
+		ClientUISyncActionRegisterable::performUIAction();
+		(inst_->*call_)();
+	}
+protected:
+	T *inst_;
+	void (T::*call_)();
 };
 
 class ClientUISyncActionBuffer

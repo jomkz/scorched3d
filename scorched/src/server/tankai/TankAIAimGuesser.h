@@ -25,7 +25,7 @@
 #include <tankai/TankAIAimResult.h>
 
 class Tanket;
-class TankAIAimGuesser : public PhysicsParticleObjectHandler
+class TankAIAimGuesser
 {
 public:
 	TankAIAimGuesser(ScorchedContext &context);
@@ -36,18 +36,9 @@ public:
 		Vector &actualPosition,
 		TankAIAimResult &result);
 
-	// PhysicsParticleObjectHandler
-	virtual void collision(PhysicsParticleObject &position, 
-		ScorchedCollisionId collisionId);
-	virtual void wallCollision(PhysicsParticleObject &position,
-		ScorchedCollisionId collisionId);
-
 protected:
-	bool collision_;
 	ScorchedContext &context_;
-	PhysicsParticleObject currentGuess_;
 
-	void getCurrentGuess(Tanket *tanket, TankAIAimResult &result);
 	void initialShot(Tanket *tanket, Vector &target,
 		TankAIAimResult &result);
 	void refineShot(Tanket *tanket,

@@ -208,6 +208,7 @@ public:
 	static fixed XPI;
 	static fixed X2PI;
 	static fixed XPIO2;
+	static fixed DEGTORAD;
 
 	static fixed fromFloat(float flt);
 

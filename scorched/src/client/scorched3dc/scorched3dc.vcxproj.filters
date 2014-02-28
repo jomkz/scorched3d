@@ -1464,6 +1464,9 @@
     <ClCompile Include="..\uiactions\UIProjectileRenderer.cpp">
       <Filter>uiactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\tanket\TanketShotPath.cpp">
+      <Filter>tanket</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2863,6 +2866,9 @@
     </ClInclude>
     <ClInclude Include="..\uiactions\UIProjectileRenderer.h">
       <Filter>uiactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\tanket\TanketShotPath.h">
+      <Filter>tanket</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

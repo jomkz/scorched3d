@@ -41,6 +41,7 @@ fixed fixed::XPIO2 =   fixed(true,_XPIO2);
 #define XLN_E    fixed(true,_XLN_E)
 #define _XLN_10   23025 // 2.30258509299404568402
 #define XLN_10   fixed(true,_XLN_10)
+fixed fixed::DEGTORAD = (fixed(1) / fixed(180)) * fixed::XPI;
 
 const int64_t fixed::FIXED_RESOLUTION(10000);
 const float fixed::FIXED_RESOLUTION_FLOAT(10000.0f);

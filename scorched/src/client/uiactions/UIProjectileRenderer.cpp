@@ -24,6 +24,7 @@
 #include <actions/ShotProjectile.h>
 
 UIProjectileRenderer::UIProjectileRenderer(ShotProjectile *shotProjectile) :
+	ClientUISyncActionRegisterable(true),
 	shotProjectile_(shotProjectile), projectileNode_(0)
 {
 }
