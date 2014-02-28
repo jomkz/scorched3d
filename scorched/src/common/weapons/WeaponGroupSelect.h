@@ -22,15 +22,13 @@
 #define AFX_WeaponGroupSelect_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <engine/ObjectGroupEntryDefinition.h>
 
-class WeaponGroupSelect  : public Weapon
+class WeaponGroupSelect : public Weapon
 {
 public:
 	WeaponGroupSelect();
 	virtual ~WeaponGroupSelect();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,8 +37,8 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponGroupSelect, AccessoryPart::AccessoryWeapon);
 
 protected:
-	std::string groupName_;
-	Weapon *nextAction_;
+	ObjectGroupReferenceDefinition groupNames_;
+	XMLEntryWeaponChoice nextAction_;
 
 };
 

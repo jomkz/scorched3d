@@ -22,24 +22,23 @@
 #define __INCLUDE_WeaponInvokeWeaponh_INCLUDE__
 
 #include <weapons/Weapon.h>
-#include <set>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class WeaponInvokeWeapon  : public Weapon
+class WeaponInvokeWeapon : public Weapon
 {
 public:
 	WeaponInvokeWeapon();
 	virtual ~WeaponInvokeWeapon();
 
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
-
 	// Inherited from Weapon
+	virtual bool readXML(XMLNode *node, void *xmlData);
 	void fireWeapon(ScorchedContext &context,
 		WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity);
 
 	REGISTER_ACCESSORY_HEADER(WeaponInvokeWeapon, AccessoryPart::AccessoryWeapon);
 
 protected:
+	XMLEntryString invoke_;
 	Weapon *invokeWeapon_;
 };
 

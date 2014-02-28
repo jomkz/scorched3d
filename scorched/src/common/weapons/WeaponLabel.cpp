@@ -24,47 +24,38 @@
 REGISTER_ACCESSORY_SOURCE(WeaponLabel);
 
 WeaponLabel::WeaponLabel() :
-	nextWeapon_(0)
+	Weapon("WeaponLabel",
+		"Used to tag a spot in the code so that you can loop back to it later on using WeaponGotoLabel."),
+	label_("Label's identifier, can be invoked by WeaponGotoLabel")
 {
-
+	addChildXMLEntry("label", &label_);
+	addChildXMLEntry("nextweapon", &nextWeapon_);
 }
 
 WeaponLabel::~WeaponLabel()
 {
-	delete nextWeapon_;
-	nextWeapon_ = 0;
 }
 
-bool WeaponLabel::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
+bool WeaponLabel::readXMLEntry(XMLNode *node, void *xmlData, const char *name, XMLEntry *entry)
 {
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
+	XMLEntrySimpleType *simple = (XMLEntrySimpleType *) entry; 
 
-	// Get the label
-	std::string label;
-	if (!accessoryNode->getNamedChild("label", label)) return false;
-
-	context.addLabel(label.c_str(), this);
-
-	// Get the next weapon
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("nextweapon", subNode)) return false;
-
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
+	if (0 == strcmp(name, "label"))
 	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
+		return entry->readXML(node, xmlData);
 	}
-	nextWeapon_ = (Weapon*) accessory;
-
-	context.removeLabel(label.c_str());
-
-	return true;
+	else
+	{
+		AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
+		context->addLabel(label_.getValue().c_str(), this);
+		bool result = entry->readXML(node, xmlData);
+		context->removeLabel(label_.getValue().c_str());
+		return result;
+	}
 }
 
 void WeaponLabel::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	nextWeapon_->fire(context, weaponContext, position, velocity);
+	nextWeapon_.getValue()->fire(context, weaponContext, position, velocity);
 }

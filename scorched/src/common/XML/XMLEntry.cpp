@@ -326,7 +326,7 @@ bool XMLEntryContainer::readXML(XMLNode *node, void *xmlData)
 			std::map<std::string, XMLEntry *>::iterator findItor =
 				xmlEntryChildren_.find((*itor)->getName());
 			if (findItor == xmlEntryChildren_.end()) return (*itor)->returnError("Unrecognised XML element");
-			if (!findItor->second->readXML(*itor, xmlData)) return (*itor)->returnError("Failed to parse XML element");
+			if (!readXMLEntry(*itor, xmlData, (*itor)->getName(), findItor->second)) return (*itor)->returnError("Failed to parse XML element");
 			seenTags.insert((*itor)->getName());
 		}
 	}
@@ -344,6 +344,11 @@ bool XMLEntryContainer::readXML(XMLNode *node, void *xmlData)
 	}
 
 	return true;
+}
+
+bool XMLEntryContainer::readXMLEntry(XMLNode *node, void *xmlData, const char *name, XMLEntry *entry)
+{
+	return entry->readXML(node, xmlData);
 }
 
 void XMLEntryContainer::writeXML(XMLNode *parentNode)

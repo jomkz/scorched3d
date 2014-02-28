@@ -25,38 +25,41 @@
 REGISTER_ACCESSORY_SOURCE(WeaponInvokeWeapon);
 
 WeaponInvokeWeapon::WeaponInvokeWeapon() :
-	invokeWeapon_(0)
+	Weapon("WeaponInvokeWeapon",
+		"This primitive calls another pre-defined weapon 'X'. "
+		"If a person is killed by this weapon it would say killed by weapon X. "
+		"The kill money etc would be calculated from X's attributes."),
+	invoke_("Name of the accessory to give.  The accessory being invoked MUST BE DEFINED BEFORE this one.")
 {
-
+	addChildXMLEntry("invoke", &invoke_);
 }
 
 WeaponInvokeWeapon::~WeaponInvokeWeapon()
 {
 }
 
-bool WeaponInvokeWeapon::parseXML(AccessoryCreateContext &context, XMLNode *accessoryNode)
+bool WeaponInvokeWeapon::readXML(XMLNode *node, void *xmlData)
 {
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
+	if (!Weapon::readXML(node, xmlData)) return false;
 
-	std::string invoke;
-	if (!accessoryNode->getNamedChild("invoke", invoke)) return false;
-	Accessory *accessory = context.getAccessoryStore().
-		findByPrimaryAccessoryName(invoke.c_str());
+	AccessoryCreateContext *context = (AccessoryCreateContext *) xmlData;
+	Accessory *accessory = context->getAccessoryStore().
+		findByPrimaryAccessoryName(invoke_.getValue().c_str());
 	if (!accessory)
 	{
-		return accessoryNode->returnError(
+		return node->returnError(
 			S3D::formatStringBuffer("Failed to find accessory named %s",
-				invoke.c_str()));
+			invoke_.getValue().c_str()));
 	}
 
 	AccessoryPart *accessoryPart = accessory->getAction();
 	if (!accessoryPart || accessoryPart->getType() != AccessoryPart::AccessoryWeapon)
 	{
-		return accessoryNode->returnError("Failed to find sub weapon, not a weapon");
+		return node->returnError("Failed to find sub weapon, not a weapon");
 	}
 	invokeWeapon_ = (Weapon*) accessoryPart;
 
-	return accessoryNode->failChildren();
+	return true;
 }
 
 void WeaponInvokeWeapon::fireWeapon(ScorchedContext &context,

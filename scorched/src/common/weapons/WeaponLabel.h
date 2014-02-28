@@ -22,15 +22,13 @@
 #define AFX_WeaponLabel_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_
 
 #include <weapons/Weapon.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class WeaponLabel  : public Weapon
+class WeaponLabel : public Weapon
 {
 public:
 	WeaponLabel();
 	virtual ~WeaponLabel();
-
-	virtual bool parseXML(AccessoryCreateContext &context,
-		XMLNode *accessoryNode);
 
 	// Inherited from Weapon
 	void fireWeapon(ScorchedContext &context,
@@ -39,8 +37,10 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponLabel, AccessoryPart::AccessoryWeapon);
 
 protected:
-	Weapon *nextWeapon_;
+	XMLEntryWeaponChoice nextWeapon_;
+	XMLEntryString label_;
 
+	virtual bool readXMLEntry(XMLNode *node, void *xmlData, const char *name, XMLEntry *entry);
 };
 
 #endif // !defined(AFX_WeaponLabel_H__B5C043F0_7DC6_4198_AE5B_E19002234FCE__INCLUDED_)

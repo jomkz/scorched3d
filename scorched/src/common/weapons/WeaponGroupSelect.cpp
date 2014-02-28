@@ -32,53 +32,47 @@
 REGISTER_ACCESSORY_SOURCE(WeaponGroupSelect);
 
 WeaponGroupSelect::WeaponGroupSelect() :
-	nextAction_(0)
+	Weapon("WeaponGroupSelect", "Instructs weapon to shift it's origin to an object with a pre-specified <groupname>." 
+		"Groups objects may include boids, ships, trees, or weapon-created objects (eg. projectiles and rollers. "),
+	groupNames_(),
+	nextAction_()
 {
-
+	addChildXMLEntry("groupname", &groupNames_);
+	addChildXMLEntry("nextaction", &nextAction_);
 }
 
 WeaponGroupSelect::~WeaponGroupSelect()
 {
-	delete nextAction_;
-	nextAction_ = 0;
-}
-
-bool WeaponGroupSelect::parseXML(AccessoryCreateContext &context,XMLNode *accessoryNode)
-{
-	if (!Weapon::parseXML(context, accessoryNode)) return false;
-
-	if (!accessoryNode->getNamedChild("groupname", groupName_)) return false;
-
-	XMLNode *subNode = 0;
-	if (!accessoryNode->getNamedChild("nextaction", subNode)) return false;
-	
-	// Check next weapon is correct type
-	AccessoryPart *accessory = context.getAccessoryStore().
-		createAccessoryPart(context, parent_, subNode);
-	if (!accessory || accessory->getType() != AccessoryPart::AccessoryWeapon)
-	{
-		return subNode->returnError("Failed to find sub weapon, not a weapon");
-	}
-	nextAction_ = (Weapon*) accessory;
-
-	return true;
 }
 
 void WeaponGroupSelect::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
 	// Find the group to select the objects in
-	ObjectGroup *objectGroup = weaponContext.getInternalContext().getLocalGroups().getGroup(groupName_.c_str());
-	if (!objectGroup) objectGroup = context.getObjectGroups().getGroup(groupName_.c_str());
-	if (!objectGroup) return;
+	std::vector<ObjectGroupEntry *> positions;
+	std::list<XMLEntryString *>::iterator itor = groupNames_.getChildren().begin(),
+		end = groupNames_.getChildren().end();
+	for (;itor!=end;++itor)
+	{
+		const char *groupName = (*itor)->getValue().c_str();
+		ObjectGroup *objectGroup = weaponContext.getInternalContext().getLocalGroups().getGroup(groupName);
+		if (!objectGroup) objectGroup = context.getObjectGroups().getGroup(groupName);
+		if (objectGroup) 
+		{
+			ObjectGroup::ObjectGroupEntryHolderIterator iterator(objectGroup);
+			ObjectGroupEntry *entry;
+			while (entry = iterator.getNext())
+			{
+				positions.push_back(entry);
+			}			
+		}
+	}
 
-	// Select the object
-	int objectCount = objectGroup->getObjectCount();
-	if (objectCount == 0) return;
-	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt("WeaponGroupSelect") % objectCount;
-	ObjectGroupEntry *entry = objectGroup->getObjectByPos(object);
+	if (positions.empty()) return;
+	unsigned int object = context.getSimulator().getRandomGenerator().getRandUInt("WeaponGroupSelect") % positions.size();
+	ObjectGroupEntry *entry = positions[object];
 
 	FixedVector newPosition = entry->getPosition();
 	FixedVector newVelocity = entry->getVelocity();
-	nextAction_->fire(context, weaponContext, newPosition, newVelocity);
+	nextAction_.getValue()->fire(context, weaponContext, newPosition, newVelocity);
 }

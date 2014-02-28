@@ -138,6 +138,8 @@ protected:
 	std::map<std::string, XMLEntry *> xmlEntryChildren_;
 	const char *xmlTypeName_, *xmlDescription_;
 	bool required_;
+
+	virtual bool readXMLEntry(XMLNode *node, void *xmlData, const char *name, XMLEntry *entry);
 };
 
 template <class T>
