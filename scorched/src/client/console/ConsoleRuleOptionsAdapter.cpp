@@ -57,7 +57,8 @@ ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, OptionEnt
 		readRule_ = new ConsoleRuleMethodIAdapterEx<ConsoleRuleOptionsAdapter>(
 			console, this,
 			&ConsoleRuleOptionsAdapter::readValue, 
-			"get", ConsoleUtil::formParams(ConsoleRuleParam(entry.getName())));
+			"get", ConsoleUtil::formParams(ConsoleRuleParam(entry.getName())),
+			entry.getDescription());
 		console_.addRule(readRule_);
 	}
 	if (entry.getData() & OptionEntry::DataRWAccess) 
@@ -65,7 +66,8 @@ ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, OptionEnt
 		writeRule_ = new ConsoleRuleMethodIAdapterEx<ConsoleRuleOptionsAdapter>(
 			console, this,
 			&ConsoleRuleOptionsAdapter::writeValue, 
-			"set", ConsoleUtil::formParams(ConsoleRuleParam(entry.getName()), ConsoleRuleParam("value", type)));
+			"set", ConsoleUtil::formParams(ConsoleRuleParam(entry.getName()), ConsoleRuleParam("value", type)),
+			entry.getDescription());
 		console_.addRule(writeRule_);
 	}
 }
@@ -84,12 +86,15 @@ ConsoleRuleOptionsAdapter::~ConsoleRuleOptionsAdapter()
 
 void ConsoleRuleOptionsAdapter::readValue(std::vector<ConsoleRuleValue> &values, unsigned int userData)
 {
-	console_.addLine(false, entry_.getValueAsString());
+	CEGUI::String result = CEGUI::String(entry_.getName()) + " = " + entry_.getValueAsString();
+	console_.addLine(false, result);
 }
 
 void ConsoleRuleOptionsAdapter::writeValue(std::vector<ConsoleRuleValue> &values, unsigned int userData)
 {
 	entry_.setValueFromString(values[2].valueString);
+	CEGUI::String result = CEGUI::String(entry_.getName()) + " = " + entry_.getValueAsString();
+	console_.addLine(false, result);
 }
 
 ConsoleRuleOptionsAdapterHolder::ConsoleRuleOptionsAdapterHolder()

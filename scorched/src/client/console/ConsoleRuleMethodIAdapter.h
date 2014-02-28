@@ -37,8 +37,8 @@ class ConsoleRuleMethodIAdapter : public ConsoleRule
 public:
 	ConsoleRuleMethodIAdapter(Console &console, T *inst, 
 		void (T::*call)(), 
-		const char *name) : 
-		ConsoleRule(name, std::vector<ConsoleRuleParam>()), 
+		const char *name, const std::string &help = "") : 
+		ConsoleRule(name, std::vector<ConsoleRuleParam>(), help), 
 		console_(console), inst_(inst), call_(call)
 	{
 		console_.addRule(this);
@@ -46,8 +46,9 @@ public:
 
 	ConsoleRuleMethodIAdapter(Console &console, T *inst, 
 		void (T::*call)(), 
-		const char *name, const std::vector<ConsoleRuleParam> &params) : 
-		ConsoleRule(name, params),
+		const char *name, const std::vector<ConsoleRuleParam> &params,
+		const std::string &help = "") : 
+		ConsoleRule(name, params, help),
 		console_(console), inst_(inst), call_(call)
 	{
 		console_.addRule(this);
@@ -80,8 +81,9 @@ public:
 	ConsoleRuleMethodIAdapterEx(Console &console, T *inst, 
 		void (T::*call)(std::vector<ConsoleRuleValue>&, unsigned int), 
 		const char *name, const std::vector<ConsoleRuleParam> &params,
+		const std::string &help = "",
 		unsigned int userData = 0) :
-		ConsoleRule(name, params, userData), 
+		ConsoleRule(name, params, help, userData), 
 		console_(console), inst_(inst), call_(call)
 	{
 		console_.addRule(this);

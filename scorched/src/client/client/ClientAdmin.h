@@ -37,8 +37,6 @@ protected:
 		unsigned int userData);
 	void adminTwoParam(std::vector<ConsoleRuleValue> &split, 
 		unsigned int userData);
-	void adminHelp();
-
 };
 
 #endif // !defined(AFX_ClientAdmin_H__571BC1CA_BDBC_4F2B_9F83_4AA083520198__INCLUDED_)

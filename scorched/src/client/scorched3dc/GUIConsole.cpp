@@ -64,7 +64,7 @@ GUIConsole *GUIConsole::instance()
 	return &instance_;
 }
 
-GUIConsole::GUIConsole() : consoleWindow_(0)
+GUIConsole::GUIConsole() : consoleWindow_(0), commandHistoryIndex_(0)
 {
    create();
    setVisible(false);
@@ -130,6 +130,31 @@ bool GUIConsole::handle_keyDownSubmitted(const CEGUI::EventArgs &e)
 		case CEGUI::Key::PageDown:
 			outputWindow_->getVertScrollbar()->scrollForwardsByPage();
 			return true;
+		case CEGUI::Key::ArrowUp:
+			{
+				if (commandHistoryIndex_ < (int) commandHistory_.size())
+				{
+					commandHistoryIndex_++;
+					setText(commandHistory_[commandHistory_.size() - commandHistoryIndex_]);
+				}
+			}
+			return true;
+		case CEGUI::Key::ArrowDown:
+			{
+				if (commandHistoryIndex_ > 0)
+				{
+					commandHistoryIndex_--;
+					if (commandHistoryIndex_ == 0)
+					{
+						setText("");
+					}
+					else 
+					{
+						setText(commandHistory_[commandHistory_.size() - commandHistoryIndex_]);
+					}
+				}
+			}
+			return true;
 		case CEGUI::Key::Home:
 			editBox_->setCaretIndex(0);
 			return true;
@@ -164,6 +189,8 @@ void GUIConsole::outputText(const CEGUI::String &inMsg, bool command)
 	{
 		newItem = new CEGUI::ListboxTextItem("> " + inMsg);
 		newItem->setTextColours(red); 
+		commandHistoryIndex_ = 0;
+		commandHistory_.push_back(inMsg);
 	}
 	else 
 	{

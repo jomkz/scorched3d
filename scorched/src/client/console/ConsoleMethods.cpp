@@ -40,17 +40,17 @@ void ConsoleMethods::init(Console &console)
 		new ConsoleRuleMethodIAdapter<ConsoleMethods>(
 			console,
 			this, &ConsoleMethods::exit, 
-			"exit"));
+			"exit", "Exit the game"));
 	deleter_.addRule(
 		new ConsoleRuleMethodIAdapter<ConsoleMethods>(
 			console,
 			this, &ConsoleMethods::exit, 
-			"quit"));
+			"quit", "Quit the game"));
 	deleter_.addRule(
 		new ConsoleRuleMethodIAdapter<ConsoleMethods>(
 			console,
 			this, &ConsoleMethods::help, 
-			"help"));
+			"help", "Show all of the available console commands"));
 }
 
 void ConsoleMethods::help()

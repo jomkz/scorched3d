@@ -23,6 +23,7 @@
 
 #include <engine/ThreadCallbackI.h>
 #include <common/LoggerI.h>
+#include <vector>
 
 class GUIConsoleClientThreadCallback : public ThreadCallbackI 
 {
@@ -73,6 +74,8 @@ protected:
 	CEGUI::Window *consoleWindow_;
 	CEGUI::Editbox* editBox_;
 	CEGUI::Listbox *outputWindow_;
+	int commandHistoryIndex_;
+	std::vector<CEGUI::String> commandHistory_;
 
 private:
 	GUIConsole();

@@ -67,10 +67,11 @@ ClientChannelManager::ClientChannelManager(ComsMessageHandler &comsMessageHandle
 		ComsChannelTextMessage::ComsChannelTextMessageType,
 		comsMessageHandler);
 	consoleRule_ = new ConsoleRuleMethodIAdapterEx<ClientChannelManager>(console,
-		this, &ClientChannelManager::say, "Say", 
+		this, &ClientChannelManager::say, "say", 
 		ConsoleUtil::formParams(
 		ConsoleRuleParam("channel", ConsoleRuleTypeString),
-		ConsoleRuleParam("text", ConsoleRuleTypeString)));
+		ConsoleRuleParam("text", ConsoleRuleTypeString)),
+		"Send a chat message to the given channel (as the current player)");
 }
 
 ClientChannelManager::~ClientChannelManager()

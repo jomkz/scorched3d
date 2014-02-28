@@ -34,8 +34,9 @@ ConsoleRuleParam::ConsoleRuleParam(const std::string &name, ConsoleRuleType type
 
 ConsoleRule::ConsoleRule(const std::string &name,
 	const std::vector<ConsoleRuleParam> &params,
+	const std::string &help,
 	unsigned int userData) : 
-	name_(name), params_(params), 
+	name_(name), params_(params), help_(help),
 	userData_(userData)
 {
 
@@ -57,18 +58,23 @@ std::string ConsoleRule::toString()
 		switch (param.getType())
 		{
 		case ConsoleRuleTypeBoolean:
-			result.append("<on|off>");
+			result.append("<").append(param.getName()).append(":on|off>");
 			break;
 		case ConsoleRuleTypeNumber:
-			result.append("<number>");
+			result.append("<").append(param.getName()).append(":number>");
 			break;
 		case ConsoleRuleTypeString:
-			result.append("<").append(param.getName()).append(">");
+			result.append("<").append(param.getName()).append(":string>");
 			break;
 		case ConsoleRuleTypeNone:
 			result.append(param.getName());
 			break;
 		}
+	}
+	if (help_.size() > 0)
+	{
+		result.append("       - ");
+		result.append(help_);
 	}
 	return result;
 }

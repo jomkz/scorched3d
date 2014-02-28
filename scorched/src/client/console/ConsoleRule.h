@@ -65,6 +65,7 @@ class ConsoleRule
 public:
 	ConsoleRule(const std::string &name, 
 		const std::vector<ConsoleRuleParam> &params,
+		const std::string &help = "",
 		unsigned int userData = 0);
 	virtual ~ConsoleRule();
 
@@ -80,11 +81,13 @@ public:
 	std::string getName() { return name_; }
 	std::vector<ConsoleRuleParam> &getParams() { return params_; }
 	unsigned int getUserData() { return userData_; }
+	std::string getHelp() { return help_; }
 
 	bool matchesPartialParams(std::vector<ConsoleRuleValue> &values);
 	bool matchesExactParams(std::vector<ConsoleRuleValue> &values);
 protected:
 	std::string name_;
+	std::string help_;
 	std::vector<ConsoleRuleParam> params_;
 	unsigned int userData_;
 
