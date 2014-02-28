@@ -24,7 +24,6 @@
 #include <cstdlib>
 #include <common/ARGParser.h>
 #include <common/Defines.h>
-#include <common/OptionEntry.h>
 #include <common/OptionsParameters.h>
 
 #ifdef HAVE_UNISTD_H
@@ -57,16 +56,6 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 	// Read options from command line
 	if (!OptionEntryHelper::addToArgParser(
 		params.getOptions(), aParser)) exit(64);
-	std::list<OptionEntry *>::iterator nonParamItor;
-	for (nonParamItor = params.getNonParamOptions().begin();
-		nonParamItor != params.getNonParamOptions().end();
-		++nonParamItor)
-	{
-		OptionEntryString *str = (OptionEntryString *) *nonParamItor;
-		aParser.addNonParamEntry(
-			str->getName(), str, 
-			str->getDescription());
-	}
 	if (!aParser.parse(argc, argv)) exit(64);
 	S3D::setSettingsDir(params.getSettingsDir());
 

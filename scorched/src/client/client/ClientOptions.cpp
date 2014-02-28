@@ -24,7 +24,7 @@
 
 // This is a mirror of AccessoryStore::SortKey.
 
-static OptionEntryEnum::EnumEntry accessorySortKeyEnum[] =
+static XMLEntryEnum::EnumEntry accessorySortKeyEnum[] =
 {
 	{ "SortNothing", 0 },
 	{ "SortName", 1 },
@@ -45,36 +45,45 @@ ClientOptions *ClientOptions::instance()
 }
 
 ClientOptions::ClientOptions() :
-	hostDescription_(options_, "HostDescription",
-		"The description of this host given to any servers for stats.", OptionEntry::DataRAccess | OptionEntry::DataNoRestore, ""),
-	validateServerIp_(options_, "ValidateServerIp",
-		"Checks if the server ip address matches the published address", OptionEntry::DataRAccess, true),
-	waterAnimate_(options_, "WaterAnimate",
-		"Should we animate the landscape water", OptionEntry::DataRWAccess, true),
-	waterDraw_(options_, "WaterDraw",
-		"Should we draw the landscape water", OptionEntry::DataRWAccess, true),
-	waterWireframe_(options_, "WaterWireframe",
-		"Should we draw the landscape water as wireframe", OptionEntry::DataRWAccess | OptionEntry::DataDebugOnly, false),
-	skyDraw_(options_, "SkyDraw",
-		"Should we draw the sky", OptionEntry::DataRWAccess, true),
-	landscapeDraw_(options_, "LandscapeDraw",
-		"Should we draw the landscape", OptionEntry::DataRWAccess, true),
-	landscapeGridDraw_(options_, "LandscapeGridDraw",
-		"Should we draw the landscape grid", OptionEntry::DataRWAccess | OptionEntry::DataDebugOnly, false),
-	shadows_(options_, "Shadows",
-		"Should we draw shadows", OptionEntry::DataRWAccess, false),
-	cameraWireframe_(options_, "CameraWireframe",
-		"Should everything we draw be wireframe", OptionEntry::DataRWAccess | OptionEntry::DataDebugOnly, false),
-	targetsDraw_(options_, "TargetsDraw",
-		"Should we draw targets", OptionEntry::DataRWAccess, true)
+	XMLEntrySimpleGroup("options", 
+		"The Scorched3D client side options, these options change aspects of the game not relating to gameplay"),
+	hostDescription_("HostDescription",
+		"The description of this host given to any servers for stats.", XMLEntry::eDataRWAccess | XMLEntry::eDataNoRestore, ""),
+	validateServerIp_("ValidateServerIp",
+		"Checks if the server ip address matches the published address", XMLEntry::eDataRWAccess, true),
+	waterAnimate_("WaterAnimate",
+		"Should we animate the landscape water", XMLEntry::eDataRWAccess, true),
+	waterDraw_("WaterDraw",
+		"Should we draw the landscape water", XMLEntry::eDataRWAccess, true),
+	waterWireframe_("WaterWireframe",
+		"Should we draw the landscape water as wireframe", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
+	skyDraw_("SkyDraw",
+		"Should we draw the sky", XMLEntry::eDataRWAccess, true),
+	landscapeDraw_("LandscapeDraw",
+		"Should we draw the landscape", XMLEntry::eDataRWAccess, true),
+	landscapeGridDraw_("LandscapeGridDraw",
+		"Should we draw the landscape grid", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
+	shadows_("Shadows",
+		"Should we draw shadows", XMLEntry::eDataRWAccess, false),
+	cameraWireframe_("CameraWireframe",
+		"Should everything we draw be wireframe", XMLEntry::eDataRWAccess | XMLEntry::eDataDebugOnly, false),
+	targetsDraw_("TargetsDraw",
+		"Should we draw targets", XMLEntry::eDataRWAccess, true)
 {
+	addChildXMLEntry(&waterAnimate_, &waterDraw_, &waterWireframe_);
+	addChildXMLEntry(&skyDraw_);
+	addChildXMLEntry(&landscapeDraw_, &landscapeGridDraw_);
+	addChildXMLEntry(&cameraWireframe_);
+	addChildXMLEntry(&targetsDraw_);
+	addChildXMLEntry(&shadows_);
+	addChildXMLEntry(&validateServerIp_, &hostDescription_);
 }
 
 ClientOptions::~ClientOptions()
 {	
 }
 
-bool ClientOptions::writeOptionsToFile(bool allOptions)
+bool ClientOptions::writeOptionsToFile()
 {
 	std::string path = S3D::getSettingsFile("display.xml");
 
@@ -91,15 +100,14 @@ bool ClientOptions::writeOptionsToFile(bool allOptions)
 	}
 	else fclose(checkfile);
 
-	if (!OptionEntryHelper::writeToFile(options_, path, allOptions)) return false;
-	return true;
+	return writeToFile(path);
 }
 
 bool ClientOptions::readOptionsFromFile()
 {
 	std::string path = S3D::getSettingsFile("display.xml");
 
-	if (!OptionEntryHelper::readFromFile(options_, path))
+	if (!readFromFile(path))
 	{
 		S3D::dialogMessage(
 			"Scorched3D", S3D::formatStringBuffer(
@@ -115,13 +123,12 @@ bool ClientOptions::readOptionsFromFile()
 
 void ClientOptions::loadDefaultValues()
 {
-        std::list<OptionEntry *>::iterator itor;
-        for (itor = options_.begin();
-                itor != options_.end();
-                ++itor)
+	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+		end = xmlEntryChildren_.end();
+	for (;itor!=end;++itor)
 	{
-		OptionEntry *entry = (*itor);
-		if (!(entry->getData() & OptionEntry::DataNoRestore))
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) (*itor);
+		if (!(entry->getData() & XMLEntry::eDataNoRestore))
 		{
 			entry->setValueFromString(entry->getDefaultValueAsString());
 		}
@@ -131,23 +138,23 @@ void ClientOptions::loadDefaultValues()
 void ClientOptions::loadSafeValues()
 {
 	std::string path = S3D::getDataFile("data/safedisplay.xml");
-	OptionEntryHelper::readFromFile(options_, path);
+	readFromFile(path);
 }
 
 void ClientOptions::loadMediumValues()
 {
 	std::string path = S3D::getDataFile("data/mediumdisplay.xml");
-	OptionEntryHelper::readFromFile(options_, path);
+	readFromFile(path);
 }
 
 void ClientOptions::loadFastestValues()
 {
 	std::string path = S3D::getDataFile("data/fastestdisplay.xml");
-	OptionEntryHelper::readFromFile(options_, path);
+	readFromFile(path);
 }
 
 void ClientOptions::loadUltraValues()
 {
 	std::string path = S3D::getDataFile("data/ultradisplay.xml");
-	OptionEntryHelper::readFromFile(options_, path);
+	readFromFile(path);
 }

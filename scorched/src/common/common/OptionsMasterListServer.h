@@ -21,36 +21,31 @@
 #if !defined(__INCLUDE_OptionsMasterListServerh_INCLUDE__)
 #define __INCLUDE_OptionsMasterListServerh_INCLUDE__
 
-#include <common/OptionEntry.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class OptionsMasterListServer
+class OptionsMasterListServer : public XMLEntrySimpleGroup
 {
 public:
 	static OptionsMasterListServer *instance();
 
-	const char *getMasterListServer() { return masterListServer_; }
-	const char *getMasterListServerURI() { return masterListServerURI_; }
-	const char *getMasterListBackupServer() { return masterListBackupServer_; }
-	const char *getMasterListBackupServerURI() { return masterListBackupServerURI_; }
-	const char *getChatServer() { return chatServer_; }
-	const char *getChatServerURI() { return chatServerURI_; }
-	int getMasterListServerTimeout() { return masterListServerTimeout_; }
+	const char *getMasterListServer() { return masterListServer_.getValue().c_str(); }
+	const char *getMasterListServerURI() { return masterListServerURI_.getValue().c_str(); }
+	const char *getMasterListBackupServer() { return masterListBackupServer_.getValue().c_str(); }
+	const char *getMasterListBackupServerURI() { return masterListBackupServerURI_.getValue().c_str(); }
+	const char *getChatServer() { return chatServer_.getValue().c_str(); }
+	const char *getChatServerURI() { return chatServerURI_.getValue().c_str(); }
+	int getMasterListServerTimeout() { return masterListServerTimeout_.getValue(); }
 
 protected:
 	static OptionsMasterListServer *instance_;
 
-	std::list<OptionEntry *> options_;
-
-	OptionEntryString masterListServer_;
-	OptionEntryString masterListServerURI_;
-	OptionEntryString masterListBackupServer_;
-	OptionEntryString masterListBackupServerURI_;
-	OptionEntryString chatServer_;
-	OptionEntryString chatServerURI_;
-	OptionEntryInt masterListServerTimeout_;
-
-	bool readOptionsFromFile();
-	bool writeOptionsToFile();
+	XMLEntryString masterListServer_;
+	XMLEntryString masterListServerURI_;
+	XMLEntryString masterListBackupServer_;
+	XMLEntryString masterListBackupServerURI_;
+	XMLEntryString chatServer_;
+	XMLEntryString chatServerURI_;
+	XMLEntryInt masterListServerTimeout_;
 
 private:
 	OptionsMasterListServer();

@@ -40,11 +40,11 @@ public:
 protected:
 	static ServerParams *instance_;
 
-	OptionEntryString server_;
-	OptionEntryInt exitTime_;
-	OptionEntryBool hideWindow_;
-	OptionEntryBool startCustom_;
-	OptionEntryBool exitOnSyncFailure_;
+	XMLEntryString server_;
+	XMLEntryInt exitTime_;
+	XMLEntryBool hideWindow_;
+	XMLEntryBool startCustom_;
+	XMLEntryBool exitOnSyncFailure_;
 
 private:
 	ServerParams();

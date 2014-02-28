@@ -33,28 +33,33 @@ ClientParams *ClientParams::instance()
 }
 
 ClientParams::ClientParams() :
-	connect_(options_, "connect", 
+	OptionsParameters("options", "The command line options for the Scorched3D client"),
+	connect_("connect", 
 		"The name of the server to connect to, starts a NET/LAN client", 0, ""),
-	connectAcceptDefaults_(options_, "connectwithdefaults", 
+	connectAcceptDefaults_("connectwithdefaults", 
 		"Connect to the server without prompting for player name and tank selection", 0, false),
-	client_(options_, "startclient",
+	client_("startclient",
 		"Starts a scorched 3d client, requires the name of the client settings file e.g. data/singlecustom.xml", 0, ""),
-	startcustom_(options_, "startcustom",
+	startcustom_("startcustom",
 		"Starts a scorched 3d client, Uses the last custom game made", 0, false),
-	save_(options_, "loadsave",
+	save_("loadsave",
 		"Continues a scorched 3d client game, requires the name of the saved game.", 0, ""),
-	exittime_(options_, "exittime",
+	exittime_("exittime",
 		"The time after which the client will exit", 0, 0),
-	disconnecttime_(options_, "disconnecttime",
+	disconnecttime_("disconnecttime",
 		"The time after which the client will disconnect from the server", 0, 0),
-	username_(options_, "username",
+	username_("username",
 		"The username of the NET/LAN server", 0, ""),
-	password_(options_, "password",
+	password_("password",
 		"The password of the NET/LAN server", 0, ""),
-	nonParam_(nonParamOptions_, "launch file", 
+	nonParam_("launch file", 
 		".3dl scorched3d online gaming launching config", 0, "")
 {
-
+	addChildXMLEntry(&connect_, &connectAcceptDefaults_);
+	addChildXMLEntry(&client_, &startcustom_, &save_);
+	addChildXMLEntry(&exittime_, &disconnecttime_);
+	addChildXMLEntry(&username_, &password_);
+	addChildXMLEntry(&nonParam_);
 }
 
 ClientParams::~ClientParams()

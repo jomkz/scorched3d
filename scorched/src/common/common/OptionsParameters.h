@@ -21,28 +21,19 @@
 #if !defined(__INCLUDE_OptionsParamh_INCLUDE__)
 #define __INCLUDE_OptionsParamh_INCLUDE__
 
-#include <common/OptionEntry.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class OptionsParameters
+class OptionsParameters : public XMLEntrySimpleGroup
 {
 public:
-	OptionsParameters();
+	OptionsParameters(const char *name, const char *description);
 	virtual ~OptionsParameters();
 
 	std::string getSettingsDir() { return settingsdir_.getValue(); }
-	bool getWriteFullOptions() { return writefulloptions_.getValue(); }
 	bool getRewriteOptions() { return rewriteoptions_.getValue(); }
-
-	std::list<OptionEntry *> &getOptions();
-	std::list<OptionEntry *> &getNonParamOptions();
-
 protected:
-	std::list<OptionEntry *> options_;
-	std::list<OptionEntry *> nonParamOptions_;
-
-	OptionEntryString settingsdir_;
-	OptionEntryBool writefulloptions_;
-	OptionEntryBool rewriteoptions_;
+	XMLEntryString settingsdir_;
+	XMLEntryBool rewriteoptions_;
 };
 
 #endif

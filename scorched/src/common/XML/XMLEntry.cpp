@@ -29,6 +29,7 @@ XMLEntry::~XMLEntry()
 }
 
 XMLEntryContainer::XMLEntryContainer(const char *name, const char *description) :
+	XMLEntry(),
 	xmlEntryName_(name), xmlEntryDescription_(description)
 {
 }

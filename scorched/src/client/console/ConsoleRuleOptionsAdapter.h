@@ -21,18 +21,18 @@
 #if !defined(AFX_ConsoleRULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_)
 #define AFX_ConsoleRULEFNIADAPTER_H__A8429FA2_3499_4F4A_95BC_9F94FC58C087__INCLUDED_
 
-#include <common/OptionEntry.h>
+#include <XML/XMLEntrySimpleTypes.h>
 #include <console/ConsoleRuleMethodIAdapter.h>
 #include <string>
 
 class ConsoleRuleOptionsAdapter
 {
 public:
-	ConsoleRuleOptionsAdapter(Console &console, OptionEntry &entry);
+	ConsoleRuleOptionsAdapter(Console &console, XMLEntrySimpleType &entry);
 	virtual ~ConsoleRuleOptionsAdapter();
 protected:
 	Console &console_;
-	OptionEntry &entry_;
+	XMLEntrySimpleType &entry_;
 	ConsoleRuleMethodIAdapterEx<ConsoleRuleOptionsAdapter> *readRule_, *writeRule_;
 
 	void readValue(std::vector<ConsoleRuleValue> &values, unsigned int userData);
@@ -45,7 +45,7 @@ public:
 	ConsoleRuleOptionsAdapterHolder();
 	virtual ~ConsoleRuleOptionsAdapterHolder();
 
-	void addToConsole(Console &console, std::list<OptionEntry *> &options);
+	void addToConsole(Console &console, std::list<XMLEntry *> &options);
 
 protected:
 	std::list<ConsoleRuleOptionsAdapter *> adapters_;

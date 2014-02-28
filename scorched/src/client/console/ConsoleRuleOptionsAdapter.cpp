@@ -23,28 +23,21 @@
 #include <console/ConsoleRuleOptionsAdapter.h>
 #include <client/ScorchedClient.h>
 
-ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, OptionEntry &entry) :
+ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, XMLEntrySimpleType &entry) :
 	console_(console),
 	entry_(entry),
 	readRule_(0), writeRule_(0)
 {
 	ConsoleRuleType type = ConsoleRuleTypeNone;
-	switch (entry_.getEntryType())
+	switch (entry_.getTypeCatagory())
 	{
-		case OptionEntry::OptionEntryEnumType:
-		case OptionEntry::OptionEntryIntType:
-		case OptionEntry::OptionEntryBoundedIntType:
-		case OptionEntry::OptionEntryFloatType:
-		case OptionEntry::OptionEntryFixedType:
+		case XMLEntrySimpleType::eSimpleNumberType:
 			type = ConsoleRuleTypeNumber;
 		break;
-		case OptionEntry::OptionEntryVectorType:
-		case OptionEntry::OptionEntryStringEnumType:
-		case OptionEntry::OptionEntryStringType:
-		case OptionEntry::OptionEntryTextType:
+		case XMLEntrySimpleType::eSimpleStringType:
 			type = ConsoleRuleTypeString;
 		break;
-		case OptionEntry::OptionEntryBoolType:
+		case XMLEntrySimpleType::eSimpleBooleanType:
 			type = ConsoleRuleTypeBoolean;
 		break;
 		default:
@@ -52,8 +45,8 @@ ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, OptionEnt
 		break;
 	}
 
-	if (entry.getData() & OptionEntry::DataRWAccess ||
-		entry.getData() & OptionEntry::DataRAccess) {
+	if (entry.getData() & XMLEntry::eDataRWAccess ||
+		entry.getData() & XMLEntry::eDataROAccess) {
 		readRule_ = new ConsoleRuleMethodIAdapterEx<ConsoleRuleOptionsAdapter>(
 			console, this,
 			&ConsoleRuleOptionsAdapter::readValue, 
@@ -61,7 +54,7 @@ ConsoleRuleOptionsAdapter::ConsoleRuleOptionsAdapter(Console &console, OptionEnt
 			entry.getDescription());
 		console_.addRule(readRule_);
 	}
-	if (entry.getData() & OptionEntry::DataRWAccess) 
+	if (entry.getData() & XMLEntry::eDataRWAccess) 
 	{
 		writeRule_ = new ConsoleRuleMethodIAdapterEx<ConsoleRuleOptionsAdapter>(
 			console, this,
@@ -102,14 +95,14 @@ ConsoleRuleOptionsAdapterHolder::ConsoleRuleOptionsAdapterHolder()
 
 }
 
-void ConsoleRuleOptionsAdapterHolder::addToConsole(Console &console, std::list<OptionEntry *> &options)
+void ConsoleRuleOptionsAdapterHolder::addToConsole(Console &console, std::list<XMLEntry *> &options)
 {
-	std::list<OptionEntry *>::iterator itor;
+	std::list<XMLEntry *>::iterator itor;
 	for (itor = options.begin();
 		itor != options.end();
-		itor++)
+		++itor)
 	{
-		ConsoleRuleOptionsAdapter *adapter = new ConsoleRuleOptionsAdapter(console, *(*itor));
+		ConsoleRuleOptionsAdapter *adapter = new ConsoleRuleOptionsAdapter(console, (XMLEntrySimpleType &) *(*itor));
 		adapters_.push_back(adapter);
 	}
 }

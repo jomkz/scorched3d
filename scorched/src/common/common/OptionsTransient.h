@@ -21,12 +21,10 @@
 #if !defined(__INCLUDE_OptionsTransienth_INCLUDE__)
 #define __INCLUDE_OptionsTransienth_INCLUDE__
 
-#include <common/Vector.h>
 #include <common/OptionsScorched.h>
-#include <net/NetBuffer.h>
 
 class TargetContainer;
-class OptionsTransient
+class OptionsTransient : public XMLEntrySimpleGroup
 {
 public:
 	OptionsTransient(OptionsScorched &optionsGame);
@@ -68,17 +66,10 @@ public:
 	// Arms Level
 	int getArmsLevel();
 
-	// Used to send this structure over coms
-	bool writeToBuffer(NetBuffer &buffer);
-	bool readFromBuffer(NetBufferReader &reader);
-
-	std::list<OptionEntry *> &getOptions() { return options_; }
-
 protected:
-	std::list<OptionEntry *> options_;
 	OptionsScorched &optionsGame_;
-	OptionEntryInt currentRoundNo_, currentTurnNo_;
-	OptionEntryInt wallType_;
+	XMLEntryInt currentRoundNo_, currentTurnNo_;
+	XMLEntryInt wallType_;
 
 	bool newGame_;
 	void newGameWall();

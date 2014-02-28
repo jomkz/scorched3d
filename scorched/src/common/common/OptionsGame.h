@@ -21,9 +21,9 @@
 #if !defined(__INCLUDE_OptionsGameh_INCLUDE__)
 #define __INCLUDE_OptionsGameh_INCLUDE__
 
-#include <common/OptionEntry.h>
+#include <XML/XMLEntrySimpleTypes.h>
 
-class OptionsGame
+class OptionsGame : public XMLEntrySimpleGroup
 {
 public:
 	OptionsGame();
@@ -101,452 +101,441 @@ public:
 		TeamBallanceAutoByBots = 4
 	};
 	
-	const char *getTutorial() { return tutorial_; }
-	OptionEntryString &getTutorialEntry() { return tutorial_; }
+	const char *getTutorial() { return tutorial_.getValue().c_str(); }
+	XMLEntryString &getTutorialEntry() { return tutorial_; }
 
-	int getScorePerMoney() { return scorePerMoney_; }
-	OptionEntryInt &getScorePerMoneyEntry() { return scorePerMoney_; }
+	int getScorePerMoney() { return scorePerMoney_.getValue(); }
+	XMLEntryInt &getScorePerMoneyEntry() { return scorePerMoney_; }
 
-	int getScorePerAssist() { return scorePerAssist_; }
-	OptionEntryInt &getScorePerAssistEntry() { return scorePerAssist_; }
+	int getScorePerAssist() { return scorePerAssist_.getValue(); }
+	XMLEntryInt &getScorePerAssistEntry() { return scorePerAssist_; }
 
-	int getScorePerKill() { return scorePerKill_; }
-	OptionEntryInt &getScorePerKillEntry() { return scorePerKill_; }
+	int getScorePerKill() { return scorePerKill_.getValue(); }
+	XMLEntryInt &getScorePerKillEntry() { return scorePerKill_; }
 
-	int getScorePerResign() { return scorePerResign_; }
-	OptionEntryInt &getScorePerResignEntry() { return scorePerResign_; }
+	int getScorePerResign() { return scorePerResign_.getValue(); }
+	XMLEntryInt &getScorePerResignEntry() { return scorePerResign_; }
 
-	int getScorePerSpectate() { return scorePerSpectate_; }
-	OptionEntryInt &getScorePerSpectateEntry() { return scorePerSpectate_; }
+	int getScorePerSpectate() { return scorePerSpectate_.getValue(); }
+	XMLEntryInt &getScorePerSpectateEntry() { return scorePerSpectate_; }
 
-	int getScoreWonForRound() { return scoreWonForRound_; }
-	OptionEntryInt &getScoreWonForRoundEntry() { return scoreWonForRound_; }
+	int getScoreWonForRound() { return scoreWonForRound_.getValue(); }
+	XMLEntryInt &getScoreWonForRoundEntry() { return scoreWonForRound_; }
 
-	int getScoreWonForLives() { return scoreWonForLives_; }
-	OptionEntryInt &getScoreWonForLivesEntry() { return scoreWonForLives_; }
+	int getScoreWonForLives() { return scoreWonForLives_.getValue(); }
+	XMLEntryInt &getScoreWonForLivesEntry() { return scoreWonForLives_; }
 
-	int getSkillForRound() { return skillForRound_; }
-	OptionEntryInt &getSkillForRoundEntry() { return skillForRound_; }
+	int getSkillForRound() { return skillForRound_.getValue(); }
+	XMLEntryInt &getSkillForRoundEntry() { return skillForRound_; }
 
-	int getSkillForMatch() { return skillForMatch_; }
-	OptionEntryInt &getSkillForMatchEntry() { return skillForMatch_; }
+	int getSkillForMatch() { return skillForMatch_.getValue(); }
+	XMLEntryInt &getSkillForMatchEntry() { return skillForMatch_; }
 
-	int getSkillForResign() { return skillForResign_; }
-	OptionEntryInt &getSkillForResignEntry() { return skillForResign_; }
+	int getSkillForResign() { return skillForResign_.getValue(); }
+	XMLEntryInt &getSkillForResignEntry() { return skillForResign_; }
 
-	int getMaxSkillLost() { return maxSkillLost_; }
-	OptionEntryInt &getMaxSkillLostEntry() { return maxSkillLost_; }
+	int getMaxSkillLost() { return maxSkillLost_.getValue(); }
+	XMLEntryInt &getMaxSkillLostEntry() { return maxSkillLost_; }
 
-	int getMaxSkillGained() { return maxSkillGained_; }
-	OptionEntryInt &getMaxSkillGainedEntry() { return maxSkillGained_; }
+	int getMaxSkillGained() { return maxSkillGained_.getValue(); }
+	XMLEntryInt &getMaxSkillGainedEntry() { return maxSkillGained_; }
 
-	int getSkillForSelfKill() { return skillForSelfKill_; }
-	OptionEntryInt &getSkillForSelfKillEntry() { return skillForSelfKill_; }
+	int getSkillForSelfKill() { return skillForSelfKill_.getValue(); }
+	XMLEntryInt &getSkillForSelfKillEntry() { return skillForSelfKill_; }
 
-	int getSkillForTeamKill() { return skillForTeamKill_; }
-	OptionEntryInt &getSkillForTeamKillEntry() { return skillForTeamKill_; }
+	int getSkillForTeamKill() { return skillForTeamKill_.getValue(); }
+	XMLEntryInt &getSkillForTeamKillEntry() { return skillForTeamKill_; }
 
-	int getTeams() { return teams_; }
-	OptionEntryInt &getTeamsEntry() { return teams_; }
+	int getTeams() { return teams_.getValue(); }
+	XMLEntryInt &getTeamsEntry() { return teams_; }
 
-	int getMinimumLandHeight() { return minimumLandHeight_; }
-	OptionEntryInt &getMinimumLandHeightEntry() { return minimumLandHeight_; }
+	int getMinimumLandHeight() { return minimumLandHeight_.getValue(); }
+	XMLEntryInt &getMinimumLandHeightEntry() { return minimumLandHeight_; }
 
-	int getWeaponSpeed() { return weaponSpeed_; }
-	OptionEntryInt &getWeaponSpeedEntry() { return weaponSpeed_; }
+	int getWeaponSpeed() { return weaponSpeed_.getValue(); }
+	XMLEntryInt &getWeaponSpeedEntry() { return weaponSpeed_; }
 
-	int getStartArmsLevel() { return startArmsLevel_; }
-	OptionEntryInt &getStartArmsLevelEntry() { return startArmsLevel_; }
+	int getStartArmsLevel() { return startArmsLevel_.getValue(); }
+	XMLEntryInt &getStartArmsLevelEntry() { return startArmsLevel_; }
 
-	int getEndArmsLevel() { return endArmsLevel_; }
-	OptionEntryInt &getEndArmsLevelEntry() { return endArmsLevel_; }
+	int getEndArmsLevel() { return endArmsLevel_.getValue(); }
+	XMLEntryInt &getEndArmsLevelEntry() { return endArmsLevel_; }
 
-	int getMaxNumberWeapons() { return maxNumberWeapons_; }
-	OptionEntryInt &getMaxNumberWeaponsEntry() { return maxNumberWeapons_; }
+	int getMaxNumberWeapons() { return maxNumberWeapons_.getValue(); }
+	XMLEntryInt &getMaxNumberWeaponsEntry() { return maxNumberWeapons_; }
 
-	int getNoMaxPlayers() { return numberOfPlayers_; }
-	OptionEntryInt &getNoMaxPlayersEntry() { return numberOfPlayers_; }
+	int getNoMaxPlayers() { return numberOfPlayers_.getValue(); }
+	XMLEntryInt &getNoMaxPlayersEntry() { return numberOfPlayers_; }
 
-	int getNoMinPlayers() { return numberOfMinPlayers_; }
-	OptionEntryInt &getNoMinPlayersEntry() { return numberOfMinPlayers_; }
+	int getNoMinPlayers() { return numberOfMinPlayers_.getValue(); }
+	XMLEntryInt &getNoMinPlayersEntry() { return numberOfMinPlayers_; }
 
-	int getNoRounds() { return numberOfRounds_; }
-	OptionEntryInt &getNoRoundsEntry() { return numberOfRounds_; }
+	int getNoRounds() { return numberOfRounds_.getValue(); }
+	XMLEntryInt &getNoRoundsEntry() { return numberOfRounds_; }
 
-	int getNoTurns() { return maxRoundTurns_; }
-	OptionEntryInt &getNoTurnsEntry() { return maxRoundTurns_; }
+	int getNoTurns() { return maxRoundTurns_.getValue(); }
+	XMLEntryInt &getNoTurnsEntry() { return maxRoundTurns_; }
 
-	int getRemoveBotsAtPlayers() { return removeBotsAtPlayers_; }
-	OptionEntryInt &getRemoveBotsAtPlayersEntry() { return removeBotsAtPlayers_; }
+	int getRemoveBotsAtPlayers() { return removeBotsAtPlayers_.getValue(); }
+	XMLEntryInt &getRemoveBotsAtPlayersEntry() { return removeBotsAtPlayers_; }
 
-	int getStartMoney() { return moneyStarting_; }
-	OptionEntryInt &getStartMoneyEntry() { return moneyStarting_; }
+	int getStartMoney() { return moneyStarting_.getValue(); }
+	XMLEntryInt &getStartMoneyEntry() { return moneyStarting_; }
 
-	int getInterest() { return moneyInterest_; }
-	OptionEntryInt &getInterestEntry() { return moneyInterest_; }
+	int getInterest() { return moneyInterest_.getValue(); }
+	XMLEntryInt &getInterestEntry() { return moneyInterest_; }
 
-	int getFreeMarketAdjustment() { return freeMarketAdjustment_; }
-	OptionEntryInt &getFreeMarketAdjustmentEntry() { return freeMarketAdjustment_; }
+	int getFreeMarketAdjustment() { return freeMarketAdjustment_.getValue(); }
+	XMLEntryInt &getFreeMarketAdjustmentEntry() { return freeMarketAdjustment_; }
 
-	int getFreeMarketLimits() { return freeMarketLimits_; }
-	OptionEntryInt &getFreeMarketLimitsEntry() { return freeMarketLimits_; }
+	int getFreeMarketLimits() { return freeMarketLimits_.getValue(); }
+	XMLEntryInt &getFreeMarketLimitsEntry() { return freeMarketLimits_; }
 
-	bool getFreeMarketTracksBotPurchases() { return freeMarketTracksBotPurchases_; }
-	OptionEntryBool &getFreeMarketTracksBotPurchasesEntry() { return freeMarketTracksBotPurchases_; }
+	bool getFreeMarketTracksBotPurchases() { return freeMarketTracksBotPurchases_.getValue(); }
+	XMLEntryBool &getFreeMarketTracksBotPurchasesEntry() { return freeMarketTracksBotPurchases_; }
 
-	int getMaxLandscapeSize() { return maxLandscapeSize_; }
-	OptionEntryInt &getMaxLandscapeSizeEntry() { return maxLandscapeSize_; }
+	int getMaxLandscapeSize() { return maxLandscapeSize_.getValue(); }
+	XMLEntryInt &getMaxLandscapeSizeEntry() { return maxLandscapeSize_; }
 
-	int getStartTime() { return startTime_; }
-	OptionEntryInt &getStartTimeEntry() { return startTime_; }
+	int getStartTime() { return startTime_.getValue(); }
+	XMLEntryInt &getStartTimeEntry() { return startTime_; }
 
-	int getShotTime() { return shotTime_; }
-	OptionEntryInt &getShotTimeEntry() { return shotTime_; }
+	int getShotTime() { return shotTime_.getValue(); }
+	XMLEntryInt &getShotTimeEntry() { return shotTime_; }
 
-	int getAIShotTime() { return aiShotTime_; }
-	OptionEntryInt &getAIShotTimeEntry() { return aiShotTime_; }
+	int getAIShotTime() { return aiShotTime_.getValue(); }
+	XMLEntryInt &getAIShotTimeEntry() { return aiShotTime_; }
 
-	int getBuyingTime() { return buyingTime_; }
-	OptionEntryInt &getBuyingTimeEntry() { return buyingTime_; }
+	int getBuyingTime() { return buyingTime_.getValue(); }
+	XMLEntryInt &getBuyingTimeEntry() { return buyingTime_; }
 
-	int getRemoveTime() { return removeTime_; }
-	OptionEntryInt &getRemoveTimeEntry() { return removeTime_; }
+	int getRemoveTime() { return removeTime_.getValue(); }
+	XMLEntryInt &getRemoveTimeEntry() { return removeTime_; }
 
-	int getRoundTime() { return roundTime_; }
-	OptionEntryInt &getRoundTimeEntry() { return roundTime_; }
+	int getRoundTime() { return roundTime_.getValue(); }
+	XMLEntryInt &getRoundTimeEntry() { return roundTime_; }
 
-	int getRoundScoreTime() { return roundScoreTime_; }
-	OptionEntryInt &getRoundScoreTimeEntry() { return roundScoreTime_; }
+	int getRoundScoreTime() { return roundScoreTime_.getValue(); }
+	XMLEntryInt &getRoundScoreTimeEntry() { return roundScoreTime_; }
 
-	int getScoreTime() { return scoreTime_; }
-	OptionEntryInt &getScoreTimeEntry() { return scoreTime_; }
+	int getScoreTime() { return scoreTime_.getValue(); }
+	XMLEntryInt &getScoreTimeEntry() { return scoreTime_; }
 
-	int getIdleCycleTime() { return idleCycleTime_; }
-	OptionEntryInt &getIdleCycleTimeEntry() { return idleCycleTime_; }
+	int getIdleCycleTime() { return idleCycleTime_.getValue(); }
+	XMLEntryInt &getIdleCycleTimeEntry() { return idleCycleTime_; }
 
-	int getAllowedMissedMoves() { return allowedMissedMoves_; }
-	OptionEntryInt &getAllowedMissedMovesEntry() { return allowedMissedMoves_; }
+	int getAllowedMissedMoves() { return allowedMissedMoves_.getValue(); }
+	XMLEntryInt &getAllowedMissedMovesEntry() { return allowedMissedMoves_; }
 
-	int getMinFallingDistance() { return minFallingDistance_; }
-	OptionEntryInt &getMinFallingDistanceEntry() { return minFallingDistance_; }
+	int getMinFallingDistance() { return minFallingDistance_.getValue(); }
+	XMLEntryInt &getMinFallingDistanceEntry() { return minFallingDistance_; }
 
-	bool getTankFallingDamage() { return tankFallingDamage_; }
-	OptionEntryBool &getTankFallingDamageEntry() { return tankFallingDamage_; }
+	bool getTankFallingDamage() { return tankFallingDamage_.getValue(); }
+	XMLEntryBool &getTankFallingDamageEntry() { return tankFallingDamage_; }
 
-	int getMaxClimbingDistance() { return maxClimbingDistance_; }
-	OptionEntryInt &getMaxClimbingDistanceEntry() { return maxClimbingDistance_; }
+	int getMaxClimbingDistance() { return maxClimbingDistance_.getValue(); }
+	XMLEntryInt &getMaxClimbingDistanceEntry() { return maxClimbingDistance_; }
 
-	int getPlayerLives() { return playerLives_; }
-	OptionEntryInt &getPlayerLivesEntry() { return playerLives_; }
+	int getPlayerLives() { return playerLives_.getValue(); }
+	XMLEntryInt &getPlayerLivesEntry() { return playerLives_; }
 
-	int getGravity() { return gravity_; }
-	OptionEntryInt &getGravityEntry() { return gravity_; }
+	int getGravity() { return gravity_.getValue(); }
+	XMLEntryInt &getGravityEntry() { return gravity_; }
 
-	OptionEntryEnum getWindForce() { return windForce_; } // WindForce
-	OptionEntryEnum &getWindForceEntry() { return windForce_; } // WindForce
+	WindForce getWindForce() { return (WindForce) windForce_.getValue(); } 
+	XMLEntryEnum &getWindForceEntry() { return windForce_; } 
 
-	OptionEntryEnum getWindType() { return windType_; } // WindType
-	OptionEntryEnum &getWindTypeEntry() { return windType_; } // WindType
+	WindType getWindType() { return (WindType) windType_.getValue(); } 
+	XMLEntryEnum &getWindTypeEntry() { return windType_; } 
 
-	OptionEntryEnum getWallType() { return wallType_; } // WallType
-	OptionEntryEnum &getWallTypeEntry() { return wallType_; } // WallType
+	WallType getWallType() { return (WallType) wallType_.getValue(); } 
+	XMLEntryEnum &getWallTypeEntry() { return wallType_; }
 
-	OptionEntryEnum getWeapScale() { return weapScale_; } // WeapScale
-	OptionEntryEnum &getWeapScaleEntry() { return weapScale_; } // WeapScale
+	WeapScale getWeapScale() { return (WeapScale) weapScale_.getValue(); } 
+	XMLEntryEnum &getWeapScaleEntry() { return weapScale_; } 
 	
-	OptionEntryEnum getTurnType() { return turnType_; } // TurnType
-	OptionEntryEnum &getTurnTypeEntry() { return turnType_; } // TurnType
+	TurnType getTurnType() { return (TurnType) turnType_.getValue(); } 
+	XMLEntryEnum &getTurnTypeEntry() { return turnType_; } 
 	 
-	int getBuyOnRound() { return moneyBuyOnRound_; }
-	OptionEntryInt &getBuyOnRoundEntry() { return moneyBuyOnRound_; }
+	int getBuyOnRound() { return moneyBuyOnRound_.getValue(); }
+	XMLEntryInt &getBuyOnRoundEntry() { return moneyBuyOnRound_; }
 
-	int getMoneyPerRound() { return moneyPerRound_; }
-	OptionEntryInt &getMoneyPerRoundEntry() { return moneyPerRound_; }
+	int getMoneyPerRound() { return moneyPerRound_.getValue(); }
+	XMLEntryInt &getMoneyPerRoundEntry() { return moneyPerRound_; }
 
-	int getMoneyWonForRound() { return moneyWonForRound_; }
-	OptionEntryInt &getMoneyWonForRoundEntry() { return moneyWonForRound_; }
+	int getMoneyWonForRound() { return moneyWonForRound_.getValue(); }
+	XMLEntryInt &getMoneyWonForRoundEntry() { return moneyWonForRound_; }
 
-	int getMoneyWonForLives() { return moneyWonForLives_; }
-	OptionEntryInt &getMoneyWonForLivesEntry() { return moneyWonForLives_; }
+	int getMoneyWonForLives() { return moneyWonForLives_.getValue(); }
+	XMLEntryInt &getMoneyWonForLivesEntry() { return moneyWonForLives_; }
 
-	int getMoneyWonPerKillPoint() { return moneyPerKillPoint_; }
-	OptionEntryInt &getMoneyWonPerKillPointEntry() { return moneyPerKillPoint_; }
+	int getMoneyWonPerKillPoint() { return moneyPerKillPoint_.getValue(); }
+	XMLEntryInt &getMoneyWonPerKillPointEntry() { return moneyPerKillPoint_; }
 
-	int getMoneyWonPerMultiKillPoint() { return moneyPerMultiKillPoint_; }
-	OptionEntryInt &getMoneyWonPerMultiKillPointEntry() { return moneyPerMultiKillPoint_; }
+	int getMoneyWonPerMultiKillPoint() { return moneyPerMultiKillPoint_.getValue(); }
+	XMLEntryInt &getMoneyWonPerMultiKillPointEntry() { return moneyPerMultiKillPoint_; }
 
-	int getMoneyWonPerAssistPoint() { return moneyPerAssistPoint_; }
-	OptionEntryInt &getMoneyWonPerAssistPointEntry() { return moneyPerAssistPoint_; }
+	int getMoneyWonPerAssistPoint() { return moneyPerAssistPoint_.getValue(); }
+	XMLEntryInt &getMoneyWonPerAssistPointEntry() { return moneyPerAssistPoint_; }
 
-	int getMoneyWonPerHitPoint() { return moneyPerHitPoint_; }
-	OptionEntryInt &getMoneyWonPerHitPointEntry() { return moneyPerHitPoint_; }
+	int getMoneyWonPerHitPoint() { return moneyPerHitPoint_.getValue(); }
+	XMLEntryInt &getMoneyWonPerHitPointEntry() { return moneyPerHitPoint_; }
 
-	bool getMoneyPerHealthPoint() { return moneyPerHealthPoint_; }
-	OptionEntryBool &getMoneyPerHealthPointEntry() { return moneyPerHealthPoint_; }
+	bool getMoneyPerHealthPoint() { return moneyPerHealthPoint_.getValue(); }
+	XMLEntryBool &getMoneyPerHealthPointEntry() { return moneyPerHealthPoint_; }
 
-	bool getLimitPowerByHealth() { return limitPowerByHealth_; }
-	OptionEntryBool &getLimitPowerByHealthEntry() { return limitPowerByHealth_; }
+	bool getLimitPowerByHealth() { return limitPowerByHealth_.getValue(); }
+	XMLEntryBool &getLimitPowerByHealthEntry() { return limitPowerByHealth_; }
 	
-	OptionEntryEnum getTeamBallance() { return teamBallance_; } // TeamBallanceType
-	OptionEntryEnum &getTeamBallanceEntry() { return teamBallance_; } // TeamBallanceType
+	TeamBallanceType getTeamBallance() { return (TeamBallanceType) teamBallance_.getValue(); } 
+	XMLEntryEnum &getTeamBallanceEntry() { return teamBallance_; } 
 
-	int getComputersDeathTalk() { return computersDeathTalk_; }
-	OptionEntryInt &getComputersDeathTalkEntry() { return computersDeathTalk_; }
+	int getComputersDeathTalk() { return computersDeathTalk_.getValue(); }
+	XMLEntryInt &getComputersDeathTalkEntry() { return computersDeathTalk_; }
 
-	int getComputersAttackTalk() { return computersAttackTalk_; }
-	OptionEntryInt &getComputersAttackTalkEntry() { return computersAttackTalk_; }
+	int getComputersAttackTalk() { return computersAttackTalk_.getValue(); }
+	XMLEntryInt &getComputersAttackTalkEntry() { return computersAttackTalk_; }
 
-	const char * getEconomy() { return economy_; }
-	OptionEntryStringEnum &getEconomyEntry() { return economy_; }
+	const char * getEconomy() { return economy_.getValue().c_str(); }
+	XMLEntryStringEnum &getEconomyEntry() { return economy_; }
 
-	const char * getLandscapes() { return landscapes_; }
-	OptionEntryString &getLandscapesEntry() { return landscapes_; }
+	const char * getLandscapes() { return landscapes_.getValue().c_str(); }
+	XMLEntryString &getLandscapesEntry() { return landscapes_; }
 
-	const char * getStatsLogger() { return statsLogger_; }
-	OptionEntryStringEnum &getStatsLoggerEntry() { return statsLogger_; }
+	const char * getStatsLogger() { return statsLogger_.getValue().c_str(); }
+	XMLEntryStringEnum &getStatsLoggerEntry() { return statsLogger_; }
 
-	const char * getServerFileLogger() { return serverFileLogger_; }
-	OptionEntryStringEnum &getServerFileLoggerEntry() { return serverFileLogger_; }
+	const char * getServerFileLogger() { return serverFileLogger_.getValue().c_str(); }
+	XMLEntryStringEnum &getServerFileLoggerEntry() { return serverFileLogger_; }
 
-	const char * getBotNamePrefix() { return botNamePrefix_; }
-	OptionEntryString &getBotNamePrefixEntry() { return botNamePrefix_; }
+	const char * getBotNamePrefix() { return botNamePrefix_.getValue().c_str(); }
+	XMLEntryString &getBotNamePrefixEntry() { return botNamePrefix_; }
 
-	bool getGiveAllWeapons() { return giveAllWeapons_; }
-	OptionEntryBool &getGiveAllWeaponsEntry() { return giveAllWeapons_; }
+	bool getGiveAllWeapons() { return giveAllWeapons_.getValue(); }
+	XMLEntryBool &getGiveAllWeaponsEntry() { return giveAllWeapons_; }
 
-	bool getCycleMaps() { return cycleMaps_; }
-	OptionEntryBool &getCycleMapsEntry() { return cycleMaps_; }
+	bool getCycleMaps() { return cycleMaps_.getValue(); }
+	XMLEntryBool &getCycleMapsEntry() { return cycleMaps_; }
 
-	int getResignMode() { return resignMode_; }
-	OptionEntryInt &getResignModeEntry() { return resignMode_; }
+	int getResignMode() { return resignMode_.getValue(); }
+	XMLEntryInt &getResignModeEntry() { return resignMode_; }
 
-	OptionEntryEnum getMovementRestriction() { return movementRestriction_; } // MovementRestrictionType
-	OptionEntryEnum &getMovementRestrictionEntry() { return movementRestriction_; } // MovementRestrictionType
+	MovementRestrictionType getMovementRestriction() { return (MovementRestrictionType) movementRestriction_.getValue(); } 
+	XMLEntryEnum &getMovementRestrictionEntry() { return movementRestriction_; } 
 
-	bool getRandomizeBotNames() { return randomizeBotNames_; }
-	OptionEntryBool &getRandomizeBotNamesEntry() { return randomizeBotNames_; }
+	bool getRandomizeBotNames() { return randomizeBotNames_.getValue(); }
+	XMLEntryBool &getRandomizeBotNamesEntry() { return randomizeBotNames_; }
 
-	int getPortNo() { return portNo_; }
-	OptionEntryInt &getPortNoEntry() { return portNo_; }
+	int getPortNo() { return portNo_.getValue(); }
+	XMLEntryInt &getPortNoEntry() { return portNo_; }
 
-	int getManagementPortNo() { return managementPortNo_; }
-	OptionEntryInt &getManagementPortNoEntry() { return managementPortNo_; }
+	int getManagementPortNo() { return managementPortNo_.getValue(); }
+	XMLEntryInt &getManagementPortNoEntry() { return managementPortNo_; }
 
-	const char * getMod() { return mod_; }
-	OptionEntryString &getModEntry() { return mod_; }
+	const char * getMod() { return mod_.getValue().c_str(); }
+	XMLEntryString &getModEntry() { return mod_; }
 
-	const char * getMOTD() { return motd_; }
-	OptionEntryString &getMOTDEntry() { return motd_; }
+	const char * getMOTD() { return motd_.getValue().c_str(); }
+	XMLEntryString &getMOTDEntry() { return motd_; }
 
-	int getModDownloadSpeed() { return modDownloadSpeed_; }
-	OptionEntryInt &getModDownloadSpeedEntry() { return modDownloadSpeed_; }
+	int getModDownloadSpeed() { return modDownloadSpeed_.getValue(); }
+	XMLEntryInt &getModDownloadSpeedEntry() { return modDownloadSpeed_; }
 
-	int getMaxAvatarSize() { return maxAvatarSize_; }
-	OptionEntryInt &getMaxAvatarSizeEntry() { return maxAvatarSize_; }
+	int getMaxAvatarSize() { return maxAvatarSize_.getValue(); }
+	XMLEntryInt &getMaxAvatarSizeEntry() { return maxAvatarSize_; }
 
-	const char * getServerName() { return serverName_; }
-	OptionEntryString &getServerNameEntry() { return serverName_; }
+	const char * getServerName() { return serverName_.getValue().c_str(); }
+	XMLEntryString &getServerNameEntry() { return serverName_; }
 
-	const char * getServerPassword() { return serverPassword_; }
-	OptionEntryString &getServerPasswordEntry() { return serverPassword_; }
+	const char * getServerPassword() { return serverPassword_.getValue().c_str(); }
+	XMLEntryString &getServerPasswordEntry() { return serverPassword_; }
 
-	OptionEntryString &getPlayerType(int no) { DIALOG_ASSERT(no<24); return *playerType_[no]; }
+	XMLEntryString &getPlayerType(int no) { DIALOG_ASSERT(no<24); return *playerType_[no]; }
 
-	const char * getPublishAddress() { return publishAddress_; }
-	OptionEntryString &getPublishAddressEntry() { return publishAddress_; }
+	const char * getPublishAddress() { return publishAddress_.getValue().c_str(); }
+	XMLEntryString &getPublishAddressEntry() { return publishAddress_; }
 
-	bool getAllowSameIP() { return allowSameIP_; }
-	OptionEntryBool &getAllowSameIPEntry() { return allowSameIP_; }
+	bool getAllowSameIP() { return allowSameIP_.getValue(); }
+	XMLEntryBool &getAllowSameIPEntry() { return allowSameIP_; }
 
-	bool getAllowSameUniqueId() { return allowSameUniqueId_; }
-	OptionEntryBool &getAllowSameUniqueIdEntry() { return allowSameUniqueId_; }
+	bool getAllowSameUniqueId() { return allowSameUniqueId_.getValue(); }
+	XMLEntryBool &getAllowSameUniqueIdEntry() { return allowSameUniqueId_; }
 
-	bool getPublishServer() { return publishServer_; }
-	OptionEntryBool &getPublishServerEntry() { return publishServer_; }
+	bool getPublishServer() { return publishServer_.getValue(); }
+	XMLEntryBool &getPublishServerEntry() { return publishServer_; }
 
-	bool getUseUPnP() { return useUPnP_; }
-	OptionEntryBool &getUseUPnPEntry() { return useUPnP_; }
+	bool getUseUPnP() { return useUPnP_.getValue(); }
+	XMLEntryBool &getUseUPnPEntry() { return useUPnP_; }
 
-	bool getUseUPnPLogging() { return useUPnPLogging_; }
-	OptionEntryBool &getUseUPnPLoggingEntry() { return useUPnPLogging_; }
+	bool getUseUPnPLogging() { return useUPnPLogging_.getValue(); }
+	XMLEntryBool &getUseUPnPLoggingEntry() { return useUPnPLogging_; }
 
-	bool getResidualPlayers() { return residualPlayers_; }
-	OptionEntryBool &getResidualPlayersEntry() { return residualPlayers_; }
+	bool getResidualPlayers() { return residualPlayers_.getValue(); }
+	XMLEntryBool &getResidualPlayersEntry() { return residualPlayers_; }
 
-	bool getDelayedDefenseActivation() { return delayedDefenseActivation_; }
-	OptionEntryBool &getDelayedDefenseActivationEntry() { return delayedDefenseActivation_; }
+	bool getDelayedDefenseActivation() { return delayedDefenseActivation_.getValue(); }
+	XMLEntryBool &getDelayedDefenseActivationEntry() { return delayedDefenseActivation_; }
 
-	bool getAutoSendSyncCheck() { return autoSendSyncCheck_; }
-	OptionEntryBool &getAutoSendSyncCheckEntry() { return autoSendSyncCheck_; }
+	bool getAutoSendSyncCheck() { return autoSendSyncCheck_.getValue(); }
+	XMLEntryBool &getAutoSendSyncCheckEntry() { return autoSendSyncCheck_; }
 
-	bool getWaitForShotsBeforeShowingScore() { return waitForShotsBeforeShowingScore_; }
-	OptionEntryBool &getWaitForShotsBeforeShowingScoreEntry() { return waitForShotsBeforeShowingScore_; }
+	bool getWaitForShotsBeforeShowingScore() { return waitForShotsBeforeShowingScore_.getValue(); }
+	XMLEntryBool &getWaitForShotsBeforeShowingScoreEntry() { return waitForShotsBeforeShowingScore_; }
 
-	bool getActionSyncCheck() { return actionSyncCheck_; }
-	OptionEntryBool &getActionSyncCheckEntry() { return actionSyncCheck_; }
+	bool getActionSyncCheck() { return actionSyncCheck_.getValue(); }
+	XMLEntryBool &getActionSyncCheckEntry() { return actionSyncCheck_; }
 
-	bool getActionRandomSyncCheck() { return actionRandomSyncCheck_; }
-	OptionEntryBool &getActionRandomSyncCheckEntry() { return actionRandomSyncCheck_; }
+	bool getActionRandomSyncCheck() { return actionRandomSyncCheck_.getValue(); }
+	XMLEntryBool &getActionRandomSyncCheckEntry() { return actionRandomSyncCheck_; }
 
-	bool getActionMovementSyncCheck() { return actionMovementSyncCheck_; }
-	OptionEntryBool &getActionMovementSyncCheckEntry() { return actionMovementSyncCheck_; }
+	bool getActionMovementSyncCheck() { return actionMovementSyncCheck_.getValue(); }
+	XMLEntryBool &getActionMovementSyncCheckEntry() { return actionMovementSyncCheck_; }
 
-	bool getActionCollisionSyncCheck() { return actionCollisionSyncCheck_; }
-	OptionEntryBool &getActionCollisionSyncCheckEntry() { return actionCollisionSyncCheck_; }
+	bool getActionCollisionSyncCheck() { return actionCollisionSyncCheck_.getValue(); }
+	XMLEntryBool &getActionCollisionSyncCheckEntry() { return actionCollisionSyncCheck_; }
 
-	bool getTargetPlacementSyncCheck() { return targetPlacementSyncCheck_; }
-	OptionEntryBool &getTargetPlacementSyncCheckEntry() { return targetPlacementSyncCheck_; }
+	bool getTargetPlacementSyncCheck() { return targetPlacementSyncCheck_.getValue(); }
+	XMLEntryBool &getTargetPlacementSyncCheckEntry() { return targetPlacementSyncCheck_; }
 
-	bool getWeaponSyncCheck() { return weaponSyncCheck_; }
-	OptionEntryBool &getWeaponSyncCheckEntry() { return weaponSyncCheck_; }
+	bool getWeaponSyncCheck() { return weaponSyncCheck_.getValue(); }
+	XMLEntryBool &getWeaponSyncCheckEntry() { return weaponSyncCheck_; }
 
-	bool getAccessoryNameSyncCheck() { return accessoryNameSyncCheck_; }
-	OptionEntryBool &getAccessoryNameSyncCheckEntry() { return accessoryNameSyncCheck_; }
+	bool getAccessoryNameSyncCheck() { return accessoryNameSyncCheck_.getValue(); }
+	XMLEntryBool &getAccessoryNameSyncCheckEntry() { return accessoryNameSyncCheck_; }
 
-	const char *getAuthHandler() { return authHandler_; }
-	OptionEntryStringEnum &getAuthHandlerEntry() { return authHandler_; }
+	const char *getAuthHandler() { return authHandler_.getValue().c_str(); }
+	XMLEntryStringEnum &getAuthHandlerEntry() { return authHandler_; }
 
-	const char *getAuthHandlerParam1() { return authHandlerParam1_; }
-	OptionEntryString &getAuthHandlerParam1Entry() { return authHandlerParam1_; }
+	const char *getAuthHandlerParam1() { return authHandlerParam1_.getValue().c_str(); }
+	XMLEntryString &getAuthHandlerParam1Entry() { return authHandlerParam1_; }
 
-	const char *getAuthHandlerParam2() { return authHandlerParam2_; }
-	OptionEntryString &getAuthHandlerParam2Entry() { return authHandlerParam2_; }
+	const char *getAuthHandlerParam2() { return authHandlerParam2_.getValue().c_str(); }
+	XMLEntryString &getAuthHandlerParam2Entry() { return authHandlerParam2_; }
 
-	bool getRegisteredUserNames() { return registeredUserNames_; }
-	OptionEntryBool &getRegisteredUserNamesEntry() { return registeredUserNames_; }
+	bool getRegisteredUserNames() { return registeredUserNames_.getValue(); }
+	XMLEntryBool &getRegisteredUserNamesEntry() { return registeredUserNames_; }
 
-	bool getAllowMultiLingualChat() { return allowMultiLingualChat_; }
-	OptionEntryBool &getAllowMultiLingualChatEntry() { return allowMultiLingualChat_; }
+	bool getAllowMultiLingualChat() { return allowMultiLingualChat_.getValue(); }
+	XMLEntryBool &getAllowMultiLingualChatEntry() { return allowMultiLingualChat_; }
 
-	bool getAllowMultiLingualNames() { return allowMultiLingualNames_; }
-	OptionEntryBool &getAllowMultiLingualNamesEntry() { return allowMultiLingualNames_; }
+	bool getAllowMultiLingualNames() { return allowMultiLingualNames_.getValue(); }
+	XMLEntryBool &getAllowMultiLingualNamesEntry() { return allowMultiLingualNames_; }
 
-	bool getDebugFeatures() { return debugFeatures_; }
-	OptionEntryBool &getDebugFeaturesEntry() { return debugFeatures_; }
-
-	// Fns used to save or restore the state of the options
-	OptionEntry *getEntryByName(const std::string &name);
-	std::list<OptionEntry *> &getOptions();
-	std::list<OptionEntry *> &getPlayerTypeOptions(); 
-	virtual bool writeOptionsToFile(const std::string &filePath, bool allOptions);
-	virtual bool readOptionsFromFile(const std::string &filePath);
-	virtual bool writeToBuffer(NetBuffer &buffer, bool useProtected, bool usePlayerTypes);
-	virtual bool readFromBuffer(NetBufferReader &reader, bool useProtected, bool usePlayerTypes);
-
+	bool getDebugFeatures() { return debugFeatures_.getValue(); }
+	XMLEntryBool &getDebugFeaturesEntry() { return debugFeatures_; }
 protected:
-	std::list<OptionEntry *> options_;
-	std::list<OptionEntry *> playerTypeOptions_;
+	std::list<XMLEntry *> playerTypeOptions_;
 
-	OptionEntryBoundedInt weaponSpeed_;
-	OptionEntryBoundedInt startArmsLevel_;
-	OptionEntryBoundedInt endArmsLevel_;
-	OptionEntryBoundedInt shotTime_;
-	OptionEntryBoundedInt aiShotTime_;
-	OptionEntryBoundedInt startTime_;
-	OptionEntryBoundedInt buyingTime_;
-	OptionEntryBoundedInt removeTime_;
-	OptionEntryBoundedInt roundTime_;
-	OptionEntryBoundedInt roundScoreTime_;
-	OptionEntryBoundedInt scoreTime_;
-	OptionEntryBoundedInt idleCycleTime_;
-	OptionEntryBoundedInt allowedMissedMoves_;
-	OptionEntryBoundedInt numberOfRounds_;
-	OptionEntryBoundedInt maxRoundTurns_;
-	OptionEntryBoundedInt maxNumberWeapons_;
-	OptionEntryBoundedInt gravity_;
-	OptionEntryBoundedInt minFallingDistance_;
-	OptionEntryBool tankFallingDamage_;
-	OptionEntryBoundedInt maxClimbingDistance_;
-	OptionEntryBoundedInt playerLives_;
-	OptionEntryBoundedInt teams_;
-	OptionEntryBoundedInt numberOfPlayers_;
-	OptionEntryBoundedInt numberOfMinPlayers_;
-	OptionEntryBoundedInt removeBotsAtPlayers_;
-	OptionEntryBoundedInt computersDeathTalk_;
-	OptionEntryBoundedInt computersAttackTalk_;
-	OptionEntryBoundedInt moneyBuyOnRound_;
-	OptionEntryBoundedInt moneyWonForRound_;
-	OptionEntryBoundedInt moneyWonForLives_;
-	OptionEntryBoundedInt moneyPerKillPoint_;
-	OptionEntryBoundedInt moneyPerMultiKillPoint_;
-	OptionEntryBoundedInt moneyPerAssistPoint_;
-	OptionEntryBoundedInt moneyPerHitPoint_;
-	OptionEntryBoundedInt moneyPerRound_;
-	OptionEntryBool moneyPerHealthPoint_;
-	OptionEntryBoundedInt scorePerMoney_;
-	OptionEntryBoundedInt scorePerAssist_;
-	OptionEntryBoundedInt scorePerKill_;
-	OptionEntryBoundedInt scorePerResign_;
-	OptionEntryBoundedInt scorePerSpectate_;
-	OptionEntryBoundedInt scoreWonForRound_;
-	OptionEntryBoundedInt scoreWonForLives_;
-	OptionEntryInt maxLandscapeSize_;
-	OptionEntryInt freeMarketAdjustment_;
-	OptionEntryInt freeMarketLimits_;
-	OptionEntryBool freeMarketTracksBotPurchases_;
-	OptionEntryInt minimumLandHeight_;
-	OptionEntryBoundedInt skillForRound_;
-	OptionEntryBoundedInt skillForMatch_;
-	OptionEntryBoundedInt skillForResign_;
-	OptionEntryBoundedInt maxSkillLost_;
-	OptionEntryBoundedInt maxSkillGained_;
-	OptionEntryBoundedInt skillForSelfKill_;
-	OptionEntryBoundedInt skillForTeamKill_;
-	OptionEntryBoundedInt moneyStarting_;
-	OptionEntryEnum teamBallance_;
-	OptionEntryBoundedInt moneyInterest_;
-	OptionEntryBool limitPowerByHealth_;
-	OptionEntryString tutorial_;
-	OptionEntryBool cycleMaps_;
-	OptionEntryEnum resignMode_;
-	OptionEntryEnum movementRestriction_;
-	OptionEntryEnum turnType_;
-	OptionEntryEnum windForce_;
-	OptionEntryEnum windType_;
-	OptionEntryEnum wallType_;
-	OptionEntryEnum weapScale_;
-	OptionEntryBoundedInt modDownloadSpeed_;
-	OptionEntryInt maxAvatarSize_;
-	OptionEntryString mod_;
-	OptionEntryString motd_;
-	OptionEntryStringEnum economy_;
-	OptionEntryString landscapes_;
-	OptionEntryStringEnum statsLogger_;
-	OptionEntryStringEnum serverFileLogger_;
-	OptionEntryBool waitForShotsBeforeShowingScore_;
+	XMLEntryBoundedInt weaponSpeed_;
+	XMLEntryBoundedInt startArmsLevel_;
+	XMLEntryBoundedInt endArmsLevel_;
+	XMLEntryBoundedInt shotTime_;
+	XMLEntryBoundedInt aiShotTime_;
+	XMLEntryBoundedInt startTime_;
+	XMLEntryBoundedInt buyingTime_;
+	XMLEntryBoundedInt removeTime_;
+	XMLEntryBoundedInt roundTime_;
+	XMLEntryBoundedInt roundScoreTime_;
+	XMLEntryBoundedInt scoreTime_;
+	XMLEntryBoundedInt idleCycleTime_;
+	XMLEntryBoundedInt allowedMissedMoves_;
+	XMLEntryBoundedInt numberOfRounds_;
+	XMLEntryBoundedInt maxRoundTurns_;
+	XMLEntryBoundedInt maxNumberWeapons_;
+	XMLEntryBoundedInt gravity_;
+	XMLEntryBoundedInt minFallingDistance_;
+	XMLEntryBool tankFallingDamage_;
+	XMLEntryBoundedInt maxClimbingDistance_;
+	XMLEntryBoundedInt playerLives_;
+	XMLEntryBoundedInt teams_;
+	XMLEntryBoundedInt numberOfPlayers_;
+	XMLEntryBoundedInt numberOfMinPlayers_;
+	XMLEntryBoundedInt removeBotsAtPlayers_;
+	XMLEntryBoundedInt computersDeathTalk_;
+	XMLEntryBoundedInt computersAttackTalk_;
+	XMLEntryBoundedInt moneyBuyOnRound_;
+	XMLEntryBoundedInt moneyWonForRound_;
+	XMLEntryBoundedInt moneyWonForLives_;
+	XMLEntryBoundedInt moneyPerKillPoint_;
+	XMLEntryBoundedInt moneyPerMultiKillPoint_;
+	XMLEntryBoundedInt moneyPerAssistPoint_;
+	XMLEntryBoundedInt moneyPerHitPoint_;
+	XMLEntryBoundedInt moneyPerRound_;
+	XMLEntryBool moneyPerHealthPoint_;
+	XMLEntryBoundedInt scorePerMoney_;
+	XMLEntryBoundedInt scorePerAssist_;
+	XMLEntryBoundedInt scorePerKill_;
+	XMLEntryBoundedInt scorePerResign_;
+	XMLEntryBoundedInt scorePerSpectate_;
+	XMLEntryBoundedInt scoreWonForRound_;
+	XMLEntryBoundedInt scoreWonForLives_;
+	XMLEntryInt maxLandscapeSize_;
+	XMLEntryInt freeMarketAdjustment_;
+	XMLEntryInt freeMarketLimits_;
+	XMLEntryBool freeMarketTracksBotPurchases_;
+	XMLEntryInt minimumLandHeight_;
+	XMLEntryBoundedInt skillForRound_;
+	XMLEntryBoundedInt skillForMatch_;
+	XMLEntryBoundedInt skillForResign_;
+	XMLEntryBoundedInt maxSkillLost_;
+	XMLEntryBoundedInt maxSkillGained_;
+	XMLEntryBoundedInt skillForSelfKill_;
+	XMLEntryBoundedInt skillForTeamKill_;
+	XMLEntryBoundedInt moneyStarting_;
+	XMLEntryEnum teamBallance_;
+	XMLEntryBoundedInt moneyInterest_;
+	XMLEntryBool limitPowerByHealth_;
+	XMLEntryString tutorial_;
+	XMLEntryBool cycleMaps_;
+	XMLEntryEnum resignMode_;
+	XMLEntryEnum movementRestriction_;
+	XMLEntryEnum turnType_;
+	XMLEntryEnum windForce_;
+	XMLEntryEnum windType_;
+	XMLEntryEnum wallType_;
+	XMLEntryEnum weapScale_;
+	XMLEntryBoundedInt modDownloadSpeed_;
+	XMLEntryInt maxAvatarSize_;
+	XMLEntryString mod_;
+	XMLEntryString motd_;
+	XMLEntryStringEnum economy_;
+	XMLEntryString landscapes_;
+	XMLEntryStringEnum statsLogger_;
+	XMLEntryStringEnum serverFileLogger_;
+	XMLEntryBool waitForShotsBeforeShowingScore_;
 
 	// Server only options
-	OptionEntryString botNamePrefix_;
-	OptionEntryBool actionSyncCheck_;
-	OptionEntryBool actionMovementSyncCheck_;
-	OptionEntryBool actionRandomSyncCheck_;
-	OptionEntryBool actionCollisionSyncCheck_;
-	OptionEntryBool targetPlacementSyncCheck_;
-	OptionEntryBool weaponSyncCheck_;
-	OptionEntryBool accessoryNameSyncCheck_;
-	OptionEntryBool autoSendSyncCheck_;
-	OptionEntryBool residualPlayers_;
-	OptionEntryBool delayedDefenseActivation_;
-	OptionEntryBool randomizeBotNames_;
-	OptionEntryBool giveAllWeapons_;
-	OptionEntryBool registeredUserNames_;
-	OptionEntryBool allowMultiLingualChat_;
-	OptionEntryBool allowMultiLingualNames_;
-	OptionEntryStringEnum authHandler_;
-	OptionEntryString authHandlerParam1_;
-	OptionEntryString authHandlerParam2_;
-	OptionEntryString serverName_;
-	OptionEntryString *playerType_[24];
-	OptionEntryString serverPassword_;
-	OptionEntryInt portNo_;
-	OptionEntryInt managementPortNo_;
-	OptionEntryString publishAddress_;
-	OptionEntryBool publishServer_;
-	OptionEntryBool useUPnP_;
-	OptionEntryBool useUPnPLogging_;
-	OptionEntryBool allowSameIP_;
-	OptionEntryBool allowSameUniqueId_;
-	OptionEntryBool debugFeatures_;
+	XMLEntryString botNamePrefix_;
+	XMLEntryBool actionSyncCheck_;
+	XMLEntryBool actionMovementSyncCheck_;
+	XMLEntryBool actionRandomSyncCheck_;
+	XMLEntryBool actionCollisionSyncCheck_;
+	XMLEntryBool targetPlacementSyncCheck_;
+	XMLEntryBool weaponSyncCheck_;
+	XMLEntryBool accessoryNameSyncCheck_;
+	XMLEntryBool autoSendSyncCheck_;
+	XMLEntryBool residualPlayers_;
+	XMLEntryBool delayedDefenseActivation_;
+	XMLEntryBool randomizeBotNames_;
+	XMLEntryBool giveAllWeapons_;
+	XMLEntryBool registeredUserNames_;
+	XMLEntryBool allowMultiLingualChat_;
+	XMLEntryBool allowMultiLingualNames_;
+	XMLEntryStringEnum authHandler_;
+	XMLEntryString authHandlerParam1_;
+	XMLEntryString authHandlerParam2_;
+	XMLEntryString serverName_;
+	XMLEntryString *playerType_[24];
+	XMLEntryString serverPassword_;
+	XMLEntryInt portNo_;
+	XMLEntryInt managementPortNo_;
+	XMLEntryString publishAddress_;
+	XMLEntryBool publishServer_;
+	XMLEntryBool useUPnP_;
+	XMLEntryBool useUPnPLogging_;
+	XMLEntryBool allowSameIP_;
+	XMLEntryBool allowSameUniqueId_;
+	XMLEntryBool debugFeatures_;
 };
 
 #endif

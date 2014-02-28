@@ -20,8 +20,8 @@
 
 #include <XML/XMLEntryComplexTypes.h>
 
-XMLEntryModelID::XMLEntryModelID(const char *tagName) :
-	XMLEntryGroup(tagName, "A definition of a displayable model"),
+XMLEntryModelID::XMLEntryModelID(const char *tagName, unsigned int data) :
+	XMLEntryGroup(tagName, "A definition of a displayable model", data),
 	meshName("meshname", "The ogre mesh resource name, this mesh must already be loaded in the ogre resources")
 {
 	addChildXMLEntry(&meshName);

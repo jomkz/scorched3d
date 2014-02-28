@@ -26,9 +26,9 @@
 #include <map>
 
 XMLEntrySimpleType::XMLEntrySimpleType(const char *name, const char *description, unsigned int data) :
+	data_(data),
 	name_(name),
-	description_(description),
-	data_(data)
+	description_(description)
 {
 }
 
@@ -38,7 +38,7 @@ XMLEntrySimpleType::~XMLEntrySimpleType()
 
 bool XMLEntrySimpleType::readXML(XMLNode *parentNode)
 {
-	bool required = data_ & eRequired;
+	bool required = data_ & eDataRequired;
 	XMLNode *foundNode = 0;
 	if (parentNode->getNamedChild(name_, foundNode, required)) 
 	{
@@ -58,9 +58,9 @@ bool XMLEntrySimpleType::readXML(XMLNode *parentNode)
 
 void XMLEntrySimpleType::writeXML(XMLNode *parentNode)
 {
-	if (data_ & eDepricated) return;
+	if (data_ & eDataDepricated) return;
 
-	bool required = data_ & eRequired;
+	bool required = data_ & eDataRequired;
 	std::string name = getName(),
 		description = getDescription(),
 		defaultValue = getDefaultValueAsString(), 
@@ -75,14 +75,147 @@ void XMLEntrySimpleType::writeXML(XMLNode *parentNode)
 		required?"":defaultValue.c_str()), 
 		XMLNode::XMLCommentType));
 
+	if (getValueAsString() == getDefaultValueAsString()) return;
+
 	// Add the actual node
 	XMLNode *newNode = new XMLNode(name_, getValueAsString());
 	parentNode->addChild(newNode);
 }
 
+XMLEntrySimpleGroup::XMLEntrySimpleGroup(const char *name, const char *description) :
+	XMLEntryGroup(name, description)
+{
+}
+
+XMLEntrySimpleGroup::~XMLEntrySimpleGroup()
+{
+}
+
+XMLEntrySimpleType *XMLEntrySimpleGroup::getEntryByName(const std::string &name)
+{
+	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+		end = xmlEntryChildren_.end();
+	for (;itor!=end;++itor)
+	{
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
+		if (name == entry->getName())
+		{
+			return entry;
+		}
+	}
+	return 0;
+}
+
+bool XMLEntrySimpleGroup::writeToBuffer(NetBuffer &buffer, bool useProtected)
+{
+	// Write out all of the options
+	// We do this as strings this make the message larger than it needs to be but
+	// we always know how to read the options at the other end.
+	// Even if the other end does not have all the options this end does.
+	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+		end = xmlEntryChildren_.end();
+	for (;itor!=end;++itor)
+	{
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
+		// Only send data that is allowed to be sent
+		if (!(entry->getData() & XMLEntry::eDataProtected) || useProtected)
+		{
+			// Optimization, only send options that have changed from thier default
+			if (entry->getValueAsString() != entry->getDefaultValueAsString())
+			{
+				buffer.addToBuffer(entry->getName());
+				buffer.addToBuffer(entry->getValueAsString());
+			}
+		}
+	}
+	buffer.addToBuffer("-"); // Marks the end of the entries
+	return true;
+}
+
+bool XMLEntrySimpleGroup::readFromBuffer(NetBufferReader &reader, bool useProtected)
+{
+	// Create a map from string name to existing options
+	// So we can find the named option when reading the buffer
+	std::map<std::string, XMLEntrySimpleType *> entryMap;
+	std::list<XMLEntry *>::iterator itor = xmlEntryChildren_.begin(),
+		end = xmlEntryChildren_.end();
+	for (;itor!=end;++itor)
+	{
+		XMLEntrySimpleType *entry = (XMLEntrySimpleType *) *itor;
+		if (!(entry->getData() & XMLEntry::eDataProtected) || useProtected)
+		{
+			// Create map
+			std::string name = entry->getName();
+			entryMap[name] = entry;
+
+			// Reset to the default value as only the non-default values are sent
+			if (entry->getValueAsString() != entry->getDefaultValueAsString())
+			{
+				entry->setValueFromString(entry->getDefaultValueAsString());
+			}
+		}
+	}
+
+	// Read the strings from the other end
+	for (;;)
+	{
+		std::string name, value;
+		if (!reader.getFromBuffer(name)) return false;
+		if (strcmp(name.c_str(), "-") == 0) break; // The end symbol
+		if (!reader.getFromBuffer(value)) return false;
+		
+		std::map<std::string, XMLEntrySimpleType *>::iterator finditor =
+			entryMap.find(name);
+		if (finditor == entryMap.end())
+		{
+			Logger::log(S3D::formatStringBuffer("Warning:Does not support server option \"%s\"",
+				name.c_str()));
+		}
+		else
+		{
+			XMLEntrySimpleType *entry = (*finditor).second;
+			if (!entry->setValueFromString(value.c_str())) return false;
+		}
+	}
+
+	return true;
+}
+
+bool XMLEntrySimpleGroup::writeToFile(const std::string &filePath)
+{
+	XMLNode tmpNode("tmp");
+	writeXML(&tmpNode);
+	if (tmpNode.getChildren().empty()) return false;
+	XMLNode *rootNode = tmpNode.getChildren().front();
+	if (!rootNode->writeToFile(filePath.c_str())) return false;
+	return true;
+}
+
+bool XMLEntrySimpleGroup::readFromFile(const std::string &filePath)
+{
+	// Parse the XML file
+	XMLFile file;
+	if (!file.readFile(filePath.c_str()))
+	{
+		S3D::dialogMessage("Scorched3D Options", S3D::formatStringBuffer(
+			"ERROR: Failed to parse file \"%s\"\n"
+			"%s",
+			filePath.c_str(),
+			file.getParserError()));
+		return false;
+	}
+
+	// return true for an empty file
+	if (!file.getRootNode()) return true;
+
+	// Read the options from the XML node
+	if (!readXML(file.getRootNode())) return false;
+	return true;
+}
+
 XMLEntryInt::XMLEntryInt(const char *name, 
 	const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired), 
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired), 
 	value_(0), defaultValue_(0)
 {
 }
@@ -237,7 +370,7 @@ bool XMLEntryEnum::setValueFromString(const std::string &string)
 
 XMLEntryBool::XMLEntryBool(const char *name, 
 	const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired),
 	value_(false), defaultValue_(false)
 {
 }
@@ -295,7 +428,7 @@ bool XMLEntryBool::getValue()
 
 XMLEntryString::XMLEntryString(const char *name,
 	const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired),
 	value_(""), defaultValue_(""), multiline_(false)
 {
 
@@ -389,7 +522,7 @@ bool XMLEntryStringEnum::setValueFromString(const std::string &string)
 
 XMLEntryFixed::XMLEntryFixed(const char *name, 
 		const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired),
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired),
 	value_(0), defaultValue_(0)
 {
 }
@@ -437,7 +570,7 @@ bool XMLEntryFixed::setValue(fixed value)
 
 XMLEntryFixedVector::XMLEntryFixedVector(const char *name, 
 	const char *description) :
-	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eRequired)
+	XMLEntrySimpleType(name, description, XMLEntrySimpleType::eDataRequired)
 {
 
 }

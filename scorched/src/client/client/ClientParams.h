@@ -52,16 +52,16 @@ public:
 protected:
 	static ClientParams *instance_;
 
-	OptionEntryString connect_;
-	OptionEntryString client_;
-	OptionEntryString password_;
-	OptionEntryString username_;
-	OptionEntryString save_;
-	OptionEntryString nonParam_;
-	OptionEntryBool startcustom_;
-	OptionEntryBool connectAcceptDefaults_;
-	OptionEntryInt exittime_;
-	OptionEntryInt disconnecttime_;
+	XMLEntryString connect_;
+	XMLEntryString client_;
+	XMLEntryString password_;
+	XMLEntryString username_;
+	XMLEntryString save_;
+	XMLEntryString nonParam_;
+	XMLEntryBool startcustom_;
+	XMLEntryBool connectAcceptDefaults_;
+	XMLEntryInt exittime_;
+	XMLEntryInt disconnecttime_;
 
 private:
 	ClientParams();

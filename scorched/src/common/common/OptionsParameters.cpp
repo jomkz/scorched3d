@@ -21,29 +21,17 @@
 #include <common/OptionsParameters.h>
 #include <common/Defines.h>
 
-OptionsParameters::OptionsParameters() :
-	settingsdir_(options_, "settingsdir",
+OptionsParameters::OptionsParameters(const char *name, const char *description) :
+	XMLEntrySimpleGroup(name, description),
+	settingsdir_( "settingsdir",
 		"The directory in the users home directory that the scorched3d settings are stored in.", 0, ".scorched3do"),
-	writefulloptions_(options_, "writefulloptions",
-		"When writing options files write all options even if they are the default", 0, false),
-	rewriteoptions_(options_, "rewriteoptions",
+	rewriteoptions_( "rewriteoptions",
 		"When reading options files rewrite them to refresh all options", 0, false)
 {
-
+	addChildXMLEntry(&settingsdir_, &rewriteoptions_);
 }
 
 OptionsParameters::~OptionsParameters()
 {
 	
 }
-
-std::list<OptionEntry *> &OptionsParameters::getOptions()
-{
-	return options_;
-}
-
-std::list<OptionEntry *> &OptionsParameters::getNonParamOptions()
-{
-	return nonParamOptions_;
-}
-

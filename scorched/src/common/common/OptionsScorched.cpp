@@ -130,9 +130,9 @@ void OptionsScorched::updateChangeSet()
 	NetBuffer *defaultBuffer = NetBufferPool::instance()->getFromPool();
 
 	defaultBuffer->reset();
-	mainOptions_.writeToBuffer(*defaultBuffer, true, true);
+	mainOptions_.writeToBuffer(*defaultBuffer, true);
 	NetBufferReader reader(*defaultBuffer);
-	changedOptions_.readFromBuffer(reader, true, true);
+	changedOptions_.readFromBuffer(reader, true);
 
 	NetBufferPool::instance()->addToPool(defaultBuffer);
 }
@@ -182,10 +182,15 @@ bool OptionsScorched::commitChanges()
 	return different;
 }
 
-OptionEntry *OptionsScorched::getEntryByName(const std::string &name)
+bool OptionsScorched::hasLevelChangedValue(const char *name)
 {
-	OptionEntry *levelEntry = levelOptions_.getEntryByName(name);
+	return false;
+}
+
+XMLEntrySimpleType *OptionsScorched::getEntryByName(const std::string &name)
+{
+	XMLEntrySimpleType *levelEntry = levelOptions_.getEntryByName(name);
 	if (levelEntry && levelEntry->isChangedValue()) return levelEntry;
-	OptionEntry *otherEntry = mainOptions_.getEntryByName(name);
+	XMLEntrySimpleType *otherEntry = mainOptions_.getEntryByName(name);
 	return otherEntry;
 }

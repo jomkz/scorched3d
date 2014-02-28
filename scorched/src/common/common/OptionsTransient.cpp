@@ -28,15 +28,17 @@
 #include <math.h>
 
 OptionsTransient::OptionsTransient(OptionsScorched &optionsGame) :
+	XMLEntrySimpleGroup("options", 
+		"The options that change from one turn to the next"),
 	optionsGame_(optionsGame), newGame_(false),
-	currentRoundNo_(options_, "CurrentRoundNo", 
+	currentRoundNo_("CurrentRoundNo", 
 		"The current number of rounds played in this game", 0, 0),
-	currentTurnNo_(options_, "CurrentTurnNo", 
+	currentTurnNo_("CurrentTurnNo", 
 		"The current number of turns played in this round", 0, 1),
-	wallType_(options_, "WallType",
+	wallType_("WallType",
 		"The current wall type", 0, 0)
 {
-	
+	addChildXMLEntry(&currentRoundNo_, &currentTurnNo_, &wallType_);
 }
 
 OptionsTransient::~OptionsTransient()
@@ -80,18 +82,6 @@ unsigned int OptionsTransient::getLeastUsedTeam(TargetContainer &container)
 		}
 	}
 	return team;
-}
-
-bool OptionsTransient::writeToBuffer(NetBuffer &buffer)
-{
-	if (!OptionEntryHelper::writeToBuffer(options_, buffer, false)) return false;
-	return true;
-}
-
-bool OptionsTransient::readFromBuffer(NetBufferReader &reader)
-{
-	if (!OptionEntryHelper::readFromBuffer(options_, reader, false)) return false;
-	return true;
 }
 
 void OptionsTransient::reset()

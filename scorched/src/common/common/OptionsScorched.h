@@ -25,13 +25,13 @@
 
 #define GENERIC_GETTER(x) \
 	{ \
-	if (levelOptions_.get##x##Entry().isChangedValue()) return levelOptions_.get##x(); \
+	if (hasLevelChangedValue(#x)) return levelOptions_.get##x(); \
 	else return mainOptions_.get##x(); \
 	};
 
 #define OPTIONSTRING_GETTER(x) const char *get##x() GENERIC_GETTER(x)
 #define OPTIONINT_GETTER(x) int get##x() GENERIC_GETTER(x)
-#define OPTIONENUM_GETTER(x) OptionEntryEnum get##x() GENERIC_GETTER(x)
+#define OPTIONENUM_GETTER(x) int get##x() GENERIC_GETTER(x)
 #define OPTIONSTRINGENUM_GETTER(x) const char *get##x() GENERIC_GETTER(x)
 #define OPTIONBOOL_GETTER(x) bool get##x() GENERIC_GETTER(x)
 #define OPTIONFLOAT_GETTER(x) bool get##x() GENERIC_GETTER(x)
@@ -166,13 +166,13 @@ public:
 	OPTIONBOOL_GETTER(RegisteredUserNames);
 	OPTIONBOOL_GETTER(DebugFeatures);
 
-	OptionEntryString &getPlayerType(int no) { DIALOG_ASSERT(no<24); return mainOptions_.getPlayerType(no); }
+	XMLEntryString &getPlayerType(int no) { DIALOG_ASSERT(no<24); return mainOptions_.getPlayerType(no); }
 
 	OptionsGame &getChangedOptions() { return changedOptions_; }
 	OptionsGame &getMainOptions() { return mainOptions_; }
 	OptionsGame &getLevelOptions() { return levelOptions_; }
 
-	OptionEntry *getEntryByName(const std::string &name);
+	XMLEntrySimpleType *getEntryByName(const std::string &name);
 
 	void updateLevelOptions(ScorchedContext &context, LandscapeDefinition &defn);
 	void updateChangeSet();
@@ -183,8 +183,9 @@ protected:
 	OptionsGame changedOptions_;
 	OptionsGame levelOptions_;
 
+	bool hasLevelChangedValue(const char *name);
 	void updateLevelOptions(std::vector<LandscapeInclude *> &options,
-		std::map<std::string, OptionEntry *> &values);
+		std::map<std::string, XMLEntry *> &values);
 };
 
 #endif

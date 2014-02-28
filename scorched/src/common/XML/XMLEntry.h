@@ -26,6 +26,17 @@
 class XMLEntry
 {
 public:
+	enum XMLEntryData
+	{
+		eDataRequired =  1,
+		eDataDepricated = 2,
+		eDataProtected = 4,
+		eDataRWAccess = 8,
+		eDataROAccess = 16,
+		eDataNoRestore = 32,
+		eDataDebugOnly = 64
+	};
+
 	XMLEntry();
 	virtual ~XMLEntry();
 
@@ -39,6 +50,7 @@ class XMLEntryTypeChoice : public XMLEntry
 {
 public:
 	XMLEntryTypeChoice(const char *name, const char *description) :
+		XMLEntry(),
 		name_(name), description_(description), value_(0)
 	{
 
@@ -145,6 +157,7 @@ class XMLEntryList : public XMLEntry
 {
 public:
 	XMLEntryList(const char *tagName, const char *description) :
+	  XMLEntry(),
 	  tagName_(tagName), description_(description)
 	{
 	}

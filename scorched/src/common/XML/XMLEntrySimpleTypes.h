@@ -30,10 +30,11 @@
 class XMLEntrySimpleType : public XMLEntry
 {
 public:
-	enum SimpleTypeData
+	enum XMLEntrySimpleTypeCatagory
 	{
-		eRequired =  1,
-		eDepricated = 2
+		eSimpleNumberType,
+		eSimpleStringType,
+		eSimpleBooleanType
 	};
 
 	XMLEntrySimpleType(const char *name, const char *description, unsigned int data);
@@ -42,11 +43,13 @@ public:
 	std::string getName() { return name_; }
 	virtual std::string getDescription() { return description_; }
 	virtual std::string getRangeDescription() { return ""; }
-	virtual unsigned getData() { return data_; }
+
+	virtual unsigned int getData() { return data_; }
 
 	virtual std::string getDefaultValueAsString() = 0;
 	virtual std::string getValueAsString() = 0;
 	virtual bool setValueFromString(const std::string &string) = 0;
+	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() = 0;
 
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode);
@@ -55,6 +58,21 @@ protected:
 	unsigned int data_;
 	const char *name_;
 	const char *description_;
+};
+
+class XMLEntrySimpleGroup : public XMLEntryGroup
+{
+public:
+	XMLEntrySimpleGroup(const char *name, const char *description);
+	virtual ~XMLEntrySimpleGroup();
+
+	XMLEntrySimpleType *getEntryByName(const std::string &name);
+
+	// Fns used to save or restore the state of the options
+	bool writeToFile(const std::string &filePath);
+	bool readFromFile(const std::string &filePath);
+	bool writeToBuffer(NetBuffer &buffer, bool useProtected);
+	bool readFromBuffer(NetBufferReader &reader, bool useProtected);
 };
 
 class XMLEntryInt : public XMLEntrySimpleType
@@ -71,6 +89,7 @@ public:
 	virtual std::string getValueAsString();
 	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
+	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleNumberType; }
 
 	virtual int getValue();
 	virtual bool setValue(int value);
@@ -146,6 +165,7 @@ public:
 	virtual std::string getValueAsString();
 	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
+	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleBooleanType; }
 
 	virtual bool setValue(bool value);
 	virtual bool getValue();
@@ -170,6 +190,7 @@ public:
 	virtual std::string getValueAsString();
 	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
+	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleStringType; }
 
 	virtual std::string getValue();
 	virtual bool setValue(const std::string &value);
@@ -220,6 +241,7 @@ public:
 	virtual std::string getValueAsString();
 	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
+	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleNumberType; }
 
 	virtual fixed getValue();
 	virtual bool setValue(fixed value);
@@ -243,6 +265,7 @@ public:
 	virtual std::string getValueAsString();
 	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
+	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleStringType; }
 
 	virtual FixedVector &getValue();
 	virtual bool setValue(FixedVector value);

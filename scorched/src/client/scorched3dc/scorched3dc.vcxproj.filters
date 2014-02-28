@@ -285,9 +285,6 @@
     <ClCompile Include="..\..\common\common\NumberParser.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\common\OptionEntry.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\common\OptionsGame.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -1713,9 +1710,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\NumberParser.h">
-      <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\common\OptionEntry.h">
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\common\OptionsGame.h">

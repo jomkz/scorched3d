@@ -21,73 +21,71 @@
 #if !defined(__INCLUDE_ClientOptionsh_INCLUDE__)
 #define __INCLUDE_ClientOptionsh_INCLUDE__
 
-#include <common/OptionEntry.h>
+#include <XML/XMLEntrySimpleTypes.h>
 #include <console/ConsoleRuleOptionsAdapter.h>
 
-class ClientOptions
+class ClientOptions : public XMLEntrySimpleGroup
 {
 public:
 	static ClientOptions *instance();
 
-	bool getWaterAnimate() { return waterAnimate_; }
-	OptionEntryBool &getWaterAnimateEntry() { return waterAnimate_; }
+	bool getWaterAnimate() { return waterAnimate_.getValue(); }
+	XMLEntryBool &getWaterAnimateEntry() { return waterAnimate_; }
 
-	bool getWaterDraw() { return waterDraw_; }
-	OptionEntryBool &getWaterDrawEntry() { return waterDraw_; }
+	bool getWaterDraw() { return waterDraw_.getValue(); }
+	XMLEntryBool &getWaterDrawEntry() { return waterDraw_; }
 
-	bool getWaterWireframe() { return waterWireframe_; }
-	OptionEntryBool &getWaterWireframeEntry() { return waterWireframe_; }
+	bool getWaterWireframe() { return waterWireframe_.getValue(); }
+	XMLEntryBool &getWaterWireframeEntry() { return waterWireframe_; }
 
-	bool getSkyDraw() { return skyDraw_; }
-	OptionEntryBool &getSkyDrawEntry() { return skyDraw_; }
+	bool getSkyDraw() { return skyDraw_.getValue(); }
+	XMLEntryBool &getSkyDrawEntry() { return skyDraw_; }
 
-	bool getLandscapeDraw() { return landscapeDraw_; }
-	OptionEntryBool &getLandscapeDrawEntry() { return landscapeDraw_; }
+	bool getLandscapeDraw() { return landscapeDraw_.getValue(); }
+	XMLEntryBool &getLandscapeDrawEntry() { return landscapeDraw_; }
 
-	bool getLandscapeGridDraw() { return landscapeGridDraw_; }
-	OptionEntryBool &getLandscapeGridDrawEntry() { return landscapeGridDraw_; }
+	bool getLandscapeGridDraw() { return landscapeGridDraw_.getValue(); }
+	XMLEntryBool &getLandscapeGridDrawEntry() { return landscapeGridDraw_; }
 
-	bool getCameraWireframe() { return cameraWireframe_; }
-	OptionEntryBool &getCameraWireframeEntry() { return cameraWireframe_; }
+	bool getCameraWireframe() { return cameraWireframe_.getValue(); }
+	XMLEntryBool &getCameraWireframeEntry() { return cameraWireframe_; }
 
-	bool getTargetsDraw() { return targetsDraw_; }
-	OptionEntryBool &getTargetsDrawEntry() { return targetsDraw_; }
+	bool getTargetsDraw() { return targetsDraw_.getValue(); }
+	XMLEntryBool &getTargetsDrawEntry() { return targetsDraw_; }
 
-	bool getShadows() { return shadows_; }
-	OptionEntryBool &getShadowsEntry() { return shadows_; }
+	bool getShadows() { return shadows_.getValue(); }
+	XMLEntryBool &getShadowsEntry() { return shadows_; }
 
-	bool getValidateServerIp() { return validateServerIp_; }
-	OptionEntryBool &getValidateServerIpEntry() { return validateServerIp_; }
+	bool getValidateServerIp() { return validateServerIp_.getValue(); }
+	XMLEntryBool &getValidateServerIpEntry() { return validateServerIp_; }
 
-	const char *getHostDescription() { return hostDescription_; }
-	OptionEntryString &getHostDescriptionEntry() { return hostDescription_; }
+	const char *getHostDescription() { return hostDescription_.getValue().c_str(); }
+	XMLEntryString &getHostDescriptionEntry() { return hostDescription_; }
 
 	void loadSafeValues();
 	void loadDefaultValues();
 	void loadMediumValues();
 	void loadFastestValues();
 	void loadUltraValues();
-	bool writeOptionsToFile(bool allOptions);
+	bool writeOptionsToFile();
 	bool readOptionsFromFile();
 
-	std::list<OptionEntry *> &getOptions() { return options_; }
-	void addToConsole(Console &console) { consoleHolder_.addToConsole(console, options_); }
+	void addToConsole(Console &console) { consoleHolder_.addToConsole(console, xmlEntryChildren_); }
 
 protected:
 	static ClientOptions *instance_;
-	std::list<OptionEntry *> options_;
 
 	ConsoleRuleOptionsAdapterHolder consoleHolder_;
-	OptionEntryBool waterAnimate_;
-	OptionEntryBool waterDraw_;
-	OptionEntryBool waterWireframe_;
-	OptionEntryBool skyDraw_;
-	OptionEntryBool landscapeDraw_, landscapeGridDraw_;
-	OptionEntryBool cameraWireframe_;
-	OptionEntryBool targetsDraw_;
-	OptionEntryBool shadows_;
-	OptionEntryBool validateServerIp_;
-	OptionEntryString hostDescription_;
+	XMLEntryBool waterAnimate_;
+	XMLEntryBool waterDraw_;
+	XMLEntryBool waterWireframe_;
+	XMLEntryBool skyDraw_;
+	XMLEntryBool landscapeDraw_, landscapeGridDraw_;
+	XMLEntryBool cameraWireframe_;
+	XMLEntryBool targetsDraw_;
+	XMLEntryBool shadows_;
+	XMLEntryBool validateServerIp_;
+	XMLEntryString hostDescription_;
 
 private:
 	ClientOptions();

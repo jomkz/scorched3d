@@ -29,38 +29,27 @@ OptionsMasterListServer *OptionsMasterListServer::instance()
 }
 
 OptionsMasterListServer::OptionsMasterListServer() :
-	masterListServer_(options_, "MasterListServer",
+	XMLEntrySimpleGroup("options", 
+		"The options that define how the Scorched3D client fetches online data"), 
+	masterListServer_("MasterListServer",
 		"The master list server for scorched3d", 0, "scorched3d.sourceforge.net"),
-	masterListServerURI_(options_, "MasterListServerURI",
+	masterListServerURI_("MasterListServerURI",
 		"The URI on the master list server for scorched3d", 0, "/scorched"),
-	masterListBackupServer_(options_, "MasterListBackupServer",
+	masterListBackupServer_("MasterListBackupServer",
 		"The backup master list server for scorched3d", 0, "www.scorched3d.co.uk"),
-	masterListBackupServerURI_(options_, "MasterListBackupServerURI",
+	masterListBackupServerURI_("MasterListBackupServerURI",
 		"The URI on the backup master list server for scorched3d", 0, "/scorched"),
-	masterListServerTimeout_(options_, "MasterListServerTimeout",
+	masterListServerTimeout_("MasterListServerTimeout",
 		"The amount of time to allow for list communications", 0, 10),
-	chatServer_(options_, "ChatServer",
+	chatServer_("ChatServer",
 		"The chat server for scorched3d", 0, "www.scorched3d.co.uk"),
-	chatServerURI_(options_, "ChatServerURI",
+	chatServerURI_("ChatServerURI",
 		"The URI on the chat server for scorched3d", 0, "/phpBB3/chatmessages.php")
 {
-	readOptionsFromFile();
+	readFromFile(S3D::getSettingsFile("masterlistservers.xml"));
 }
 
 OptionsMasterListServer::~OptionsMasterListServer()
 {
 }
 
-bool OptionsMasterListServer::writeOptionsToFile()
-{
-	std::string filePath = S3D::getSettingsFile("masterlistservers.xml");
-	if (!OptionEntryHelper::writeToFile(options_, filePath, true)) return false;
-	return true;
-}
-
-bool OptionsMasterListServer::readOptionsFromFile()
-{
-	std::string filePath = S3D::getSettingsFile("masterlistservers.xml");
-	if (!OptionEntryHelper::readFromFile(options_, filePath)) return false;
-	return true;
-}
