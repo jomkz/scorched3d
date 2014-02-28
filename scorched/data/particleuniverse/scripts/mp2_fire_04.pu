@@ -1,0 +1,145 @@
+system mp2_fire_04
+{
+    fast_forward                                0.2 0.025
+    category                                    mp2_fire
+    technique mp2_burn_1_technique
+    {
+        visual_particle_quota                   30
+        material                                mp2_flash_f
+        renderer                                Billboard
+        {
+            billboard_rotation_type             vertex
+        }
+        emitter                                 SphereSurface 
+        {
+            emission_rate                       15
+            angle                               dyn_random
+            {
+                min                             1
+                max                             30
+            }
+            time_to_live                        dyn_random
+            {
+                min                             1
+                max                             2
+            }
+            velocity                            dyn_random
+            {
+                min                             2
+                max                             3
+            }
+            all_particle_dimensions             dyn_random
+            {
+                min                             2
+                max                             5
+            }
+            radius                              0.2
+        }
+        affector                                TextureRotator 
+        {
+            use_own_rotation                    true
+            rotation                            dyn_random
+            {
+                min                             -3
+                max                             3
+            }
+            rotation_speed                      dyn_random
+            {
+                min                             0
+                max                             0
+            }
+        }
+        affector                                Scale 
+        {
+            xyz_scale                           dyn_curved_spline
+            {
+                control_point                   0.00369004 7.93352
+                control_point                   0.309963 1.46814
+                control_point                   0.976015 -0.121884
+            }
+        }
+        affector                                Colour 
+        {
+            time_colour                         0    0 0 0 1
+            time_colour                         0.0478261  1 1 1 1
+            time_colour                         0.115217  1 0.486275 0.286275 1
+            time_colour                         0.536957  0.431373 0.129412 0 1
+            time_colour                         1    0 0 0 1
+        }
+        affector                                LinearForce 
+        {
+            force_vector                        0 4 0
+        }
+    }
+    technique mp2_burn_2_technique
+    {
+        visual_particle_quota                   100
+        material                                mp2_smoke_atlas_a
+        renderer                                Billboard
+        {
+            render_queue_group                  49
+            texture_coords_rows                 2
+            texture_coords_columns              2
+            billboard_rotation_type             vertex
+        }
+        emitter                                 SphereSurface 
+        {
+            angle                               dyn_random
+            {
+                min                             1
+                max                             15
+            }
+            time_to_live                        dyn_random
+            {
+                min                             2
+                max                             4
+            }
+            velocity                            dyn_random
+            {
+                min                             3
+                max                             6
+            }
+            all_particle_dimensions             dyn_random
+            {
+                min                             0.2
+                max                             3
+            }
+            end_texture_coords_range            3
+            radius                              0.3
+        }
+        affector                                TextureRotator 
+        {
+            use_own_rotation                    true
+            rotation                            dyn_random
+            {
+                min                             -3
+                max                             3
+            }
+            rotation_speed                      dyn_random
+            {
+                min                             -0.2
+                max                             0.2
+            }
+        }
+        affector                                Scale 
+        {
+            xyz_scale                           dyn_curved_spline
+            {
+                control_point                   0.00369004 7.95568
+                control_point                   0.317343 -1.22438
+                control_point                   2 -1.89474
+            }
+        }
+        affector                                Colour 
+        {
+            time_colour                         0    1 0.937255 0.835294 0
+            time_colour                         0.113043  1 0.854902 0.603922 1
+            time_colour                         0.345652  0.784314 0.658824 0.392157 1
+            time_colour                         1    0.784314 0.627451 0.392157 0
+        }
+        affector                                LinearForce 
+        {
+            force_vector                        0 1 0
+        }
+    }
+}

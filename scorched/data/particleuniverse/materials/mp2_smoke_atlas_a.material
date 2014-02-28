@@ -1,0 +1,17 @@
+material mp2_smoke_atlas_a
+{
+    technique
+    {
+        pass
+        {
+            lighting off
+            depth_write off
+            scene_blend alpha_blend
+
+            texture_unit
+            {
+                texture mp2_smoke_atlas_a.png
+            }
+        }
+    }
+}

@@ -66,8 +66,10 @@ void Explosion::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
-		ScorchedClient::instance()->getClientUISync().addActionFromClient(
-			new UIParticleAction(position_, "dirtExplosion"));
+		if (0 != strcmp(weapon_->getAccessoryTypeName(), "WeaponMuzzle")) {
+			ScorchedClient::instance()->getClientUISync().addActionFromClient(
+				new UIParticleAction(position_, "mp2_explosion_01"));
+		}
 
 /*
 		float height = context_->getLandscapeMaps().getGroundMaps().getInterpHeight(

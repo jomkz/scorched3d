@@ -30,15 +30,17 @@
 #include <tank/TankViewPoints.h>
 #include <actions/Napalm.h>
 #include <actions/CameraPositionAction.h>
-#ifndef S3D_SERVER
-	#include <client/ScorchedClient.h>
-#endif
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapedef/LandscapeTex.h>
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
+
+#ifndef S3D_SERVER
+	#include <client/ScorchedClient.h>
+	#include <uiactions/UINapalmRenderer.h>
+#endif
 
 static const int deformSize = 3;
 static bool deformCreated = false;
@@ -95,8 +97,7 @@ void Napalm::init()
 			context_->getActionController().addAction(pos);
 		}
 
-		//set_ = ExplosionTextures::instance()->getTextureSetByName(
-		//	params_->getNapalmTexture());
+		setActionRender(new UINapalmRenderer(this));
 	}
 #endif // #ifndef S3D_SERVER
 }
@@ -109,33 +110,6 @@ std::string Napalm::getActionDetails()
 
 void Napalm::simulate(fixed frameTime, bool &remove)
 {
-#ifndef S3D_SERVER
-	if (!context_->getServerMode())
-	{
-		if (!napalmPoints_.empty() &&
-			!params_->getNoSmoke() &&
-			counter_.nextDraw(frameTime.asFloat()))
-		{
-			NapalmEntry *entry = 0;
-			int count = rand() % napalmPoints_.size();
-			std::list<NapalmEntry *>::iterator itor;
-			for (itor = napalmPoints_.begin();
-				itor != napalmPoints_.end();
-				itor++, count --)
-			{
-				entry = *itor;
-				if (count <=0) break;
-			}
-
-			fixed posZ = 
-				ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeight(
-				entry->posX, entry->posY);
-			//Landscape::instance()->getSmoke().
-			//	addSmoke(float(entry->posX), float(entry->posY), posZ.asFloat());
-		}
-	}
-#endif // #ifndef S3D_SERVER
-
 	// Add napalm for the period of the time interval
 	// once the time interval has expired then start taking it away
 	// Once all napalm has disapeared the simulation is over
@@ -220,6 +194,13 @@ void Napalm::simulateRmStep()
 		napalmPoints_.pop_front();
 		int x = entry->posX;
 		int y = entry->posY;
+
+#ifndef S3D_SERVER
+	if (!context_->getServerMode()) 
+	{
+		((UINapalmRenderer *) renderer_)->removeEntry(entry);
+	}
+#endif
 		delete entry;
 
 		unsigned int pointsCount = XY2_TO_UINT(x, y);
@@ -276,7 +257,13 @@ void Napalm::simulateAddEdge(int x, int y)
 	// Add this current point to the napalm map
 	RandomGenerator &random = context_->getSimulator().getRandomGenerator();
 	int offset = (random.getRandFixed("Napalm") * 31).asInt();
-	NapalmEntry *newEntry = new NapalmEntry(x, y, offset, particleSet_);
+	NapalmEntry *newEntry = new NapalmEntry(x, y, height, offset, particleSet_);
+#ifndef S3D_SERVER
+	if (!context_->getServerMode()) 
+	{
+		((UINapalmRenderer *) renderer_)->addEntry(newEntry);
+	}
+#endif
 	napalmPoints_.push_back(newEntry);
 
 	unsigned int pointsCount = XY2_TO_UINT(x, y);
@@ -294,57 +281,7 @@ void Napalm::simulateAddEdge(int x, int y)
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{
-		/*
-		ParticleEmitter emitter;
-		emitter.setAttributes(
-			params_->getNapalmTime().asFloat(), params_->getNapalmTime().asFloat(),
-			0.5f, 1.0f, // Mass
-			0.01f, 0.02f, // Friction
-			Vector(0.0f, 0.0f, 0.0f), Vector(0.0f, 0.0f, 0.0f), // Velocity
-			Vector(1.0f, 1.0f, 1.0f), 0.9f, // StartColor1
-			Vector(1.0f, 1.0f, 1.0f), 0.6f, // StartColor2
-			Vector(1.0f, 1.0f, 1.0f), 0.0f, // EndColor1
-			Vector(1.0f, 1.0f, 1.0f), 0.1f, // EndColor2
-			1.5f, 1.5f, 1.5f, 1.5f, // Start Size
-			1.5f, 1.5f, 1.5f, 1.5f, // EndSize
-			Vector(0.0f, 0.0f, 0.0f), // Gravity
-			params_->getLuminance(),
-			false);
-		Vector position1(float(x) + 0.5f, float(y) - 0.2f, 0.0f);
-		Vector position2(float(x) - 0.5f, float(y) - 0.2f, 0.0f);
-		Vector position3(float(x) + 0.0f, float(y) + 0.5f, 0.0f);
-		emitter.emitNapalm(
-			position1, 
-			ScorchedClient::instance()->getParticleEngine(),
-			set_);
-		emitter.emitNapalm(
-			position2, 
-			ScorchedClient::instance()->getParticleEngine(),
-			set_);
-		emitter.emitNapalm(
-			position3, 
-			ScorchedClient::instance()->getParticleEngine(),
-			set_);
 
-		if (vPoint_) vPoint_->setValues(FixedVector::fromVector(position1));
-
-		// Add the ground scorch
-		if (!GLStateExtension::getNoTexSubImage())
-		{
-			if (height == context_->getLandscapeMaps().getGroundMaps().getHeight(x, y)) 
-			{
-				if (S3D_RAND < params_->getGroundScorchPer().asFloat())
-				{
-					Vector pos(x, y);
-					DeformTextures::deformLandscape(pos, 
-						(int) (deformSize + 1),
-						ExplosionTextures::instance()->getScorchBitmap(
-							params_->getDeformTexture()),
-						deformMap);
-				}
-			}
-		}
-		*/
 	}
 #endif // #ifndef S3D_SERVER
 

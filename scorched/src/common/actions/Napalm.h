@@ -37,14 +37,15 @@ class Napalm : public Action
 public:
 	struct NapalmEntry 
 	{
-		NapalmEntry(int x, int y, int o, int p) : 
-			offset(o), posX(x), posY(y), pset(p) {}
+		NapalmEntry(int x, int y, fixed z, int o, int p) : 
+			offset(o), posX(x), posY(y), posZ(z), pset(p) {}
 
 		int pset;
 		int offset;
 		int posX, posY;
+		fixed posZ;
 	};
-
+	
 	Napalm(int x, int y, Weapon *weapon, NapalmParams *params, 
 		WeaponFireContext &weaponContext);
 	virtual ~Napalm();
@@ -81,7 +82,6 @@ protected:
 	void simulateRmStep();
 	void simulateDamage();
 	void addBurnAction(Target *target);
-
 };
 
 #endif

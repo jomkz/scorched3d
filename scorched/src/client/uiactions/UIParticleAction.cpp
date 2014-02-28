@@ -69,12 +69,15 @@ void UIParticleAction::create()
 	particleNode_ = sceneManager->getRootSceneNode()->createChildSceneNode();
 	particleNode_->setPosition(
 		position_[0].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED,
-		position_[2].getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED,
+		position_[2].getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED + 10.0f,
 		position_[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED);
 	particleNode_->attachObject(pSys_);
-	pSys_->setScale(ParticleUniverse::Vector3(OgreSystem::OGRE_WORLD_SCALE,
+	
+	pSys_->setScale(ParticleUniverse::Vector3(
+		OgreSystem::OGRE_WORLD_SCALE,
 		OgreSystem::OGRE_WORLD_SCALE,
 		OgreSystem::OGRE_WORLD_SCALE));
+	pSys_->setScaleVelocity(OgreSystem::OGRE_WORLD_SCALE);
 	pSys_->addParticleSystemListener(this);
 	pSys_->start(10.0);
 }

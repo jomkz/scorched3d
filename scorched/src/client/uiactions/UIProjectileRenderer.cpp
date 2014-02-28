@@ -98,8 +98,11 @@ void UIProjectileRenderer::create()
 	pSys_ = pManager->createParticleSystem(particleName, "newpropulsion", sceneManager);
 	
 	projectileNode_->attachObject(pSys_);
-	pSys_->setScale(ParticleUniverse::Vector3(OgreSystem::OGRE_WORLD_SCALE,
+	pSys_->setScale(ParticleUniverse::Vector3(
+		OgreSystem::OGRE_WORLD_SCALE,
 		OgreSystem::OGRE_WORLD_SCALE,
 		OgreSystem::OGRE_WORLD_SCALE));
+	pSys_->setScaleVelocity(
+		OgreSystem::OGRE_WORLD_SCALE);
 	pSys_->start();
 }
