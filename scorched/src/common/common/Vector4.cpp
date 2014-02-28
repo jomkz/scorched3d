@@ -89,7 +89,7 @@ void Vector4::getRotationMatrix(float *R)
 
 void Vector4::getOpenGLRotationMatrix(float *rotMatrix)
 {
-	static float matrix[12];
+	float matrix[12];
 	getRotationMatrix(matrix);
 
 	rotMatrix[0] = matrix[0];
@@ -128,7 +128,7 @@ void Vector4::Normalize()
 
 void Vector4::getRelativeVector(Vector &r, Vector &p)
 {
-	static float matrix[12];
+	float matrix[12];
 	getRotationMatrix(matrix);
 
 	float *result = r;

@@ -84,11 +84,11 @@ void TanketWeapon::setCurrentWeapon(Accessory *wp)
 	currentWeapon_ = wp;
 }
 
-const char *TanketWeapon::getWeaponString()
+std::string TanketWeapon::getWeaponString()
 {
 	if (!getCurrent()) return "";
 
-	static char buffer[256];
+	char buffer[256];
 	int count = tanket_->getAccessories().getAccessoryCount(getCurrent());
 	snprintf(buffer, 256, ((count>0)?"%s (%i)":"%s (In)"),
 		getCurrent()->getName(), count);

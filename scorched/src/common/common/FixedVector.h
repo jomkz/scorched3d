@@ -179,28 +179,25 @@ public:
 		return v;
 	}
 
-	Vector &asVector()
+	void asVector(Vector &result)
 	{
-		static Vector a[10];
-		static unsigned int count = 0;
-		
-		Vector &b = a[++count % 10];
-		b[0] = V[0].asFloat();
-		b[1] = V[1].asFloat();
-		b[2] = V[2].asFloat();
-		return b;
+		result[0] = V[0].asFloat();
+		result[1] = V[1].asFloat();
+		result[2] = V[2].asFloat();
 	}
 
-	void asVector(Vector &dest)
+	Vector asVector()
 	{
-		dest[0] = V[0].asFloat();
-		dest[1] = V[1].asFloat();
-		dest[2] = V[2].asFloat();
+		Vector result;
+		result[0] = V[0].asFloat();
+		result[1] = V[1].asFloat();
+		result[2] = V[2].asFloat();
+		return result;
 	}
 
-	static FixedVector &fromVector(Vector &vec)
+	static FixedVector fromVector(Vector &vec)
 	{
-		static FixedVector result;
+		FixedVector result;
 		result[0] = fixed::fromFloat(vec[0]);
 		result[1] = fixed::fromFloat(vec[1]);
 		result[2] = fixed::fromFloat(vec[2]);
@@ -279,7 +276,7 @@ public:
 	fixed &operator[](const int m) { DIALOG_ASSERT(m<=2); return V[m]; }
 	fixed const &operator[](const int m) const { DIALOG_ASSERT(m<=2); return V[m]; }
 
-	const char *asQuickString();
+	std::string asQuickString();
 
 	operator fixed*() { return V; }
 	static FixedVector &getNullVector();

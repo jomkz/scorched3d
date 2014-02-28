@@ -445,7 +445,7 @@ bool OptionsGame::writeOptionsToFile(const std::string &filePath, bool allOption
 bool OptionsGame::readOptionsFromFile(const std::string &filePath)
 {
 	std::list<OptionEntry *> saveOptions = 
-		playerTypeOptions_; // Note: The players are also saved
+		playerTypeOptions_; // Note: The players are also loaded
         std::list<OptionEntry *>::iterator itor;
         for (itor = options_.begin();
                 itor != options_.end();

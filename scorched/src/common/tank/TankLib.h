@@ -49,9 +49,9 @@ namespace TankLib
 		RandomGenerator &random,
 		FixedVector &position, FixedVector &shootAt, 
 		fixed &angleXYDegs, fixed &angleYZDegs, fixed &power);
-	FixedVector &getVelocityVector(fixed xy, fixed yz);
-	FixedVector &getGunPosition(fixed xy, fixed yz);
-	FixedVector &getTankGunPosition(FixedVector &tankTurretPosition, fixed xy, fixed yz);
+	void getVelocityVector(FixedVector &result, fixed xy, fixed yz);
+	void getGunPosition(FixedVector &result, fixed xy, fixed yz);
+	void getTankGunPosition(FixedVector &result, FixedVector &tankTurretPosition, fixed xy, fixed yz);
 };
 
 

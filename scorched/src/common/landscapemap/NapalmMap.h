@@ -30,7 +30,7 @@ public:
 	virtual ~NapalmMap();
 
 	void create(int width, int height);
-	fixed &getNapalmHeight(int w, int h);
+	fixed getNapalmHeight(int w, int h);
 
 protected:
 	fixed *entries_;

@@ -119,8 +119,8 @@ public:
 		return (m_nVal >= fixedVal.m_nVal);
 	}
 
-	const char *asString();
-	const char *asQuickString();
+	std::string asString();
+	std::string asQuickString();
 
 	float asFloat()
 	{

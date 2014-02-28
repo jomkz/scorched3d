@@ -80,8 +80,8 @@ public:
 	void resetTotalEarnedStats();
 
 	// Get info as text
-	const char *getTimePlayedString();
-	const char *getScoreString();
+	std::string getTimePlayedString();
+	std::string getScoreString();
 
 	// Serialize the tank
 	bool writeMessage(NamedNetBuffer &buffer);

@@ -18,21 +18,42 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientServerAccessh_INCLUDE__)
-#define __INCLUDE_ClientServerAccessh_INCLUDE__
+#if !defined(__INCLUDE_UIProgressCounterh_INCLUDE__)
+#define __INCLUDE_UIProgressCounterh_INCLUDE__
 
-#include <string>
+#include <common/ProgressCounter.h>
+#include <engine/ThreadCallbackI.h>
 
-class ClientServerAccess 
+class UIProgressThreadCallback : public ThreadCallbackI
 {
 public:
-	static int getIntProperty(const std::string &propertyName);
-	static std::string getStringProperty(const std::string &propertyName);
+	UIProgressThreadCallback(const LangString &op, const float percentage);
+	virtual ~UIProgressThreadCallback();
+
+	// ThreadCallbackI
+	virtual void callbackInvoked();
 
 private:
-	ClientServerAccess();
-	virtual ~ClientServerAccess();
-
+	const LangString op_;
+	const float percentage_;
 };
 
-#endif // __INCLUDE_ClientServerAccessh_INCLUDE__
+class UIProgressCounter : public ProgressCounterI
+{
+public:
+	static ProgressCounter *instance();
+
+	// ProgressCounterI
+	virtual void operationChange(const LangString &op);
+	virtual void progressChange(const LangString &op, const float percentage);
+
+private:
+	static ProgressCounter *instance_;
+
+	UIProgressCounter ();
+	virtual ~UIProgressCounter ();
+
+	time_t lastTime_;
+};
+
+#endif

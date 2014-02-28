@@ -41,6 +41,7 @@
 #include <common/OptionsScorched.h>
 
 static const int deformSize = 3;
+static boost::mutex deformMutex;
 static DeformLandscape::DeformPoints deformMap;
 static bool deformCreated = false;
 
@@ -78,22 +79,27 @@ void Napalm::init()
 {
 	if (!deformCreated)
 	{
-		deformCreated = true;
-
-		Vector center(deformSize + 1, deformSize + 1);
-		for (int a=0; a<(deformSize + 1) * 2; a++)
+		deformMutex.lock();
+		if (!deformCreated)
 		{
-			for (int b=0; b<(deformSize + 1) * 2; b++)
-			{
-				Vector pos(a, b);
-				float dist = (center - pos).Magnitude();
-				dist /= deformSize;
-				dist = 1.0f - S3D_MIN(1.0f, dist);
+			deformCreated = true;
 
-				DIALOG_ASSERT(a < 100 && b < 100);
-				deformMap.map[a][b] = fixed::fromFloat(dist);
+			Vector center(deformSize + 1, deformSize + 1);
+			for (int a=0; a<(deformSize + 1) * 2; a++)
+			{
+				for (int b=0; b<(deformSize + 1) * 2; b++)
+				{
+					Vector pos(a, b);
+					float dist = (center - pos).Magnitude();
+					dist /= deformSize;
+					dist = 1.0f - S3D_MIN(1.0f, dist);
+
+					DIALOG_ASSERT(a < 100 && b < 100);
+					deformMap.map[a][b] = fixed::fromFloat(dist);
+				}
 			}
 		}
+		deformMutex.unlock();
 	}
 
 	edgePoints_.insert(XY_TO_UINT(startX_, startY_));
@@ -524,8 +530,7 @@ void Napalm::simulateDamage()
 	// Store how much each tank is damaged
 	// Keep in a map so we don't need to create multiple
 	// damage actions.  Now we only create one per tank
-	static std::map<unsigned int, fixed> TargetDamageCalc;
-	TargetDamageCalc.clear();
+	std::map<unsigned int, fixed> TargetDamageCalc;
 
 	// Add damage into the damage map for each napalm point that is near to
 	// the tanks

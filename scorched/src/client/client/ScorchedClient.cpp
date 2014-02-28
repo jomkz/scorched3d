@@ -58,7 +58,7 @@ ScorchedClient *ScorchedClient::instance()
 	return instance_;
 }
 
-void ScorchedClient::startClient(ProgressCounter *counter, ThreadCallbackI *endCallback)
+void ScorchedClient::startClient(ProgressCounter *counter)
 {
 	DIALOG_ASSERT(!instance_ && !instanceLock);
 	creationMutex.lock();
@@ -66,7 +66,7 @@ void ScorchedClient::startClient(ProgressCounter *counter, ThreadCallbackI *endC
 	instanceLock = new ScorchedClient;
 	instance_ = instanceLock;
 	instanceLock = 0;
-	clientThread = new boost::thread(ScorchedClient::startClientInternalStatic, instance_, counter, endCallback);
+	clientThread = new boost::thread(ScorchedClient::startClientInternalStatic, instance_, counter);
 	ThreadUtils::setThreadName(clientThread->native_handle(), "ClientThread");
 	creationMutex.unlock();
 }
@@ -130,27 +130,25 @@ Simulator &ScorchedClient::getSimulator()
 	return *clientSimulator_; 
 }
 
-void ScorchedClient::startClientInternalStatic(ScorchedClient *instance, 
-		ProgressCounter *counter, ThreadCallbackI *endCallback)
+void ScorchedClient::startClientInternalStatic(ScorchedClient *instance, ProgressCounter *counter)
 {
 	thread_id = boost::this_thread::get_id();
-	instance->startClientInternal(counter, endCallback);
+	instance->startClientInternal(counter);
 }
 
-void ScorchedClient::startClientInternal(
-	ProgressCounter *counter, ThreadCallbackI *endCallback)
+void ScorchedClient::startClientInternal(ProgressCounter *counter)
 {
 	// Check if we are connecting to a server
-	if (ClientParams::instance()->getConnect()[0])
+	if (!ClientParams::instance()->getConnect().empty())
 	{
 
 	}
 	else if (ClientParams::instance()->getStartCustom() ||
-		ClientParams::instance()->getClientFile()[0])
+		!ClientParams::instance()->getClientFile().empty())
 	{
 
 	}
-	else if (ClientParams::instance()->getSaveFile()[0])
+	else if (!ClientParams::instance()->getSaveFile().empty())
 	{
 		// Or the client saved game
 		if (!S3D::fileExists(ClientParams::instance()->getSaveFile()))
@@ -193,11 +191,12 @@ void ScorchedClient::startClientInternal(
 		ThreadCallbackI *callback = new ThreadCallbackIAdapter<ScorchedClient>(
 			this, &ScorchedClient::serverStartedServerThread);
 
-		if (ClientParams::instance()->getSaveFile()[0])
+		if (!ClientParams::instance()->getSaveFile().empty())
 		{
 			// Load the saved game state (settings)
-			ScorchedServerSettingsSave settings(ClientParams::instance()->getSaveFile());
-			ScorchedServer::startServer(settings, 0, callback);
+			ScorchedServerSettingsSave *settings = 
+				new ScorchedServerSettingsSave(ClientParams::instance()->getSaveFile());
+			ScorchedServer::startServer(settings, counter, callback);
 		}
 		else
 		{
@@ -215,10 +214,11 @@ void ScorchedClient::startClientInternal(
 					clientFile.c_str()));
 			}
 
-			ScorchedServerSettingsOptions settings(clientFile,
+			ScorchedServerSettingsOptions *settings =
+				new ScorchedServerSettingsOptions(clientFile,
 				ClientParams::instance()->getRewriteOptions(),
 				ClientParams::instance()->getWriteFullOptions());
-			ScorchedServer::startServer(settings, 0, callback);
+			ScorchedServer::startServer(settings, counter, callback);
 		}
 	}
 	else

@@ -72,11 +72,10 @@ void XMLNode::addSpecialChars(const std::string &content, std::string &result)
 
 const char *XMLNode::getSpacer(int space)
 {
-	static std::string spacestr;
-	spacestr = "";
+	spacestr_ = "";
 
-	for (int i=0; i<space; i++) spacestr+="\t";
-	return spacestr.c_str();
+	for (int i=0; i<space; i++) spacestr_+="\t";
+	return spacestr_.c_str();
 }
 
 XMLNode::XMLNode(const char *name, const char *content, NodeType type) : 
@@ -136,8 +135,8 @@ XMLNode::XMLNode(const char *name, bool content, NodeType type) :
 XMLNode::XMLNode(const char *name, fixed content, NodeType type) :
 	name_(name), parent_(0), type_(type), useContentNodes_(false)
 {
-	const char *buffer = content.asString();
-	addContent(buffer, (int) strlen(buffer));
+	std::string buffer = content.asString();
+	addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
 }
 
 XMLNode::XMLNode(const char *name, FixedVector &content, NodeType type) :
@@ -150,14 +149,14 @@ XMLNode::XMLNode(const char *name, FixedVector &content, NodeType type) :
 	XMLNode *nodeC = new XMLNode("c");
 	addChild(nodeC);
 
-	const char *buffer = content[0].asString();
-	nodeA->addContent(buffer, (int) strlen(buffer));
+	std::string buffer = content[0].asString();
+	nodeA->addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
 
 	buffer = content[1].asString();
-	nodeB->addContent(buffer, (int) strlen(buffer));
+	nodeB->addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
 
 	buffer = content[2].asString();
-	nodeC->addContent(buffer, (int) strlen(buffer));
+	nodeC->addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
 }
 
 XMLNode::XMLNode(const char *name, FixedVector4 &content, NodeType type) :
@@ -172,17 +171,17 @@ XMLNode::XMLNode(const char *name, FixedVector4 &content, NodeType type) :
 	XMLNode *nodeD = new XMLNode("d");
 	addChild(nodeD);
 
-	const char *buffer = content[0].asString();
-	nodeA->addContent(buffer, (int) strlen(buffer));
+	std::string buffer = content[0].asString();
+	nodeA->addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
 
 	buffer = content[1].asString();
-	nodeB->addContent(buffer, (int) strlen(buffer));
+	nodeB->addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
 
 	buffer = content[2].asString();
-	nodeC->addContent(buffer, (int) strlen(buffer));
+	nodeC->addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
 
 	buffer = content[3].asString();
-	nodeD->addContent(buffer, (int) strlen(buffer));
+	nodeD->addContent(buffer.c_str(), (int) strlen(buffer.c_str()));
 }
 
 XMLNode::XMLNode(const char *name, Vector &content, NodeType type) :
@@ -599,9 +598,7 @@ const char *XMLNode::getContent()
 	if (useContentNodes_ &&
 		getType() == XMLNodeType)
 	{
-		static std::string result;
-
-		result = "";
+		allContext_ = "";
 		std::list<XMLNode *>::iterator itor;
 		for (itor = getChildren().begin();
 			itor != getChildren().end();
@@ -610,10 +607,10 @@ const char *XMLNode::getContent()
 			XMLNode *node = (*itor);
 			if (node->getType() == XMLContentType)
 			{
-				result += node->content_.c_str();
+				allContext_ += node->content_.c_str();
 			}
 		}
-		return result.c_str();
+		return allContext_.c_str();
 	}
 	else
 	{

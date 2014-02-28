@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StdAfx.h"
+#include <engine/ThreadCallback.h>
 
 class Scorched3DC : 
 	public Ogre::FrameListener, 
@@ -12,7 +13,11 @@ public:
 	Scorched3DC();
 	virtual ~Scorched3DC();
 
+	static Scorched3DC *instance();
+
 	bool go();
+
+	ThreadCallback &getUIThreadCallback() { return uiThreadCallback_; }
 
 	// Ogre::FrameListener
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -31,6 +36,8 @@ public:
 	virtual void windowClosed(Ogre::RenderWindow* rw);
 
 protected:
+	static Scorched3DC *instance_;
+	ThreadCallback uiThreadCallback_;
 	bool quit_;
 	Ogre::Root *ogreRoot_;
 	Ogre::RenderWindow* ogreWindow_;
@@ -47,6 +54,7 @@ protected:
 
 	bool quit(const CEGUI::EventArgs &e);
 	bool start(const CEGUI::EventArgs &e);
+	bool join(const CEGUI::EventArgs &e);
 	bool loadPlugin(const Ogre::String &pluginName, const Ogre::String &requiredName);
 	bool createWindow();
 	bool createInput();

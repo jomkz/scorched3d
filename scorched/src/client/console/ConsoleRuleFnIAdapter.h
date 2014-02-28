@@ -29,12 +29,12 @@ class ConsoleRuleFnIBooleanAdapter :
 	public ConsoleRuleFnI
 {
 public:
-	ConsoleRuleFnIBooleanAdapter(const char *name, bool &param);
+	ConsoleRuleFnIBooleanAdapter(const std::string &name, bool &param);
 	virtual ~ConsoleRuleFnIBooleanAdapter();
 
 	// Inherited from ConsoleRuleFnI
-	virtual bool getBoolParam(const char *name);
-	virtual void setBoolParam(const char *name, bool value);
+	virtual bool getBoolParam(const std::string &name);
+	virtual void setBoolParam(const std::string &name, bool value);
 
 protected:
 	ConsoleRuleFn *readRule_, *writeRule_;
@@ -47,12 +47,12 @@ class ConsoleRuleFnINumberAdapter :
 	public ConsoleRuleFnI
 {
 public:
-	ConsoleRuleFnINumberAdapter(const char *name, float &param);
+	ConsoleRuleFnINumberAdapter(const std::string &name, float &param);
 	virtual ~ConsoleRuleFnINumberAdapter();
 
 	// Inherited from ConsoleRuleFnI
-	virtual float getNumberParam(const char *name);
-	virtual void  setNumberParam(const char *name, float value);
+	virtual float getNumberParam(const std::string &name);
+	virtual void  setNumberParam(const std::string &name, float value);
 
 protected:
 	ConsoleRuleFn *readRule_, *writeRule_;
@@ -69,12 +69,12 @@ public:
 	virtual ~ConsoleRuleFnIOptionsAdapter();
 
 	// Inherited from ConsoleRuleFnI
-	virtual bool getBoolParam(const char *name);
-	virtual void setBoolParam(const char *name, bool value);
-	virtual float getNumberParam(const char *name);
-	virtual void  setNumberParam(const char *name, float value);
-	virtual const char *getStringParam(const char *name);
-	virtual void setStringParam(const char *name, const char *value);
+	virtual bool getBoolParam(const std::string &name);
+	virtual void setBoolParam(const std::string &name, bool value);
+	virtual float getNumberParam(const std::string &name);
+	virtual void  setNumberParam(const std::string &name, float value);
+	virtual std::string getStringParam(const std::string &name);
+	virtual void setStringParam(const std::string &name, const std::string &value);
 
 protected:
 	OptionEntry &entry_;

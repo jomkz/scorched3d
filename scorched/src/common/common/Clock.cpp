@@ -40,7 +40,7 @@ unsigned int Clock::getTicksDifference()
 	boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
 	boost::posix_time::time_duration diff = now - lastTime_;
 
-	unsigned int timeDiff = (unsigned int) diff.total_microseconds();
+	unsigned int timeDiff = (unsigned int) diff.total_milliseconds();
 	if (timeDiff == 0) timeDiff = 1;
 
 	lastTime_ = now;

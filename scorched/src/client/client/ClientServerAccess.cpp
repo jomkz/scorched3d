@@ -60,13 +60,13 @@ int ClientServerAccess::getIntProperty(const std::string &propertyName)
 	return callback.result_;
 }
 
-const char *ClientServerAccess::getStringProperty(const std::string &propertyName)
+std::string ClientServerAccess::getStringProperty(const std::string &propertyName)
 {
 	class ClientServerOptionsAccessStr : public ThreadCallbackI
 	{
 	public:
 		ClientServerOptionsAccessStr(const std::string &propertyName) : 
-			propertyName_(propertyName), result_(0)
+			propertyName_(propertyName), result_("")
 		{
 
 		}
@@ -81,7 +81,7 @@ const char *ClientServerAccess::getStringProperty(const std::string &propertyNam
 		}
 
 		std::string propertyName_;
-		const char *result_;
+		std::string result_;
 	};
 	ClientServerOptionsAccessStr callback(propertyName);
 	ScorchedServer::getThreadCallback().addCallbackSync(callback);

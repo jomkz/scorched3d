@@ -37,6 +37,7 @@
 #include <target/TargetContainer.h>
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
+#include <scorched3dc/UIProgressCounter.h>
 
 ClientStateLoadLevel::ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler) : initialLevel_(true)
 {
@@ -106,11 +107,10 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 	}
 
 	// Generate new landscape
-	ProgressCounter counter;
 	ScorchedClient::instance()->getLandscapeMaps().generateMaps(
 		ScorchedClient::instance()->getContext(),
 		message.getLandscapeDefinition(),
-		&counter); // No events
+		UIProgressCounter::instance()); // No events
 
 	// Reset and initialize simulator and
 	ScorchedClient::instance()->getClientSimulator().newLevel();

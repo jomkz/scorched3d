@@ -625,10 +625,13 @@ bool TankAICurrentMove::makeBurriedShot(Tanket *tanket, Tanket *targetTanket,
 		100000, xy, yz, power);
 
 	// Check if this shot is burried
+	FixedVector tankTurretPosition, tankGunPosition;
+	tanket->getLife().getTankTurretPosition(tankTurretPosition);
+	TankLib::getTankGunPosition(tankGunPosition, tankTurretPosition, 
+			tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ());
 	if (TankLib::intersection(
 		ScorchedServer::instance()->getContext(), 
-		TankLib::getTankGunPosition(tanket->getLife().getTankTurretPosition(), 
-			tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ()),
+		tankGunPosition,
 		xy, yz, power, 2))
 	{
 		if (TankAI::getTankAILogging())

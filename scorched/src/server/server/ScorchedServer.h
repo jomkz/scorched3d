@@ -22,7 +22,6 @@
 #define __INCLUDE_ScorchedServerh_INCLUDE__
 
 #include <engine/ScorchedContext.h>
-#include <server/ScorchedServerSettings.h>
 #include <common/fixed.h>
 #include <string>
 
@@ -47,6 +46,7 @@ class ServerChannelManager;
 class ServerSyncCheck;
 class ServerMessageHandler;
 class ServerFileServer;
+class ScorchedServerSettings;
 class EventHandlerDataBase;
 class ThreadCallbackI;
 
@@ -55,7 +55,7 @@ class ScorchedServer : public ScorchedContext
 public:
 	static ScorchedServer *instance();
 
-	static void startServer(const ScorchedServerSettings &settings, 
+	static void startServer(ScorchedServerSettings *settings, 
 		ProgressCounter *counter, ThreadCallbackI *endCallback);
 	static void stopServer();
 
@@ -111,9 +111,9 @@ protected:
 
 	void checkSettings();
 	static void startServerInternalStatic(ScorchedServer *instance, 
-		const ScorchedServerSettings &settings, 
+		ScorchedServerSettings *settings, 
 		ProgressCounter *counter, ThreadCallbackI *endCallback);
-	void startServerInternal(const ScorchedServerSettings &settings, ProgressCounter *counter, ThreadCallbackI *endCallback);
+	void startServerInternal(ScorchedServerSettings *settings, ProgressCounter *counter, ThreadCallbackI *endCallback);
 	bool serverLoop(fixed timeDifference);
 
 private:

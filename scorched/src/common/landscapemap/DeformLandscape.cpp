@@ -117,7 +117,10 @@ void DeformLandscape::deformLandscape(
 				radius.asQuickString(), (down?"Down":"Up")));
 	}
 
-	static DeformPoints deformMap;
+	static DeformPoints serverDeformMap;
+	static DeformPoints clientDeformMap;
+	DeformPoints &deformMap = context.getServerMode()?serverDeformMap:clientDeformMap;
+
 	if (down && context.getLandscapeMaps().getRoofMaps().getRoofOn())
 	{
 		bool hits = deformRoofInternal(context, pos, radius, depthScale, true);

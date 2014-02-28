@@ -259,12 +259,12 @@ void ServerConnectAuthHandler::processMessageInternal(
 		return;
 	}
 
-	const char *savedGame = "";
+	std::string savedGame = "";
 #ifndef S3D_SERVER
 	savedGame = ClientParams::instance()->getSaveFile();
 #endif
 
-	if (savedGame[0])
+	if (!savedGame.empty())
 	{
 		SaveGame::loadTargets(savedGame);
 		ScorchedServer::instance()->getServerState().setState(ServerState::ServerNewLevelState);

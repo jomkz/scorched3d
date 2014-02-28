@@ -258,8 +258,8 @@ void WeaponAimed::fireAimedWeapon(ScorchedContext &context,
 		if (invert) angleYZDegs += 180;
 
 		// Create the shot
-		FixedVector &velocity = TankLib::getVelocityVector(
-			angleXYDegs, angleYZDegs);
+		FixedVector velocity;
+		TankLib::getVelocityVector(velocity, angleXYDegs, angleYZDegs);
 		velocity *= power;
 
 		aimedWeapon_->fire(

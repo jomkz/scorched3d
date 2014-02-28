@@ -33,6 +33,7 @@
 #include <server/ServerSyncCheck.h>
 #include <server/ServerMessageHandler.h>
 #include <server/ServerFileServer.h>
+#include <server/ScorchedServerSettings.h>
 #include <common/OptionsScorched.h>
 #include <common/OptionsTransient.h>
 #include <common/Logger.h>
@@ -78,7 +79,7 @@ ScorchedServer *ScorchedServer::instance()
 	return instance_;
 }
 
-void ScorchedServer::startServer(const ScorchedServerSettings &settings, ProgressCounter *counter, ThreadCallbackI *endCallback)
+void ScorchedServer::startServer(ScorchedServerSettings *settings, ProgressCounter *counter, ThreadCallbackI *endCallback)
 {
 	DIALOG_ASSERT(!instance_ && !instanceLock);
 	creationMutex.lock();
@@ -177,43 +178,43 @@ ServerConnectAuthHandler &ScorchedServer::getServerConnectAuthHandler()
 }
 
 void ScorchedServer::startServerInternalStatic(ScorchedServer *instance, 
-		const ScorchedServerSettings &settings, 
+		ScorchedServerSettings *settings, 
 		ProgressCounter *counter, ThreadCallbackI *endCallback)
 {
 	thread_id = boost::this_thread::get_id();
 	instance->startServerInternal(settings, counter, endCallback);
 }
 
-void ScorchedServer::startServerInternal(const ScorchedServerSettings &settings, 
+void ScorchedServer::startServerInternal(ScorchedServerSettings *settings, 
 	ProgressCounter *counter, ThreadCallbackI *endCallback)
 {
 	std::string startTime = S3D::getStartTime();
 	Logger::log(S3D::formatStringBuffer("Server started : %s", startTime.c_str()));
 
-	std::string settingsType = ((ScorchedServerSettings &) settings).type();
+	std::string settingsType = settings->type();
 	if (settingsType == "FILE")
 	{
-		ScorchedServerSettingsOptions &options = (ScorchedServerSettingsOptions &) settings;
+		ScorchedServerSettingsOptions *options = (ScorchedServerSettingsOptions *) settings;
 
 		// Load options
-		getOptionsGame().getMainOptions().readOptionsFromFile(options.settingsFile_);
-		if (options.rewriteOptions_)
+		getOptionsGame().getMainOptions().readOptionsFromFile(options->settingsFile_);
+		if (options->rewriteOptions_)
 		{
 			getOptionsGame().getMainOptions().writeOptionsToFile(
-				options.settingsFile_,
-				options.writeFullOptions_);
+				options->settingsFile_,
+				options->writeFullOptions_);
 		}
 	}
 	else if (settingsType == "SAVE")
 	{
-		ScorchedServerSettingsSave &options = (ScorchedServerSettingsSave &) settings;
+		ScorchedServerSettingsSave *options = (ScorchedServerSettingsSave *) settings;
 
 		// Load the saved game state (settings)
-		if (!SaveGame::loadState(options.saveFile_))
+		if (!SaveGame::loadState(options->saveFile_))
 		{
 			S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
 				"Cannot load save file \"%s\".",
-				options.saveFile_.c_str()), 
+				options->saveFile_.c_str()), 
 				false);			
 		}
 	}
@@ -221,6 +222,8 @@ void ScorchedServer::startServerInternal(const ScorchedServerSettings &settings,
 	{
 		S3D::dialogExit("Scorched3D", "ScorchedServer::startServerInternal - Unknown settings type");
 	}
+	delete settings;
+	settings = 0;
 
 	// Setup the message handling classes
 #ifndef S3D_SERVER

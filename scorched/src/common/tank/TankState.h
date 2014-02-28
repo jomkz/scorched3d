@@ -68,8 +68,8 @@ public:
 	void setNewlyJoined(bool n) { newlyJoined_ = n; }
 	unsigned int getStateChangeCount() { return stateChangeCount_; }
 	
-	const char *getStateString();
-	const char *getSmallStateString();
+	std::string getStateString();
+	std::string getSmallStateString();
 	LangString &getSmallStateLangString();
 
 	// Serialize the tank

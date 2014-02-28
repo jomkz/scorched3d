@@ -651,7 +651,9 @@ bool PhysicsParticleObject::getTargetCollision(CollisionInfo &collision, Target 
 	// Check we are in this target
 	if (target->getLife().collision(position_))
 	{
-		collision.normal = (position_ - target->getLife().getCenterPosition()).Normalize();	
+		FixedVector centerPosition;
+		target->getLife().getCenterPosition(centerPosition);
+		collision.normal = (position_ - centerPosition).Normalize();	
 		collision.deflectFactor = 1;
 		collision.collisionId = CollisionIdTarget;
 		return true;
@@ -677,7 +679,9 @@ bool PhysicsParticleObject::getTargetBounceCollision(CollisionInfo &collision, T
 		if (target->getLife().collision(position_) ||
 			target->getLife().collisionDistance(position_) < 1)
 		{
-			collision.normal = (position_ - target->getLife().getCenterPosition()).Normalize();	
+			FixedVector centerPosition;
+			target->getLife().getCenterPosition(centerPosition);
+			collision.normal = (position_ - centerPosition).Normalize();	
 			collision.deflectFactor = 1;
 			collision.collisionId = CollisionIdTarget;
 			return true;

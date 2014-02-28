@@ -21,6 +21,7 @@
 #include <common/Defines.h>
 #include <engine/ModFileEntryLoader.h>
 #include <engine/ModFiles.h>
+#include <net/NetBufferPool.h>
 
 bool ModFileEntryLoader::writeModFile(NetBuffer &buffer, 
 	const std::string &fileName, const std::string &modName)
@@ -93,15 +94,15 @@ bool ModFileEntryLoader::loadModFile(NetBuffer &buffer, const std::string &filen
 		if (!file) return false;
 		int newSize = 0;
 		unsigned char strbuffer[256];
-		static NetBuffer tmpBuffer;
-		tmpBuffer.reset();
+		NetBuffer *tmpBuffer = NetBufferPool::instance()->getFromPool();
+		tmpBuffer->reset();
 		do
 		{
 			newSize = (int) fread(strbuffer, 
 				sizeof(unsigned char), 
 				sizeof(buffer), 
 				file);
-			tmpBuffer.addDataToBuffer(strbuffer, newSize);
+			tmpBuffer->addDataToBuffer(strbuffer, newSize);
 		}
 		while (newSize > 0);
 		fclose(file);
@@ -109,22 +110,23 @@ bool ModFileEntryLoader::loadModFile(NetBuffer &buffer, const std::string &filen
 		if (!translate)
 		{
 			buffer.addDataToBuffer(
-				tmpBuffer.getBuffer(),
-				tmpBuffer.getBufferUsed());
+				tmpBuffer->getBuffer(),
+				tmpBuffer->getBufferUsed());
 		}
 		else
 		{
-			for (unsigned i=0; i<tmpBuffer.getBufferUsed(); i++)
+			for (unsigned i=0; i<tmpBuffer->getBufferUsed(); i++)
 			{
-				if (i >= tmpBuffer.getBufferUsed() - 1 ||
-					tmpBuffer.getBuffer()[i] != 13 ||
-					tmpBuffer.getBuffer()[i+1] != 10)
+				if (i >= tmpBuffer->getBufferUsed() - 1 ||
+					tmpBuffer->getBuffer()[i] != 13 ||
+					tmpBuffer->getBuffer()[i+1] != 10)
 				{	
 					buffer.addDataToBuffer(
-						&tmpBuffer.getBuffer()[i] , 1);
+						&tmpBuffer->getBuffer()[i] , 1);
 				}
 			}
 		}
+		NetBufferPool::instance()->addToPool(tmpBuffer);
 	}
 
 	return true;

@@ -28,7 +28,7 @@ class ServerParams : public OptionsParameters
 public:
 	static ServerParams *instance();
 
-	const char *getServerFile() { return server_.getValue(); }
+	std::string getServerFile() { return server_.getValue(); }
 	bool getHideWindow() { return hideWindow_.getValue(); }
 	bool getServerCustom() { return startCustom_.getValue(); }
 	bool getExitOnSyncFailure() { return exitOnSyncFailure_.getValue(); }

@@ -40,7 +40,7 @@ public:
 	void setTargetPositionAndRotation(FixedVector &position, fixed rotation);
 	void setTargetPosition(FixedVector &position);
 	FixedVector &getTargetPosition() { return targetPosition_; }
-	FixedVector &getCenterPosition();
+	void getCenterPosition(FixedVector &result);
 	void setSize(FixedVector &size);
 	FixedVector &getSize() { return size_; }
 	FixedVector4 &getQuaternion() { return quaternion_; }
@@ -48,7 +48,7 @@ public:
 	void setRotation(fixed rotation);
 	FixedVector &getVelocity() { return velocity_; }
 	void setVelocity(FixedVector &velocity) { velocity_ = velocity; }
-	FixedVector &getTankTurretPosition();
+	void getTankTurretPosition(FixedVector &tankTurretPosition);
 
 	void setTarget(Target *target) { target_ = target; }
 	void setBoundingSphere(bool sphereGeom);
@@ -60,7 +60,7 @@ public:
 	Vector &getFloatAabbSize() { return floatAabbSize_; }
 	float *getFloatRotMatrix() { return floatRotMatrix_; }
 	float getFloatBoundingSize() { return floatBoundingSize_; }
-	Vector &getFloatCenterPosition();
+	void getFloatCenterPosition(Vector &resykt);
 
 	// Collision
 	fixed collisionDistance(FixedVector &position);

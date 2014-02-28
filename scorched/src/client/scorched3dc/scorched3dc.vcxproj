@@ -423,6 +423,7 @@
     <ClCompile Include="..\client\ClientConnectionRejectHandler.cpp" />
     <ClCompile Include="..\client\ClientGameStoppedHandler.cpp" />
     <ClCompile Include="..\client\ClientHandlers.cpp" />
+    <ClCompile Include="..\client\ClientJoinGameThreadCallback.cpp" />
     <ClCompile Include="..\client\ClientMessageHandler.cpp" />
     <ClCompile Include="..\client\ClientOperationHandler.cpp" />
     <ClCompile Include="..\client\ClientOptions.cpp" />
@@ -451,6 +452,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UIProgressCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\actions\Action.h" />
@@ -870,6 +872,7 @@
     <ClInclude Include="..\client\ClientConnectionRejectHandler.h" />
     <ClInclude Include="..\client\ClientGameStoppedHandler.h" />
     <ClInclude Include="..\client\ClientHandlers.h" />
+    <ClInclude Include="..\client\ClientJoinGameThreadCallback.h" />
     <ClInclude Include="..\client\ClientMessageHandler.h" />
     <ClInclude Include="..\client\ClientOperationHandler.h" />
     <ClInclude Include="..\client\ClientOptions.h" />
@@ -894,6 +897,7 @@
     <ClInclude Include="..\console\ConsoleRules.h" />
     <ClInclude Include="Scorched3DC.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UIProgressCounter.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F27B2892-60F6-40E6-81AA-953B53D433B7}</ProjectGuid>

@@ -50,12 +50,15 @@
 #endif
 
 unsigned int TankAddSimAction::TankAddSimActionCount = 0;
+static boost::mutex TankAddSimActionCountMutex;
 
 REGISTER_CLASS_SOURCE(TankAddSimAction);
 
 TankAddSimAction::TankAddSimAction()
 {
+	TankAddSimActionCountMutex.lock();
 	TankAddSimActionCount++;
+	TankAddSimActionCountMutex.unlock();
 }
 
 TankAddSimAction::TankAddSimAction(
@@ -67,12 +70,16 @@ TankAddSimAction::TankAddSimAction(
 	uniqueId_(uniqueId), sUID_(sUID), hostDesc_(hostDesc),
 	ipAddress_(ipAddress), aiName_(aiName), playerName_(playerName)
 {
+	TankAddSimActionCountMutex.lock();
 	TankAddSimActionCount++;
+	TankAddSimActionCountMutex.unlock();
 }
 
 TankAddSimAction::~TankAddSimAction()
 {
+	TankAddSimActionCountMutex.lock();
 	TankAddSimActionCount--;
+	TankAddSimActionCountMutex.unlock();
 }
 
 bool TankAddSimAction::invokeAction(ScorchedContext &context)

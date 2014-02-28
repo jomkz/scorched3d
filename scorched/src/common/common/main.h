@@ -64,8 +64,8 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 	{
 		OptionEntryString *str = (OptionEntryString *) *nonParamItor;
 		aParser.addNonParamEntry(
-			(char *) str->getName(), str, 
-			(char *) str->getDescription());
+			str->getName(), str, 
+			str->getDescription());
 	}
 	if (!aParser.parse(argc, argv)) exit(64);
 	S3D::setSettingsDir(params.getSettingsDir());

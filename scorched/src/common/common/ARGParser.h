@@ -59,15 +59,15 @@ public:
 
 	bool parse(const char *lpCmdLine);
 	bool parse(int argc,char *argv[]);
-	void addEntry(char *cmd, char **destStr, char *help = "");
-	void addEntry(char *cmd, int *destI, char *help = "");
-	void addEntry(char *cmd, bool *destB, char *help = "");
+	void addEntry(const std::string &cmd, char **destStr, const std::string &help = "");
+	void addEntry(const std::string &cmd, int *destI, const std::string &help = "");
+	void addEntry(const std::string &cmd, bool *destB, const std::string &help = "");
 
-	void addEntry(char *cmd, ARGParserBoolI *destBool, char *help = "");
-	void addEntry(char *cmd, ARGParserIntI *destInt, char *help = "");
-	void addEntry(char *cmd, ARGParserStringI *destString, char *help = "");
+	void addEntry(const std::string &cmd, ARGParserBoolI *destBool, const std::string &help = "");
+	void addEntry(const std::string &cmd, ARGParserIntI *destInt, const std::string &help = "");
+	void addEntry(const std::string &cmd, ARGParserStringI *destString, const std::string &help = "");
 
-	void addNonParamEntry(char *cmd, ARGParserStringI *destString, char *help = "");
+	void addNonParamEntry(const std::string &cmd, ARGParserStringI *destString, const std::string &help = "");
 
 	void showArgs(const char *topString = NULL);
 
@@ -80,7 +80,7 @@ protected:
 			  char **destCArg = 0,
 			  int *destIArg = 0,
 			  bool *destBArg = 0,
-			  char *helpArg = "");
+			  const std::string &helpArg = "");
 
 		ARGParserBoolI *destBool;
 		ARGParserIntI *destInt;
@@ -93,7 +93,7 @@ protected:
 
 	std::map<std::string, Entry> argMap_;
 	std::map<std::string, Entry> nonParamMap_;
-	void addNewEntry(const char *cmd, ARGParser::Entry &entry);
+	void addNewEntry(const std::string &cmd, ARGParser::Entry &entry);
 	bool parseLineIntoStrings(const char *line, std::list<std::string> &cmdLine);
 	bool parseArg(ARGParser::Entry &newEntry, std::list<std::string> &cmdLine);
 };

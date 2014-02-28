@@ -62,7 +62,7 @@ class Console;
 class ConsoleRule
 {
 public:
-	ConsoleRule(const char *name, 
+	ConsoleRule(const std::string &name, 
 		const std::vector<ConsoleRuleParam> &params,
 		unsigned int userData = 0);
 	virtual ~ConsoleRule();
@@ -76,7 +76,7 @@ public:
 	std::string toString(std::vector<ConsoleRuleValue> &values);
 	static std::string valuesToString(std::vector<ConsoleRuleValue> &values);
 
-	const char *getName() { return name_.c_str(); }
+	std::string getName() { return name_; }
 	std::vector<ConsoleRuleParam> &getParams() { return params_; }
 	unsigned int getUserData() { return userData_; }
 

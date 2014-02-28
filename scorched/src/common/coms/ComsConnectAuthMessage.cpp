@@ -92,7 +92,7 @@ const char *ComsConnectAuthMessage::getValue(const char *name)
 	return (*itor).second.c_str();
 }
 
-void ComsConnectAuthMessage::setValue(const char *name, const char *value)
+void ComsConnectAuthMessage::setValue(const std::string &name, const std::string &value)
 {
 	values_[name] = value;
 }

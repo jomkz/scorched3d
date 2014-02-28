@@ -1383,6 +1383,12 @@
     <ClCompile Include="..\..\common\common\ThreadUtils.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="UIProgressCounter.cpp">
+      <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\client\ClientJoinGameThreadCallback.cpp">
+      <Filter>client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2707,6 +2713,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\common\ThreadUtils.h">
       <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="UIProgressCounter.h">
+      <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\client\ClientJoinGameThreadCallback.h">
+      <Filter>client</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

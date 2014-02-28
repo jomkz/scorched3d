@@ -153,7 +153,7 @@ bool OptionsScorched::commitChanges()
 		OptionEntry *entry = *itor;
 		OptionEntry *otherentry = *otheritor;
 
-		DIALOG_ASSERT(0 == strcmp(entry->getName(), otherentry->getName()));
+		DIALOG_ASSERT(entry->getName() == otherentry->getName());
 
 		std::string str = entry->getValueAsString();
 		std::string otherstr = otherentry->getValueAsString();

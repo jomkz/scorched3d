@@ -42,11 +42,11 @@ public:
 	ComsConnectAuthMessage();
 	virtual ~ComsConnectAuthMessage();
 
-	void setUserName(const char *username) { setValue("username", username); }
-	void setPassword(const char *password) { setValue("password", password); }
-	void setUniqueId(const char *uid) { setValue("uid", uid); }
-	void setSUI(const char *SUId) { setValue("SUId", SUId); }
-	void setHostDesc(const char *host) { setValue("host", host); }
+	void setUserName(const std::string &username) { setValue("username", username); }
+	void setPassword(const std::string &password) { setValue("password", password); }
+	void setUniqueId(const std::string &uid) { setValue("uid", uid); }
+	void setSUI(const std::string &SUId) { setValue("SUId", SUId); }
+	void setHostDesc(const std::string &host) { setValue("host", host); }
 	void setCompatabilityVer(unsigned int settingsver);
 	void setNoPlayers(unsigned int players);
 
@@ -67,7 +67,7 @@ public:
 protected:
 	std::map<std::string, std::string> values_;
 
-	void setValue(const char *name, const char *value);
+	void setValue(const std::string &name, const std::string &value);
 	const char *getValue(const char *name);
 
 private:

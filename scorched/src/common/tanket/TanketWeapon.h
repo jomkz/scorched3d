@@ -53,7 +53,7 @@ public:
 
 	// Change the currently selected weapon
 	Accessory *getCurrent();
-	const char *getWeaponString();
+	std::string getWeaponString();
 
 protected:
 	Accessory *currentWeapon_;

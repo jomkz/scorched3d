@@ -24,8 +24,6 @@
 #include <stdio.h>
 #include <zlib.h>
 
-static NetBuffer tmpBuffer;
-
 TankAvatar::TankAvatar()
 {
 	file_ = new NetBuffer();
@@ -53,6 +51,7 @@ void TankAvatar::clear()
 
 bool TankAvatar::readMessage(NetBufferReader &reader)
 {
+	NetBuffer tmpBuffer;
 	std::string name;
 	if (!reader.getFromBuffer(name)) return false;
 	if (!reader.getFromBuffer(tmpBuffer)) return false;
@@ -66,7 +65,7 @@ bool TankAvatar::loadFromFile(const std::string &fileName)
 	if (in)
 	{
 		name_ = fileName;
-		tmpBuffer.reset();
+		NetBuffer tmpBuffer;
 		unsigned char readBuf[512];
 		while (unsigned int size = (unsigned int) fread(readBuf, sizeof(unsigned char), 512, in))
 		{

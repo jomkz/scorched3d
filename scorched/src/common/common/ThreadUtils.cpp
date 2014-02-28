@@ -48,7 +48,7 @@ static void _SetThreadName(boost::thread::native_handle_type threadHandle, const
     }
 }
 #else
-static void _SetThreadName(DWORD threadId, const char* threadName) {
+static void _SetThreadName(boost::thread::native_handle_type threadHandle, const char* threadName) {
 }
 #endif
 

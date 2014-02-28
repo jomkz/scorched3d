@@ -110,9 +110,9 @@ void TankAIAimGuesser::refineShot(Tanket *tanket,
 	Vector &currentPos, Vector &wantedPos)
 {
 	// Get the used velocity
-	FixedVector shotVelocity = 
-		TankLib::getVelocityVector(tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ()) *
-		(tanket->getShotInfo().getPower() + 1);
+	FixedVector shotVelocity;
+	TankLib::getVelocityVector(shotVelocity, tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ());
+	shotVelocity *=	(tanket->getShotInfo().getPower() + 1);
 
 	// Figure out how much the last shot missed by
 	Vector missedBy = wantedPos - currentPos;
@@ -162,9 +162,13 @@ void TankAIAimGuesser::getCurrentGuess(Tanket *tanket)
 	context_.getOptionsGame().getMainOptions().
 		getActionSyncCheckEntry().setValue(false);
 
-	FixedVector shotVelocity = TankLib::getVelocityVector(tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ()) *
-		(tanket->getShotInfo().getPower() + 1);
-	FixedVector shotPosition = TankLib::getTankGunPosition(tanket->getLife().getTankTurretPosition(),
+	FixedVector shotVelocity;
+	TankLib::getVelocityVector(shotVelocity, tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ());
+	shotVelocity *=	(tanket->getShotInfo().getPower() + 1);
+	FixedVector tankTurretPosition;
+	tanket->getLife().getTankTurretPosition(tankTurretPosition);
+	FixedVector shotPosition;
+	TankLib::getTankGunPosition(shotPosition, tankTurretPosition,
 		tanket->getShotInfo().getRotationGunXY(), tanket->getShotInfo().getRotationGunYZ());
 
 	PhysicsParticleObject particleObject;

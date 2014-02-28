@@ -22,8 +22,6 @@
 #include <weapons/AccessoryStore.h>
 #include <common/Defines.h>
 
-std::set<Weapon *> WeaponInvokeWeapon::weaponStack_;
-
 REGISTER_ACCESSORY_SOURCE(WeaponInvokeWeapon);
 
 WeaponInvokeWeapon::WeaponInvokeWeapon() :
@@ -64,14 +62,15 @@ bool WeaponInvokeWeapon::parseXML(AccessoryCreateContext &context, XMLNode *acce
 void WeaponInvokeWeapon::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-	if (weaponStack_.find(invokeWeapon_) != weaponStack_.end())
+	std::set<Weapon *> &weaponStack = weaponContext.getInternalContext().getWeaponStack();
+	if (weaponStack.find(invokeWeapon_) != weaponStack.end())
 	{
 		S3D::dialogExit("Scorched3D", S3D::formatStringBuffer(
 			"WeaponInvokeWeapon recursive called for weapon %s",
 			invokeWeapon_->getParent()->getName()));
 	}
     
-	weaponStack_.insert(invokeWeapon_);
+	weaponStack.insert(invokeWeapon_);
 	invokeWeapon_->fire(context, weaponContext, position, velocity);
-	weaponStack_.erase(invokeWeapon_);
+	weaponStack.erase(invokeWeapon_);
 }

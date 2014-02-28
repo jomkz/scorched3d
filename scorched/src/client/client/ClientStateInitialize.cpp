@@ -30,7 +30,6 @@
 #include <client/ClientOptions.h>
 #include <common/DefinesAssert.h>
 #include <common/DefinesString.h>
-#include <common/ProgressCounter.h>
 #include <common/OptionsGame.h>
 #include <common/OptionsScorched.h>
 #include <common/ThreadUtils.h>
@@ -51,7 +50,6 @@
 #include <net/NetServerTCP3.h>
 #include <net/NetLoopBack.h>
 #include <server/ScorchedServer.h>
-#include <server/ScorchedServerSettings.h>
 #include <server/ServerMain.h>
 #include <target/TargetContainer.h>
 #include <tank/TankModelStore.h>
@@ -59,6 +57,8 @@
 #include <tanket/TanketTypes.h>
 #include <weapons/AccessoryStore.h>
 #include <landscapedef/LandscapeDefinitions.h>
+#include <scorched3dc/UIProgressCounter.h>
+#include <lang/LangResource.h>
 
 ClientStateInitialize::ClientStateInitialize(ComsMessageHandler &comsMessageHandler) :
 	remoteConnectionThread_(0), totalBytes_(0)
@@ -104,20 +104,16 @@ void ClientStateInitialize::getHost(std::string &host, int &port)
 {
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		const char *serverName = ClientParams::instance()->getConnect();
-		host = serverName;
+		host = ClientParams::instance()->getConnect();
 		port = S3D::ScorchedPort;
 
-		char *colon = strchr((char *)serverName, ':');
+		char *colon = strchr((char *)host.c_str(), ':');
 		if (colon) 
 		{
 			char *stop;
 			*colon = '\0';
 			colon++;
 			port = strtol(colon, &stop, 10);
-			host = serverName;
-			colon--;
-			*colon = ':';
 		}	
 	}
 	else
@@ -200,15 +196,15 @@ void ClientStateInitialize::sendAuth()
 	// Check the number of players that are connecting
 	unsigned int noPlayers = 1;
 	if (!ClientParams::instance()->getConnectedToServer() &&
-		!ClientParams::instance()->getSaveFile()[0])
+		ClientParams::instance()->getSaveFile().empty())
 	{
 		int maxComputerAIs = ClientServerAccess::getIntProperty("NumberOfPlayers");
 		noPlayers = 0;
 		for (int i=0; i<maxComputerAIs; i++)
 		{
-			const char *playerType = ClientServerAccess::getStringProperty(
+			std::string playerType = ClientServerAccess::getStringProperty(
 				S3D::formatStringBuffer("PlayerType%i", (i+1)));
-			if (0 == stricmp(playerType, "Human"))
+			if (0 == stricmp(playerType.c_str(), "Human"))
 			{
 				noPlayers++;
 			}
@@ -218,8 +214,8 @@ void ClientStateInitialize::sendAuth()
 	ComsConnectAuthMessage connectMessage;
 	connectMessage.setUserName(ClientParams::instance()->getUserName());
 	connectMessage.setPassword(ClientParams::instance()->getPassword());
-	connectMessage.setUniqueId(uniqueId.c_str());
-	connectMessage.setSUI(SUI.c_str());
+	connectMessage.setUniqueId(uniqueId);
+	connectMessage.setSUI(SUI);
 	connectMessage.setHostDesc(OptionsDisplay::instance()->getHostDescription());
 	connectMessage.setNoPlayers(noPlayers);
 	connectMessage.setCompatabilityVer((unsigned int) OptionsDisplay::instance()->getOptions().size());
@@ -263,12 +259,9 @@ bool ClientStateInitialize::processConnectAcceptMessage(
 	// the server is using.
 	if (ClientParams::instance()->getConnectedToServer())
 	{
-		ProgressCounter progressCounter;
-		progressCounter.setNewPercentage(0.0f);
-
 		if (!ScorchedClient::instance()->getModFiles().loadModFiles(
 			ScorchedClient::instance()->getOptionsGame().getMod(), true,
-			&progressCounter))
+			UIProgressCounter::instance()))
 		{
 			S3D::dialogMessage("ModFiles", 
 				S3D::formatStringBuffer("Failed to load mod \"%s\"",
@@ -347,12 +340,10 @@ bool ClientStateInitialize::processFileMessage(
 			if (doneBytes > 0) {
 				percentage = (unsigned int)(((doneBytes / 1024) * 100) / (totalBytes_ / 1024));
 			}
-			/*
-			TODO
-			ProgressDialog::instance()->progressChange(
-				LANG_RESOURCE_3("DOWNLOADING_FILE", "Downloading mod, {0}% {1}/{2} KB", 
-				percentage, (doneBytes / 1024), (totalBytes_ / 1024)), float(percentage));
-			*/
+			UIProgressCounter::instance()->setNewOp(
+				LANG_RESOURCE_3("DOWNLOADING_FILE", "Downloading mod, {0}% {1}/{2} KB",
+				percentage, (doneBytes / 1024), (totalBytes_ / 1024)));
+			UIProgressCounter::instance()->setNewPercentage(float(percentage));
 
 			// Read the size
 			unsigned int uncompressedSize = 0;
@@ -456,16 +447,13 @@ bool ClientStateInitialize::processInitializeModMessage(
 
 bool ClientStateInitialize::initializeMod()
 {
-	ProgressCounter progressCounter;
-	progressCounter.setNewPercentage(0.0f);
-
 	// Re-load the tank names/sayings
 	ScorchedClient::instance()->getTankAIStrings().load();
 
 	// Load the accessory files
 	if (!ScorchedClient::instance()->getAccessoryStore().parseFile(
 		ScorchedClient::instance()->getContext(),
-		&progressCounter)) return false;
+		UIProgressCounter::instance())) return false;
 
 	if (!ScorchedClient::instance()->getTanketTypes().
 		loadTanketTypes(ScorchedClient::instance()->getContext())) {
@@ -479,7 +467,7 @@ bool ClientStateInitialize::initializeMod()
 	if (!ScorchedClient::instance()->getTankModels().loadTankMeshes(
 		ScorchedClient::instance()->getContext(), 
 		OptionsDisplay::instance()->getTankDetail(),
-		&progressCounter))
+		UIProgressCounter::instance()))
 	{
 		S3D::dialogMessage("Scorched 3D", "Failed to load all tank models");
 		return false;

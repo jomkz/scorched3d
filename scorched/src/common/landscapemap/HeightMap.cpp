@@ -154,6 +154,7 @@ fixed HeightMap::getInterpHeight(fixed w, fixed h)
 
 FixedVector &HeightMap::getNormal(int w, int h)
 {
+	FixedVector A, B, C, total;
 	if (w >= 0 && h >= 0 && w<=width_ && h<=height_) 
 	{
 		int pos = (width_+1) * h + w;
@@ -168,10 +169,7 @@ FixedVector &HeightMap::getNormal(int w, int h)
 			int x = w;
 			int y = h;
 
-			static FixedVector C;
 			C = heightData->position;
-
-			static FixedVector total;
 			total.zero();
 
 			int times = 0;
@@ -181,12 +179,10 @@ FixedVector &HeightMap::getNormal(int w, int h)
 				{
 					if (b>3) b=0;
 
-					static FixedVector A;
 					int aPosX, aPosY;
 					getVectorPos(a, aPosX, aPosY, dist);
 					if (!getVector(A, aPosX + x, aPosY + y)) continue;
 
-					static FixedVector B;
 					int bPosX, bPosY;				
 					getVectorPos(b, bPosX, bPosY, dist);
 					if (!getVector(B, bPosX + x, bPosY + y)) continue;
@@ -229,23 +225,23 @@ void HeightMap::getInterpNormal(fixed w, fixed h, FixedVector &normal)
 	FixedVector &normalC = getNormal(ihx2.asInt(), ihy.asInt());
 	FixedVector &normalD = getNormal(ihx2.asInt(), ihy2.asInt());
 
-	static FixedVector normalDiffAB;
+	FixedVector normalDiffAB;
 	normalDiffAB = normalB;
 	normalDiffAB -= normalA;
 	normalDiffAB *= fhy;
-	static FixedVector normalDiffCD;
+	FixedVector normalDiffCD;
 	normalDiffCD = normalD;
 	normalDiffCD -= normalC;
 	normalDiffCD *= fhy;
 
-	static FixedVector normalE;
+	FixedVector normalE;
 	normalE = normalA;
 	normalE += normalDiffAB;
-	static FixedVector normalF;
+	FixedVector normalF;
 	normalF = normalC;
 	normalF += normalDiffCD;
 
-	static FixedVector normalDiffEF;
+	FixedVector normalDiffEF;
 	normalDiffEF = normalF;
 	normalDiffEF -= normalE;
 	normalDiffEF *= fhx;

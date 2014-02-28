@@ -29,6 +29,7 @@
 #include <target/TargetContainer.h>
 #include <target/TargetLife.h>
 
+static boost::mutex instanceCountLock;
 unsigned int TankNewGameSimAction::instanceCount_(0);
 
 REGISTER_CLASS_SOURCE(TankNewGameSimAction);
@@ -36,18 +37,24 @@ REGISTER_CLASS_SOURCE(TankNewGameSimAction);
 TankNewGameSimAction::TankNewGameSimAction() :
 	playerId_(0)
 {
+	instanceCountLock.lock();
 	instanceCount_++;
+	instanceCountLock.unlock();
 }
 
 TankNewGameSimAction::TankNewGameSimAction(unsigned int playerId) :
 	playerId_(playerId)
 {
+	instanceCountLock.lock();
 	instanceCount_++;
+	instanceCountLock.unlock();
 }
 
 TankNewGameSimAction::~TankNewGameSimAction()
 {
+	instanceCountLock.lock();
 	instanceCount_--;
+	instanceCountLock.unlock();
 }
 
 bool TankNewGameSimAction::invokeAction(ScorchedContext &context)

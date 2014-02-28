@@ -18,21 +18,19 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_ClientServerAccessh_INCLUDE__)
-#define __INCLUDE_ClientServerAccessh_INCLUDE__
+#if !defined(__INCLUDE_ClientJoinGameThreadCallbackh_INCLUDE__)
+#define __INCLUDE_ClientJoinGameThreadCallbackh_INCLUDE__
 
-#include <string>
+#include <engine/ThreadCallbackI.h>
 
-class ClientServerAccess 
+class ClientJoinGameThreadCallback : public ThreadCallbackI
 {
 public:
-	static int getIntProperty(const std::string &propertyName);
-	static std::string getStringProperty(const std::string &propertyName);
+	ClientJoinGameThreadCallback();
+	virtual ~ClientJoinGameThreadCallback();
 
-private:
-	ClientServerAccess();
-	virtual ~ClientServerAccess();
-
+	// ThreadCallbackI
+	virtual void callbackInvoked();
 };
 
-#endif // __INCLUDE_ClientServerAccessh_INCLUDE__
+#endif

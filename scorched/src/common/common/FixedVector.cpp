@@ -21,34 +21,29 @@
 #include <common/FixedVector.h>
 
 static FixedVector nullVector;
-static FixedVector minVector, maxVector;
+static FixedVector minVector = FixedVector(fixed::MIN_FIXED, fixed::MIN_FIXED, fixed::MIN_FIXED);
+static FixedVector maxVector = FixedVector(fixed::MAX_FIXED, fixed::MAX_FIXED, fixed::MAX_FIXED);
 
-const char *FixedVector::asQuickString()
+std::string FixedVector::asQuickString()
 {
-	static int i=0;
-	static char buffer[5][75];
-
-	char *result = buffer[++i % 5];
-	snprintf(result, 75, "%s,%s,%s", 
-		V[0].asQuickString(), V[1].asQuickString(), V[2].asQuickString());
-	return result;
+	std::string v1 = V[0].asQuickString();
+	std::string v2 = V[0].asQuickString();
+	std::string v3 = V[0].asQuickString();
+	return S3D::formatStringBuffer("%s,%s,%s", v1.c_str(), v2.c_str(), v3.c_str());
 }
 
 FixedVector &FixedVector::getNullVector()
 {
-	nullVector.zero();
 	return nullVector;
 }
 
 FixedVector &FixedVector::getMaxVector()
 {
-	maxVector = FixedVector(fixed::MAX_FIXED, fixed::MAX_FIXED, fixed::MAX_FIXED);
 	return maxVector;
 }
 
 FixedVector &FixedVector::getMinVector()
 {
-	minVector = FixedVector(fixed::MIN_FIXED, fixed::MIN_FIXED, fixed::MIN_FIXED);
 	return minVector;	
 }
 

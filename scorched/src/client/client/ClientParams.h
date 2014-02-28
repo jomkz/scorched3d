@@ -28,17 +28,17 @@ class ClientParams : public OptionsParameters
 public:
 	static ClientParams *instance();
 
-	const char *getConnect() { return connect_.getValue(); }
-	const char *getClientFile() { return client_.getValue(); }
-	const char *getSaveFile() { return save_.getValue(); }
-	const char *getUserName() { return username_.getValue(); }
-	const char *getPassword() { return password_.getValue(); }
-	const char *getNonParam() { return nonParam_.getValue(); }
+	std::string getConnect() { return connect_.getValue(); }
+	std::string getClientFile() { return client_.getValue(); }
+	std::string getSaveFile() { return save_.getValue(); }
+	std::string getUserName() { return username_.getValue(); }
+	std::string getPassword() { return password_.getValue(); }
+	std::string getNonParam() { return nonParam_.getValue(); }
 	int getExitTime() { return exittime_.getValue(); }
 	int getDisconnectTime() { return disconnecttime_.getValue(); }
 	bool getStartCustom() { return startcustom_.getValue(); }
 	bool getConnectAcceptDefaults() { return connectAcceptDefaults_.getValue(); }
-	bool getConnectedToServer() { return (getConnect()[0] != '\0'); }
+	bool getConnectedToServer() { return !getConnect().empty(); }
 
 	void setStartCustom(bool custom) { startcustom_.setValue(custom); }
 	void setClientFile(const char *file) { client_.setValue(file); }

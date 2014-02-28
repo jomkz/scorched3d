@@ -128,19 +128,6 @@ public:
 
 	void Normalize();
 
-	Vector4 &asVector4()
-	{
-		static Vector4 a[10];
-		static unsigned int count = 0;
-		
-		Vector4 &b = a[++count % 10];
-		b[0] = V[0].asFloat();
-		b[1] = V[1].asFloat();
-		b[2] = V[2].asFloat();
-		b[3] = V[3].asFloat();
-		return b;
-	}
-
 	void asVector(Vector4 &dest)
 	{
 		dest[0] = V[0].asFloat();

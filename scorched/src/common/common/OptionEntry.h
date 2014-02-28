@@ -52,28 +52,28 @@ public:
 	};
 
 	OptionEntry(std::list<OptionEntry *> &group,
-				const char *name,
-				const char *description,
+				const std::string &name,
+				const std::string &description,
 				unsigned int data);
 	virtual ~OptionEntry();
 
-	const char *getName() { return name_.c_str(); }
-	virtual const char *getDescription() { return description_.c_str(); }
-	virtual const char *getRangeDescription() { return 0; }
+	std::string getName() { return name_; }
+	virtual std::string getDescription() { return description_.c_str(); }
+	virtual std::string getRangeDescription() { return ""; }
 	virtual unsigned getData() { return data_; }
 
 	virtual EntryType getEntryType() = 0;
-	virtual const char *getDefaultValueAsString() = 0;
-	virtual const char *getValueAsString() = 0;
+	virtual std::string getDefaultValueAsString() = 0;
+	virtual std::string getValueAsString() = 0;
 	virtual bool isDefaultValue() = 0;
 	virtual bool isChangedValue() { return changedValue_; }
 	virtual bool setValueFromString(const std::string &string) = 0;
 	virtual bool addToArgParser(ARGParser &parser) = 0;
 	virtual void setNotChanged() { changedValue_ = false; }
 
-	virtual const char *getComsBufferValue() 
+	virtual std::string getComsBufferValue() 
 		{ return getValueAsString(); }
-	virtual bool setComsBufferValue(const char *string) 
+	virtual bool setComsBufferValue(const std::string &string) 
 		{ return setValueFromString(string); }
 
 protected:
@@ -107,22 +107,22 @@ public:
 								ARGParser &parser);
 
 	static OptionEntry *getEntry(std::list<OptionEntry *> &options,
-		const char *name);
+		const std::string &name);
 };
 
 class OptionEntryInt : public OptionEntry, public ARGParserIntI
 {
 public:
 	OptionEntryInt(std::list<OptionEntry *> &group,
-				   const char *name, 
-				   const char *description,
+				   const std::string &name, 
+				   const std::string &description,
 				   unsigned int data,
 				   int defaultValue);
 	virtual ~OptionEntryInt();
 
 	virtual EntryType getEntryType() { return OptionEntryIntType; }
-	virtual const char *getValueAsString();
-	virtual const char *getDefaultValueAsString();
+	virtual std::string getValueAsString();
+	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
 
 	virtual int getValue();
@@ -144,14 +144,14 @@ class OptionEntryBoundedInt : public OptionEntryInt
 {
 public:
 	OptionEntryBoundedInt(std::list<OptionEntry *> &group,
-						  const char *name, 
-						  const char *description,
+						  const std::string &name, 
+						  const std::string &description,
 						  unsigned int data,
 						  int defaultValue,
 						  int minValue, int maxValue, int stepValue);
 	virtual ~OptionEntryBoundedInt();
 
-	virtual const char *getRangeDescription();
+	virtual std::string getRangeDescription();
 	virtual EntryType getEntryType() { return OptionEntryBoundedIntType; }
 	virtual bool setValue(int value);
 
@@ -170,13 +170,13 @@ class OptionEntryEnum : public OptionEntryInt
 public:
 	struct EnumEntry
 	{
-		const char *description;
+		std::string description;
 		int value;
 	};
 
 	OptionEntryEnum(std::list<OptionEntry *> &group,
-						  const char *name, 
-						  const char *description,
+						  const std::string &name, 
+						  const std::string &description,
 						  unsigned int data,
 						  int value,
 						  OptionEntryEnum::EnumEntry enums[]);
@@ -184,15 +184,15 @@ public:
 
 	virtual EntryType getEntryType() { return OptionEntryEnumType; }
 	virtual bool setValue(int value);
-	virtual const char *getRangeDescription();
+	virtual std::string getRangeDescription();
 
-	virtual const char *getDefaultValueAsString();
-	virtual const char *getValueAsString();
+	virtual std::string getDefaultValueAsString();
+	virtual std::string getValueAsString();
 	virtual bool setValueFromString(const std::string &string);
 
-	virtual const char *getComsBufferValue() 
+	virtual std::string getComsBufferValue() 
 		{ return OptionEntryInt::getValueAsString(); }
-	virtual bool setComsBufferValue(const char *string) 
+	virtual bool setComsBufferValue(const std::string &string) 
 		{ return OptionEntryInt::setValueFromString(string); }
 
 	OptionEntryEnum::EnumEntry *getEnums() { return enums_; }
@@ -206,15 +206,15 @@ class OptionEntryBool : public OptionEntry, public ARGParserBoolI
 {
 public:
 	OptionEntryBool(std::list<OptionEntry *> &group,
-					const char *name, 
-					const char *description,
+					const std::string &name, 
+					const std::string &description,
 					unsigned int data,
 					bool defaultValue);
 	virtual ~OptionEntryBool();
 
 	virtual EntryType getEntryType() { return OptionEntryBoolType; }
-	virtual const char *getValueAsString();
-	virtual const char *getDefaultValueAsString();
+	virtual std::string getValueAsString();
+	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
 
 	virtual bool setValue(bool value);
@@ -235,19 +235,19 @@ class OptionEntryString : public OptionEntry, public ARGParserStringI
 {
 public:
 	OptionEntryString(std::list<OptionEntry *> &group,
-					  const char *name,
-					  const char *description,
+					  const std::string &name,
+					  const std::string &description,
 					  unsigned int data,
-					  const char *defaultValue,
+					  const std::string &defaultValue,
 					  bool multiline = false);
 	virtual ~OptionEntryString();
 
 	virtual EntryType getEntryType() { return (multiline_?OptionEntryTextType:OptionEntryStringType); }
-	virtual const char *getValueAsString();
-	virtual const char *getDefaultValueAsString();
+	virtual std::string getValueAsString();
+	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
 
-	virtual const char *getValue();
+	virtual std::string getValue();
 	virtual bool setValue(const std::string &value);
 
 	virtual bool addToArgParser(ARGParser &parser);
@@ -268,20 +268,20 @@ class OptionEntryStringEnum : public OptionEntryString
 public:
 	struct EnumEntry
 	{
-		const char *value;
+		std::string value;
 	};
 
 	OptionEntryStringEnum(std::list<OptionEntry *> &group,
-						  const char *name, 
-						  const char *description,
+						  const std::string &name, 
+						  const std::string &description,
 						  unsigned int data,
-						  const char *value,
+						  const std::string &value,
 						  OptionEntryStringEnum::EnumEntry enums[]);
 	virtual ~OptionEntryStringEnum();
 
 	virtual EntryType getEntryType() { return OptionEntryStringEnumType; }
 	virtual bool setValue(const std::string &value);
-	virtual const char *getRangeDescription();
+	virtual std::string getRangeDescription();
 
 	virtual bool setValueFromString(const std::string &string);
 
@@ -296,16 +296,16 @@ class OptionEntryFloat : public OptionEntry
 {
 public:
 	OptionEntryFloat(std::list<OptionEntry *> &group,
-				   const char *name, 
-				   const char *description,
+				   const std::string &name, 
+				   const std::string &description,
 				   unsigned int data,
 				   float defaultValue,
 				   bool truncate = false);
 	virtual ~OptionEntryFloat();
 
 	virtual EntryType getEntryType() { return OptionEntryFloatType; }
-	virtual const char *getValueAsString();
-	virtual const char *getDefaultValueAsString();
+	virtual std::string getValueAsString();
+	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
 
 	virtual float getValue();
@@ -327,16 +327,16 @@ class OptionEntryVector : public OptionEntry
 {
 public:
 	OptionEntryVector(std::list<OptionEntry *> &group,
-				   const char *name, 
-				   const char *description,
+				   const std::string &name, 
+				   const std::string &description,
 				   unsigned int data,
 				   Vector defaultValue,
 				   bool truncate = false);
 	virtual ~OptionEntryVector();
 
 	virtual EntryType getEntryType() { return OptionEntryVectorType; }
-	virtual const char *getValueAsString();
-	virtual const char *getDefaultValueAsString();
+	virtual std::string getValueAsString();
+	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
 
 	virtual Vector &getValue();
@@ -358,15 +358,15 @@ class OptionEntryFixed : public OptionEntry
 {
 public:
 	OptionEntryFixed(std::list<OptionEntry *> &group,
-				   const char *name, 
-				   const char *description,
+				   const std::string &name, 
+				   const std::string &description,
 				   unsigned int data,
 				   fixed defaultValue);
 	virtual ~OptionEntryFixed();
 
 	virtual EntryType getEntryType() { return OptionEntryFixedType; }
-	virtual const char *getValueAsString();
-	virtual const char *getDefaultValueAsString();
+	virtual std::string getValueAsString();
+	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
 
 	virtual fixed getValue();
@@ -387,15 +387,15 @@ class OptionEntryFixedVector : public OptionEntry
 {
 public:
 	OptionEntryFixedVector(std::list<OptionEntry *> &group,
-				   const char *name, 
-				   const char *description,
+				   const std::string &name, 
+				   const std::string &description,
 				   unsigned int data,
 				   FixedVector defaultValue);
 	virtual ~OptionEntryFixedVector();
 
 	virtual EntryType getEntryType() { return OptionEntryFixedVectorType; }
-	virtual const char *getValueAsString();
-	virtual const char *getDefaultValueAsString();
+	virtual std::string getValueAsString();
+	virtual std::string getDefaultValueAsString();
 	virtual bool setValueFromString(const std::string &string);
 
 	virtual FixedVector &getValue();

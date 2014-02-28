@@ -30,10 +30,8 @@
 #include <tank/TankModelContainer.h>
 #include <stdlib.h>
 
-unsigned int Accessory::nextAccessoryId_ = 0;
-
-Accessory::Accessory() :
-	accessoryId_(++nextAccessoryId_),
+Accessory::Accessory(unsigned int accessoryId) :
+	accessoryId_(accessoryId),
 	name_("NONAME"), description_("NODESC"), 
 	accessoryAction_(0),
 	toolTip_(ToolTip::ToolTipHelp, LangString(), LangString()),

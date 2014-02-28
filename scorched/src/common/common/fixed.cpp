@@ -82,9 +82,9 @@ fixed::fixed(const char *nVal)
 	if (neg) m_nVal =- m_nVal;
 }
 
-const char *fixed::asString()
+std::string fixed::asString()
 {
-	static char result[20];
+	char result[20];
 	int r = 0;
 
 	char buffer[20];
@@ -131,12 +131,9 @@ const char *fixed::asString()
 	return result;
 }
 
-const char *fixed::asQuickString()
+std::string fixed::asQuickString()
 {
-	static int i=0;
-	static char buffer[5][25];
-
-	char *result = buffer[++i % 5];
+	char result[25];
 	snprintf(result, 25, "%lli", m_nVal);
 	return result;
 }

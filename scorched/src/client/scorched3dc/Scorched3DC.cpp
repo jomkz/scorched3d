@@ -1,11 +1,14 @@
 #include "StdAfx.h"
-#include "Scorched3DC.h"
+
+#include <scorched3dc/Scorched3DC.h>
+#include <scorched3dc/UIProgressCounter.h>
 
 #include <common/Logger.h>
 #include <common/FileLogger.h>
 #include <client/ClientState.h>
 #include <client/ClientParams.h>
 #include <client/ScorchedClient.h>
+#include <client/ClientJoinGameThreadCallback.h>
 #include <net/NetInterface.h>
 #include <lang/Lang.h>
 
@@ -20,13 +23,20 @@ static CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
 	}
 }
 
+Scorched3DC *Scorched3DC::instance_(0);
+
+Scorched3DC *Scorched3DC::instance()
+{
+	return instance_;
+}
+
 Scorched3DC::Scorched3DC() : 
 	ogreRoot_(0), ogreWindow_(0),
 	inputManager_(0), mouse_(0), keyboard_(0),
 	guiRenderer_(0), sceneMgr_(0), camera_(0),
 	quit_(false)
 {
-
+	instance_ = this;
 }
 
 Scorched3DC::~Scorched3DC()
@@ -38,6 +48,7 @@ Scorched3DC::~Scorched3DC()
 	windowClosed(ogreWindow_);
 	delete ogreRoot_;
 	ogreRoot_ = 0;
+	instance_ = 0;
 }
 
 bool Scorched3DC::loadPlugin(const Ogre::String &pluginName, const Ogre::String &requiredName)
@@ -254,7 +265,13 @@ bool Scorched3DC::quit(const CEGUI::EventArgs &e)
 bool Scorched3DC::start(const CEGUI::EventArgs &e)
 {
 	ClientParams::instance()->setStartCustom(true);
-	ScorchedClient::startClient(0, 0);
+	ScorchedClient::startClient(UIProgressCounter::instance());
+	return true;
+}
+
+bool Scorched3DC::join(const CEGUI::EventArgs &e)
+{
+	ScorchedClient::getThreadCallback().addCallback(new ClientJoinGameThreadCallback());
 	return true;
 }
 
@@ -280,11 +297,6 @@ void Scorched3DC::createScene()
 	camera_->setAspectRatio(
 		Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 
-	// Create head
-	//Ogre::Entity* ogreHead = sceneMgr_->createEntity("Head", "ogrehead.mesh");
-    //Ogre::SceneNode* headNode = sceneMgr_->getRootSceneNode()->createChildSceneNode();
-    //headNode->attachObject(ogreHead);
-
     // Set ambient light
     sceneMgr_->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 
@@ -297,19 +309,49 @@ void Scorched3DC::createScene()
 	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
 
 	{
-	CEGUI::Window *quit = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/QuitButton");
-	quit->setText("Quit");
-	quit->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
-	quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::quit, this));
-	sheet->addChildWindow(quit);
+		CEGUI::Window *quit = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/QuitButton");
+		quit->setText("Quit");
+		quit->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
+		quit->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::quit, this));
+		sheet->addChildWindow(quit);
 	}
 	{
-	CEGUI::Window *start = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/StartButton");
-	start->setText("Start");
-	start->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
-	start->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
-	start->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::start, this));
-	sheet->addChildWindow(start);
+		CEGUI::Window *start = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/StartButton");
+		start->setText("Start");
+		start->setPosition(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
+		start->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
+		start->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::start, this));
+		sheet->addChildWindow(start);
+	}
+	{
+		CEGUI::Window *join = wmgr.createWindow("OgreTray/Button", "CEGUIDemo/JoinButton");
+		join->setText("Join");
+		join->setPosition(CEGUI::UVector2(CEGUI::UDim(0.3f, 0.0f), CEGUI::UDim(0.00f, 0.0f)));
+		join->setSize(CEGUI::UVector2(CEGUI::UDim(0.15f, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
+		join->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&Scorched3DC::join, this));
+		sheet->addChildWindow(join);
+	}
+	{
+		CEGUI::DefaultWindow* staticText = static_cast<CEGUI::DefaultWindow*>(wmgr.createWindow("OgreTray/StaticText", "StaticText"));
+		staticText->setText("Red Static Text");
+		// Colours are specified as aarrggbb in Hexadecimal
+		// Where aa is alpha, rr is red, gg is green, and bb is blue 
+		// tl: top left,  tr: top right,  bl: bottom left,  br: bottom right
+		staticText->setProperty("TextColours", "tl:FFFF0000 tr:FFFF0000 bl:FFFF0000 br:FFFF0000");
+		staticText->setProperty("VertFormatting", "TopAligned"); // TopAligned, BottomAligned, VertCentred
+		staticText->setProperty("HorzFormatting", "HorzCentred"); // LeftAligned, RightAligned, HorzCentred
+			// HorzJustified, WordWrapLeftAligned, WordWrapRightAligned, WordWrapCentred, WordWrapJustified
+		staticText->setTooltipText("This is a StaticText widget");
+		staticText->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f), CEGUI::UDim(0.15f, 0.0f)));
+		staticText->setSize(CEGUI::UVector2(CEGUI::UDim(0.6f, 0.0f), CEGUI::UDim(0.1f, 0.0f)));
+		sheet->addChildWindow(staticText);
+
+		CEGUI::ProgressBar* progressBar = static_cast<CEGUI::ProgressBar*>(wmgr.createWindow("OgreTray/ProgressBar", "ProgressBar"));
+		progressBar->setProgress(0.0f); // Initial progress of 25%
+		progressBar->setStepSize(0.10f); // Calling step() will increase the progress by 10%
+		progressBar->setPosition(CEGUI::UVector2(CEGUI::UDim(0.1f, 0.0f), CEGUI::UDim(0.5f, 0.0f)));
+		progressBar->setSize(CEGUI::UVector2(CEGUI::UDim(0.8f, 0.0f), CEGUI::UDim(0.3f, 0.0f)));
+		staticText->addChildWindow(progressBar);
 	}
 
 	CEGUI::System::getSingleton().setGUISheet(sheet);
@@ -355,6 +397,9 @@ bool Scorched3DC::go()
 		{
 			return false;
 		}
+
+		// Update UI
+		uiThreadCallback_.processCallbacks();
  
 		// Render a frame
 		if(!ogreRoot_->renderOneFrame()) 

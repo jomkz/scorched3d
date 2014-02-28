@@ -49,7 +49,7 @@ static std::vector<ConsoleRuleParam> generateFnParams(
 	return params;
 }
 
-ConsoleRuleFn::ConsoleRuleFn(const char *name, 
+ConsoleRuleFn::ConsoleRuleFn(const std::string &name, 
 	ConsoleRuleFnI *user, 
 	ConsoleRuleType type, 
 	bool write) :

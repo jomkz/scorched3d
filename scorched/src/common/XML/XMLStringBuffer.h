@@ -31,7 +31,7 @@ public:
 
 	bool create(const char *xmlString, unsigned int size);
 
-	const char *getParserError() { return parser_.getParseError(); }
+	std::string getParserError() { return parser_.getParseError(); }
 	XMLNode *getRootNode() { return parser_.getRoot(); }
 
 protected:

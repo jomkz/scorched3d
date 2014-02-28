@@ -85,18 +85,19 @@ std::string ConsoleRules::matchRule(const char *line,
 			ConsoleRule *rule = itor->second;
 			ConsoleRuleValue &nameValue = values[0];
 
+			std::string ruleName = rule->getName();
 			if (values.size() == 1)
 			{
-				size_t nameLen = strlen(rule->getName());
+				size_t nameLen = strlen(ruleName.c_str());
 				if (nameLen >= nameValue.valueString.length() &&
-					_strnicmp(line, rule->getName(), nameValue.valueString.length()) == 0)
+					_strnicmp(line, ruleName.c_str(), nameValue.valueString.length()) == 0)
 				{
 					matches.push_back((*itor).second);
 				}
 			}
 			else
 			{
-				if (0 == stricmp(rule->getName(), nameValue.valueString.c_str()))
+				if (0 == stricmp(ruleName.c_str(), nameValue.valueString.c_str()))
 				{
 					if (rule->matchesPartialParams(values))
 					{

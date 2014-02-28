@@ -59,7 +59,8 @@ void TargetDamageCalc::explosion(ScorchedContext &context,
 		}
 		else 
 		{
-			FixedVector &currentPosition = current->getLife().getCenterPosition();
+			FixedVector currentPosition;
+			current->getLife().getCenterPosition(currentPosition);
 			FixedVector direction = position - currentPosition;
 			fixed dist2d = (direction[0] * direction[0] + 
 				direction[1] * direction[1]).sqrt();

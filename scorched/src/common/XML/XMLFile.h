@@ -32,7 +32,11 @@ public:
 	bool readFile(const std::string &fileName);
 
 	const char *getParserError() { 
-		return fileError_.empty()?parser_.getParseError():fileError_.c_str(); 
+		if (fileError_.empty())
+		{
+			fileError_ = parser_.getParseError();
+		}
+		return fileError_.c_str(); 
 	}
 	XMLNode *getRootNode() { return parser_.getRoot(); }
 

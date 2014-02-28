@@ -32,7 +32,7 @@ ConsoleRuleParam::ConsoleRuleParam(const std::string &name, ConsoleRuleType type
 {
 }
 
-ConsoleRule::ConsoleRule(const char *name,
+ConsoleRule::ConsoleRule(const std::string &name,
 	const std::vector<ConsoleRuleParam> &params,
 	unsigned int userData) : 
 	name_(name), params_(params), 

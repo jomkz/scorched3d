@@ -29,7 +29,7 @@ public:
 	OptionsParameters();
 	virtual ~OptionsParameters();
 
-	const char *getSettingsDir() { return settingsdir_.getValue(); }
+	std::string getSettingsDir() { return settingsdir_.getValue(); }
 	bool getWriteFullOptions() { return writefulloptions_.getValue(); }
 	bool getRewriteOptions() { return rewriteoptions_.getValue(); }
 

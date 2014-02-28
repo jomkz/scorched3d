@@ -32,7 +32,7 @@ public:
 	virtual ~XMLParser();
 
 	bool parse(const char *data, int len, int final);
-	const char *getParseError();
+	std::string getParseError();
 
 	void setSource(const std::string &source) { source_ = source; }
 	XMLNode *getRoot() { return root_; }

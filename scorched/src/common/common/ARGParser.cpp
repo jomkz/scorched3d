@@ -28,7 +28,7 @@ ARGParser::Entry::Entry(ARGParserBoolI *destBoolArg,
 						char **destCArg,
 						int *destIArg,
 						bool *destBArg,
-						char *helpArg) :
+						const std::string &helpArg) :
 	destBool(destBoolArg),
 	destInt(destIntArg),
 	destString(destStringArg),
@@ -283,48 +283,48 @@ void ARGParser::showArgs(const char *topString)
 	S3D::dialogMessage("Arguments", buffer, false);
 }
 
-void ARGParser::addEntry(char *cmd, char **destStr, char *help)
+void ARGParser::addEntry(const std::string &cmd, char **destStr, const std::string &help)
 {
 	Entry newEntry(NULL, NULL, NULL, destStr, NULL, NULL, help);
 	addNewEntry(cmd, newEntry);
 }
 
-void ARGParser::addEntry(char *cmd, int *destI, char *help)
+void ARGParser::addEntry(const std::string &cmd, int *destI, const std::string &help)
 {
 	Entry newEntry(NULL, NULL, NULL, NULL, destI, NULL, help);
 	addNewEntry(cmd, newEntry);
 }
 
-void ARGParser::addEntry(char *cmd, bool *destB, char *help)
+void ARGParser::addEntry(const std::string &cmd, bool *destB, const std::string &help)
 {
 	Entry newEntry(NULL, NULL, NULL, NULL, NULL, destB, help);
 	addNewEntry(cmd, newEntry);
 }
 
-void ARGParser::addEntry(char *cmd, ARGParserBoolI *destBool, char *help)
+void ARGParser::addEntry(const std::string &cmd, ARGParserBoolI *destBool, const std::string &help)
 {
 	Entry newEntry(destBool, NULL, NULL, NULL, NULL, NULL, help);
 	addNewEntry(cmd, newEntry);
 }
 
-void ARGParser::addEntry(char *cmd, ARGParserIntI *destInt, char *help)
+void ARGParser::addEntry(const std::string &cmd, ARGParserIntI *destInt, const std::string &help)
 {
 	Entry newEntry(NULL, destInt, NULL, NULL, NULL, NULL, help);
 	addNewEntry(cmd, newEntry);
 }
 
-void ARGParser::addEntry(char *cmd, ARGParserStringI *destString, char *help)
+void ARGParser::addEntry(const std::string &cmd, ARGParserStringI *destString, const std::string &help)
 {
 	Entry newEntry(NULL, NULL, destString, NULL, NULL, NULL, help);
 	addNewEntry(cmd, newEntry);
 }
 
-void ARGParser::addNewEntry(const char *cmd, ARGParser::Entry &newEntry)
+void ARGParser::addNewEntry(const std::string &cmd, ARGParser::Entry &newEntry)
 {
 	argMap_[cmd] = newEntry;
 }
 
-void ARGParser::addNonParamEntry(char *cmd, ARGParserStringI *destString, char *help)
+void ARGParser::addNonParamEntry(const std::string &cmd, ARGParserStringI *destString, const std::string &help)
 {
 	Entry newEntry(NULL, NULL, destString, NULL, NULL, NULL, help);
 	nonParamMap_[cmd] = newEntry;

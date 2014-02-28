@@ -471,11 +471,22 @@ void TargetDamage::logDeath(ScorchedContext &context, WeaponFireContext &weaponC
 	else
 	{
 		Vector white(1.0f, 1.0f, 1.0f);
-		static Tank envTank(context, 0, 0, 
-			LANG_STRING("Environment"), 
-			white);
-		envTank.setUniqueId("Environment");
-		firedTank = &envTank;
+		if (context.getServerMode())
+		{
+			static Tank serverEnvTank(context, 0, 0, 
+				LANG_STRING("Environment"), 
+				white);
+			serverEnvTank.setUniqueId("Environment");
+			firedTank = &serverEnvTank;
+		}
+		else 
+		{
+			static Tank clientEnvTank(context, 0, 0, 
+				LANG_STRING("Environment"), 
+				white);
+			clientEnvTank.setUniqueId("Environment");
+			firedTank = &clientEnvTank;
+		}
 	}
 
 	if (firedTank)

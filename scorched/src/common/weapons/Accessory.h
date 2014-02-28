@@ -35,7 +35,7 @@ class MissileMesh;
 class Accessory  
 {
 public:
-	Accessory();
+	Accessory(unsigned int accessoryId);
 	virtual ~Accessory();
 
 	enum PositionSelectType
@@ -83,10 +83,9 @@ public:
 	void setPrice(int p) { if (p>0) price_ = p; }
 	void setSellPrice(int p) { if (p>0) sellPrice_ = p; }
 
-	static void resetAccessoryIds() { nextAccessoryId_ = 0; }
 	unsigned int getAccessoryId() { return accessoryId_; }
 protected:
-	static unsigned int nextAccessoryId_;
+	unsigned int nextAccessoryId_;
 	unsigned int accessoryId_;
 	bool aiOnly_;
 	bool botOnly_;

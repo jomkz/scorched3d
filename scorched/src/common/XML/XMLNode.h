@@ -127,7 +127,7 @@ public:
 		std::string &result);
 	static void addSpecialChars(const std::string &content, 
 		std::string &result);
-	static const char *getSpacer(int space);
+	const char *getSpacer(int space);
 
 protected:
 	bool useContentNodes_;
@@ -138,8 +138,9 @@ protected:
 	std::list<XMLNode *> parameters_;
 	std::list<XMLNode *> removedParameters_; // Tidied
 	std::string name_;
-	std::string content_;
+	std::string content_, allContext_;
 	std::string source_;
+	std::string spacestr_;
 	int line_, col_;
 };
 

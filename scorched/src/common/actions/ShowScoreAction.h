@@ -29,14 +29,11 @@ public:
 	ShowScoreAction(fixed scoreTime, bool finalScore);
 	virtual ~ShowScoreAction();
 
-	static bool getFinalScore() { return finalScoreStatic_; }
-
 	virtual void init();
 	virtual void simulate(fixed frameTime, bool &remove);
 	virtual std::string getActionType() { return "ShowScoreAction"; }
 
 protected:
-	static bool finalScoreStatic_;
 	fixed scoreTime_;
 	bool finalScore_;
 

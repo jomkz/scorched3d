@@ -49,7 +49,7 @@ void Matrix16::identity()
 
 void Matrix16::multiply(float *b)
 {
-	static float product[16];
+	float product[16];
 	float *a = M;
 
 	int i;

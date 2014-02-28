@@ -40,7 +40,7 @@ AccessoryStore::~AccessoryStore()
 void AccessoryStore::clearAccessories()
 {
 	AccessoryPart::resetAccessoryPartIds();
-	Accessory::resetAccessoryIds();
+	nextAccessoryId_ = 0;
 	muzzleFlash_ = 0;
 	deathAnimation_ = 0;
 	while (!accessories_.empty())
@@ -92,7 +92,7 @@ bool AccessoryStore::parseFile(
 
 		// Parse the accessory
 		AccessoryCreateContext createContext(context);
-		Accessory *accessory = new Accessory();
+		Accessory *accessory = new Accessory(++nextAccessoryId_);
 		if (!accessory->parseXML(createContext, currentNode))
 		{
 			return currentNode->returnError(

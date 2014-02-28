@@ -237,7 +237,9 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 #endif // #ifndef S3D_SERVER
 
 	// Get firing context
-	FixedVector newVelocity = TankLib::getVelocityVector(
+	FixedVector newVelocity;
+	TankLib::getVelocityVector(
+		newVelocity,
 		message.getRotationXY(), message.getRotationYZ());
 	WeaponFireContext weaponContext(
 		tanket->getPlayerId(),
@@ -246,8 +248,12 @@ void PlayMovesSimAction::tankFired(ScorchedContext &context,
 		referenced_, 
 		(tanket->getType() == Target::TypeTank));
 	FixedVector velocity = newVelocity * (message.getPower() + 1);
-	FixedVector position = TankLib::getTankGunPosition(
-		tanket->getLife().getTankTurretPosition(),
+	FixedVector tankTurretPosition;
+	tanket->getLife().getTankTurretPosition(tankTurretPosition);
+	FixedVector position;
+	TankLib::getTankGunPosition(
+		position,
+		tankTurretPosition,
 		message.getRotationXY(), message.getRotationYZ());
 
 	// Create an action for the muzzle flash

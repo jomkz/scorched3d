@@ -61,8 +61,7 @@ void TargetSpace::updateTarget(Target *target)
 	}
 	else
 	{
-		static std::vector<Square*> squares;
-		squares.clear();
+		std::vector<Square*> squares;
 		getSquares(target, squares);
 
 		bool same = false;
@@ -279,7 +278,8 @@ void TargetSpace::getCollisionSet(FixedVector &position, fixed radius,
 				FixedVector checkPos = position;
 				if (ignoreHeight)
 				{
-					FixedVector centerPos = target->getLife().getCenterPosition();
+					FixedVector centerPos;
+					target->getLife().getCenterPosition(centerPos);
 					checkPos[2] = centerPos[2];
 				}
 				fixed distance = target->getLife().collisionDistance(checkPos);

@@ -105,33 +105,28 @@ void TargetLife::setRotation(fixed rotation)
 	updateSpace();
 }
 
-FixedVector &TargetLife::getCenterPosition()
+void TargetLife::getCenterPosition(FixedVector &result)
 {
-	static FixedVector result;
 	result = getTargetPosition();
 	result[2] += getSize()[2] / 2;
-	return result;
 }
 
-Vector &TargetLife::getFloatCenterPosition()
+void TargetLife::getFloatCenterPosition(Vector &result)
 {
-	static Vector result;
 	result = getFloatPosition();
 	result[2] += getFloatAabbSize()[2] / 2.0f;
-	return result;
 }
 
-FixedVector &TargetLife::getTankTurretPosition()
+void TargetLife::getTankTurretPosition(FixedVector &tankTurretPosition)
 {
-	static FixedVector tankTurretPosition;
 	tankTurretPosition = getTargetPosition();
 	tankTurretPosition[2] += 1;
-	return tankTurretPosition;
 }
 
 fixed TargetLife::collisionDistance(FixedVector &position)
 {
-	FixedVector &currentPosition = getCenterPosition();
+	FixedVector currentPosition;
+	getCenterPosition(currentPosition);
 	FixedVector direction = position - currentPosition;
 	fixed dist = 0;
 
@@ -195,7 +190,8 @@ fixed TargetLife::collisionDistance(FixedVector &position)
 
 bool TargetLife::collision(FixedVector &position)
 {
-	FixedVector &currentPosition = getCenterPosition();
+	FixedVector currentPosition;
+	getCenterPosition(currentPosition);
 	FixedVector direction = position - currentPosition;
 
 	// Check against bounding box

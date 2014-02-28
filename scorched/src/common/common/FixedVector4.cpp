@@ -38,7 +38,6 @@ static FixedVector4 nullVector;
 
 FixedVector4 &FixedVector4::getNullVector()
 {
-	nullVector.zero();
 	return nullVector;
 }
 
@@ -89,7 +88,7 @@ void FixedVector4::getRotationMatrix(fixed *R)
 
 void FixedVector4::getOpenGLRotationMatrix(float *rotMatrix)
 {
-	static fixed matrix[12];
+	fixed matrix[12];
 	getRotationMatrix(matrix);
 
 	rotMatrix[0] = matrix[0].asFloat();
@@ -128,7 +127,7 @@ void FixedVector4::Normalize()
 
 void FixedVector4::getRelativeVector(FixedVector &r, FixedVector &p)
 {
-	static fixed matrix[12];
+	fixed matrix[12];
 	getRotationMatrix(matrix);
 
 	fixed *result = r;

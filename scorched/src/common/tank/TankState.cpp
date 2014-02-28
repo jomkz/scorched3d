@@ -119,9 +119,9 @@ void TankState::setState(State s)
 	}
 }
 
-const char *TankState::getStateString()
+std::string TankState::getStateString()
 {
-	static char string[1024];
+	char string[1024];
 	snprintf(string, 1024, "%s %s (%i hp)",
 		getSmallStateString(),
 		(muted_?"muted ":""),
@@ -129,7 +129,7 @@ const char *TankState::getStateString()
 	return string;
 }
 
-const char *TankState::getSmallStateString()
+std::string TankState::getSmallStateString()
 {
 	const char *type = "";
 	switch (state_)

@@ -35,24 +35,31 @@
 #include <server/ScorchedServer.h>
 #include <events/EventController.h>
 
+boost::mutex TankChangeSimActionCountMutex;
 unsigned int TankChangeSimAction::TankChangeSimActionCount = 0;
 
 REGISTER_CLASS_SOURCE(TankChangeSimAction);
 
 TankChangeSimAction::TankChangeSimAction()
 {
+	TankChangeSimActionCountMutex.lock();
 	TankChangeSimActionCount++;
+	TankChangeSimActionCountMutex.unlock();
 }
 
 TankChangeSimAction::TankChangeSimAction(ComsTankChangeMessage &message) :
 	message_(message)
 {
+	TankChangeSimActionCountMutex.lock();
 	TankChangeSimActionCount++;
+	TankChangeSimActionCountMutex.unlock();
 }
 
 TankChangeSimAction::~TankChangeSimAction()
 {
+	TankChangeSimActionCountMutex.lock();
 	TankChangeSimActionCount--;
+	TankChangeSimActionCountMutex.unlock();
 }
 
 bool TankChangeSimAction::invokeAction(ScorchedContext &context)

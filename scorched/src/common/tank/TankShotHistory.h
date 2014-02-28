@@ -57,9 +57,9 @@ public:
 	void undo();
 	std::vector<ShotEntry> &getOldShots();
 
-	const char *getRotationString();
-	const char *getElevationString();
-	const char *getPowerString();
+	std::string getRotationString();
+	std::string getElevationString();
+	std::string getPowerString();
 
 protected:
 	ScorchedContext &context_;

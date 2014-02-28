@@ -27,6 +27,7 @@
 #include <engine/ScorchedContext.h>
 #include <engine/ObjectGroups.h>
 
+class Weapon;
 class WeaponFireContextInternal
 {
 public:
@@ -46,6 +47,7 @@ public:
 	FixedVector &getVelocityVector() { return velocityVector_; }
 
 	ObjectGroups &getLocalGroups() { return localGroups_; }
+	std::set<Weapon *> &getWeaponStack() { return weaponStack_; }
 
 	int getIncLabelCount(unsigned int label);
 
@@ -61,6 +63,7 @@ protected:
 	unsigned int selectPositionY_;
 	FixedVector velocityVector_;
 	std::map<unsigned int, int> *labelCount_;
+	std::set<Weapon *> weaponStack_;
 
 private:
 	WeaponFireContextInternal(WeaponFireContextInternal &other);

@@ -124,9 +124,9 @@ fixed TankShotHistory::getPowerDiff()
 	return tank_->getShotInfo().getPower() - oldPower_;
 }
 
-const char *TankShotHistory::getRotationString()
+std::string TankShotHistory::getRotationString()
 {
-	static char messageBuffer[255];
+	char messageBuffer[255];
 	fixed rotDiff = getRotationXYDiff();
 
 	snprintf(messageBuffer, 255, "%+.1f (%+.1f)", 
@@ -135,9 +135,9 @@ const char *TankShotHistory::getRotationString()
 	return messageBuffer;
 }
 
-const char *TankShotHistory::getElevationString()
+std::string TankShotHistory::getElevationString()
 {
-	static char messageBuffer[255];
+	char messageBuffer[255];
 	fixed rotDiff = getRotationYZDiff();
 
 	snprintf(messageBuffer, 255, "%+.1f (%+.1f)", 
@@ -146,9 +146,9 @@ const char *TankShotHistory::getElevationString()
 	return messageBuffer;
 }
 
-const char *TankShotHistory::getPowerString()
+std::string TankShotHistory::getPowerString()
 {
-	static char messageBuffer[255];
+	char messageBuffer[255];
 	fixed powDiff = getPowerDiff();
 
 	snprintf(messageBuffer, 255, "%+.1f (%+.1f)", 		

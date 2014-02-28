@@ -330,7 +330,7 @@ bool ModFiles::importModFiles(std::string &mod, const std::string &fileName)
 bool ModFiles::importModFiles(std::string &mod, NetBuffer &tmpBuffer)
 {
 	// Mod Name
-	static std::string modName;
+	std::string modName;
 	std::string version;
 	NetBufferReader tmpReader(tmpBuffer);
 	if (!tmpReader.getFromBuffer(version)) return false;

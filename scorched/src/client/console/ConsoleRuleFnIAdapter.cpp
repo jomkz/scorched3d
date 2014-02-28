@@ -22,7 +22,7 @@
 #include <console/Console.h>
 #include <console/ConsoleRuleFnIAdapter.h>
 
-ConsoleRuleFnIBooleanAdapter::ConsoleRuleFnIBooleanAdapter(const char *name, bool &param) : 
+ConsoleRuleFnIBooleanAdapter::ConsoleRuleFnIBooleanAdapter(const std::string &name, bool &param) : 
 	name_(name), param_(param),
 	readRule_(0), writeRule_(0)
 {
@@ -40,19 +40,19 @@ ConsoleRuleFnIBooleanAdapter::~ConsoleRuleFnIBooleanAdapter()
 	delete writeRule_;
 }
 
-bool ConsoleRuleFnIBooleanAdapter::getBoolParam(const char *name)
+bool ConsoleRuleFnIBooleanAdapter::getBoolParam(const std::string &name)
 {
 	DIALOG_ASSERT(name_ == name);
 	return param_;
 }
 
-void ConsoleRuleFnIBooleanAdapter::setBoolParam(const char *name, bool value)
+void ConsoleRuleFnIBooleanAdapter::setBoolParam(const std::string &name, bool value)
 {
 	DIALOG_ASSERT(name_ == name);
 	param_ = value;
 }
 
-ConsoleRuleFnINumberAdapter::ConsoleRuleFnINumberAdapter(const char *name, float &param) : 
+ConsoleRuleFnINumberAdapter::ConsoleRuleFnINumberAdapter(const std::string &name, float &param) : 
 	name_(name), param_(param),
 	readRule_(0), writeRule_(0)
 {
@@ -70,13 +70,13 @@ ConsoleRuleFnINumberAdapter::~ConsoleRuleFnINumberAdapter()
 	delete writeRule_;
 }
 
-float ConsoleRuleFnINumberAdapter::getNumberParam(const char *name)
+float ConsoleRuleFnINumberAdapter::getNumberParam(const std::string &name)
 {
 	DIALOG_ASSERT(name_ == name);
 	return param_;
 }
 
-void ConsoleRuleFnINumberAdapter::setNumberParam(const char *name, float value)
+void ConsoleRuleFnINumberAdapter::setNumberParam(const std::string &name, float value)
 {
 	DIALOG_ASSERT(name_ == name);
 	param_ = value;
@@ -133,17 +133,17 @@ ConsoleRuleFnIOptionsAdapter::~ConsoleRuleFnIOptionsAdapter()
 	}
 }
 
-bool ConsoleRuleFnIOptionsAdapter::getBoolParam(const char *name)
+bool ConsoleRuleFnIOptionsAdapter::getBoolParam(const std::string &name)
 {
 	return ((OptionEntryBool &) entry_).getValue();
 }
 
-void ConsoleRuleFnIOptionsAdapter::setBoolParam(const char *name, bool value)
+void ConsoleRuleFnIOptionsAdapter::setBoolParam(const std::string &name, bool value)
 {
 	((OptionEntryBool &) entry_).setValue(value);
 }
 
-float ConsoleRuleFnIOptionsAdapter::getNumberParam(const char *name)
+float ConsoleRuleFnIOptionsAdapter::getNumberParam(const std::string &name)
 {
 	if (entry_.getEntryType() == OptionEntry::OptionEntryIntType)
 	{
@@ -160,7 +160,7 @@ float ConsoleRuleFnIOptionsAdapter::getNumberParam(const char *name)
 	return -99.99f;
 }
 
-void  ConsoleRuleFnIOptionsAdapter::setNumberParam(const char *name, float value)
+void  ConsoleRuleFnIOptionsAdapter::setNumberParam(const std::string &name, float value)
 {
 	if (entry_.getEntryType() == OptionEntry::OptionEntryIntType)
 	{
@@ -176,12 +176,12 @@ void  ConsoleRuleFnIOptionsAdapter::setNumberParam(const char *name, float value
 	}
 }
 
-const char *ConsoleRuleFnIOptionsAdapter::getStringParam(const char *name)
+std::string ConsoleRuleFnIOptionsAdapter::getStringParam(const std::string &name)
 {
 	return ((OptionEntryString &) entry_).getValue();
 }
 
-void ConsoleRuleFnIOptionsAdapter::setStringParam(const char *name, const char *value)
+void ConsoleRuleFnIOptionsAdapter::setStringParam(const std::string &name, const std::string &value)
 {
 	((OptionEntryString &) entry_).setValue(value);
 }

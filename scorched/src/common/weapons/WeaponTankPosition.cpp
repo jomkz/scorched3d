@@ -74,7 +74,7 @@ void WeaponTankPosition::fireWeapon(ScorchedContext &context,
 		FixedVector newPosition = tanket->getLife().getTargetPosition();
 		if (sightPos_)
 		{
-			newPosition = tanket->getLife().getTankTurretPosition();
+			tanket->getLife().getTankTurretPosition(newPosition);
 		}
 
 		aimedWeapon_->fire(context, weaponContext, newPosition, velocity);

@@ -23,6 +23,7 @@
 #include <server/ServerCommon.h>
 #include <server/ServerParams.h>
 #include <server/ScorchedServer.h>
+#include <server/ScorchedServerSettings.h>
 #include <common/Logger.h>
 
 void consoleServer()
@@ -36,7 +37,8 @@ void consoleServer()
 		S3D::ScorchedProtocolVersion.c_str(), 
 		S3D::ScorchedBuildTime.c_str()));
 
-	ScorchedServerSettingsOptions settings(
+	ScorchedServerSettingsOptions *settings =
+		new ScorchedServerSettingsOptions(
 		ServerParams::instance()->getServerFile(),
 		ServerParams::instance()->getRewriteOptions(),
 		ServerParams::instance()->getWriteFullOptions());

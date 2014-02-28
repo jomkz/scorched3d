@@ -20,13 +20,20 @@
 
 #include <net/NetBufferPool.h>
 
+static boost::mutex messagePoolMutex_;
+
 NetBufferPool *NetBufferPool::instance_ = 0;
 
 NetBufferPool *NetBufferPool::instance()
 {
 	if (!instance_)
 	{
-		instance_ = new NetBufferPool;
+		messagePoolMutex_.lock();
+		if (!instance_)
+		{
+			instance_ = new NetBufferPool;
+		}
+		messagePoolMutex_.unlock();
 	}
 	return instance_;
 }

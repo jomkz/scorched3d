@@ -78,7 +78,8 @@ void WeaponRedirect::fireWeapon(ScorchedContext &context,
 	if (vabs_) currentv = vredirect_.getValue(context);
 	else currentv += vredirect_.getValue(context);
 	
-	FixedVector newVelocity = TankLib::getVelocityVector(currenth, fixed(90) - currentv);
+	FixedVector newVelocity;
+	TankLib::getVelocityVector(newVelocity, currenth, fixed(90) - currentv);
 	newVelocity.StoreNormalize();
 	newVelocity *= currentMag;
 	

@@ -24,7 +24,6 @@
 
 #include <net/NetBuffer.h>
 #include <list>
-#include <boost/thread.hpp>
 
 class NetBufferPool
 {
@@ -37,7 +36,6 @@ public:
 protected:
 	static NetBufferPool *instance_;
 	std::list<NetBuffer *> messagePool_;
-	boost::mutex messagePoolMutex_;
 
 private:
 	NetBufferPool();

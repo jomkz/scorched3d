@@ -29,20 +29,20 @@ class ConsoleRuleFnI
 public:
 	virtual ~ConsoleRuleFnI();
 
-	virtual bool getBoolParam(const char *name) { DIALOG_ASSERT(0); return true; }
-	virtual void setBoolParam(const char *name, bool value) { DIALOG_ASSERT(0); }
+	virtual bool getBoolParam(const std::string &name) { DIALOG_ASSERT(0); return true; }
+	virtual void setBoolParam(const std::string &name, bool value) { DIALOG_ASSERT(0); }
 
-	virtual float getNumberParam(const char *name) { DIALOG_ASSERT(0); return 0.0f; }
-	virtual void  setNumberParam(const char *name, float value) { DIALOG_ASSERT(0); }
+	virtual float getNumberParam(const std::string &name) { DIALOG_ASSERT(0); return 0.0f; }
+	virtual void  setNumberParam(const std::string &name, float value) { DIALOG_ASSERT(0); }
 
-	virtual const char *getStringParam(const char *name) { DIALOG_ASSERT(0); return 0; }
-	virtual void setStringParam(const char *name, const char *value) { DIALOG_ASSERT(0); }
+	virtual std::string getStringParam(const std::string &name) { DIALOG_ASSERT(0); return 0; }
+	virtual void setStringParam(const std::string &name, const std::string &value) { DIALOG_ASSERT(0); }
 };
 
 class ConsoleRuleFn : public ConsoleRule
 {
 public:
-	ConsoleRuleFn(const char *name, 
+	ConsoleRuleFn(const std::string &name, 
 		ConsoleRuleFnI *user, 
 		ConsoleRuleType type, 
 		bool write = false);

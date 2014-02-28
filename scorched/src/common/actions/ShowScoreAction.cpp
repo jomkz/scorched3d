@@ -31,8 +31,6 @@
 #include <client/ClientState.h>
 #endif
 
-bool ShowScoreAction::finalScoreStatic_ = false;
-
 ShowScoreAction::ShowScoreAction(fixed scoreTime, bool finalScore) :
 	Action(true),
 	scoreTime_(scoreTime),
@@ -46,8 +44,6 @@ ShowScoreAction::~ShowScoreAction()
 
 void ShowScoreAction::init()
 {
-	finalScoreStatic_ = finalScore_;
-
 #ifndef S3D_SERVER
 	if (!context_->getServerMode())
 	{

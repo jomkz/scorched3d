@@ -51,11 +51,11 @@ bool XMLParser::parse(const char *data, int len, int final)
 	return (status == XML_STATUS_OK);
 }
 
-const char *XMLParser::getParseError()
+std::string XMLParser::getParseError()
 {
 	XML_Error errorCode = XML_GetErrorCode(p_);
 
-	static char message[1024];
+	char message[1024];
 	snprintf(message, 1024,
 		"Parse Error, File %s: Line:%i Col:%i Error:%s",
 		source_.c_str(),

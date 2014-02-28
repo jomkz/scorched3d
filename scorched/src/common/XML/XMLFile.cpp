@@ -43,7 +43,7 @@ bool XMLFile::readFile(const std::string &fileName)
 			fileError_ = std::string("Failed to find file \"") + fileName + "\"";
 		}
 
-		return true;
+		return false;
 	}
 
 	// Parse the file

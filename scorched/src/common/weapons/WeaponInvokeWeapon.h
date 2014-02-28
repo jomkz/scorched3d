@@ -41,8 +41,6 @@ public:
 
 protected:
 	Weapon *invokeWeapon_;
-	static std::set<Weapon *> weaponStack_;
-
 };
 
 

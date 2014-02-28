@@ -26,24 +26,31 @@
 #include <tankai/TankAINone.h>
 #include <actions/TankRemove.h>
 
+static boost::mutex TankRemoveSimActionCountLock;
 unsigned int TankRemoveSimAction::TankRemoveSimActionCount = 0;
 
 REGISTER_CLASS_SOURCE(TankRemoveSimAction);
 
 TankRemoveSimAction::TankRemoveSimAction()
 {
+	TankRemoveSimActionCountLock.lock();
 	TankRemoveSimActionCount++;
+	TankRemoveSimActionCountLock.unlock();
 }
 
 TankRemoveSimAction::TankRemoveSimAction(unsigned int playerId, fixed removalTime) :
 	playerId_(playerId), removalTime_(removalTime)
 {
+	TankRemoveSimActionCountLock.lock();
 	TankRemoveSimActionCount++;
+	TankRemoveSimActionCountLock.unlock();
 }
 
 TankRemoveSimAction::~TankRemoveSimAction()
 {
+	TankRemoveSimActionCountLock.lock();
 	TankRemoveSimActionCount--;
+	TankRemoveSimActionCountLock.unlock();
 }
 
 bool TankRemoveSimAction::invokeAction(ScorchedContext &context)

@@ -89,9 +89,9 @@ void TankScore::setScore(int score)
 	totalScoreEarned_ += score_ - oldScore;
 }
 
-const char *TankScore::getTimePlayedString()
+std::string TankScore::getTimePlayedString()
 {
-	static char timestr[256];
+	char timestr[256];
 	time_t seconds = time(0) - startTime_;
 	div_t playedTimeHr = div((int) seconds, 3600);
 	div_t playedTime = div(playedTimeHr.rem, 60);
@@ -104,9 +104,9 @@ const char *TankScore::getTimePlayedString()
 	return timestr;
 }
 
-const char *TankScore::getScoreString()
+std::string TankScore::getScoreString()
 {
-	static char score[256];
+	char score[256];
 	snprintf(score, 256, "%i (%i$ %iK %iA %iW %iL %iR)", 
 		getScore(), getMoney(), getKills(), getAssists(), 
 		getWins(), tank_->getState().getLives(),

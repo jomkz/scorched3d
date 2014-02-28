@@ -50,7 +50,7 @@ public:
 	bool getIntersect(Line &direction, Vector &intersect);
 
 	// Napalm map functions
-	fixed &getNapalmHeight(int w, int h)
+	fixed getNapalmHeight(int w, int h)
 		{ return nmap_.getNapalmHeight(w, h); }
 
 	// Deformable landscape area fns

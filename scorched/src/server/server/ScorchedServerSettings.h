@@ -37,6 +37,9 @@ public:
 	const std::string &type() { return type_; }
 
 private:
+	ScorchedServerSettings(const ScorchedServerSettings &other);
+	ScorchedServerSettings &operator= (const ScorchedServerSettings &other);
+
 	std::string type_;
 };
 

@@ -74,6 +74,7 @@ public:
 	void sortList(std::list<Accessory *> &accList, int sortKey=SortNothing);
 
 protected:
+	unsigned int nextAccessoryId_;
 	std::set<std::string> tabGroups_;
 	std::map<unsigned int, Accessory *> accessoriesById_;
 	std::list<Accessory *> accessories_;
