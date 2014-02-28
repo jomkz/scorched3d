@@ -25,7 +25,7 @@
 #include <landscapedef/LandscapeDefinition.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/Simulator.h>
-#include <simactions/TankLoadedSimAction.h>
+#include <simactions/DestinationLoadedSimAction.h>
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
 #include <tank/TankState.h>
@@ -123,28 +123,6 @@ bool ServerLoadLevel::processMessage(
 
 void ServerLoadLevel::setLoaded(unsigned int destinationId)
 {
-	Logger::log(S3D::formatStringBuffer("sdsd sdsd"));
-
-	// These tanks are now ready to play
-	std::map<unsigned int, Tank *>::iterator itor;
-	std::map<unsigned int, Tank *> &tanks = 
-		ScorchedServer::instance()->getTargetContainer().getTanks();
-	for (itor = tanks.begin();
-		itor != tanks.end();
-		++itor)
-	{
-		// For each tank
-		Tank *tank = (*itor).second;
-
-		Logger::log(S3D::formatStringBuffer("sdsd sdsd %u,%u", destinationId, tank->getDestinationId()));
-
-		if (destinationId == tank->getDestinationId())
-		{
-			TankLoadedSimAction *loadedAction = 
-				new TankLoadedSimAction(tank->getPlayerId(), 
-					tank->getState().getNotSpectator());
-			ScorchedServer::instance()->getServerSimulator().
-				addSimulatorAction(loadedAction);
-		}
-	}
+	ScorchedServer::instance()->getServerSimulator().
+		addSimulatorAction(new DestinationLoadedSimAction(destinationId));
 }

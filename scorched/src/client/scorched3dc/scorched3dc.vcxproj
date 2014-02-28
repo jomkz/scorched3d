@@ -215,6 +215,7 @@
     <ClCompile Include="..\..\common\placement\PlacementTypeTankStart.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementTypeTree.cpp" />
     <ClCompile Include="..\..\common\simactions\AdminSimAction.cpp" />
+    <ClCompile Include="..\..\common\simactions\DestinationLoadedSimAction.cpp" />
     <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp" />
     <ClCompile Include="..\..\common\simactions\PlayMovesSimAction.cpp" />
     <ClCompile Include="..\..\common\simactions\RoundStartSimAction.cpp" />
@@ -697,6 +698,7 @@
     <ClInclude Include="..\..\common\placement\PlacementTypeTankStart.h" />
     <ClInclude Include="..\..\common\placement\PlacementTypeTree.h" />
     <ClInclude Include="..\..\common\simactions\AdminSimAction.h" />
+    <ClInclude Include="..\..\common\simactions\DestinationLoadedSimAction.h" />
     <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h" />
     <ClInclude Include="..\..\common\simactions\PlayMovesSimAction.h" />
     <ClInclude Include="..\..\common\simactions\RoundStartSimAction.h" />

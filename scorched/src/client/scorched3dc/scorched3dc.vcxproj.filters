@@ -1497,6 +1497,9 @@
     <ClCompile Include="DocumentGenerator.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\simactions\DestinationLoadedSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2926,6 +2929,9 @@
     </ClInclude>
     <ClInclude Include="DocumentGenerator.h">
       <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\DestinationLoadedSimAction.h">
+      <Filter>simactions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
