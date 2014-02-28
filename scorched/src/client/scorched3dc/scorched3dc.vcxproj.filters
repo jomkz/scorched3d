@@ -76,6 +76,9 @@
     <Filter Include="uiactions">
       <UniqueIdentifier>{f92f80ec-a12b-4e8b-8f2c-42e520004c79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="models">
+      <UniqueIdentifier>{fe0c7fa2-6c64-4789-9c15-6f7ce6894625}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1496,6 +1499,9 @@
     </ClCompile>
     <ClCompile Include="..\..\common\landscapedef\LandscapeDescriptionsBase.cpp">
       <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\models\ModelFactory.cpp">
+      <Filter>models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2926,6 +2932,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeDescriptionsItem.h">
       <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\models\ModelFactory.h">
+      <Filter>models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

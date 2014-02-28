@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -451,6 +451,7 @@
     <ClCompile Include="..\dialogs\GUIFrameTimer.cpp" />
     <ClCompile Include="..\dialogs\GUIProgressCounter.cpp" />
     <ClCompile Include="..\dialogs\GUITankInfo.cpp" />
+    <ClCompile Include="..\models\ModelFactory.cpp" />
     <ClCompile Include="..\uiactions\UIActiveTankAction.cpp" />
     <ClCompile Include="..\uiactions\UIJoinGameAction.cpp" />
     <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp" />
@@ -933,6 +934,7 @@
     <ClInclude Include="..\dialogs\GUIFrameTimer.h" />
     <ClInclude Include="..\dialogs\GUIProgressCounter.h" />
     <ClInclude Include="..\dialogs\GUITankInfo.h" />
+    <ClInclude Include="..\models\ModelFactory.h" />
     <ClInclude Include="..\uiactions\UIActiveTankAction.h" />
     <ClInclude Include="..\uiactions\UIJoinGameAction.h" />
     <ClInclude Include="..\uiactions\UILandscapeDeformAction.h" />
@@ -976,12 +978,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -1006,19 +1010,19 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(ProjectDir)$(TargetName)_d.pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\cegui-deps-0.8.x-src\dependencies\include;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include;$(PARTICLEUNIVERSE_HOME)\sdk\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_DEPENDENCIES_DIR)\include;$(CEGUI_HOME)\include\cegui-0;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include;$(PARTICLEUNIVERSE_HOME)\sdk\include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <AdditionalOptions>/Zm400 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OgreMain_d.lib;OIS_d.lib;CEGUIBase_d.lib;CEGUIOgreRenderer_d.lib;OgreTerrain_d.lib;zlib_d.lib;libpng_d.lib;expat_d.lib;hydrax_d.lib;skyx_d.lib;ParticleUniverse_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\cegui-deps-0.8.x-src\dependencies\lib\static;$(SKYX_HOME)\debug;$(HYDRAX_HOME)\bin\debug;$(PARTICLEUNIVERSE_HOME)\lib\Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\debug;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_DEPENDENCIES_DIR)\lib\static;$(SKYX_HOME)\lib\debug;$(HYDRAX_HOME)\bin\debug;$(PARTICLEUNIVERSE_HOME)\lib\Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -1030,20 +1034,20 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(ProjectDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_HOME)\CEGUI\include;$(CEGUI_HOME)\cegui-deps-0.8.x-src\dependencies\include;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include;$(PARTICLEUNIVERSE_HOME)\sdk\include</AdditionalIncludeDirectories>
-      <AdditionalOptions>/Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_DEPENDENCIES_DIR)\include;$(CEGUI_HOME)\include\cegui-0;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include;$(PARTICLEUNIVERSE_HOME)\sdk\include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalOptions>/Zm400 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OgreMain.lib;OIS.lib;CEGUIBase-0.lib;CEGUIOgreRenderer-0.lib;OgreTerrain.lib;zlib.lib;libpng.lib;expat.lib;hydrax.lib;skyx.lib;ParticleUniverse.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\release;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;$(CEGUI_HOME)\cegui-deps-0.8.x-src\dependencies\lib\static;$(SKYX_HOME)\release;$(HYDRAX_HOME)\bin\Release;$(PARTICLEUNIVERSE_HOME)\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OgreMain.lib;OIS.lib;CEGUIBase.lib;CEGUIOgreRenderer.lib;OgreTerrain.lib;zlib.lib;libpng.lib;expat.lib;hydrax.lib;skyx.lib;ParticleUniverse.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(CEGUI_HOME)\lib;$(OGRE_HOME)\lib\release;$(OGRE_HOME)\boost\lib;$(BOOST_HOME)\stage\lib;$(CEGUI_HOME)\dependencies\lib\static;$(CEGUI_DEPENDENCIES_DIR)\lib\static;$(SKYX_HOME)\lib\release;$(HYDRAX_HOME)\bin\Release;$(PARTICLEUNIVERSE_HOME)\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

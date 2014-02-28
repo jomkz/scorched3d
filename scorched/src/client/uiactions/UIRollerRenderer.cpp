@@ -22,6 +22,7 @@
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <actions/ShotBounce.h>
+#include <models/ModelFactory.h>
 
 UIRollerRenderer::UIRollerRenderer(ShotBounce *shotBounce) :
 	ClientUISyncActionRegisterable(true),
@@ -76,8 +77,6 @@ void UIRollerRenderer::create()
 {
 	Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
 
-	Ogre::Entity *projectileEntity = sceneManager->createEntity("cube.mesh");
 	projectileNode_ = sceneManager->getRootSceneNode()->createChildSceneNode();
-	projectileNode_->setScale(30.0f, 30.0f, 30.0f);
-	projectileNode_->attachObject(projectileEntity);
+	ModelFactory::attachModel(projectileNode_, shotBounce_->getWeapon()->getRollerModelID());
 }

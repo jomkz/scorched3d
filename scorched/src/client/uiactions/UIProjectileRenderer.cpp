@@ -22,6 +22,7 @@
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <actions/ShotProjectile.h>
+#include <models/ModelFactory.h>
 
 UIProjectileRenderer::UIProjectileRenderer(ShotProjectile *shotProjectile) :
 	ClientUISyncActionRegisterable(true),
@@ -85,10 +86,8 @@ void UIProjectileRenderer::create()
 {
 	Ogre::SceneManager *sceneManager = ScorchedUI::instance()->getOgreSystem().getOgreLandscapeSceneManager();
 
-	Ogre::Entity *projectileEntity = sceneManager->createEntity("snakeeye.mesh");
 	projectileNode_ = sceneManager->getRootSceneNode()->createChildSceneNode();
-	projectileNode_->setScale(30.0f, 30.0f, 30.0f);
-	projectileNode_->attachObject(projectileEntity);
+	ModelFactory::attachModel(projectileNode_, shotProjectile_->getWeapon()->getModelID());
 
 	static int particleNumber = 0;
 	std::string particleName = S3D::formatStringBuffer("pr%u", ++particleNumber);

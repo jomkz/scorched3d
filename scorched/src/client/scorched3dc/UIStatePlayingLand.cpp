@@ -150,6 +150,11 @@ void UIStatePlayingLand::defineOptions()
 
 void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
 {
+	// Add the entire landscape normal data to an image
+	// The image we can resize to match the blend map size
+	// This image is smoothed during the resize process and is a quick/dirty way
+	// of smoothing the landscape normal data over the blend map
+	// We don't need to do this with the height data as we can get this from the landscape itself
 	unsigned char *rawData = OGRE_ALLOC_T(unsigned char, 
 		(hmap_->getMapHeight() + 1)*(hmap_->getMapWidth() + 1)*sizeof(unsigned char), 
 		Ogre::MEMCATEGORY_GENERAL);
@@ -165,9 +170,18 @@ void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
 	}
 	
 	Ogre::Terrain* firstTerrain = terrainGroup_->getTerrain(0, 0);
+
+	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong in release mode
+	size_t blendMapWidth, blendMapHeight;
+	Ogre::TerrainLayerBlendMap* blendMap0 = firstTerrain->getLayerBlendMap(1);
+	blendMap0->convertUVToImageSpace(1.0, 1.0, &blendMapWidth, &blendMapHeight);
+	blendMapWidth++; // They are indexed by Zero
+	blendMapHeight++;
+
 	normalMapImage.loadDynamicImage(rawData, hmap_->getMapWidth() + 1, hmap_->getMapHeight() + 1, 1, Ogre::PF_L8, true);
-	normalMapImage.resize(hmap_->getMapWidth() / 128 * firstTerrain->getLayerBlendMapSize(), 
-		hmap_->getMapHeight() / 128 * firstTerrain->getLayerBlendMapSize());
+	int newWidth = hmap_->getMapWidth() / 128 * blendMapWidth;
+	int newHeight = hmap_->getMapHeight() / 128 * blendMapHeight;
+	normalMapImage.resize(newWidth, newHeight);
 }
 
 void UIStatePlayingLand::defineTerrain(long tx, long ty)
@@ -248,7 +262,14 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 	Ogre::TerrainLayerBlendMap* blendMap2 = terrain->getLayerBlendMap(3);
 	Ogre::TerrainLayerBlendMap* blendMapStone = terrain->getLayerBlendMap(4);
 
-	float imageMultiplier = float(terrain->getLayerBlendMapSize()) / 128.0f;
+	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong in release mode
+	size_t blendMapWidth, blendMapHeight;
+	blendMap0->convertUVToImageSpace(1.0, 1.0, &blendMapWidth, &blendMapHeight);
+	blendMapWidth++; // They are indexed by Zero
+	blendMapHeight++;
+
+	float imageMultiplierX = float(blendMapWidth) / 128.0f;
+	float imageMultiplierY = float(blendMapHeight) / 128.0f;
 	float sx = tx * 128.0f;
 	float sy = ty * 128.0f;
 	float *pBlend[numberSources];
@@ -256,9 +277,9 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 	pBlend[1] = blendMap1->getBlendPointer();
 	pBlend[2] = blendMap2->getBlendPointer();
 	float* pBlendStone = blendMapStone->getBlendPointer();
-	for (Ogre::uint16 y = 0; y < terrain->getLayerBlendMapSize(); ++y)
+	for (Ogre::uint16 y = 0; y < blendMapHeight; ++y)
 	{
-		for (Ogre::uint16 x = 0; x < terrain->getLayerBlendMapSize(); ++x)
+		for (Ogre::uint16 x = 0; x < blendMapWidth; ++x)
 		{
 			// Figure out the height map coords
 			Ogre::Real tsx, tsy;
@@ -269,8 +290,8 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 			int hy = int(hyf);
 
 			// Get height and normal information
-			int ix = int(hxf * imageMultiplier);
-			int iy = int(hyf * imageMultiplier);
+			int ix = int(hxf * imageMultiplierX);
+			int iy = int(hyf * imageMultiplierY);
 			Ogre::ColourValue tempColor = normalMapImage.getColourAt(ix, iy, 0);
 			float normal = tempColor.g;
 			// This stops the height bands from being too uniform

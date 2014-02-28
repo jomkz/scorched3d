@@ -33,6 +33,7 @@
 #include <tankai/TankAICurrent.h>
 #include <tankai/TankAIWeaponSets.h>
 #include <tanket/TanketTypes.h>
+#include <tank/TankModelStore.h>
 
 void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
@@ -70,6 +71,9 @@ void DocumentGenerator::generatDocumentation(const std::string &directory)
 
 	TanketTypes tanketTypes;
 	tanketTypes.generateDocumentation(documentGenerator);
+
+	TankModelStore tankModelStore;
+	tankModelStore.generateDocumentation(documentGenerator);
 
 	documentGenerator.writeDocumentation();
 }
