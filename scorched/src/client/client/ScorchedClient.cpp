@@ -45,8 +45,8 @@
 #include <server/ScorchedServerSettings.h>
 
 TargetSpace *ScorchedClient::targetSpace_ = new TargetSpace();
-ThreadCallback *ScorchedClient::threadCallback_ = new ThreadCallback();
-ClientUISyncExternal *ScorchedClient::clientUISyncExternal_ = new ClientUISyncExternal();
+ThreadCallback *ScorchedClient::threadCallback_ = new ThreadCallback(false);
+ClientUISync *ScorchedClient::clientUISync_ = new ClientUISync();
 
 static time_t startTime = 0;
 ScorchedClient *ScorchedClient::instance_ = 0;
@@ -128,14 +128,13 @@ ScorchedClient::ScorchedClient() :
 	getComsMessageHandler().setConnectionHandler(clientMessageHandler_);
 
 	console_ = new ConsoleImpl();
+	ClientOptions::instance()->addToConsole(*console_);
 	channelManager_ = new ClientChannelManager(getComsMessageHandler(), *console_);
 	clientHandlers_ = new ClientHandlers(getComsMessageHandler());
 	clientState_ = new ClientState(getComsMessageHandler());
 	clientSimulator_ = new ClientSimulator();
 	clientSimulator_->setScorchedContext(this);
 	clientAdmin_ = new ClientAdmin(*console_);
-	clientUISync_ = new ClientUISync();
-	clientUISyncExternal_->setClientUISync(clientUISync_);
 
 	processComsSimulateMessageAdapter_ = new ComsMessageHandlerIAdapter<ClientSimulator>(
 		clientSimulator_, &ClientSimulator::processComsSimulateMessage,
@@ -149,13 +148,11 @@ ScorchedClient::ScorchedClient() :
 
 ScorchedClient::~ScorchedClient()
 {
-	clientUISyncExternal_->setClientUISync(0);
 	targetSpace_->clear();
 	delete channelManager_;
 	delete clientHandlers_;
 	delete clientState_;
 	delete clientSimulator_;
-	delete clientUISync_;
 	delete clientAdmin_;
 	delete processComsSimulateMessageAdapter_;
 	delete processNetStatMessageAdapter_;
@@ -291,7 +288,6 @@ bool ScorchedClient::clientLoop()
 {
 	ScorchedClient::instance()->getClientSimulator().simulate();
 
-	Logger::processLogEntries();
 	bool processed = getNetInterface().processMessages() > 0;
 
 	if (ClientParams::instance()->getExitTime() > 0)
@@ -323,4 +319,14 @@ bool ScorchedClient::clientLoop()
 	clientUISync_->checkForSyncFromClient();
 
 	return processed;
+}
+
+ClientUISyncFromClient &ScorchedClient::getClientUISync() 
+{ 
+	return *clientUISync_; 
+}
+
+ClientUISyncFromUI &ScorchedClient::getClientUISyncExternal() 
+{ 
+	return *clientUISync_; 
 }

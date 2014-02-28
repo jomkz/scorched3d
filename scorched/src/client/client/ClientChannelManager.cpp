@@ -209,7 +209,7 @@ unsigned int ClientChannelManager::getChannelEntry(ClientChannelManagerI *reciev
 	return 0;
 }
 
-void ClientChannelManager::say(std::vector<ConsoleRuleValue> &values)
+void ClientChannelManager::say(std::vector<ConsoleRuleValue> &values, unsigned int userData)
 {
 	ConsoleRuleValue &channelValue = values[1];
 	ConsoleRuleValue &textValue = values[2];

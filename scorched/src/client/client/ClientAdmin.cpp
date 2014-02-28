@@ -39,87 +39,87 @@ ClientAdmin::ClientAdmin(Console &console)
 
 	// No Params
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminNoParams, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("killall")),
 			(unsigned int) ComsAdminMessage::AdminKillAll));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminNoParams, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("newgame")),
 			(unsigned int) ComsAdminMessage::AdminNewGame));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminNoParams, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("showbanned")),
 			(unsigned int) ComsAdminMessage::AdminShowBanned));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminNoParams, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("show")),
 			(unsigned int) ComsAdminMessage::AdminShow));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminNoParams, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("logout")),
 			(unsigned int) ComsAdminMessage::AdminLogout));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminNoParams, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("synccheck")),
 			(unsigned int) ComsAdminMessage::AdminSyncCheck));
 
 	// One Number Param 
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("kick"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminKick));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("kill"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminKill));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("ban"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminBan));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("flag"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminFlag));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("mute"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminMute));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("permmute"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminPermMute));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("unpermmute"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminUnPermMute));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("unmute"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminUnMute));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("poor"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber)),
@@ -127,25 +127,25 @@ ClientAdmin::ClientAdmin(Console &console)
 
 	// One String Param
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("talk"), 
 			ConsoleRuleParam("text", ConsoleRuleTypeString)),
 			(unsigned int) ComsAdminMessage::AdminTalk));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("admintalk"), 
 			ConsoleRuleParam("text", ConsoleRuleTypeString)),
 			(unsigned int) ComsAdminMessage::AdminAdminTalk));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("message"), 
 			ConsoleRuleParam("text", ConsoleRuleTypeString)),
 			(unsigned int) ComsAdminMessage::AdminMessage));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminOneParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("add"), 
 			ConsoleRuleParam("playertype", ConsoleRuleTypeString)),
@@ -153,14 +153,14 @@ ClientAdmin::ClientAdmin(Console &console)
 
 	// Two Number Params
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminTwoParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("slap"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber),
 			ConsoleRuleParam("amount", ConsoleRuleTypeNumber)),
 			(unsigned int) ComsAdminMessage::AdminSlap));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminTwoParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("changename"), 
 			ConsoleRuleParam("player", ConsoleRuleTypeNumber),
@@ -169,14 +169,14 @@ ClientAdmin::ClientAdmin(Console &console)
 
 	// Two String Params
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminTwoParam, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("login"), 
 			ConsoleRuleParam("username", ConsoleRuleTypeString),
 			ConsoleRuleParam("password", ConsoleRuleTypeString)),
 			(unsigned int) ComsAdminMessage::AdminLogin));
 	deleter_.addRule(
-		new ConsoleRuleMethodIAdapterEx2<ClientAdmin>(console,
+		new ConsoleRuleMethodIAdapterEx<ClientAdmin>(console,
 			this, &ClientAdmin::adminNoParams, "admin", 
 			ConsoleUtil::formParams(ConsoleRuleParam("login")),
 			(unsigned int) ComsAdminMessage::AdminLogin));

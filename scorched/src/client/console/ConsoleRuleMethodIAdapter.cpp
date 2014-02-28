@@ -35,7 +35,7 @@ public:
 			"test", std::vector<ConsoleRuleParam>());
 	}
 
-	void test(std::vector<ConsoleRuleValue>& values)
+	void test(std::vector<ConsoleRuleValue>& values, unsigned int userData)
 	{
 	}
 

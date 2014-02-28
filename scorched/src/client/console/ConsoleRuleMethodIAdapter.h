@@ -22,7 +22,6 @@
 #define __INCLUDE_ConsoleRuleMethodIAdapterh_INCLUDE__
 
 #include <console/Console.h>
-#include <client/ScorchedClient.h>
 
 // Q. Hmm what happens when you have a long winded naming scheme?
 // A. name -> inf
@@ -73,54 +72,21 @@ protected:
 	void (T::*call_)();
 };
 
-// Same as above but passed params to method
+// Same as above but passed params/userdata to method
 template<class T>
 class ConsoleRuleMethodIAdapterEx : public ConsoleRule
 {
 public:
 	ConsoleRuleMethodIAdapterEx(Console &console, T *inst, 
-		void (T::*call)(std::vector<ConsoleRuleValue>&), 
-		const char *name, const std::vector<ConsoleRuleParam> &params) :
-		ConsoleRule(name, params), 
-		console_(console), inst_(inst), call_(call)
-	{
-		console_.addRule(this);
-	};
-	virtual ~ConsoleRuleMethodIAdapterEx()
-	{
-		console_.removeRule(this);
-	};
-
-	virtual void runRule(
-		Console *console,
-		const char *wholeLine,
-		std::vector<ConsoleRuleValue> &values)
-	{
-		(inst_->*call_)(values);
-	};
-
-protected:
-	Console &console_;
-	std::string name_;
-	T *inst_;
-	void (T::*call_)(std::vector<ConsoleRuleValue>&);
-};
-
-// Same as above but passed userdata to method
-template<class T>
-class ConsoleRuleMethodIAdapterEx2 : public ConsoleRule
-{
-public:
-	ConsoleRuleMethodIAdapterEx2(Console &console, T *inst, 
 		void (T::*call)(std::vector<ConsoleRuleValue>&, unsigned int), 
 		const char *name, const std::vector<ConsoleRuleParam> &params,
-		unsigned int userData) :
+		unsigned int userData = 0) :
 		ConsoleRule(name, params, userData), 
 		console_(console), inst_(inst), call_(call)
 	{
 		console_.addRule(this);
 	};
-	virtual ~ConsoleRuleMethodIAdapterEx2()
+	virtual ~ConsoleRuleMethodIAdapterEx()
 	{
 		console_.removeRule(this);
 	};

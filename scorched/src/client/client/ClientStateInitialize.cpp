@@ -224,9 +224,9 @@ void ClientStateInitialize::sendAuth()
 	connectMessage.setPassword(ClientParams::instance()->getPassword());
 	connectMessage.setUniqueId(uniqueId);
 	connectMessage.setSUI(SUI);
-	connectMessage.setHostDesc(OptionsDisplay::instance()->getHostDescription());
+	connectMessage.setHostDesc(ClientOptions::instance()->getHostDescription());
 	connectMessage.setNoPlayers(noPlayers);
-	connectMessage.setCompatabilityVer((unsigned int) OptionsDisplay::instance()->getOptions().size());
+	connectMessage.setCompatabilityVer((unsigned int) ClientOptions::instance()->getOptions().size());
 
 	ComsMessageSender::sendToServer(connectMessage);
 }
@@ -474,7 +474,6 @@ bool ClientStateInitialize::initializeMod()
 	// This is after mods are complete but before any tanks models are used
 	if (!ScorchedClient::instance()->getTankModels().loadTankMeshes(
 		ScorchedClient::instance()->getContext(), 
-		OptionsDisplay::instance()->getTankDetail(),
 		UIProgressCounter::instance()))
 	{
 		S3D::dialogMessage("Scorched 3D", "Failed to load all tank models");

@@ -25,8 +25,8 @@
 #include <common/Logger.h>
 #include <limits.h>
 
-GUIConsoleWriteAction::GUIConsoleWriteAction(const CEGUI::String &text) :
-	text_(text)
+GUIConsoleWriteAction::GUIConsoleWriteAction(const CEGUI::String &text, bool command) :
+	text_(text), command_(command)
 {
 }
 
@@ -36,7 +36,22 @@ GUIConsoleWriteAction::~GUIConsoleWriteAction()
 
 void GUIConsoleWriteAction::performUIAction()
 {
-	GUIConsole::instance()->outputText(text_);
+	GUIConsole::instance()->outputText(text_, command_);
+	delete this;
+}
+
+GUIConsoleUpdateTextAction::GUIConsoleUpdateTextAction(const CEGUI::String &text) :
+	text_(text)
+{
+}
+
+GUIConsoleUpdateTextAction::~GUIConsoleUpdateTextAction()
+{
+}
+
+void GUIConsoleUpdateTextAction::performUIAction()
+{
+	GUIConsole::instance()->setText(text_);
 	delete this;
 }
 
@@ -52,8 +67,8 @@ ConsoleImpl::~ConsoleImpl()
 
 void ConsoleImpl::addLine(bool parse, const CEGUI::String &text)
 {
-	GUIConsoleWriteAction *writeAction = new GUIConsoleWriteAction(text);
-	ScorchedClient::instance()->getClientUISync().addClientUISyncAction(writeAction);
+	GUIConsoleWriteAction *writeAction = new GUIConsoleWriteAction(text, parse);
+	ScorchedClient::instance()->getClientUISync().addActionFromClient(writeAction);
 	if (parse)
 	{
 		rules_.addLine(this, text.c_str());
@@ -71,5 +86,27 @@ void ConsoleImpl::help()
 		++itor)
 	{
 		addLine(false, *itor);
+	}
+}
+
+void ConsoleImpl::matchRule(const CEGUI::String &line)
+{
+	std::vector<ConsoleRule *> matches;
+	std::string result = rules_.matchRule(line.c_str(), matches);
+
+	if (result.length() > 0)
+	{
+		GUIConsoleUpdateTextAction *writeAction = new GUIConsoleUpdateTextAction(result);
+		ScorchedClient::instance()->getClientUISync().addActionFromClient(writeAction);
+	}
+
+	addLine(false, "-------------------");
+	std::vector<ConsoleRule *>::iterator itor;
+	for (itor = matches.begin();
+		itor != matches.end();
+		++itor)
+	{
+		std::string text = (*itor)->toString();
+		addLine(false, text.c_str());
 	}
 }

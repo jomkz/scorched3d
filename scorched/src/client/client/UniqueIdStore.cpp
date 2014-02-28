@@ -126,7 +126,7 @@ bool UniqueIdStore::saveUniqueId(unsigned int ip, const char *id,
 		Logger::log(S3D::formatStringBuffer("Server ip does not match published ip\n%s != %s (%s)",
 			actualIp.c_str(), published, pubIp.c_str()));
 
-		if (OptionsDisplay::instance()->getValidateServerIp())
+		if (ClientOptions::instance()->getValidateServerIp())
 		{
 			return false;
 		}

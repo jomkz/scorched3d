@@ -64,7 +64,6 @@ void ServerConsoleProgressCounter::logMessage(LoggerInfo &info)
 
 void ServerConsoleProgressCounter::operationChange(const LangString &op)
 {
-	Logger::processLogEntries();
 	hashes_ = 0;
 }
 

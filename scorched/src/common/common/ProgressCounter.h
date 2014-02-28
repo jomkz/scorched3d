@@ -42,6 +42,7 @@ public:
 	void setNewOp(const LangString &op);
 	void setNewPercentage(float percentage);
 
+	ProgressCounterI *getUser() { return user_; }
 	LangString &getCurrentOp() { return currentOp_; }
 	float getCurrentPercentage() { return currentPercentage_; }
 

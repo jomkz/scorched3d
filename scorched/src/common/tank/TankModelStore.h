@@ -33,8 +33,7 @@ public:
 	TankModelStore();
 	virtual ~TankModelStore();
 
-	bool loadTankMeshes(ScorchedContext &context, int detailLevel,
-		ProgressCounter *counter = 0);
+	bool loadTankMeshes(ScorchedContext &context, ProgressCounter *counter = 0);
 	void clear();
 
 	TankModel *getModelByName(const char *name);

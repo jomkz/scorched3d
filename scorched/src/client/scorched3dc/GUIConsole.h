@@ -22,6 +22,7 @@
 #define AFX_GUIConsole_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
 #include <engine/ThreadCallbackI.h>
+#include <common/LoggerI.h>
 
 class GUIConsoleClientThreadCallback : public ThreadCallbackI 
 {
@@ -33,10 +34,23 @@ public:
 	virtual void callbackInvoked();
 
 protected:
-	const CEGUI::String inMsg_;
+	CEGUI::String inMsg_;
 };
 
-class GUIConsole
+class GUIConsoleTabCompleteClientThreadCallback : public ThreadCallbackI 
+{
+public:
+	GUIConsoleTabCompleteClientThreadCallback(const CEGUI::String &currentText);
+	virtual ~GUIConsoleTabCompleteClientThreadCallback();
+
+	// ThreadCallbackI
+	virtual void callbackInvoked();
+
+protected:
+	CEGUI::String currentText_;
+};
+
+class GUIConsole : public LoggerI
 {
 public:
 	static GUIConsole *instance();
@@ -44,13 +58,21 @@ public:
 	void setVisible(bool visible);
 	bool isVisible(); 
  
-	void outputText(const CEGUI::String &inMsg, const CEGUI::Colour &colour = CEGUI::Colour( 0xFFFFFFFF)); 
+	void outputText(const CEGUI::String &inMsg, bool command); 
+	void setText(const CEGUI::String &text);
+
+	// LoggerI
+	virtual void logMessage(LoggerInfo &info);
 
 protected:
 	void create();   
+	void tabComplete();
 	bool handle_TextSubmitted(const CEGUI::EventArgs &e);
+	bool handle_keyDownSubmitted(const CEGUI::EventArgs &e);
  
 	CEGUI::Window *consoleWindow_;
+	CEGUI::Editbox* editBox_;
+	CEGUI::Listbox *outputWindow_;
 
 private:
 	GUIConsole();

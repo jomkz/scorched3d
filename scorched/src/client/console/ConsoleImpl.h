@@ -29,8 +29,22 @@
 class GUIConsoleWriteAction : public ClientUISyncAction 
 {
 public:
-	GUIConsoleWriteAction(const CEGUI::String &text);
+	GUIConsoleWriteAction(const CEGUI::String &text, bool command);
 	virtual ~GUIConsoleWriteAction();
+	
+	// ClientUISyncAction
+	virtual void performUIAction();
+
+private:
+	bool command_;
+	CEGUI::String text_;
+};
+
+class GUIConsoleUpdateTextAction : public ClientUISyncAction 
+{
+public:
+	GUIConsoleUpdateTextAction(const CEGUI::String &text);
+	virtual ~GUIConsoleUpdateTextAction();
 	
 	// ClientUISyncAction
 	virtual void performUIAction();
@@ -50,6 +64,8 @@ public:
 
 	virtual void addLine(bool parse, const CEGUI::String &line);
 	virtual void help();
+
+	virtual void matchRule(const CEGUI::String &line);
 
 protected:
 	ConsoleRules rules_;

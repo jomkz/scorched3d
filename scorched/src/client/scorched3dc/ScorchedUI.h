@@ -24,7 +24,6 @@
 class InputManager;
 class OgreSystem;
 class UIState;
-class ThreadCallback;
 class ScorchedUI
 {
 public:
@@ -37,7 +36,6 @@ public:
 
 	OgreSystem &getOgreSystem() { return *ogreSystem_; }
 	UIState &getUIState() { return *uiState_; }
-	ThreadCallback &getUIThreadCallback() { return *uiThreadCallback_; }
 	InputManager &getInputManager() { return *inputManager_; }
 
 protected:
@@ -46,7 +44,6 @@ protected:
 	UIState *uiState_;
 	OgreSystem *ogreSystem_;
 	InputManager *inputManager_;
-	ThreadCallback *uiThreadCallback_;
 };
 
 #endif // __INCLUDE_ScorchedUIh_INCLUDE__

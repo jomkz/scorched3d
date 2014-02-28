@@ -73,7 +73,7 @@ protected:
 	ComsMessageHandlerI *channelTextMessageTypeAdapter_;
 	ConsoleRule *consoleRule_;
 	unsigned int getChannelEntry(ClientChannelManagerI *reciever);
-	void say(std::vector<ConsoleRuleValue> &values);
+	void say(std::vector<ConsoleRuleValue> &values, unsigned int userData);
 	bool processChannelMessage(NetMessage &message, NetBufferReader &reader);
 	bool processChannelTextMessage(NetMessage &message, NetBufferReader &reader);
 };

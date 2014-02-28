@@ -23,6 +23,7 @@
 
 #include <common/ProgressCounter.h>
 #include <engine/ThreadCallbackI.h>
+#include <engine/ThreadCallback.h>
 
 class UIProgressThreadCallback : public ThreadCallbackI
 {
@@ -43,18 +44,26 @@ class UIProgressCounter : public ProgressCounterI
 public:
 	static ProgressCounter *instance();
 
+	void updateProgress();
+
 	// ProgressCounterI
 	// ** Called from the client and server so careful with threading **
 	virtual void operationChange(const LangString &op);
 	virtual void progressChange(const LangString &op, const float percentage);
 
+protected:
+	time_t lastTime_;
+	// A seperate callback mechanism so we can get progress when
+	// the client is blocked and cant use uisync
+	// Most other things should use this as it may cause
+	// issues with sequencing of other actions being performed via uisync
+	ThreadCallback threadCallback_;
+
 private:
 	static ProgressCounter *instance_;
 
 	UIProgressCounter ();
-	virtual ~UIProgressCounter ();
-
-	time_t lastTime_;
+	virtual ~UIProgressCounter ();	
 };
 
 #endif

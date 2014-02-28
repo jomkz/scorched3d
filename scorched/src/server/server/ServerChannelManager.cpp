@@ -335,6 +335,7 @@ void ServerChannelManager::refreshDestination(unsigned int destinationId)
 {
 	// Get the sender for this message
 	DestinationEntry *destEntry = getDestinationEntryById(destinationId);
+	if (!destEntry) return; // No available log output
 
 	// Form the list of available and joined channels
 	// for each local id and send them back to the client

@@ -33,8 +33,7 @@ TankModelStore::~TankModelStore()
 	clear();
 }
 
-bool TankModelStore::loadTankMeshes(ScorchedContext &context, 
-	int detailLevel, ProgressCounter *counter)
+bool TankModelStore::loadTankMeshes(ScorchedContext &context, ProgressCounter *counter)
 {
 	clear();
 
@@ -59,7 +58,7 @@ bool TankModelStore::loadTankMeshes(ScorchedContext &context,
 
 	// Itterate all of the tanks in the file
 	int count = 0;
-	std::vector<TankModel *> randomModels, lowModels, midModels, highModels;
+	std::vector<TankModel *> randomModels, allModels;
     std::list<XMLNode *>::iterator childrenItor;
 	std::list<XMLNode *> &children = file.getRootNode()->getChildren();
     for (childrenItor = children.begin();
@@ -88,23 +87,17 @@ bool TankModelStore::loadTankMeshes(ScorchedContext &context,
 		}
 		else 
 		{
-			lowModels.push_back(tankModel);
+			allModels.push_back(tankModel);
 		}
 	}
 
 	// Add tanks dependant on the set detail level
-	if (detailLevel >= 2) addModels(highModels);
-	if (detailLevel >= 1) addModels(midModels);
-	if (detailLevel >= 0) addModels(lowModels);
-	if (models_.empty()) addModels(midModels);
-	if (models_.empty()) addModels(highModels);
+	addModels(allModels);
 	addModels(randomModels);
 
 	// Remove any models we don't use
 	killModels(randomModels);
-	killModels(lowModels);
-	killModels(midModels);
-	killModels(highModels);
+	killModels(allModels);
 
 	return true;
 }

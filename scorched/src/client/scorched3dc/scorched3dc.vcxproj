@@ -442,9 +442,8 @@
     <ClCompile Include="..\console\ConsoleImpl.cpp" />
     <ClCompile Include="..\console\ConsoleMethods.cpp" />
     <ClCompile Include="..\console\ConsoleRule.cpp" />
-    <ClCompile Include="..\console\ConsoleRuleFn.cpp" />
-    <ClCompile Include="..\console\ConsoleRuleFnIAdapter.cpp" />
     <ClCompile Include="..\console\ConsoleRuleMethodIAdapter.cpp" />
+    <ClCompile Include="..\console\ConsoleRuleOptionsAdapter.cpp" />
     <ClCompile Include="..\console\ConsoleRules.cpp" />
     <ClCompile Include="CameraController.cpp" />
     <ClCompile Include="GUIConsole.cpp" />
@@ -904,9 +903,8 @@
     <ClInclude Include="..\console\ConsoleImpl.h" />
     <ClInclude Include="..\console\ConsoleMethods.h" />
     <ClInclude Include="..\console\ConsoleRule.h" />
-    <ClInclude Include="..\console\ConsoleRuleFn.h" />
-    <ClInclude Include="..\console\ConsoleRuleFnIAdapter.h" />
     <ClInclude Include="..\console\ConsoleRuleMethodIAdapter.h" />
+    <ClInclude Include="..\console\ConsoleRuleOptionsAdapter.h" />
     <ClInclude Include="..\console\ConsoleRules.h" />
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="GUIConsole.h" />

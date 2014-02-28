@@ -36,7 +36,7 @@ public:
 	static LoggerInfo defaultInfo;
 	static void addLogger(LoggerI *logger, bool logFromUIThread);
 	static void remLogger(LoggerI *logger);
-	static void processLogEntries();
+	static void processLogEntries(); // Should only call from UI thread
 
 	static void log(const LoggerInfo &info);
 	static void log(const char *text);

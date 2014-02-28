@@ -154,7 +154,6 @@ void TankAICurrentMove::playMove(Tanket *tanket,
 		}
 		else
 		{
-			Logger::processLogEntries();
 			DIALOG_ASSERT(0);
 		}
 	}

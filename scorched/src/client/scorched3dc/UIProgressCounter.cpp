@@ -34,6 +34,11 @@ UIProgressThreadCallback::~UIProgressThreadCallback()
 
 void UIProgressThreadCallback::callbackInvoked()
 {
+	if (ScorchedUI::instance()->getUIState().getState() != UIState::StateProgress)
+	{
+		return;
+	}
+
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::Window *rootWindow = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 	CEGUI::DefaultWindow* staticText = static_cast<CEGUI::DefaultWindow*>(rootWindow->getChild("StaticText"));
@@ -59,12 +64,18 @@ ProgressCounter *UIProgressCounter::instance()
 	return instance_;
 }
 
-UIProgressCounter::UIProgressCounter() : lastTime_(0)
+UIProgressCounter::UIProgressCounter() : 
+	lastTime_(0), threadCallback_(false)
 {
 }
 
 UIProgressCounter::~UIProgressCounter()
 {
+}
+
+void UIProgressCounter::updateProgress()
+{
+	threadCallback_.processCallbacks();
 }
 
 void UIProgressCounter::operationChange(const LangString &op)
@@ -79,6 +90,6 @@ void UIProgressCounter::progressChange(const LangString &op, const float percent
 	{
 		lastTime_ = currentTime;
 		UIProgressThreadCallback *callback = new UIProgressThreadCallback(op, percentage);
-		ScorchedUI::instance()->getUIThreadCallback().addCallback(callback);
+		threadCallback_.addCallback(callback);
 	}
 }

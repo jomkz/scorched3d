@@ -27,7 +27,7 @@
 class ThreadCallback
 {
 public:
-	ThreadCallback();
+	ThreadCallback(bool allowedSync);
 	virtual ~ThreadCallback();
 
 	void addCallback(ThreadCallbackI *callback);
@@ -35,7 +35,7 @@ public:
 
 	void processCallbacks();
 protected:
-	bool callbackOutstanding_;
+	bool callbackOutstanding_, allowedSync_;
 	boost::mutex callbackMutex_;
 	std::list<ThreadCallbackI *> callbacks_;
 };

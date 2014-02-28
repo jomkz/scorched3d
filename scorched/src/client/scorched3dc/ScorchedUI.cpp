@@ -22,7 +22,7 @@
 #include <scorched3dc/UIState.h>
 #include <scorched3dc/OgreSystem.h>
 #include <scorched3dc/InputManager.h>
-#include <engine/ThreadCallback.h>
+#include <scorched3dc/UIProgressCounter.h>
 #include <common/Clock.h>
 #include <common/Logger.h>
 #include <common/FileLogger.h>
@@ -45,7 +45,6 @@ ScorchedUI::ScorchedUI() :
 	uiState_ = new UIState();
 	ogreSystem_ = new OgreSystem();
 	inputManager_ = new InputManager();
-	uiThreadCallback_ = new ThreadCallback();
 }
 
 ScorchedUI::~ScorchedUI()
@@ -53,7 +52,6 @@ ScorchedUI::~ScorchedUI()
 	delete uiState_;
 	delete ogreSystem_;
 	delete inputManager_;
-	delete uiThreadCallback_;
 	instance_ = 0;
 }
 
@@ -89,9 +87,10 @@ bool ScorchedUI::go()
 
 		// Pump window messages for nice behaviour
 		Ogre::WindowEventUtilities::messagePump();
+		Logger::processLogEntries();
  
 		// Update UI
-		uiThreadCallback_->processCallbacks();
+		((UIProgressCounter *)UIProgressCounter::instance()->getUser())->updateProgress();
  
 		// Render a frame
 		uiState_->updateState(frameTime);

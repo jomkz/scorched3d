@@ -20,8 +20,8 @@
 
 #include <engine/ThreadCallback.h>
 
-ThreadCallback::ThreadCallback() :
-	callbackOutstanding_(false)
+ThreadCallback::ThreadCallback(bool allowedSync) :
+	callbackOutstanding_(false), allowedSync_(allowedSync)
 {
 }
 
@@ -38,6 +38,11 @@ void ThreadCallback::addCallback(ThreadCallbackI *callback)
 
 void ThreadCallback::addCallbackSync(ThreadCallbackI &callback)
 {
+	if (!allowedSync_)
+	{
+		S3D::dialogExit("ThreadCallback", "Sync not enabled");
+	}
+
 	boost::unique_lock<boost::mutex> lock(callbackMutex_);
 	callback.sync = new ThreadCallbackISync();
 	callbacks_.push_back(&callback);

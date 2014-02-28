@@ -64,9 +64,14 @@ void UIState::setState(State nextState)
 	currentState_->createState();
 }
 
+UIState::State UIState::getState() 
+{ 
+	return currentState_->getState(); 
+}
+
 void UIState::setStateNonUIThread(State nextState)
 {
-	ScorchedClient::instance()->getClientUISync().addClientUISyncAction(
+	ScorchedClient::instance()->getClientUISync().addActionFromClient(
 		new UIStateClientUISyncAction(nextState));
 }
 

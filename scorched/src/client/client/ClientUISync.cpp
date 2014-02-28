@@ -28,19 +28,20 @@ ClientUISyncAction::~ClientUISyncAction()
 {
 }
 
-ClientUISync::ClientUISync()
+ClientUISyncActionBuffer::ClientUISyncActionBuffer()
 {
 	actionsSize_ = 1024;
 	actions_ = new ClientUISyncAction*[actionsSize_];
 	actionCount_ = 0;
-	currentlySynching_ = false;
 }
 
-ClientUISync::~ClientUISync()
+ClientUISyncActionBuffer::~ClientUISyncActionBuffer()
 {
+	delete [] actions_;
+	actions_ = 0;
 }
 
-void ClientUISync::addClientUISyncAction(ClientUISyncAction *action)
+void ClientUISyncActionBuffer::addClientUISyncAction(ClientUISyncAction *action)
 {
 	if (actionCount_ == actionsSize_)
 	{
@@ -54,9 +55,27 @@ void ClientUISync::addClientUISyncAction(ClientUISyncAction *action)
 	++actionCount_;
 }
 
+ClientUISync::ClientUISync() : currentlySynching_(false)
+{
+}
+
+ClientUISync::~ClientUISync()
+{
+}
+
+void ClientUISync::addActionFromClient(ClientUISyncAction *action)
+{
+	actionsFromClient_.addClientUISyncAction(action);
+}
+
+void ClientUISync::addActionFromUI(ClientUISyncAction *action)
+{
+	actionsFromUI_.addClientUISyncAction(action);
+}
+
 void ClientUISync::checkForSyncFromClient()
 {
-	if (!actionCount_) return;
+	if (!actionsFromClient_.getActionCount()) return;
 
 	{
 		boost::unique_lock<boost::mutex> lock(syncMutex_);
@@ -75,28 +94,24 @@ void ClientUISync::checkForSyncFromUI()
 	{
 		boost::unique_lock<boost::mutex> lock(syncMutex_);
 
-		ClientUISyncAction **currentAction = actions_;
-		for (int i=0; i<actionCount_; ++i, ++currentAction)
 		{
-			(*currentAction)->performUIAction();
+			ClientUISyncAction **currentAction = actionsFromClient_.getActions();
+			for (int i=0; i<actionsFromClient_.getActionCount(); ++i, ++currentAction)
+			{
+				(*currentAction)->performUIAction();
+			}
+			actionsFromClient_.resetCount();
+		}
+		{
+			ClientUISyncAction **currentAction = actionsFromUI_.getActions();
+			for (int i=0; i<actionsFromUI_.getActionCount(); ++i, ++currentAction)
+			{
+				(*currentAction)->performUIAction();
+			}
+			actionsFromUI_.resetCount();
 		}
 
-		actionCount_ = 0;
 		currentlySynching_ = false;
 		syncCond_.notify_one();
 	}
-}
-
-ClientUISyncExternal::ClientUISyncExternal() : sync_(0)
-{
-}
-
-ClientUISyncExternal::~ClientUISyncExternal()
-{
-
-}
-
-void ClientUISyncExternal::checkForSyncFromUI()
-{
-	if (sync_) sync_->checkForSyncFromUI();
 }

@@ -1344,12 +1344,6 @@
     <ClCompile Include="..\console\ConsoleRule.cpp">
       <Filter>console</Filter>
     </ClCompile>
-    <ClCompile Include="..\console\ConsoleRuleFn.cpp">
-      <Filter>console</Filter>
-    </ClCompile>
-    <ClCompile Include="..\console\ConsoleRuleFnIAdapter.cpp">
-      <Filter>console</Filter>
-    </ClCompile>
     <ClCompile Include="..\console\ConsoleRuleMethodIAdapter.cpp">
       <Filter>console</Filter>
     </ClCompile>
@@ -1427,6 +1421,9 @@
     </ClCompile>
     <ClCompile Include="GUIConsole.cpp">
       <Filter>scorched3dc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\console\ConsoleRuleOptionsAdapter.cpp">
+      <Filter>console</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2714,12 +2711,6 @@
     <ClInclude Include="..\console\ConsoleRule.h">
       <Filter>console</Filter>
     </ClInclude>
-    <ClInclude Include="..\console\ConsoleRuleFn.h">
-      <Filter>console</Filter>
-    </ClInclude>
-    <ClInclude Include="..\console\ConsoleRuleFnIAdapter.h">
-      <Filter>console</Filter>
-    </ClInclude>
     <ClInclude Include="..\console\ConsoleRuleMethodIAdapter.h">
       <Filter>console</Filter>
     </ClInclude>
@@ -2797,6 +2788,9 @@
     </ClInclude>
     <ClInclude Include="GUIConsole.h">
       <Filter>scorched3dc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\console\ConsoleRuleOptionsAdapter.h">
+      <Filter>console</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

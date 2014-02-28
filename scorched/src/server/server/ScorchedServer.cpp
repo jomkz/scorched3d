@@ -70,7 +70,7 @@ static boost::thread::id thread_id;
 static boost::mutex creationMutex;
 static bool serverStopped = false;
 TargetSpace *ScorchedServer::targetSpace_ = new TargetSpace();
-ThreadCallback *ScorchedServer::threadCallback_ = new ThreadCallback();
+ThreadCallback *ScorchedServer::threadCallback_ = new ThreadCallback(true);
 
 ScorchedServer *ScorchedServer::instance()
 {
@@ -254,7 +254,7 @@ void ScorchedServer::startServerInternal(ScorchedServerSettings *settings,
 	{
 		S3D::dialogExit("Scorched3D", "Cannot load tanket types");
 	}
-	if (!getTankModels().loadTankMeshes(getContext(), 2, counter)) 
+	if (!getTankModels().loadTankMeshes(getContext(), counter)) 
 	{
 		S3D::dialogExit("Scorched3D", "Cannot load tank meshes");
 	}
@@ -335,8 +335,6 @@ void ScorchedServer::startServerInternal(ScorchedServerSettings *settings,
 
 bool ScorchedServer::serverLoop(fixed timeDifference)
 {
-	Logger::processLogEntries();
-
 	if (!getNetInterfaceValid())
 	{
 		return false;

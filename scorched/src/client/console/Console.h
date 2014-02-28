@@ -30,6 +30,8 @@ public:
 	virtual void removeRule(ConsoleRule *rule) = 0;
 
 	virtual void addLine(bool parse, const CEGUI::String &line) = 0;
+	virtual void matchRule(const CEGUI::String &line) = 0;
+
 	virtual void help() = 0;
 };
 

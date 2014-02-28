@@ -47,6 +47,8 @@ public:
 	void setStateNonUIThread(State nextState);
 	void updateState(float frameTime);
 
+	State getState();
+
 protected:
 	static UIState *instance_;
 	UIStateMainMenu *uiStateMenuMenu_;

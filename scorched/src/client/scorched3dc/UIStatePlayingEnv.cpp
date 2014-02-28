@@ -21,6 +21,7 @@
 #include <scorched3dc/UIStatePlayingEnv.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
+#include <client/ClientOptions.h>
 
 class HydraxRttListener : public Hydrax::RttManager::RttListener
 {
@@ -217,5 +218,8 @@ void UIStatePlayingEnv::updateLighting()
 void UIStatePlayingEnv::update(float frameTime)
 {
 	//updateLighting(); // Don't need to do this at the moment as the sky simulation is paused
-	hydraX_->update(frameTime);
+	if (ClientOptions::instance()->getDrawWater())
+	{
+		hydraX_->update(frameTime);
+	}
 }

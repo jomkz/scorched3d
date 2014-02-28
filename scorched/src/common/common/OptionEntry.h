@@ -33,9 +33,16 @@ class OptionEntry
 public:
 	enum StandardData
 	{
+		DataNoAccess = 0,
+		DataRWAccess = 1,
+		DataRAccess = 2,
+		DataNoRestore = 4,
+		DataDebugOnly = 8,
+
 		DataDepricated = 128,
 		DataProtected = 256
 	};
+
 	enum EntryType
 	{
 		OptionEntryIntType,

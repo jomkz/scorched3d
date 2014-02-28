@@ -30,40 +30,62 @@ public:
 	virtual void performUIAction() = 0;
 };
 
-class ClientUISync  
+class ClientUISyncActionBuffer
+{
+public:
+	ClientUISyncActionBuffer();
+	~ClientUISyncActionBuffer();
+
+	void addClientUISyncAction(ClientUISyncAction *action);
+
+	int getActionCount() { return actionCount_; }
+	void resetCount() { actionCount_ = 0; }
+	ClientUISyncAction **getActions() { return actions_; }
+
+protected:
+	int actionCount_;
+	int actionsSize_;
+	ClientUISyncAction **actions_;
+};
+
+class ClientUISyncFromClient 
+{
+public:
+	virtual ~ClientUISyncFromClient() {}
+
+	virtual void checkForSyncFromClient() = 0;
+	virtual void addActionFromClient(ClientUISyncAction *action) = 0;
+};
+
+class ClientUISyncFromUI 
+{
+public:
+	virtual ~ClientUISyncFromUI() {}
+
+	virtual void checkForSyncFromUI() = 0;
+	virtual void addActionFromUI(ClientUISyncAction *action) = 0;
+};
+
+class ClientUISync : public ClientUISyncFromClient, 
+					public ClientUISyncFromUI
 {
 public:
 	ClientUISync();
 	virtual ~ClientUISync();
 
-	void checkForSyncFromClient();
-	void checkForSyncFromUI();
+	virtual void checkForSyncFromClient();
+	virtual void checkForSyncFromUI();
 
-	void addClientUISyncAction(ClientUISyncAction *action);
+	virtual void addActionFromClient(ClientUISyncAction *action);
+	virtual void addActionFromUI(ClientUISyncAction *action);
 
 	bool currentlySynching() { return currentlySynching_; }
 protected:
-	int actionCount_;
-	int actionsSize_;
-	ClientUISyncAction **actions_;
+	ClientUISyncActionBuffer actionsFromClient_;
+	ClientUISyncActionBuffer actionsFromUI_;
 	bool currentlySynching_;
 	boost::mutex syncMutex_;
 	boost::condition_variable syncCond_;
-};
-
-// Wrapper class so UI doesn't need ScorchedClient::instance
-class ClientUISyncExternal
-{
-public:
-	ClientUISyncExternal();
-	virtual ~ClientUISyncExternal();
-
-	void checkForSyncFromUI();
-
-	void setClientUISync(ClientUISync *sync) { sync_ = sync; }
-
-protected:
-	ClientUISync *sync_;
 };
 
 #endif
