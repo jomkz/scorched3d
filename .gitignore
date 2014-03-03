@@ -24,6 +24,10 @@ build/
 *.ilk
 *.meta
 *.obj
+*.o
+*.deps
+Makefile.in
+autom4te.cache
 *.pch
 *.pdb
 *.pgc
