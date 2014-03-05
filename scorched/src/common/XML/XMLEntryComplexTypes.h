@@ -24,6 +24,33 @@
 #include <XML/XMLEntrySimpleTypes.h>
 #include <common/NumberParser.h>
 
+class XMLEntryParticleID : public XMLEntryContainer
+{
+public:
+	XMLEntryParticleID(bool required = true);
+	virtual ~XMLEntryParticleID();
+
+	XMLEntryString particleName;
+};
+
+class XMLEntryModelParticle : public XMLEntryContainer
+{
+public:
+	XMLEntryModelParticle();
+	virtual ~XMLEntryModelParticle();
+
+	XMLEntryParticleID particle;
+};
+
+class XMLEntryModelParticleList : public XMLEntryList<XMLEntryModelParticle>
+{
+public:
+	XMLEntryModelParticleList();
+	virtual ~XMLEntryModelParticleList();
+
+	virtual XMLEntryModelParticle *createXMLEntry(void *xmlData);
+};
+
 class XMLEntryModelSpec : public XMLEntryContainer
 {
 public:
@@ -41,6 +68,7 @@ public:
 	XMLEntryFixed scale;
 	XMLEntryFixed rotation;
 	XMLEntryFixed brightness;
+	XMLEntryModelParticleList particles;
 };
 
 class XMLEntryModelSpecReference : public XMLEntryModelSpec
@@ -50,6 +78,14 @@ public:
 	virtual ~XMLEntryModelSpecReference();
 
 	XMLEntryString modelName;
+	XMLEntryFixed scale;
+};
+
+class XMLEntryModelSpecNone : public XMLEntryModelSpec
+{
+public:
+	XMLEntryModelSpecNone();
+	virtual ~XMLEntryModelSpecNone();
 };
 
 class XMLEntryModel : public XMLEntryTypeChoice<XMLEntryModelSpec>
@@ -60,15 +96,6 @@ public:
 
 	virtual XMLEntryModelSpec *createXMLEntry(const std::string &type, void *xmlData);
 	virtual void getAllTypes(std::set<std::string> &allTypes);
-};
-
-class XMLEntryParticleID : public XMLEntryContainer
-{
-public:
-	XMLEntryParticleID(bool required = true);
-	virtual ~XMLEntryParticleID();
-
-	XMLEntryString particleName;
 };
 
 class XMLEntrySoundID : public XMLEntryContainer

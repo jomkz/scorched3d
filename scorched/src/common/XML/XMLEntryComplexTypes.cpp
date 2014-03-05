@@ -20,6 +20,31 @@
 
 #include <XML/XMLEntryComplexTypes.h>
 
+XMLEntryModelParticle::XMLEntryModelParticle() :
+	XMLEntryContainer("XMLEntryModelParticle",
+		"A particle that is associated (will be displayed with) an object")
+{
+	addChildXMLEntry("particle", &particle);
+}
+
+XMLEntryModelParticle::~XMLEntryModelParticle()
+{
+}
+
+XMLEntryModelParticleList::XMLEntryModelParticleList() :
+	XMLEntryList<XMLEntryModelParticle>("The set of particles associated with an object", 0)
+{
+}
+
+XMLEntryModelParticleList::~XMLEntryModelParticleList()
+{
+}
+
+XMLEntryModelParticle *XMLEntryModelParticleList::createXMLEntry(void *xmlData)
+{
+	return new XMLEntryModelParticle();
+}
+
 XMLEntryModelSpec::XMLEntryModelSpec(const char *typeName, const char *description) :
 	XMLEntryContainer(typeName, description)
 {
@@ -40,6 +65,7 @@ XMLEntryModelSpecDefinition::XMLEntryModelSpecDefinition() :
 	addChildXMLEntry("scale", &scale);
 	addChildXMLEntry("rotation", &rotation);
 	addChildXMLEntry("brightness", &brightness);
+	addChildXMLEntry("modelparticle", &particles);
 }
 
 XMLEntryModelSpecDefinition::~XMLEntryModelSpecDefinition()
@@ -47,13 +73,26 @@ XMLEntryModelSpecDefinition::~XMLEntryModelSpecDefinition()
 }
 
 XMLEntryModelSpecReference::XMLEntryModelSpecReference() :
-	XMLEntryModelSpec("XMLEntryModelSpecReference", "A reference to an existing model definition"),
-	modelName("A reference to an existing model name")
+	XMLEntryModelSpec("XMLEntryModelSpecReference", 
+		"A reference to an existing model definition defined in the models.xml file in the ModelStore"),
+	modelName("A reference to an existing model name as defined in the models.xml file"),
+	scale("The scale of the mesh, a scale of 1.0 is an unchanged scale, this is multiplied by the referenced model's scale", 0, fixed(1))
 {
-	addChildXMLEntry("", &modelName);
+	addChildXMLEntry("modelname", &modelName);
+	addChildXMLEntry("scale", &scale);
 }
 
 XMLEntryModelSpecReference::~XMLEntryModelSpecReference()
+{
+
+}
+
+XMLEntryModelSpecNone::XMLEntryModelSpecNone() :
+	XMLEntryModelSpec("XMLEntryModelSpecNone", "No model")
+{
+}
+
+XMLEntryModelSpecNone::~XMLEntryModelSpecNone()
 {
 
 }
@@ -71,6 +110,7 @@ XMLEntryModelSpec *XMLEntryModel::createXMLEntry(const std::string &type, void *
 {
 	if (type == "definition") return new XMLEntryModelSpecDefinition;
 	else if (type == "reference") return new XMLEntryModelSpecReference;
+	else if (type == "none") return new XMLEntryModelSpecNone;
 	return 0;
 }
 
@@ -78,6 +118,7 @@ void XMLEntryModel::getAllTypes(std::set<std::string> &allTypes)
 {
 	allTypes.insert("definition");
 	allTypes.insert("reference");
+	allTypes.insert("none");
 }
 
 XMLEntryParticleID::XMLEntryParticleID(bool required) :

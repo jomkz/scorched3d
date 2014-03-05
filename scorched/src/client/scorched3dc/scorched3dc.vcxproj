@@ -1037,7 +1037,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderOutputFile>$(ProjectDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <AdditionalIncludeDirectories>$(SolutionDir)\src\client;$(SolutionDir)\src\server;$(SolutionDir)\src\common;$(BOOST_HOME);$(OGRE_HOME)\include\OIS;$(OGRE_HOME)\include\OGRE;$(OGRE_HOME)\include;$(CEGUI_DEPENDENCIES_DIR)\include;$(CEGUI_HOME)\include\cegui-0;$(HYDRAX_HOME)\include;$(SKYX_HOME)\include;$(PARTICLEUNIVERSE_HOME)\sdk\include</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <FloatingPointModel>Fast</FloatingPointModel>

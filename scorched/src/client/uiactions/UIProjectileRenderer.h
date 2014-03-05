@@ -40,7 +40,6 @@ public:
 	virtual void deleteThis();
 protected:
 	ModelInstance projectileInstance_;
-	ParticleUniverse::ParticleSystem* pSys_;
 	ShotProjectile *shotProjectile_;
 
 	void create();

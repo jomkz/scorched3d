@@ -1,13 +1,13 @@
 <tanks>
 	<tank>
 		<name>Random</name>
-    <model>
+    <model type='definition'>
       <meshname>abrams.mesh</meshname>
     </model>
 	</tank>
 	<tank>
 		<name>Abrams</name>
-    <model>
+    <model type='definition'>
       <meshname>abrams.mesh</meshname>
     </model>
 	</tank>	

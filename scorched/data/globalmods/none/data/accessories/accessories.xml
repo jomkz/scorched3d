@@ -12,6 +12,9 @@ damage to the tank from falling.</description>
 		<!--<slowforce><a>0.0</a><b>0.0</b><c>3.0</c></slowforce>-->
 		</accessoryaction>
 		<freemarketlimits>0</freemarketlimits>
+    <model type='reference'>
+      <modelname>parachute</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Battery</name>
@@ -23,6 +26,9 @@ damage to the tank from falling.</description>
 		<cost>5000</cost>
 		<accessoryaction type='Battery'></accessoryaction>
 		<freemarketlimits>0</freemarketlimits>
+    <model type='reference'>
+      <modelname>battery</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Fuel</name>
@@ -43,6 +49,9 @@ Maximum range is 50.</description>
     <usenumber>0</usenumber>
 		<group>fuel</group>
 		<tabgroup>defense</tabgroup>
+    <model type='reference'>
+      <modelname>fuel</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Rocket Fuel</name>
@@ -64,6 +73,9 @@ Maximum range is 75.</description>
     <usenumber>0</usenumber>
 		<group>fuel</group>
 		<tabgroup>defense</tabgroup>
+    <model type='reference'>
+      <modelname>fuel</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Shield</name>
@@ -81,6 +93,9 @@ Shields must be activated to work.</description>
 			<penetration>0.7</penetration>
 			<power>100</power>
 		</accessoryaction>
+    <model type='reference'>
+      <modelname>sheild</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Heavy Shield</name>
@@ -98,6 +113,9 @@ Shields must be activated to work.</description>
 			<penetration>0.7</penetration>
 			<power>200</power>
 		</accessoryaction>
+    <model type='reference'>
+      <modelname>sheild</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Force Shield</name>
@@ -116,6 +134,9 @@ be activated before they work.</description>
 			<penetration>0.7</penetration>
 			<power>100</power>
 		</accessoryaction>
+    <model type='reference'>
+      <modelname>sheild</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Mag Deflect</name>
@@ -134,6 +155,9 @@ before they can directly hit the tank.</description>
 			<penetration>1.0</penetration>
 			<power>100</power>
 		</accessoryaction>
+    <model type='reference'>
+      <modelname>sheild</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Heavy Mag</name>
@@ -152,6 +176,9 @@ before they can directly hit the tank.</description>
 			<penetration>0.7</penetration>
 			<power>100</power>
 		</accessoryaction>
+    <model type='reference'>
+      <modelname>sheild</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Auto Defense</name>
@@ -163,6 +190,9 @@ parachutes before the round begins.</description>
 		<cost>3000</cost>
 		<maximumnumber>1</maximumnumber>
 		<accessoryaction type='AutoDefense'></accessoryaction>
+    <model type='reference'>
+      <modelname>autodefense</modelname>
+    </model>
 	</accessory>
 	<accessory>
 		<name>Napalm</name>
@@ -174,10 +204,10 @@ near the flames will lose life.</description>
 		<bundlesize>10</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-			<projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+			<projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>4.0</napalmtime>
@@ -202,10 +232,10 @@ Any tanks near the flames will lose life.</description>
 		<bundlesize>3</bundlesize>
 		<cost>20000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponNapalm'>
 				<napalmtime>4.0</napalmtime>
@@ -230,15 +260,16 @@ with any tank.</description>
 		<bundlesize>10</bundlesize>
 		<cost>7500</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
+    <model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponRoller'>
 				<numberrollers>8</numberrollers>
 				<time>RANGE(3,4)</time>
-				<rollermodel>
-          <meshname>cube.mesh</meshname>
+				<rollermodel type='reference'>
+          <modelname>cube</modelname>
         </rollermodel>
 				<!--<maintainvelocity>true</maintainvelocity>-->
 				<collisionaction type='WeaponExplosion'>
@@ -260,15 +291,21 @@ contact with any tank.</description>
 		<bundlesize>5</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
+    </model>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(3,4)</time>
-        <rollermodel>
-          <meshname>cube.mesh</meshname>
+        <rollermodel type='reference'>
+          <modelname>cube</modelname>
         </rollermodel>
         <collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -289,15 +326,18 @@ with any tank.</description>
 		<bundlesize>2</bundlesize>
 		<cost>8000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
+    </model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <collisionaction type='WeaponRoller'>
 				<numberrollers>6</numberrollers>
 				<time>RANGE(3,4)</time>
-        <rollermodel>
-          <meshname>cube.mesh</meshname>
+        <rollermodel type='reference'>
+          <modelname>cube</modelname>
         </rollermodel>
         <collisionaction type='WeaponExplosion'>
 					<hurtamount>1.0</hurtamount>
@@ -314,15 +354,15 @@ with any tank.</description>
 		<icon>bmissile.bmp</icon>
 		<startingnumber>-1</startingnumber>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.4</shieldhurtfactor>
 			<spinspeed>1.0</spinspeed>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
@@ -339,13 +379,13 @@ with any tank.</description>
 		<bundlesize>5</bundlesize>
 		<cost>2000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>0.75</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <shieldhurtfactor>0.6</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
@@ -363,10 +403,10 @@ with any tank.</description>
 		<bundlesize>3</bundlesize>
 		<cost>8000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
@@ -383,11 +423,11 @@ with any tank.</description>
 		<bundlesize>2</bundlesize>
 		<cost>12000</cost>
 		<activationsound>data/accessories/sounds/shoot/xlarge.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>1.2</shieldhurtfactor>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>1.0</hurtamount>
@@ -407,14 +447,14 @@ to cover them.</description>
 		<bundlesize>10</bundlesize>
 		<cost>3000</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>0.6</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.5</shieldhurtfactor>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<hurtamount>0.0</hurtamount>
@@ -435,13 +475,13 @@ cover them.</description>
 		<bundlesize>5</bundlesize>
 		<cost>5750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>0.8</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<shieldhurtfactor>0.8</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
@@ -463,10 +503,10 @@ cover them.</description>
 		<bundlesize>2</bundlesize>
 		<cost>6750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <collisionaction type='WeaponExplosion'>
 				<deform>up</deform>
@@ -484,10 +524,10 @@ small dirt clods in all directions.</description>
 		<bundlesize>3</bundlesize>
 		<cost>6250</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon type='WeaponExplosion'>
@@ -501,8 +541,8 @@ small dirt clods in all directions.</description>
 					<inaccuracy>50</inaccuracy>
 					<aimedweapon type='WeaponProjectile'>
 						<timedcollision>0.6</timedcollision>
-            <projectilemodel>
-              <meshname>snakeeye.mesh</meshname>
+            <projectilemodel type='reference'>
+              <modelname>snakeeye</modelname>
             </projectilemodel>
 						<collisionaction type='WeaponMulti'>
 							<subweapon type='WeaponExplosion'>
@@ -517,8 +557,8 @@ small dirt clods in all directions.</description>
 								<inaccuracy>20</inaccuracy>
 								<aimedweapon type='WeaponProjectile'>
 									<timedcollision>0.8</timedcollision>
-                  <projectilemodel>
-                    <meshname>snakeeye.mesh</meshname>
+                  <projectilemodel type='reference'>
+                    <modelname>snakeeye</modelname>
                   </projectilemodel>
 									<collisionaction type='WeaponMulti'>
 										<subweapon type='WeaponExplosion'>
@@ -535,8 +575,8 @@ small dirt clods in all directions.</description>
 											<velocitychange>0.85</velocitychange>
 											<aimedweapon type='WeaponProjectile'>
 												<timedcollision>0.8</timedcollision>
-                        <projectilemodel>
-                          <meshname>snakeeye.mesh</meshname>
+                        <projectilemodel type='reference'>
+                          <modelname>snakeeye</modelname>
                         </projectilemodel>
 												<collisionaction type='WeaponMulti'>
 													<subweapon type='WeaponExplosion'>
@@ -553,8 +593,8 @@ small dirt clods in all directions.</description>
 														    <velocitychange>0.7</velocitychange>
 															<aimedweapon type='WeaponProjectile'>
 															<shieldhurtfactor>0.3</shieldhurtfactor>
-			                        <projectilemodel>
-                                <meshname>snakeeye.mesh</meshname>
+			                        <projectilemodel type='reference'>
+                                <modelname>snakeeye</modelname>
                               </projectilemodel>
                                 <collisionaction type='WeaponExplosion'>
 																	<hurtamount>0</hurtamount>
@@ -587,10 +627,10 @@ remove earth from under them.</description>
 		<bundlesize>8</bundlesize>
 		<cost>1750</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <shieldhurtfactor>0.5</shieldhurtfactor>
 			<collisionaction type='WeaponExplosion'>
@@ -611,10 +651,10 @@ remove earth from under them.</description>
 		<bundlesize>3</bundlesize>
 		<cost>4250</cost>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponExplosion'>
 				<deform>down</deform>
@@ -633,7 +673,7 @@ your tank when covered by dirt.</description>
 		<icon>rcharge.bmp</icon>
 		<bundlesize>10</bundlesize>
 		<cost>1800</cost>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
@@ -673,7 +713,7 @@ your tank when covered by dirt.</description>
 		<icon>rblast.bmp</icon>
 		<bundlesize>5</bundlesize>
 		<cost>4200</cost>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponTranslate'>
 			<translatedist>2.0</translatedist>
 			<nextaction type='WeaponMulti'>
@@ -714,10 +754,10 @@ in the same direction.</description>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon type='WeaponExplosion'>
@@ -728,8 +768,8 @@ in the same direction.</description>
 				<subweapon type='WeaponLeapFrog'>
 					<bounce>0.6</bounce>
 					<collisionaction type='WeaponProjectile'>
-            <projectilemodel>
-              <meshname>snakeeye.mesh</meshname>
+            <projectilemodel type='reference'>
+              <modelname>snakeeye</modelname>
             </projectilemodel>
 						<collisionaction type='WeaponMulti'>
 							<subweapon type='WeaponExplosion'>
@@ -740,8 +780,8 @@ in the same direction.</description>
 							<subweapon type='WeaponLeapFrog'>
 								<bounce>0.6</bounce>
 								<collisionaction type='WeaponProjectile'>
-                  <projectilemodel>
-                    <meshname>snakeeye.mesh</meshname>
+                  <projectilemodel type='reference'>
+                    <modelname>snakeeye</modelname>
                   </projectilemodel>
 									<collisionaction type='WeaponExplosion'>
 										<hurtamount>1.0</hurtamount>
@@ -766,13 +806,13 @@ tank-seeking riot bombs.</description>
 		<bundlesize>10</bundlesize>
 		<cost>6000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>3</numberwarheads>
@@ -782,8 +822,8 @@ tank-seeking riot bombs.</description>
 				<aimedweapon type='WeaponProjectile'>
 					<under>true</under>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -804,10 +844,10 @@ tank-seeking riot bombs.</description>
 		<bundlesize>5</bundlesize>
 		<cost>7500</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>5</numberwarheads>
@@ -817,8 +857,8 @@ tank-seeking riot bombs.</description>
 				<aimedweapon type='WeaponProjectile'>
 				<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -839,13 +879,13 @@ tank-seeking riot bombs.</description>
 		<bundlesize>2</bundlesize>
 		<cost>6750</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>2</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>10</numberwarheads>
@@ -855,8 +895,8 @@ tank-seeking riot bombs.</description>
 				<aimedweapon type='WeaponProjectile'>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -877,13 +917,13 @@ tanks from underground.</description>
 		<bundlesize>7</bundlesize>
 		<cost>24000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>0.5</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>2</numberwarheads>
@@ -893,8 +933,8 @@ tanks from underground.</description>
 				<aimedweapon type='WeaponProjectile'>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
@@ -915,10 +955,10 @@ tanks from underground.</description>
 		<bundlesize>5</bundlesize>
 		<cost>31000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>6</numberwarheads>
@@ -928,8 +968,8 @@ tanks from underground.</description>
 				<aimedweapon type='WeaponProjectile'>
 				<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
@@ -950,13 +990,13 @@ tanks from underground.</description>
 		<bundlesize>2</bundlesize>
 		<cost>37000</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>2</scale>
     </model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponAimedUnder'>
 				<numberwarheads>15</numberwarheads>
@@ -966,8 +1006,8 @@ tanks from underground.</description>
 				<aimedweapon type='WeaponProjectile'>
 					<shieldhurtfactor>0.6</shieldhurtfactor>
 					<under>true</under>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<hurtamount>1.0</hurtamount>
@@ -989,21 +1029,21 @@ in a straight path.</description>
 		<bundlesize>3</bundlesize>
 		<cost>16000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
     </model>
 		<accessoryaction type='WeaponProjectile'>
 			<apexcollision>true</apexcollision>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <collisionaction type='WeaponMirv'>
 				<numberwarheads>5</numberwarheads>
 				<hspreaddist>0.1</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -1025,21 +1065,21 @@ random direction.</description>
 		<bundlesize>4</bundlesize>
 		<cost>16000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
     </model>
     <accessoryaction type='WeaponProjectile'>
 			<apexcollision>true</apexcollision>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <collisionaction type='WeaponMirv'>
 				<numberwarheads>5</numberwarheads>
 				<hspreaddist>1.0</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -1061,21 +1101,21 @@ in a random direction.</description>
 		<bundlesize>1</bundlesize>
 		<cost>48000</cost>
 		<activationsound>data/accessories/sounds/shoot/launch.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>5</scale>
     </model>		<accessoryaction type='WeaponProjectile'>
 			<apexcollision>true</apexcollision>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponMirv'>
 				<numberwarheads>20</numberwarheads>
 				<hspreaddist>1.0</hspreaddist>
 				<vspreaddist>5.0</vspreaddist>
 				<aimedweapon type='WeaponProjectile'>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
 					<collisionaction type='WeaponExplosion'>
 						<deform>down</deform>
@@ -1097,10 +1137,10 @@ any nearby tanks.</description>
 		<bundlesize>2</bundlesize>
 		<cost>39000</cost>
 		<activationsound>data/accessories/sounds/shoot/large.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<collisionaction type='WeaponMulti'>
 				<subweapon type='WeaponExplosion'>
@@ -1119,8 +1159,8 @@ any nearby tanks.</description>
 							<velocitychange>RANGE(0.8,1.1)</velocitychange>
 							<aimedweapon type='WeaponProjectile'>
 							<shieldhurtfactor>0.85</shieldhurtfactor>
-                <projectilemodel>
-                  <meshname>snakeeye.mesh</meshname>
+                <projectilemodel type='reference'>
+                  <modelname>snakeeye</modelname>
                 </projectilemodel>
 								<collisionaction type='WeaponRandomChoice'>
 									<weaponchoice>
@@ -1174,10 +1214,10 @@ without wasting weapons.</description>
 		<bundlesize>20</bundlesize>
 		<cost>100</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<shieldhurtfactor>0.2</shieldhurtfactor>
 			<showendpoint>true</showendpoint>
@@ -1195,11 +1235,11 @@ range without wasting weapons.  </description>
 		<bundlesize>10</bundlesize>
 		<cost>500</cost>
 		<activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponProjectile'>
 			<shieldhurtfactor>0.3</shieldhurtfactor>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
 			<showendpoint>true</showendpoint>
 			<showshotpath>true</showshotpath>
@@ -1216,11 +1256,13 @@ range without wasting weapons.  </description>
 			<deform>none</deform>
 			<size>1</size>
 		</accessoryaction>
+    <model type='none'/>
 	</accessory>
 	<accessory>
 		<name>Lightning</name>
 		<armslevel>10</armslevel>
 		<maximumnumber>0</maximumnumber>
+    <model type='none'/>
 		<accessoryaction type="WeaponCenterPosition">
 			<height>150</height>
 			<nextaction type="WeaponScatterPosition">
@@ -1273,6 +1315,7 @@ range without wasting weapons.  </description>
 		<name>Meteor</name>
 		<armslevel>10</armslevel>
 		<maximumnumber>0</maximumnumber>
+    <model type='none'/>
 		<accessoryaction type="WeaponCenterPosition">
 			<height>150</height>
 			<nextaction type="WeaponScatterPosition">
@@ -1288,8 +1331,8 @@ range without wasting weapons.  </description>
 						<maxaimdistance>0</maxaimdistance>
 						<inaccuracy>10</inaccuracy>
 						<aimedweapon type='WeaponProjectile'>
-              <projectilemodel>
-                <meshname>snakeeye.mesh</meshname>
+              <projectilemodel type='reference'>
+                <modelname>snakeeye</modelname>
               </projectilemodel>
               <collisionaction type='WeaponExplosion'>
 								<hurtamount>0.0</hurtamount>
@@ -1307,8 +1350,8 @@ range without wasting weapons.  </description>
 		<armslevel>10</armslevel>
 		<bundlesize>4</bundlesize>
 		<icon>laser.bmp</icon>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
     </model>
     <description>Fires a laser that cuts through hills 
 and shields damaging the tank directly.</description>
@@ -1328,8 +1371,8 @@ and shields damaging the tank directly.</description>
 		<armslevel>6</armslevel>
 		<bundlesize>2</bundlesize>
 		<icon>hlaser.bmp</icon>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
     </model>
     <description>Fires a powerful laser that cuts through hills 
 and shields damaging the tank directly.</description>
@@ -1351,8 +1394,8 @@ and shields damaging the tank directly.</description>
 		<icon>teleport.bmp</icon>
 		<activationsound>none</activationsound>
 		<bundlesize>2</bundlesize>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
     </model>
     <cost>18000</cost>
 		<accessoryaction type="WeaponCenterPosition">
@@ -1372,6 +1415,7 @@ and shields damaging the tank directly.</description>
 		<armslevel>0</armslevel>
 		<description>The tank explosion weapon</description>
 		<maximumnumber>0</maximumnumber>
+    <model type='none'/>
 		<accessoryaction type='WeaponMulti'>
       <subweapon type='WeaponExplosion'>
         <hurtamount>0.0</hurtamount>
@@ -1425,14 +1469,14 @@ and shields damaging the tank directly.</description>
 		<icon>teleport.bmp</icon>
 		<activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
 		<bundlesize>1</bundlesize>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>0.5</scale>
     </model>
 		<cost>20000</cost>
 		<accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <spinspeed>1.0</spinspeed>
 			<collisionaction type='WeaponTeleport'>
@@ -1444,6 +1488,7 @@ and shields damaging the tank directly.</description>
   <accessory>
     <name>Fire At Tank</name>
     <activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
+    <model type='none'/>
     <maximumnumber>0</maximumnumber>
     <accessoryaction type='WeaponAimedOver'>
       <numberwarheads>2</numberwarheads>
@@ -1453,8 +1498,8 @@ and shields damaging the tank directly.</description>
       <aimedweapon type='WeaponVelocity'>
         <velocitychange>2.0</velocitychange>
         <aimedweapon type='WeaponProjectile'>
-          <projectilemodel>
-            <meshname>snakeeye.mesh</meshname>
+          <projectilemodel type='reference'>
+            <modelname>snakeeye</modelname>
           </projectilemodel>
           <shieldhurtfactor>0.2</shieldhurtfactor>
           <wallcollision>false</wallcollision>
@@ -1467,10 +1512,11 @@ and shields damaging the tank directly.</description>
   <accessory>
     <name>Bomb At Tank</name>
     <activationsound>data/accessories/sounds/shoot/flare.wav</activationsound>
+    <model type='none'/>
     <maximumnumber>0</maximumnumber>
     <accessoryaction type='WeaponProjectile'>
-      <projectilemodel>
-        <meshname>snakeeye.mesh</meshname>
+      <projectilemodel type='reference'>
+        <modelname>snakeeye</modelname>
       </projectilemodel>
       <shieldhurtfactor>0.2</shieldhurtfactor>
       <wallcollision>false</wallcollision>
@@ -1487,8 +1533,8 @@ and shields damaging the tank directly.</description>
 		<bundlesize>1</bundlesize>
 		<cost>1875</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
       <scale>0.75</scale>
     </model>
 		<accessoryaction type='WeaponExplosion'>
@@ -1499,12 +1545,14 @@ and shields damaging the tank directly.</description>
 	</accessory>	
 	<accessory>
 		<name>TestPowerUpWeapon</name>
+    <model type='none'/>
 		<accessoryaction type='WeaponGivePower'>
 			<power>2000</power>
 		</accessoryaction>
 	</accessory>
 	<accessory>
 		<name>TestShield</name>
+    <model type='none'/>
 		<accessoryaction type='ShieldRound'>
 			<radius>8.0</radius>
 			<removepower>20</removepower>
@@ -1519,6 +1567,7 @@ and shields damaging the tank directly.</description>
 		<armslevel>9</armslevel>
 		<maximumnumber>0</maximumnumber>
 		<description>A test powerup</description>
+    <model type='none'/>
 		<accessoryaction type="WeaponRepeat">
 			<repeat>10</repeat>
 			<repeatweapon type="WeaponCenterPosition">
@@ -1530,8 +1579,8 @@ and shields damaging the tank directly.</description>
 					<aimedweapon type='WeaponAddTarget'>
             <target>
 						  <name>Bannana</name>
-              <model>
-                <meshname>snakeeye.mesh</meshname>
+              <model type='reference'>
+                <modelname>snakeeye</modelname>
                 <scale>0.5</scale>
               </model>
 						  <shield>Shield</shield>
@@ -1550,12 +1599,12 @@ and shields damaging the tank directly.</description>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
-        <projectilemodel>
-          <meshname>snakeeye.mesh</meshname>
+        <projectilemodel type='reference'>
+          <modelname>snakeeye</modelname>
         </projectilemodel>
 				<collisionaction type='WeaponMulti'>
 					<subweapon type='WeaponExplosion'>
@@ -1579,12 +1628,12 @@ and shields damaging the tank directly.</description>
 		<bundlesize>2</bundlesize>
 		<cost>10000</cost>
 		<activationsound>data/accessories/sounds/shoot/medium.wav</activationsound>
-		<model><meshname>snakeeye.mesh</meshname></model>
+		<model type='reference'><modelname>snakeeye</modelname></model>
 		<accessoryaction type='WeaponLabel'>
 			<label>label1</label>
 			<nextweapon type='WeaponProjectile'>
-        <projectilemodel>
-          <meshname>snakeeye.mesh</meshname>
+        <projectilemodel type='reference'>
+          <modelname>snakeeye</modelname>
         </projectilemodel>
 				<collisionaction type='WeaponMulti'>
 					<subweapon type='WeaponExplosion'>
@@ -1608,8 +1657,8 @@ and shields damaging the tank directly.</description>
 		<name>Teleport Test</name>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>1</bundlesize>
-    <model>
-      <meshname>snakeeye.mesh</meshname>
+    <model type='reference'>
+      <modelname>snakeeye</modelname>
     </model>
     <cost>15000</cost>
 		<accessoryaction type='WeaponSelectPosition'>
@@ -1627,6 +1676,7 @@ and shields damaging the tank directly.</description>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>1</bundlesize>
 		<cost>15000</cost>
+    <model type='none'/>
 		<accessoryaction type='WeaponTeamAction'>
       <action>
         <team>TeamRed</team>
@@ -1642,6 +1692,7 @@ and shields damaging the tank directly.</description>
 		<maximumnumber>0</maximumnumber>
 		<bundlesize>1</bundlesize>
 		<cost>15000</cost>
+    <model type='none'/>
 		<accessoryaction type='WeaponTypeAction'>
       <action>
         <type>none</type>
@@ -1655,6 +1706,7 @@ and shields damaging the tank directly.</description>
 	<accessory>
 		<name>GroupWin</name>
 		<maximumnumber>0</maximumnumber>
+    <model type='none'/>
 		<accessoryaction type='WeaponGiveWin'>
 			<objective>Destroyed group bob</objective>
 			<winningteam>1</winningteam>
@@ -1667,6 +1719,7 @@ and shields damaging the tank directly.</description>
 		<armslevel>8</armslevel>
 		<icon>shield.bmp</icon>
 		<activationsound>data/accessories/sounds/shield/activate.wav</activationsound>
+    <model type='none'/>
 		<bundlesize>3</bundlesize>
 		<cost>20000</cost>
 		<accessoryaction type='ShieldSquareReflective'>
@@ -1686,6 +1739,7 @@ and shields damaging the tank directly.</description>
                 <icon>bmissile.bmp</icon>
                 <startingnumber>-1</startingnumber>
                 <activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
+          <model type='none'/>
 		<accessoryaction type='WeaponPosition'>
 			<position>128 128 66</position>
 			<positionoffset>33 33 33</positionoffset>
@@ -1700,6 +1754,7 @@ and shields damaging the tank directly.</description>
                 <armslevel>10</armslevel>
                 <description>Test accessory for the NumberParser class.</description>
                 <icon>bmissile.bmp</icon>
+          <model type='none'/>
 		<maximumnumber>0</maximumnumber>
                 <startingnumber>-1</startingnumber>
                 <activationsound>data/accessories/sounds/shoot/small.wav</activationsound>
@@ -1722,6 +1777,7 @@ and shields damaging the tank directly.</description>
 	<accessory>
 		<name>BoidsLaser</name>
 		<maximumnumber>0</maximumnumber>
+    <model type='none'/>
 		<accessoryaction type='WeaponGroupSelect'>
 			<groupname>boids-gulls</groupname>
 			<nextaction type="WeaponReference">

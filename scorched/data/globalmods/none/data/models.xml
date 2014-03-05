@@ -1,0 +1,19 @@
+<models>
+  <model>
+    <modelname>snakeeye</modelname>
+    <modeldefinition>
+      <meshname>snakeeye.mesh</meshname>
+      <modelparticle>
+        <particle>
+          <particlename>newpropulsion</particlename>
+        </particle>
+      </modelparticle>
+    </modeldefinition>
+  </model>
+  <model>
+    <modelname>cube</modelname>
+    <modeldefinition>
+      <meshname>cube.mesh</meshname>
+    </modeldefinition>
+  </model>
+</models>

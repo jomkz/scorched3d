@@ -24,8 +24,8 @@ ModelStoreEntry::ModelStoreEntry() :
 	XMLEntryContainer("ModelStoreEntry", "The definition of a model that can later be used in a reference"),
 	modelName("The name of the model, this is the name that this model can be refered to as")
 {
-	addChildXMLEntry("modelName", &modelName);
-	addChildXMLEntry("modelDefinition", &modelDefinition);
+	addChildXMLEntry("modelname", &modelName);
+	addChildXMLEntry("modeldefinition", &modelDefinition);
 }
 
 ModelStoreEntry::~ModelStoreEntry()
@@ -51,6 +51,7 @@ bool ModelStoreEntries::listEntryCreated(ModelStoreEntry *newEntry, XMLNode *nod
 {
 	if (entries_.find(newEntry->modelName.getValue()) != entries_.end()) return false;
 	entries_[newEntry->modelName.getValue()] = newEntry;
+	return true;
 }
 
 ModelStoreEntry *ModelStoreEntries::createXMLEntry(void *xmlData)
@@ -59,9 +60,9 @@ ModelStoreEntry *ModelStoreEntries::createXMLEntry(void *xmlData)
 }
 
 ModelStore::ModelStore() : 
-	XMLEntryRoot<XMLEntrySimpleContainer>(S3D::eModLocation, "models.xml", "models", 
+	XMLEntryRoot<XMLEntrySimpleContainer>(S3D::eModLocation, "data/models.xml", "models", 
 		"ModelStore",
-		"A collection of pre-defined models that can later be refered to by name")
+		"A collection of pre-defined models that can later be refered to by name (using XMLEntryModelSpecReference)")
 {
 	addChildXMLEntry("model", &entries_);
 }

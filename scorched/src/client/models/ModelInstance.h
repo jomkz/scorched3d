@@ -35,6 +35,7 @@ public:
 	bool isCreated() { return sceneNode_ != 0; }
 protected:
 	Ogre::SceneNode *sceneNode_;
+	std::vector<ParticleUniverse::ParticleSystem *> pSys_;
 };
 
 #endif // !defined(AFX_ModelInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
