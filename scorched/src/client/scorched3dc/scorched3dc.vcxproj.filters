@@ -82,6 +82,9 @@
     <Filter Include="uistate">
       <UniqueIdentifier>{237edc6c-2649-4262-9263-cdec1b32232a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="template">
+      <UniqueIdentifier>{90e8fda9-9a2c-40aa-8b16-3b93c3a27f16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1508,6 +1511,12 @@
     </ClCompile>
     <ClCompile Include="..\uistate\UIStateProgress.cpp">
       <Filter>uistate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\template\TemplateProvider.cpp">
+      <Filter>template</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\template\TemplateRenderer.cpp">
+      <Filter>template</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2944,6 +2953,12 @@
     </ClInclude>
     <ClInclude Include="..\uistate\UIStateProgress.h">
       <Filter>uistate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\template\TemplateProvider.h">
+      <Filter>template</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\template\TemplateRenderer.h">
+      <Filter>template</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

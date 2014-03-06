@@ -35,9 +35,30 @@
 #include <tanket/TanketTypes.h>
 #include <tank/TankModelStore.h>
 #include <models/ModelStore.h>
+#include <template/TemplateRenderer.h>
 
 void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
+	TemplateRenderer renderer;
+
+	TemplateProviderLocal local(0);
+	local.addLocalVariable("aa", new TemplateProviderString("AAVALUE"));
+	TemplateProviderLocal *valid = new TemplateProviderLocal(&local);
+	local.addLocalVariable("valid", valid);
+	valid->addLocalVariable("var", new TemplateProviderString("CHILDVALUE"));
+
+	std::list<TemplateProvider *> lst;
+	lst.push_back(new TemplateProviderString("A"));
+	lst.push_back(new TemplateProviderString("B"));
+	lst.push_back(new TemplateProviderString("C"));
+	local.addLocalVariable("listvar", new TemplateProviderList(lst));
+
+	renderer.renderTemplateToFile(&local, "test/test.txt", 
+		S3D::formatStringBuffer("%s/test.txt", directory.c_str()));
+
+	exit(0);
+
+
 	XMLEntryDocumentGenerator documentGenerator(directory);
 
 	OptionsGame optionsGame;
