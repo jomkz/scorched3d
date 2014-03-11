@@ -130,6 +130,10 @@ public:
 	virtual void getTypeName(std::string &result);
 	virtual void getDescription(std::string &result);
 
+	// TemplateProvider
+	virtual void getStringProperty(TemplateData &data, std::string &result);
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result);
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name);
 protected:
 	const char *description_;
 	unsigned int data_;

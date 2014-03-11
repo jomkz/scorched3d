@@ -1455,9 +1455,6 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefnHeightMap.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\common\FileTemplate.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="DocumentGenerator.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
@@ -1517,6 +1514,9 @@
     </ClCompile>
     <ClCompile Include="..\..\common\template\TemplateRenderer.cpp">
       <Filter>template</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\XML\XMLEntryDocumentGenerator.cpp">
+      <Filter>XML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2894,9 +2894,6 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefnHeightMap.h">
       <Filter>landscapedef</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\common\FileTemplate.h">
-      <Filter>common</Filter>
-    </ClInclude>
     <ClInclude Include="DocumentGenerator.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
@@ -2959,6 +2956,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\template\TemplateRenderer.h">
       <Filter>template</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\XML\XMLEntryDocumentGenerator.h">
+      <Filter>XML</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

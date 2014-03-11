@@ -36,69 +36,55 @@
 #include <tank/TankModelStore.h>
 #include <models/ModelStore.h>
 #include <template/TemplateRenderer.h>
+#include <XML/XMLEntryDocumentGenerator.h>
 
 void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
-	TemplateRenderer renderer;
-
-	TemplateProviderLocal local(0);
-	local.addLocalVariable("aa", new TemplateProviderString("AAVALUE"));
-	TemplateProviderLocal *valid = new TemplateProviderLocal(&local);
-	local.addLocalVariable("valid", valid);
-	valid->addLocalVariable("var", new TemplateProviderString("CHILDVALUE"));
-
-	std::list<TemplateProvider *> lst;
-	lst.push_back(new TemplateProviderString("A"));
-	lst.push_back(new TemplateProviderString("B"));
-	lst.push_back(new TemplateProviderString("C"));
-	local.addLocalVariable("listvar", new TemplateProviderList(lst));
-
-	renderer.renderTemplateToFile(&local, "test/test.txt", 
-		S3D::formatStringBuffer("%s/test.txt", directory.c_str()));
-
-	exit(0);
-
-
 	XMLEntryDocumentGenerator documentGenerator(directory);
 
 	OptionsGame optionsGame;
-	optionsGame.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&optionsGame);
+
 	LandscapeTextureFile landscapeTex;
-	landscapeTex.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&landscapeTex);
+
 	LandscapeDefinitionFile landscapeDefn;
-	landscapeDefn.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&landscapeDefn);
+
 	LandscapeIncludeFile landscapeInclude;
-	landscapeInclude.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&landscapeInclude);
+
 	LandscapeDescriptionsBase landscapeDescriptions;
-	landscapeDescriptions.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&landscapeDescriptions);
 
 	AccessoryRoot accessory;
-	accessory.generateDocumentation(documentGenerator);
-	UniqueIdStore::EntryRoot uniqueIdStore;
-	uniqueIdStore.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&accessory);
 
-	ClientOptions::instance()->generateDocumentation(documentGenerator);
-	OptionsMasterListServer::instance()->generateDocumentation(documentGenerator);
+	UniqueIdStore::EntryRoot uniqueIdStore;
+	documentGenerator.addXMLEntryRoot(&uniqueIdStore);
+
+	documentGenerator.addXMLEntryRoot(ClientOptions::instance());
+	documentGenerator.addXMLEntryRoot(OptionsMasterListServer::instance());
 	
 	ModInfoRoot modInfo;
-	modInfo.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&modInfo);
 
 	DataBaseSettings databaseSettings;
-	databaseSettings.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&databaseSettings);
 
 	TankAICurrentFile tankAICurrent;
-	tankAICurrent.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&tankAICurrent);
 	TankAIWeaponSets weaponSets;
-	weaponSets.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&weaponSets);
 
 	TanketTypes tanketTypes;
-	tanketTypes.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&tanketTypes);
 
 	TankModelStore tankModelStore;
-	tankModelStore.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&tankModelStore);
 
 	ModelStore modelStore;
-	modelStore.generateDocumentation(documentGenerator);
+	documentGenerator.addXMLEntryRoot(&modelStore);
 
 	documentGenerator.writeDocumentation();
 }

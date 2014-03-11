@@ -55,8 +55,6 @@ public:
 	virtual void resetDefaultValue();
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() = 0;
 
-	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator);
-
 	// XMLEntry
 	virtual bool readXML(XMLNode *parentNode, void *xmlData);
 	virtual void writeXML(XMLNode *parentNode);
@@ -65,6 +63,11 @@ public:
 	virtual bool setBoolArgument(const char *strValue, bool value);
 	virtual bool setIntArgument(const char *strValue, int value);
 	virtual bool setStringArgument(const char *value);
+
+	// TemplateProvider
+	virtual void getStringProperty(TemplateData &data, std::string &result);
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result);
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name);
 protected:
 	unsigned int data_;
 	const char *description_;

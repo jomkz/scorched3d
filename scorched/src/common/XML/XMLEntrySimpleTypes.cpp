@@ -21,7 +21,6 @@
 #include <XML/XMLEntrySimpleTypes.h>
 #include <common/Defines.h>
 #include <common/Logger.h>
-#include <common/FileTemplate.h>
 #include <stdio.h>
 #include <map>
 
@@ -89,10 +88,18 @@ bool XMLEntrySimpleType::setStringArgument(const char *value)
 	return setValueFromString(value);
 }
 
-XMLEntryDocumentInfo XMLEntrySimpleType::generateDocumentation(XMLEntryDocumentGenerator &generator)
+void XMLEntrySimpleType::getStringProperty(TemplateData &data, std::string &result)
 {
-	XMLEntryDocumentInfo info;
-	return info;
+	getValueAsString(result);
+}
+
+void XMLEntrySimpleType::getListProperty(TemplateData &data, std::list<TemplateProvider *> &result)
+{
+}
+
+TemplateProvider *XMLEntrySimpleType::getChild(TemplateData &data, const std::string &name)
+{
+	return XMLEntry::getChild(data, name);
 }
 
 XMLEntrySimpleContainer::XMLEntrySimpleContainer(const char *typeName, const char *description, bool required) :

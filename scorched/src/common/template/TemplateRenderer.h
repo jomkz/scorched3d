@@ -29,26 +29,32 @@ public:
 	TemplateRenderer();
 	virtual ~TemplateRenderer();
 
-	bool renderTemplate(TemplateProvider *baseContext, 
+	bool renderTemplate(TemplateData &data, TemplateProvider *baseContext,
 		const std::string &templateName, std::string &result);
-	bool renderTemplateToFile(TemplateProvider *baseContext,
+	bool renderTemplateToFile(TemplateData &data, TemplateProvider *baseContext,
 		const std::string &templateName, const std::string &outFile);
 
 private:
 	void loadFile(const std::string &templateName, std::string &result);
-	bool renderSubTemplate(TemplateProvider *baseContext, std::string templateFile, std::string &result);
+	bool renderSubTemplate(TemplateData &data, TemplateProvider *baseContext, std::string templateFile, std::string &result);
 	bool expectCharacter(std::string &templateFile, std::string::size_type position, char character);
 	bool expectIdCharacter(std::string &templateFile, std::string::size_type position);
+	bool expectNotCharacter(std::string &templateFile, std::string::size_type position, char character);
+	bool expectStringEndingIn(std::string &templateFile, std::string::size_type position, char end, std::string &str);
 	bool expectString(std::string &templateFile, std::string::size_type position, const std::string &str);
-	std::string::size_type readVariableReference(std::string &templateFile, std::string::size_type position,
+	std::string::size_type readVariableReference(TemplateData &data, std::string &templateFile, std::string::size_type position,
 		TemplateProvider *currentContext, TemplateProvider *&variableResult);
 	std::string::size_type readVariableName(std::string &templateFile, std::string::size_type position,
 		std::string &variableName);
-	std::string::size_type readIf(std::string &templateFile, std::string::size_type position, 
+	std::string::size_type readIf(TemplateData &data, std::string &templateFile, std::string::size_type position,
 		TemplateProvider *currentContext, bool &ifResult);
-	std::string::size_type readFor(std::string &templateFile, std::string::size_type position,
+	std::string::size_type readFor(TemplateData &data, std::string &templateFile, std::string::size_type position,
 		TemplateProvider *currentContext, std::string &varName, std::list<TemplateProvider *> &result);
-	std::string::size_type findEnd(std::string &templateFile, std::string::size_type position,
+	std::string::size_type readUrl(TemplateData &data, std::string &templateFile, std::string::size_type position,
+		TemplateProvider *currentContext, std::string &urlName);
+	std::string::size_type readInclude(TemplateData &data, std::string &templateFile, std::string::size_type position,
+		TemplateProvider *currentContext, std::string &fileName);
+	std::string::size_type findEnd(TemplateData &data, std::string &templateFile, std::string::size_type position,
 		TemplateProvider *currentContext);
 };
 

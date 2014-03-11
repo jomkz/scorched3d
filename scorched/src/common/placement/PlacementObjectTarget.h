@@ -45,8 +45,6 @@ public:
 	virtual unsigned int getData() { return targetDef_.getData(); }
 	virtual void getTypeName(std::string &result) { targetDef_.getTypeName(result); }
 	virtual void getDescription(std::string &result) { targetDef_.getDescription(result); }
-	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
-		{ return targetDef_.generateDocumentation(generator); }
 protected:
 	TargetDefinition targetDef_;
 };

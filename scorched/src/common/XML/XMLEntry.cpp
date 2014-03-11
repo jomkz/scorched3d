@@ -20,188 +20,6 @@
 
 #include <XML/XMLEntry.h>
 #include <XML/XMLEntryRoot.h>
-#include <common/FileTemplate.h>
-
-XMLEntryDocumentInfo::XMLEntryDocumentInfo()
-{
-}
-
-XMLEntryDocumentInfo::~XMLEntryDocumentInfo()
-{
-}
-
-XMLEntryDocumentGenerator::XMLEntryDocumentGenerator(const std::string &documentLocation) :
-	documentLocation_(documentLocation)
-{
-}
-
-XMLEntryDocumentGenerator::~XMLEntryDocumentGenerator()
-{
-}
-
-void XMLEntryDocumentGenerator::getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType)
-{
-	if (typeName == "number" || typeName == "string" || typeName == "boolean" || typeName =="vector" || typeName == "number expression")
-	{
-		resultType = typeName;
-		return;
-	}
-
-	std::string fileLocation = documentLocation_ + "/" + typeName + ".html";
-	resultType.append("<a href='").append(fileLocation).append("'>").append(typeName).append("</a>");
-
-	std::map<std::string, TypeEntry>::iterator itor = types_.find(typeName);
-	if (itor != types_.end())
-	{
-		itor->second.typeReferences.push_back(referingType);
-	}
-	else
-	{
-		TypeEntry entry;
-		entry.typeReferences.push_back(referingType);
-		types_[typeName] = entry;
-	}
-}
-
-void XMLEntryDocumentGenerator::addType(const std::string &typeName, const std::string &fileName, FileTemplateVariables *variables)
-{
-	DIALOG_ASSERT(!hasType(typeName));
-
-	std::map<std::string, TypeEntry>::iterator itor = types_.find(typeName);
-	if (itor != types_.end())
-	{
-		itor->second.fileName = fileName;
-		itor->second.variables = variables;
-	}
-	else
-	{
-		TypeEntry entry;
-		entry.fileName = fileName;
-		entry.variables = variables;
-		types_[typeName] = entry;
-	}
-}
-
-bool XMLEntryDocumentGenerator::hasType(const std::string &typeName)
-{
-	std::map<std::string, TypeEntry>::iterator itor = types_.find(typeName);
-	if (itor == types_.end()) return false;
-	return itor->second.variables != 0;
-}
-
-void XMLEntryDocumentGenerator::writeDocumentation()
-{
-	std::string s3dVersion = S3D::ScorchedVersion + "(" + S3D::ScorchedProtocolVersion + ")";
-
-	FileTemplateVariables indexVariables;
-	indexVariables.addVariableValue("VERSION", s3dVersion.c_str());
-
-	std::map<std::string, TypeEntry>::iterator itor = types_.begin(),
-		end = types_.end();
-	for (;itor!=end;++itor)
-	{
-		if (itor->second.variables)
-		{
-			if (!itor->second.typeReferences.empty())
-			{
-				std::list<std::string>::iterator refItor = itor->second.typeReferences.begin(),
-					refEnd = itor->second.typeReferences.end();
-				for (;refItor!=refEnd;++refItor)
-				{
-					FileTemplateVariables *references = itor->second.variables->addLoopVariable("REFERENCES");
-					references->addVariableValue("REFERENCE_NAME", refItor->c_str());
-				}
-			}
-
-			std::string fileLocation = documentLocation_ + "/" + itor->first + ".html";
-			itor->second.variables->addVariableValue("VERSION", s3dVersion.c_str());
-			FileTemplate::writeTemplateToFile(itor->second.fileName, *itor->second.variables, fileLocation);
-			
-			if (itor->second.root)
-			{
-				FileTemplateVariables *fileVariables = indexVariables.addLoopVariable("ROOT");
-				fileVariables->addVariableValue("INDEX_TYPE", itor->first.c_str());
-				fileVariables->addVariableValue("INDEX_DESCRIPTION", itor->second.variables->getVariableValue("TYPE_DESCRIPTION"));
-			}
-
-			FileTemplateVariables *fileVariables = indexVariables.addLoopVariable("INDEX");
-			fileVariables->addVariableValue("INDEX_TYPE", itor->first.c_str());
-			fileVariables->addVariableValue("INDEX_DESCRIPTION", itor->second.variables->getVariableValue("TYPE_DESCRIPTION"));
-
-			delete itor->second.variables;
-		}
-	}
-
-	FileTemplateVariables stylesVariables;
-	FileTemplate::writeTemplateToFile("docs/styles.css", stylesVariables, documentLocation_ + "/styles.css");
-	FileTemplate::writeTemplateToFile("docs/index.html", indexVariables, documentLocation_ + "/index.html");	
-}
-
-void XMLEntryDocumentGenerator::addRootTypeTags(XMLEntryRootI *rootType, XMLEntry *coreType, 
-		std::list<std::pair<std::string, XMLEntry *> > &children,
-		const std::string &sourceTypeName, const std::string &sourceFileName)
-{
-	addTypeTags(coreType, children, sourceTypeName, sourceFileName);
-	std::map<std::string, TypeEntry>::iterator itor = types_.find(sourceTypeName);
-	DIALOG_ASSERT(itor != types_.end());
-	itor->second.root = true;
-	itor->second.variables->addVariableValue("TYPE_ROOT_FILENAME", rootType->getRootFileName(), true);
-	itor->second.variables->addVariableValue("TYPE_ROOT_NODENAME", rootType->getRootNodeName());
-	itor->second.variables->addVariableValue("TYPE_ROOT_FILELOCATION", 
-		S3D::getLocationConstant(rootType->getRootFileLocation()));
-}
-
-void XMLEntryDocumentGenerator::addTypeTags(XMLEntry *coreType,
-	std::list<std::pair<std::string, XMLEntry *> > &children,
-	const std::string &sourceTypeName, const std::string &sourceFileName)
-{
-	std::string typeType, typeTypeConverted,
-		typeDescription, typeDescriptionConverted;
-	coreType->getTypeName(typeType);
-	coreType->getDescription(typeDescription);
-	XMLNode::removeSpecialChars(typeDescription, typeDescriptionConverted);
-		
-	FileTemplateVariables *mainVariables = new FileTemplateVariables();
-	mainVariables->addVariableValue("TYPE_NAME", typeType.c_str());
-	mainVariables->addVariableValue("TYPE_DESCRIPTION", typeDescriptionConverted.c_str());
-	addType(sourceTypeName, sourceFileName, mainVariables);
-
-	std::list<std::pair<std::string, XMLEntry *> >::iterator itor = children.begin(), end = children.end();
-	for (;itor!=end; itor++)
-	{
-		XMLEntryDocumentInfo childInfo = itor->second->generateDocumentation(*this);
-		FileTemplateVariables *childVariables = mainVariables->addLoopVariable("CHILD");
-		std::string childTypeName, childTypeNameConverted, childDescription;
-		itor->second->getTypeName(childTypeName);
-		itor->second->getDescription(childDescription);
-		getTypeReference(typeType, childTypeName, childTypeNameConverted);
-		std::string childOptions;
-		childOptions.append((itor->second->getData() & XMLEntry::eDataRequired) != 0?"":"Optional, ");
-		if ((itor->second->getData() & XMLEntry::eDataList) != 0)
-		{
-			childOptions.append("List, ");
-		}
-		else
-		{
-			childOptions.append((itor->second->getData() & XMLEntry::eDataChoice) != 0?"Choice, ":"");
-		}
-		if (!childOptions.empty()) childOptions = childOptions.substr(0, childOptions.length()-2);
-
-		childVariables->addVariableValue("CHILD_TAGNAME", itor->first.c_str());
-		childVariables->addVariableValue("CHILD_TYPE", childTypeNameConverted.c_str());
-		childVariables->addVariableValue("CHILD_DESCRIPTION", childDescription.c_str());
-		if (!childOptions.empty()) childVariables->addVariableValue("CHILD_OPTIONS", childOptions.c_str());
-
-		FileTemplateVariables *tagVariables = mainVariables->addLoopVariable("TAG");
-		tagVariables->addVariableValue("TAG_NAME", itor->first.c_str());
-		tagVariables->addVariableValue("TAG_TYPE", childTypeNameConverted.c_str());
-		if ((itor->second->getData() & XMLEntry::eDataChoice) != 0)
-		{
-			tagVariables->addVariableValue("TAG_CHOICE", "TRUE");
-		}
-		if (!childOptions.empty()) tagVariables->addVariableValue("TAG_OPTIONS", childOptions.c_str());
-	}
-}
 
 XMLEntry::XMLEntry()
 {
@@ -209,6 +27,41 @@ XMLEntry::XMLEntry()
 
 XMLEntry::~XMLEntry()
 {
+}
+
+std::string XMLEntry::getDataDescription(unsigned int data)
+{
+	std::string result = "";
+	if (!(data & eDataRequired)) result.append(" optional");
+	if (data & eDataDepricated) result.append(" depricated");
+	if (data & eDataList) result.append(" list");
+	if (data & eDataChoice) result.append(" choice");
+	if (!(data & eDataContainer) && !(data & eDataChoice) && !(data & eDataList)) result.append(" primitive");
+	if (result.length() > 0 && result[0] == ' ') result = std::string(result, 1);
+	return result;
+}
+
+TemplateProvider *XMLEntry::getChild(TemplateData &data, const std::string &name)
+{
+	if (name == "THIS_TYPE_NAME")
+	{
+		std::string result;
+		getTypeName(result);
+		return TemplateProviderString::getStaticValue(result);
+	}
+	if (name == "THIS_DESCRIPTION")
+	{
+		std::string result;
+		getDescription(result);
+		return TemplateProviderString::getStaticValue(result);
+	}
+	if (name == "THIS_DATA")
+	{
+		std::string result = getDataDescription(getData());
+		if (result.empty()) return 0;
+		return TemplateProviderString::getStaticValue(result);
+	}
+	return 0;
 }
 
 XMLEntryContainer::XMLEntryContainer(const char *typeName, const char *description, bool required) :
@@ -388,7 +241,7 @@ void XMLEntryContainer::writeXML(XMLNode *parentNode)
 			S3D::formatStringBuffer("%s", description.c_str()), 
 			XMLNode::XMLCommentType));
 
-		if (itor->second->isList())
+		if (itor->second->getData() & eDataList)
 		{
 			XMLEntryListBase *list = (XMLEntryListBase*) itor->second;
 			std::list<XMLEntry *> children;
@@ -412,10 +265,35 @@ void XMLEntryContainer::writeXML(XMLNode *parentNode)
 	}
 }
 
-XMLEntryDocumentInfo XMLEntryContainer::generateDocumentation(XMLEntryDocumentGenerator &generator)
+void XMLEntryContainer::getStringProperty(TemplateData &data, std::string &result)
 {
-	XMLEntryDocumentInfo info;
-	if (generator.hasType(xmlTypeName_)) return info;
-	generator.addTypeTags(this, xmlEntryChildrenList_, xmlTypeName_, "docs/XMLEntryContainer.html");
-	return info;
+	getTypeName(result);
+}
+
+void XMLEntryContainer::getListProperty(TemplateData &data, std::list<TemplateProvider *> &result)
+{
+	std::list<std::pair<std::string, XMLEntry *> >::iterator itor = xmlEntryChildrenList_.begin(),
+		end = xmlEntryChildrenList_.end();
+	for (; itor != end; ++itor)
+	{
+		TemplateProviderString *value = new TemplateProviderString(itor->first);
+		data.addTmpValue(value);
+		TemplateProviderLocal *local = new TemplateProviderLocal(itor->second);
+		local->addLocalVariable("THIS_NAME", value);
+		data.addTmpValue(local);
+
+		result.push_back(local);
+	}
+}
+
+TemplateProvider *XMLEntryContainer::getChild(TemplateData &data, const std::string &name)
+{
+	TemplateProvider *result = XMLEntry::getChild(data, name);
+	if (result) return result;
+	std::map<std::string, XMLEntry *>::iterator itor = xmlEntryChildren_.find(name);
+	if (itor != xmlEntryChildren_.end())
+	{
+		return itor->second;
+	}
+	return 0;
 }

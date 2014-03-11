@@ -25,15 +25,28 @@
 #include <string>
 #include <map>
 
+class TemplateProvider;
+class TemplateData
+{
+public:
+	TemplateData();
+	virtual ~TemplateData();
+
+	void addTmpValue(TemplateProvider *value);
+
+private:
+	std::list<TemplateProvider *> tmpValues_;
+};
+
 class TemplateProvider
 {
 public:
 	TemplateProvider();
 	virtual ~TemplateProvider();
 
-	virtual void getStringProperty(std::string &result) = 0;
-	virtual void getListProperty(std::list<TemplateProvider *> &result) = 0;
-	virtual TemplateProvider *getChild(const std::string &name) = 0;
+	virtual void getStringProperty(TemplateData &data, std::string &result) = 0;
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result) = 0;
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name) = 0;
 };
 
 class TemplateProviderString : public TemplateProvider
@@ -42,10 +55,11 @@ public:
 	TemplateProviderString(const std::string &value) : value_(value) {}
 	virtual ~TemplateProviderString() {}
 
-	virtual void getStringProperty(std::string &result) { result = value_; }
-	virtual void getListProperty(std::list<TemplateProvider *> &result) { }
-	virtual TemplateProvider *getChild(const std::string &name) { return 0; }
+	virtual void getStringProperty(TemplateData &data, std::string &result) { result = value_; }
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result) { }
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name) { return 0; }
 
+	static TemplateProviderString *getStaticValue(const std::string &value);
 protected:
 	std::string value_;
 };
@@ -56,9 +70,9 @@ public:
 	TemplateProviderList(const std::list<TemplateProvider *> &value) : value_(value) {}
 	virtual ~TemplateProviderList() {}
 
-	virtual void getStringProperty(std::string &result) { result = "<ListValue>"; }
-	virtual void getListProperty(std::list<TemplateProvider *> &result) { result = value_;  }
-	virtual TemplateProvider *getChild(const std::string &name) { return 0; }
+	virtual void getStringProperty(TemplateData &data, std::string &result) { result = "<ListValue>"; }
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result) { result = value_; }
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name) { return 0; }
 
 protected:
 	std::list<TemplateProvider *> value_;
@@ -67,12 +81,13 @@ protected:
 class TemplateProviderLocal : public TemplateProvider
 {
 public:
+	TemplateProviderLocal();
 	TemplateProviderLocal(TemplateProvider *parent);
 	virtual ~TemplateProviderLocal();
 
-	virtual void getStringProperty(std::string &result);
-	virtual void getListProperty(std::list<TemplateProvider *> &result);
-	virtual TemplateProvider *getChild(const std::string &name);
+	virtual void getStringProperty(TemplateData &data, std::string &result);
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result);
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name);
 
 	void addLocalVariable(const std::string &name, TemplateProvider *value);
 

@@ -20,12 +20,35 @@
 
 #include <template/TemplateProvider.h>
 
+TemplateData::TemplateData()
+{
+}
+
+TemplateData::~TemplateData()
+{
+	std::list<TemplateProvider *>::iterator itor = tmpValues_.begin(),
+		end = tmpValues_.end();
+	for (; itor != end; ++itor) delete *itor;
+	tmpValues_.clear();
+}
+
+void TemplateData::addTmpValue(TemplateProvider *value)
+{
+	tmpValues_.push_back(value);
+}
+
 TemplateProvider::TemplateProvider()
 {
 }
 
 TemplateProvider::~TemplateProvider()
 {
+}
+
+TemplateProviderLocal::TemplateProviderLocal() :
+	parent_(0)
+{
+
 }
 
 TemplateProviderLocal::TemplateProviderLocal(TemplateProvider *parent) :
@@ -37,22 +60,22 @@ TemplateProviderLocal::~TemplateProviderLocal()
 {
 }
 
-void TemplateProviderLocal::getStringProperty(std::string &result)
+void TemplateProviderLocal::getStringProperty(TemplateData &data, std::string &result)
 {
-	if (parent_) parent_->getStringProperty(result);
+	if (parent_) parent_->getStringProperty(data, result);
 }
 
-void TemplateProviderLocal::getListProperty(std::list<TemplateProvider *> &result)
+void TemplateProviderLocal::getListProperty(TemplateData &data, std::list<TemplateProvider *> &result)
 {
-	if (parent_) parent_->getListProperty(result);
+	if (parent_) parent_->getListProperty(data, result);
 }
 
-TemplateProvider *TemplateProviderLocal::getChild(const std::string &name)
+TemplateProvider *TemplateProviderLocal::getChild(TemplateData &data, const std::string &name)
 {
 	std::map<std::string, TemplateProvider *>::iterator itor = localVariables_.find(name);
 	if (itor == localVariables_.end())
 	{
-		if (parent_) return parent_->getChild(name);
+		if (parent_) return parent_->getChild(data, name);
 		return 0;
 	}
 	else
@@ -64,4 +87,11 @@ TemplateProvider *TemplateProviderLocal::getChild(const std::string &name)
 void TemplateProviderLocal::addLocalVariable(const std::string &name, TemplateProvider *value)
 {
 	localVariables_[name] = value;
+}
+
+TemplateProviderString *TemplateProviderString::getStaticValue(const std::string &value)
+{
+	static TemplateProviderString tmp(value);
+	tmp.value_ = value;
+	return &tmp;
 }

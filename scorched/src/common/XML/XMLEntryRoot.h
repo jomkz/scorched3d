@@ -36,7 +36,7 @@ public:
 };
 
 template <class T>
-class XMLEntryRoot : public T, XMLEntryRootI
+class XMLEntryRoot : public T, public XMLEntryRootI
 {
 public:
 	XMLEntryRoot(S3D::FileLocation fileLocation, const char *fileName, const char *rootNodeName,
@@ -128,12 +128,23 @@ public:
 	virtual S3D::FileLocation getRootFileLocation() { return fileLocation_; }
 	virtual const char *getRootNodeName() { return rootNodeName_; }
 
-	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name)
 	{
-		XMLEntryDocumentInfo info;
-		if (generator.hasType(xmlTypeName_)) return info;
-		generator.addRootTypeTags(this, this, xmlEntryChildrenList_, xmlTypeName_, "docs/XMLEntryContainer.html");
-		return info;
+		TemplateProvider *result = XMLEntry::getChild(data, name);
+		if (result) return result;
+		if (name == "THIS_FILE_NAME")
+		{
+			return TemplateProviderString::getStaticValue(getRootFileName());
+		}
+		if (name == "THIS_FILE_LOCATION")
+		{
+			return TemplateProviderString::getStaticValue(S3D::getLocationConstant(getRootFileLocation()));
+		}
+		if (name == "THIS_ROOT_NODE")
+		{
+			return TemplateProviderString::getStaticValue(getRootNodeName());
+		}
+		return 0;
 	}
 protected:
 	S3D::FileLocation fileLocation_;

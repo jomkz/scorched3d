@@ -21,55 +21,12 @@
 #if !defined(__INCLUDE_XMLEntryh_INCLUDE__)
 #define __INCLUDE_XMLEntryh_INCLUDE__
 
-#include <common/FileTemplate.h>
 #include <XML/XMLParser.h>
+#include <template/TemplateProvider.h>
 #include <set>
 #include <map>
 
-class XMLEntryDocumentInfo
-{
-public:
-	XMLEntryDocumentInfo();
-	~XMLEntryDocumentInfo();
-private:
-};
-
-class FileTemplateVariables;
-class XMLEntry;
-class XMLEntryRootI;
-class XMLEntryDocumentGenerator
-{
-public:
-	XMLEntryDocumentGenerator(const std::string &documentLocation);
-	~XMLEntryDocumentGenerator();
-
-	void writeDocumentation();
-
-	void addType(const std::string &typeName, const std::string &fileName, FileTemplateVariables *variables);
-	bool hasType(const std::string &typeName);
-	void getTypeReference(const std::string &referingType, const std::string &typeName, std::string &resultType);
-
-	void addRootTypeTags(XMLEntryRootI *rootType, XMLEntry *coreType, 
-		std::list<std::pair<std::string, XMLEntry *> > &children,
-		const std::string &sourceTypeName, const std::string &sourceFileName);
-	void addTypeTags(XMLEntry *coreType, std::list<std::pair<std::string, XMLEntry *> > &children,
-		const std::string &sourceTypeName, const std::string &sourceFileName);
-private:
-	struct TypeEntry
-	{
-		TypeEntry() : variables(0), root(false) { }
-
-		std::string fileName;
-		FileTemplateVariables *variables;
-		std::list<std::string> typeReferences;
-		bool root;
-	};
-
-	std::string documentLocation_;
-	std::map<std::string, TypeEntry> types_;
-};
-
-class XMLEntry
+class XMLEntry : public TemplateProvider
 {
 public:
 	enum XMLEntryData
@@ -82,8 +39,10 @@ public:
 		eDataNoRestore = 32,
 		eDataDebugOnly = 64,
 		eDataList = 128,
-		eDataChoice = 256
+		eDataChoice = 256,
+		eDataContainer = 512
 	};
+	static std::string getDataDescription(unsigned int data);
 
 	XMLEntry();
 	virtual ~XMLEntry();
@@ -95,8 +54,8 @@ public:
 	virtual void getTypeName(std::string &result) = 0;
 	virtual void getDescription(std::string &result) = 0;
 
-	virtual bool isList() { return false; }
-	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator) { XMLEntryDocumentInfo info; return info; }
+	// TemplateProvider
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name);
 protected:
 };
 
@@ -138,10 +97,14 @@ public:
 	// XMLEntry
 	virtual bool readXML(XMLNode *node, void *xmlData);
 	virtual void writeXML(XMLNode *node);
-	virtual unsigned int getData() { return required_?eDataRequired:0; }
+	virtual unsigned int getData() { return required_ ? eDataRequired | eDataContainer : eDataContainer; }
 	virtual void getTypeName(std::string &result) { result = xmlTypeName_; }
 	virtual void getDescription(std::string &result) { result = xmlDescription_; }
-	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator);
+
+	// TemplateProvider
+	virtual void getStringProperty(TemplateData &data, std::string &result);
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result);
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name);
 protected:
 	std::list<std::pair<std::string, XMLEntry *> > xmlEntryChildrenList_;
 	std::map<std::string, XMLEntry *> xmlEntryChildren_;
@@ -151,12 +114,21 @@ protected:
 	virtual bool readXMLEntry(XMLNode *node, void *xmlData, const char *name, XMLEntry *entry);
 };
 
+class XMLEntryTypeChoiceBase : public XMLEntry
+{
+public:
+	XMLEntryTypeChoiceBase() {}
+	virtual ~XMLEntryTypeChoiceBase() {}
+
+	virtual void getAllTypeInstances(TemplateData &data, std::list<XMLEntry *> &allTypes) = 0;
+};
+
 template <class T>
-class XMLEntryTypeChoice : public XMLEntry
+class XMLEntryTypeChoice : public XMLEntryTypeChoiceBase
 {
 public:
 	XMLEntryTypeChoice(const char *typeName, const char *description) :
-		XMLEntry(),
+		XMLEntryTypeChoiceBase(),
 		xmlTypeName_(typeName), xmlDescription_(description), 
 		value_(0)
 	{
@@ -223,22 +195,51 @@ public:
 		node->addParameter(new XMLNode("type", type_, XMLNode::XMLParameterType));
 		value_->writeXML(node);
 	}
-	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
+	virtual void getAllTypeInstances(TemplateData &data, std::list<XMLEntry *> &typeInstances)
 	{
-		XMLEntryDocumentInfo info;
-		if (generator.hasType(xmlTypeName_)) return info;
-
-		std::list<std::pair<std::string, XMLEntry *> > children;
 		std::set<std::string> *allTypes = getAllTypesCached();
 		std::set<std::string>::iterator itor = allTypes->begin(), end = allTypes->end();
-		for (;itor!=end;++itor)
+		for (; itor != end; ++itor)
 		{
 			T *tmpValue = createXMLEntry(itor->c_str(), 0);
-			children.push_back(std::pair<std::string, XMLEntry *>(*itor, tmpValue));
+			typeInstances.push_back(tmpValue);
+			data.addTmpValue(tmpValue);
 		}
+	}
 
-		generator.addTypeTags(this, children, xmlTypeName_, "docs/XMLEntryTypeChoice.html");
-		return info;
+	// TemplateProvider
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name)
+	{
+		if (name == "THIS_CHOICE_TYPE")
+		{
+			std::list<TemplateProvider *> result;
+			std::set<std::string> *allTypes = getAllTypesCached();
+			std::set<std::string>::iterator itor = allTypes->begin(), end = allTypes->end();
+			for (; itor != end; ++itor)
+			{
+				T *tmpValue = createXMLEntry(itor->c_str(), 0);
+				data.addTmpValue(tmpValue);
+				TemplateProviderString *value = new TemplateProviderString(itor->c_str());
+				data.addTmpValue(value);
+				TemplateProviderLocal *local = new TemplateProviderLocal(tmpValue);
+				local->addLocalVariable("THIS_NAME", value);
+				data.addTmpValue(local);
+
+				result.push_back(local);
+			}
+			TemplateProviderList *resultList = new TemplateProviderList(result);
+			data.addTmpValue(resultList);
+			return resultList;
+		}
+		return XMLEntry::getChild(data, name);
+	}
+	virtual void getStringProperty(TemplateData &data, std::string &result)
+	{
+		value_->getStringProperty(data, result);
+	}
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result)
+	{
+		value_->getListProperty(data, result);
 	}
 protected:
 	std::string type_;
@@ -252,9 +253,9 @@ public:
 	XMLEntryListBase() {}
 	virtual ~XMLEntryListBase() {}
 
-	virtual bool isList() { return true; }
 	virtual void getListChildren(std::list<XMLEntry *> &children) = 0;
 	virtual void writeListXML(XMLNode *node, XMLEntry *listEntry) = 0;
+	virtual void getAllTypeInstances(TemplateData &data, std::list<XMLEntry *> &allTypes) = 0;
 };
 
 template <class T>
@@ -328,15 +329,45 @@ public:
 	{
 		listEntry->writeXML(node);
 	}
-
-	virtual XMLEntryDocumentInfo generateDocumentation(XMLEntryDocumentGenerator &generator)
+	virtual void getAllTypeInstances(TemplateData &data, std::list<XMLEntry *> &allTypes)
 	{
 		T *newEntry = createXMLEntry(0);
-		XMLEntryDocumentInfo info = newEntry->generateDocumentation(generator);
-		delete newEntry;
-		return info;
+		data.addTmpValue(newEntry);
+		allTypes.push_back(newEntry);
 	}
 
+	// TemplateProvider
+	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name)
+	{
+		if (name == "THIS_DATA")
+		{
+			std::string result = getDataDescription(getData());
+			return TemplateProviderString::getStaticValue(result);
+		}
+		if (name == "THIS_LIST_TYPE")
+		{
+			T *newEntry = createXMLEntry(0);
+			data.addTmpValue(newEntry);
+			return newEntry;
+		}
+		T *newEntry = createXMLEntry(0);
+		TemplateProvider *result = newEntry->getChild(data, name);
+		delete newEntry;
+		return result;
+	}
+	virtual void getStringProperty(TemplateData &data, std::string &result)
+	{
+		getTypeName(result);
+	}
+	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result)
+	{
+		std::list<T *>::iterator itor = xmlEntryChildren_.begin(),
+			end = xmlEntryChildren_.end();
+		for (; itor != end; ++itor)
+		{
+			result.push_back(*itor);
+		}
+	}
 protected:
 	int minimumListNumber_;
 	std::list<T *> xmlEntryChildren_;

@@ -205,3 +205,16 @@ void XMLEntryNumberParser::getDescription(std::string &result)
 {
 	result = description_;
 }
+
+void XMLEntryNumberParser::getStringProperty(TemplateData &data, std::string &result)
+{
+}
+
+void XMLEntryNumberParser::getListProperty(TemplateData &data, std::list<TemplateProvider *> &result)
+{
+}
+
+TemplateProvider *XMLEntryNumberParser::getChild(TemplateData &data, const std::string &name)
+{
+	return XMLEntry::getChild(data, name);
+}

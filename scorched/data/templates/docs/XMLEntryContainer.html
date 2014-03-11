@@ -1,51 +1,59 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>[[TYPE_NAME]] - Scorched3D [[VERSION]]</title>
+    <title>${CONTAINER.THIS_TYPE_NAME} - Scorched3D ${SCORCHED_VERSION}</title>
     <link rel="stylesheet" type="text/css" href="styles.css" title="Style"/>
   </head>
   <body BGCOLOR="white">
     <hr/>
     <h2>
-      [[TYPE_NAME]]
+      ${CONTAINER.THIS_TYPE_NAME}
     </h2>
-    {{exists:REFERENCES}}
+    #if(${REFERING_TYPES})
     <dl>
       <dt>
         <B>All References:</B>
       </dt>
       <dd>
-        {{loop:REFERENCES}}
-        <a href='[[REFERENCE_NAME]].html'>[[REFERENCE_NAME]]</a>
-        {{loop:REFERENCES}}
+        #for(${REFERING_TYPE} in ${REFERING_TYPES})
+        <a href='${REFERING_TYPE}.html'>${REFERING_TYPE}</a>
+        #end
       </dd>
     </dl>
-    {{exists:REFERENCES}}
+    #end
     <hr/>
     <p>
-      [[TYPE_DESCRIPTION]]
+      ${CONTAINER.THIS_DESCRIPTION}
 
-      {{exists:TYPE_ROOT_FILENAME}}
+      #if(${CONTAINER.THIS_FILE_NAME})
       <br/>
-      File type : [[TYPE_ROOT_FILELOCATION]]<br/>
-      File name : [[TYPE_ROOT_FILENAME]]<br/>
-      {{exists:TYPE_ROOT_FILENAME}}
+      File type : ${CONTAINER.THIS_FILE_LOCATION}<br/>
+      File name : ${CONTAINER.THIS_FILE_NAME}<br/>
+      #end
     </p>
     <hr/>
 
     <p>
-      {{exists:TYPE_ROOT_NODENAME}}
-      &lt;[[TYPE_ROOT_NODENAME]]&gt;<br/>
-      {{exists:TYPE_ROOT_NODENAME}}
-      {{loop:TAG}}
-      <a class='tag' id='XML_[[TAG_NAME]]' href='#[[TAG_NAME]]'>&lt;[[TAG_NAME]]{{exists:TAG_CHOICE}}&nbsp;<span class='type'>type='...'</span>{{exists:TAG_CHOICE}}&gt;</a>
-          <span class='content'>&nbsp;[[TAG_TYPE]]</span>&nbsp;
-        <a class='tag' href='#[[TAG_NAME]]'>&lt;/[[TAG_NAME]]&gt;</a>
-        {{exists:TAG_OPTIONS}}&nbsp;<span class='option'>&lt;!-- [[TAG_OPTIONS]] --&gt;</span>{{exists:TAG_OPTIONS}}<br/>
-      {{loop:TAG}}
-      {{exists:TYPE_ROOT_NODENAME}}
-      &lt;/[[TYPE_ROOT_NODENAME]]&gt;<br/>
-      {{exists:TYPE_ROOT_NODENAME}}
+      #if(${CONTAINER.THIS_ROOT_NODE})
+      &lt;${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
+      #end
+      #for(${CHILD} in ${CONTAINER})
+      <a class='tag' href='#${CHILD.THIS_NAME}'>&lt;${CHILD.THIS_NAME}#if(${CHILD.THIS_DATA}=~choice)&nbsp;<span class='type'>type='...'</span>#end&gt;</a>
+          <span class='content'>
+            #if(${CHILD.THIS_DATA}!~primitive)
+            <a href='${CHILD.THIS_TYPE_NAME}.html'>
+            #end
+            &nbsp;${CHILD.THIS_TYPE_NAME}
+            #if(${CHILD.THIS_DATA}!~primitive)
+            </a>
+            #end
+          </span>&nbsp;
+        <a class='tag' href='#${CHILD.THIS_NAME}'>&lt;/${CHILD.THIS_NAME}&gt;</a>
+        #if(${CHILD.THIS_DATA})&nbsp;<span class='option'>&lt;!-- ${CHILD.THIS_DATA} --&gt;</span>#end<br/>
+      #end
+      #if(${CONTAINER.THIS_ROOT_NODE})
+      &lt;/${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
+      #end
     </p>
     
     <hr/>
@@ -69,20 +77,30 @@
           </TH>
         </TR>
 
-        {{loop:CHILD}}
+        #for(${CHILD} in ${CONTAINER})
         <TR BGCOLOR="white" CLASS="TableRowColor">         
           <TD>
-              <a class='tag' id='[[CHILD_TAGNAME]]' href='#XML_[[CHILD_TAGNAME]]'>[[CHILD_TAGNAME]]</a>
+            <a class='tag' id='${CHILD.THIS_NAME}'>
+              ${CHILD.THIS_NAME}
+            </a>
           </TD>
           <TD style="white-space: nowrap">
-            <span class='content'>[[CHILD_TYPE]]</span>
-            {{exists:CHILD_OPTIONS}}
-            <span class='option'>([[CHILD_OPTIONS]])</span>
-            {{exists:CHILD_OPTIONS}}
+            <span class='content'>
+              #if(${CHILD.THIS_DATA}!~primitive)
+              <a href='${CHILD.THIS_TYPE_NAME}.html'>
+              #end
+                ${CHILD.THIS_TYPE_NAME}
+              #if(${CHILD.THIS_DATA}!~primitive)
+              </a>
+              #end
+            </span>
+            #if(${CHILD.THIS_DATA})
+            <span class='option'>(${CHILD.THIS_DATA})</span>
+            #end
           </TD>
-          <TD>[[CHILD_DESCRIPTION]]</TD>
+          <TD>${CHILD.THIS_DESCRIPTION}</TD>
         </TR>
-        {{loop:CHILD}}
+        #end
       </table>
     </p>
   </body>

@@ -48,7 +48,6 @@
     <ClCompile Include="..\..\common\common\FileLines.cpp" />
     <ClCompile Include="..\..\common\common\FileList.cpp" />
     <ClCompile Include="..\..\common\common\FileLogger.cpp" />
-    <ClCompile Include="..\..\common\common\FileTemplate.cpp" />
     <ClCompile Include="..\..\common\common\fixed.cpp" />
     <ClCompile Include="..\..\common\common\FixedVector.cpp" />
     <ClCompile Include="..\..\common\common\FixedVector4.cpp" />
@@ -341,6 +340,7 @@
     <ClCompile Include="..\..\common\XML\XMLDiff.cpp" />
     <ClCompile Include="..\..\common\XML\XMLEntry.cpp" />
     <ClCompile Include="..\..\common\XML\XMLEntryComplexTypes.cpp" />
+    <ClCompile Include="..\..\common\XML\XMLEntryDocumentGenerator.cpp" />
     <ClCompile Include="..\..\common\XML\XMLEntryRoot.cpp" />
     <ClCompile Include="..\..\common\XML\XMLEntrySimpleTypes.cpp" />
     <ClCompile Include="..\..\common\XML\XMLFile.cpp" />
@@ -530,7 +530,6 @@
     <ClInclude Include="..\..\common\common\FileLines.h" />
     <ClInclude Include="..\..\common\common\FileList.h" />
     <ClInclude Include="..\..\common\common\FileLogger.h" />
-    <ClInclude Include="..\..\common\common\FileTemplate.h" />
     <ClInclude Include="..\..\common\common\fixed.h" />
     <ClInclude Include="..\..\common\common\FixedVector.h" />
     <ClInclude Include="..\..\common\common\FixedVector4.h" />
@@ -827,6 +826,7 @@
     <ClInclude Include="..\..\common\XML\XMLDiff.h" />
     <ClInclude Include="..\..\common\XML\XMLEntry.h" />
     <ClInclude Include="..\..\common\XML\XMLEntryComplexTypes.h" />
+    <ClInclude Include="..\..\common\XML\XMLEntryDocumentGenerator.h" />
     <ClInclude Include="..\..\common\XML\XMLEntryRoot.h" />
     <ClInclude Include="..\..\common\XML\XMLEntrySimpleTypes.h" />
     <ClInclude Include="..\..\common\XML\XMLFile.h" />

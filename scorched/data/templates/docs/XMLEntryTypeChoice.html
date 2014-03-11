@@ -1,30 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>[[TYPE_NAME]] - Scorched3D [[VERSION]]</title>
+    <title>${CONTAINER.THIS_TYPE_NAME} - Scorched3D ${SCORCHED_VERSION}</title>
     <link rel="stylesheet" type="text/css" href="styles.css" title="Style"/>
   </head>
   <body BGCOLOR="white">
     <hr/>
     <h2>
-      [[TYPE_NAME]]
+      ${CONTAINER.THIS_TYPE_NAME}
     </h2>
-
-    {{exists:REFERENCES}}
+    #if(${REFERING_TYPES})
     <dl>
       <dt>
         <B>All References:</B>
       </dt>
       <dd>
-        {{loop:REFERENCES}}
-        <a href='[[REFERENCE_NAME]].html'>[[REFERENCE_NAME]]</a>
-        {{loop:REFERENCES}}
+        #for(${REFERING_TYPE} in ${REFERING_TYPES})
+        <a href='${REFERING_TYPE}.html'>${REFERING_TYPE}</a>
+        #end
       </dd>
     </dl>
-    {{exists:REFERENCES}}
+    #end
     <hr/>
     <p>
-      [[TYPE_DESCRIPTION]]
+      ${CONTAINER.THIS_DESCRIPTION}
     </p>
     <hr/>
 
@@ -48,20 +47,30 @@
           </TH>
         </TR>
 
-        {{loop:CHILD}}
+        #for(${CHILD} in ${CONTAINER.THIS_CHOICE_TYPE})
         <TR BGCOLOR="white" CLASS="TableRowColor">
           <TD>
-            <a class='tag' id='[[CHILD_TAGNAME]]' href='#XML_[[CHILD_TAGNAME]]'>[[CHILD_TAGNAME]]</a>
+            <a class='tag' id='${CHILD.THIS_NAME}'>
+              ${CHILD.THIS_NAME}
+            </a>
           </TD>
           <TD style="white-space: nowrap">
-            <span class='content'>[[CHILD_TYPE]]</span>
-            {{exists:CHILD_OPTIONS}}
-            <span class='option'>([[CHILD_OPTIONS]])</span>
-            {{exists:CHILD_OPTIONS}}
+            <span class='content'>
+              #if(${CHILD.THIS_DATA}!~primitive)
+              <a href='${CHILD.THIS_TYPE_NAME}.html'>
+                #end
+                ${CHILD.THIS_TYPE_NAME}
+                #if(${CHILD.THIS_DATA}!~primitive)
+              </a>
+              #end
+            </span>
+            #if(${CHILD.THIS_DATA})
+            <span class='option'>(${CHILD.THIS_DATA})</span>
+            #end
           </TD>
-          <TD>[[CHILD_DESCRIPTION]]</TD>
+          <TD>${CHILD.THIS_DESCRIPTION}</TD>
         </TR>
-        {{loop:CHILD}}
+        #end
       </table>
     </p>
   </body>
