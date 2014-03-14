@@ -35,7 +35,9 @@ LandscapeOptions::~LandscapeOptions()
 
 void LandscapeOptions::getDescription(std::string &result)
 {
-	result = "Defines the game options for this level, these options override any set globaly as the server settings.";
+	result = "Defines the game options for this level, these options override any set globaly as the server settings."
+		"<br><br>"
+		"#include(docs/includes/LandscapeOptions.html)";
 }
 
 bool LandscapeOptions::readXML(XMLNode *parentNode, void *xmlData)

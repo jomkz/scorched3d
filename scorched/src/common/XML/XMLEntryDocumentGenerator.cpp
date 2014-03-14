@@ -87,13 +87,24 @@ void XMLEntryDocumentGenerator::writeDocumentation()
 					referingTypesList.push_back(referingType);
 				}
 				TemplateProviderList referingTypes(referingTypesList);
-				local.addLocalVariable("REFERING_TYPES", &referingTypes);
+				if (!referingTypesList.empty())
+				{
+					local.addLocalVariable("REFERING_TYPES", &referingTypes);
+				}
 
 				std::string outFile = S3D::formatStringBuffer("%s/%s.html", directory_.c_str(), itor->first.c_str());
 				templateRenderer.renderTemplateToFile(data_, &local,
 					templateFileName, outFile);
 			}
 		}
+	}
+
+	{
+		TemplateRenderer templateRenderer;
+		TemplateProviderLocal local;
+		std::string outFile = S3D::formatStringBuffer("%s/%s", directory_.c_str(), "styles.css");
+		templateRenderer.renderTemplateToFile(data_, &local,
+			"docs/styles.css", outFile);
 	}
 }
 

@@ -36,6 +36,7 @@ std::string XMLEntry::getDataDescription(unsigned int data)
 	if (data & eDataDepricated) result.append(" depricated");
 	if (data & eDataList) result.append(" list");
 	if (data & eDataChoice) result.append(" choice");
+	if (data & eDataContainer) result.append(" container");
 	if (!(data & eDataContainer) && !(data & eDataChoice) && !(data & eDataList)) result.append(" primitive");
 	if (result.length() > 0 && result[0] == ' ') result = std::string(result, 1);
 	return result;

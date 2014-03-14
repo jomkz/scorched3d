@@ -308,7 +308,7 @@ OptionsGameBase::~OptionsGameBase()
 
 OptionsGame::OptionsGame() :
 	XMLEntryRoot<OptionsGameBase>(
-		S3D::eInvalidLocation, "<multiple>", "options",
+		S3D::eInvalidLocation, "user_defined", "options",
 		"OptionsGame", "Scorched3D options that define properties for the game engine", true)
 {
 }

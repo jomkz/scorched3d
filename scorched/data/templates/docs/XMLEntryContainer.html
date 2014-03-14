@@ -5,103 +5,158 @@
     <link rel="stylesheet" type="text/css" href="styles.css" title="Style"/>
   </head>
   <body BGCOLOR="white">
-    <hr/>
-    <h2>
-      ${CONTAINER.THIS_TYPE_NAME}
-    </h2>
-    #if(${REFERING_TYPES})
-    <dl>
-      <dt>
-        <B>All References:</B>
-      </dt>
-      <dd>
-        #for(${REFERING_TYPE} in ${REFERING_TYPES})
-        <a href='${REFERING_TYPE}.html'>${REFERING_TYPE}</a>
-        #end
-      </dd>
-    </dl>
-    #end
-    <hr/>
-    <p>
-      ${CONTAINER.THIS_DESCRIPTION}
-
-      #if(${CONTAINER.THIS_FILE_NAME})
-      <br/>
-      File type : ${CONTAINER.THIS_FILE_LOCATION}<br/>
-      File name : ${CONTAINER.THIS_FILE_NAME}<br/>
-      #end
-    </p>
-    <hr/>
-
-    <p>
-      #if(${CONTAINER.THIS_ROOT_NODE})
-      &lt;${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
-      #end
-      #for(${CHILD} in ${CONTAINER})
-      <a class='tag' href='#${CHILD.THIS_NAME}'>&lt;${CHILD.THIS_NAME}#if(${CHILD.THIS_DATA}=~choice)&nbsp;<span class='type'>type='...'</span>#end&gt;</a>
-          <span class='content'>
-            #if(${CHILD.THIS_DATA}!~primitive)
-            <a href='${CHILD.THIS_TYPE_NAME}.html'>
-            #end
-            &nbsp;${CHILD.THIS_TYPE_NAME}
-            #if(${CHILD.THIS_DATA}!~primitive)
-            </a>
-            #end
-          </span>&nbsp;
-        <a class='tag' href='#${CHILD.THIS_NAME}'>&lt;/${CHILD.THIS_NAME}&gt;</a>
-        #if(${CHILD.THIS_DATA})&nbsp;<span class='option'>&lt;!-- ${CHILD.THIS_DATA} --&gt;</span>#end<br/>
-      #end
-      #if(${CONTAINER.THIS_ROOT_NODE})
-      &lt;/${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
-      #end
-    </p>
-    
-    <hr/>
-    <p>
-      <table BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-        <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Tag Name</B>
-            </FONT>
-          </TH>
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Type</B>
-            </FONT>
-          </TH>
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Description</B>
-            </FONT>
-          </TH>
-        </TR>
-
-        #for(${CHILD} in ${CONTAINER})
-        <TR BGCOLOR="white" CLASS="TableRowColor">         
-          <TD>
-            <a class='tag' id='${CHILD.THIS_NAME}'>
-              ${CHILD.THIS_NAME}
-            </a>
-          </TD>
-          <TD style="white-space: nowrap">
-            <span class='content'>
-              #if(${CHILD.THIS_DATA}!~primitive)
-              <a href='${CHILD.THIS_TYPE_NAME}.html'>
+    <div class="header">
+      <h2 title="Type ${CONTAINER.THIS_TYPE_NAME}" class="title">Type ${CONTAINER.THIS_TYPE_NAME}</h2>
+    </div>
+    <div class="contentContainer">
+      <div class="description">
+        <ul class="blockList">
+          <li class="blockList">
+            <dl>
+              <dt>All Refering Types:</dt>
+              <dd>
+                #for(${REFERING_TYPE} in ${REFERING_TYPES})
+                <a href='${REFERING_TYPE}.html'>${REFERING_TYPE}</a>
+                #end
+              </dd>
+            </dl>
+            <hr>
+              <br/>
+              <div class="block">
+                ${CONTAINER.THIS_DESCRIPTION}
+              </div>
+              #if(${CONTAINER.THIS_FILE_NAME})
+              <dl>
+                <dt>
+                  <span class="strong">File type:</span>
+                </dt>
+                <dd>${CONTAINER.THIS_FILE_LOCATION}</dd>
+                <dt>
+                  <span class="strong">File name:</span>
+                </dt>
+                <dd>${CONTAINER.THIS_FILE_NAME}</dd>
+              </dl>
               #end
-                ${CHILD.THIS_TYPE_NAME}
-              #if(${CHILD.THIS_DATA}!~primitive)
-              </a>
-              #end
-            </span>
-            #if(${CHILD.THIS_DATA})
-            <span class='option'>(${CHILD.THIS_DATA})</span>
-            #end
-          </TD>
-          <TD>${CHILD.THIS_DESCRIPTION}</TD>
-        </TR>
-        #end
-      </table>
-    </p>
+            </hr>
+          </li>
+        </ul>
+      </div>
+      <div class="summary">
+        <ul class="blockList">
+          <li class="blockList">
+            <!-- =========== FIELD SUMMARY =========== -->
+            <ul class="blockList">
+              <li class="blockList">
+                <a name="field_summary">
+                  <!--   -->
+                </a>
+                <h3>Field Summary</h3>
+                <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+                  <tr>
+                    <th class="colFirst" scope="col">Tag Name</th>
+                    <th class="colLast" scope="col">Type and Description</th>
+                  </tr>
+                  #for(${CHILD} in ${CONTAINER})
+                  <tr #if(${ODD_ROW}==true)class="altColor"#end #if(${ODD_ROW}==false)class="rowColor"#end>
+                    <td class="colFirst">
+                      <code>
+                        ${CHILD.THIS_NAME}
+                      </code>
+                    </td>
+                    <td class="colLast">
+                      <code>
+                        <strong>
+                          #if(${CHILD.THIS_DATA}!~primitive)
+                          <a href='${CHILD.THIS_TYPE_NAME}.html'>
+                            #end
+                            ${CHILD.THIS_TYPE_NAME}
+                            #if(${CHILD.THIS_DATA}!~primitive)
+                          </a>
+                          #end
+                          #if(${CHILD.THIS_DATA})
+                          (${CHILD.THIS_DATA})
+                          #end
+                        </strong>
+                      </code>
+                      <div class="block">
+                        ${CHILD.THIS_DESCRIPTION}
+                      </div>
+                    </td>
+                  </tr>
+                  #end
+                </table>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="details">
+        <ul class="blockList">
+          <li class="blockList">
+            <!-- ============ METHOD DETAIL ========== -->
+            <ul class="blockList">
+              <li class="blockList">
+                <a name="method_detail">
+                  <!--   -->
+                </a>
+                <h3>XML Detail</h3>
+
+                <ul class="blockList">
+                  <li class="blockList">
+                    <h4>Local XML Fragment</h4>
+                    <div class="block">
+                      <code>
+                        #if(${CONTAINER.THIS_ROOT_NODE})
+                        &lt;${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
+                        #end
+                        #for(${CHILD} in ${CONTAINER})
+                        <a class='tag' href='#${CHILD.THIS_NAME}'>
+                          &lt;${CHILD.THIS_NAME}#if(${CHILD.THIS_DATA}=~choice)&nbsp;type='...'#end&gt;
+                        </a>
+                          #if(${CHILD.THIS_DATA}!~primitive)
+                          <a href='${CHILD.THIS_TYPE_NAME}.html'>
+                            #end
+                            &nbsp;${CHILD.THIS_TYPE_NAME}
+                            #if(${CHILD.THIS_DATA}!~primitive)
+                          </a>
+                          #end&nbsp;
+                        <a class='tag' href='#${CHILD.THIS_NAME}'>&lt;/${CHILD.THIS_NAME}&gt;</a>
+                        #if(${CHILD.THIS_DATA})&nbsp;&lt;!-- ${CHILD.THIS_DATA} --&gt;#end<br/>
+                        #end
+                        #if(${CONTAINER.THIS_ROOT_NODE})
+                        &lt;/${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
+                        #end
+                      </code>
+                    </div>
+                  </li>
+                </ul>
+
+                #include(docs/Functions.html)
+                <ul class="blockList">
+                  <li class="blockList">
+                    <h4>Full XML Context</h4>
+                    <div class="block">
+                      <code>
+                        #if(${CONTAINER.THIS_ROOT_NODE})
+                        &lt;${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
+                        #end
+
+                        #call(renderContainer(${CONTAINER}))
+
+                        #if(${CONTAINER.THIS_ROOT_NODE})
+                        &lt;/${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
+                        #end
+                      </code>
+                    </div>
+                  </li>
+                </ul>
+
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
   </body>
 </html>

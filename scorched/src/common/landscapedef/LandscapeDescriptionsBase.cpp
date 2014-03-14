@@ -56,7 +56,9 @@ XMLEntryString *LandscapeDescriptionsTexEntryList::createXMLEntry(void *xmlData)
 LandscapeDescriptionsEntry::LandscapeDescriptionsEntry() :
 	XMLEntryContainer("LandscapeDescription", 
 		"The description of a landscape, or terrain that makes up the Scorched3D playing field/arena.\n"
-		"If more than one physical and/or visual file is provided one of each will be chosen at random"),
+		"If more than one physical and/or visual file is provided one of each will be chosen at random."
+		"<br><br>"
+		"#include(docs/includes/LanscapeDescription.html)"),
 	name("The name of this landscape"),
 	description("The description of this landscape"),
 	picture("The icon to be displayed for this landscape"),

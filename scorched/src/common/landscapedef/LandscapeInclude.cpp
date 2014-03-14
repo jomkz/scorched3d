@@ -71,9 +71,10 @@ bool LandscapeInclude::readXML(XMLNode *parentNode, void *xmlData)
 }
 
 LandscapeIncludeFile::LandscapeIncludeFile() :
-	XMLEntryRoot<LandscapeInclude>(S3D::eModLocation, "<multiple>", "include",
+	XMLEntryRoot<LandscapeInclude>(S3D::eModLocation, "user_defined", "include",
 		"LandscapeInclude",
-		"A landscape/scene definition fragment, this fragment can contain many different types of Scorched3D artifact")
+		"A landscape/scene definition fragment, this fragment can contain many different types of Scorched3D artifact.<br><br>"
+		"#include(docs/includes/LandscapeInclude.html)")
 {
 
 }

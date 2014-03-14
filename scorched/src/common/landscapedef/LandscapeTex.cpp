@@ -40,7 +40,7 @@ LandscapeTex::~LandscapeTex()
 }
 
 LandscapeTextureFile::LandscapeTextureFile() :
-		XMLEntryRoot<LandscapeTex>(S3D::eModLocation, "<multiple>", 
+		XMLEntryRoot<LandscapeTex>(S3D::eModLocation, "user_defined", 
 			"tex",
 			"LandscapeTexure", 
 			"A landscape/scene definition, usualy related to the visual aspects of the landscape", true)

@@ -1,0 +1,64 @@
+#function(renderList(${localList}))
+	#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~primitive)
+		${CHILD.THIS_TYPE_NAME}
+	#end
+	#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~container)
+		#call(renderContainer(${localList.THIS_LIST_TYPE}))
+	#end
+	#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~choice)
+		#call(renderChoice(${localList.THIS_LIST_TYPE}))
+	#end
+#end
+
+#function(renderContainer(${localContainer}))
+	<table>
+    #for(${CHILD} in ${localContainer})
+		<tr><td>
+		#if(${CHILD.THIS_DATA}!~list)
+			#if(${CHILD.THIS_DATA}=~container)
+				&lt;${CHILD.THIS_NAME}&gt;<br/>
+					#call(renderContainer(${CHILD}))
+				&lt;/${CHILD.THIS_NAME}&gt;
+			#end
+			#if(${CHILD.THIS_DATA}=~choice)
+				&lt;${CHILD.THIS_NAME}&gt;<br/>
+					#call(renderChoice(${CHILD}))
+				&lt;/${CHILD.THIS_NAME}&gt;
+			#end
+			#if(${CHILD.THIS_DATA}=~primitive)
+				&lt;${CHILD.THIS_NAME}&gt;&nbsp;${CHILD.THIS_TYPE_NAME}&nbsp;&lt;/${CHILD.THIS_NAME}&gt;
+			#end
+		#end
+		#if(${CHILD.THIS_DATA}=~list)
+			&lt;${CHILD.THIS_NAME}&gt;<br/>
+				#call(renderList(${CHILD}))
+			&lt;/${CHILD.THIS_NAME}&gt;
+		#end
+		</td></tr>
+    #end
+	</table>
+#end
+
+#function(renderChoice(${localChoice}))
+	<table>
+    #for(${CHILD} in ${localChoice.THIS_CHOICE_TYPE})
+		<tr><td>
+		#if(${CHILD.THIS_DATA}!~list)
+			#if(${CHILD.THIS_DATA}=~container)
+				&lt;${CHILD.THIS_NAME}&gt;<br/>
+					#call(renderContainer(${CHILD}))
+				&lt;/${CHILD.THIS_NAME}&gt;
+			#end
+			#if(${CHILD.THIS_DATA}=~primitive)
+				&lt;${CHILD.THIS_NAME}&gt;&nbsp;${CHILD.THIS_TYPE_NAME}&nbsp;&lt;/${CHILD.THIS_NAME}&gt;
+			#end
+		#end
+		#if(${CHILD.THIS_DATA}=~list)
+			&lt;${CHILD.THIS_NAME}&gt;<br/>
+				#call(renderList(${CHILD}))
+			&lt;/${CHILD.THIS_NAME}&gt;
+		#end
+		</td></tr>
+    #end
+	</table>
+#end

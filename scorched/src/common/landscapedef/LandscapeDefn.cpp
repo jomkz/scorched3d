@@ -78,7 +78,7 @@ bool LandscapeDefn::readXML(XMLNode *node, void *xmlData)
 }
 
 LandscapeDefinitionFile::LandscapeDefinitionFile() :
-	XMLEntryRoot<LandscapeDefn>(S3D::eModLocation, "<multiple>", "defn",
+	XMLEntryRoot<LandscapeDefn>(S3D::eModLocation, "user_defined", "defn",
 		"LandscapeDefinition", 
 		"A landscape/scene definition, usualy related to the physical aspects of the landscape", true)
 {
