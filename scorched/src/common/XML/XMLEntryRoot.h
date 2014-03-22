@@ -127,6 +127,7 @@ public:
 	virtual const char *getRootFileName() { return fileName_; }
 	virtual S3D::FileLocation getRootFileLocation() { return fileLocation_; }
 	virtual const char *getRootNodeName() { return rootNodeName_; }
+	virtual bool isXMLEntryRoot() { return true; }
 
 	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name)
 	{

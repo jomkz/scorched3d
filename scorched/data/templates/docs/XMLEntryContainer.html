@@ -9,38 +9,9 @@
       <h2 title="Type ${CONTAINER.THIS_TYPE_NAME}" class="title">Type ${CONTAINER.THIS_TYPE_NAME}</h2>
     </div>
     <div class="contentContainer">
-      <div class="description">
-        <ul class="blockList">
-          <li class="blockList">
-            <dl>
-              <dt>All Refering Types:</dt>
-              <dd>
-                #for(${REFERING_TYPE} in ${REFERING_TYPES})
-                <a href='${REFERING_TYPE}.html'>${REFERING_TYPE}</a>
-                #end
-              </dd>
-            </dl>
-            <hr>
-              <br/>
-              <div class="block">
-                ${CONTAINER.THIS_DESCRIPTION}
-              </div>
-              #if(${CONTAINER.THIS_FILE_NAME})
-              <dl>
-                <dt>
-                  <span class="strong">File type:</span>
-                </dt>
-                <dd>${CONTAINER.THIS_FILE_LOCATION}</dd>
-                <dt>
-                  <span class="strong">File name:</span>
-                </dt>
-                <dd>${CONTAINER.THIS_FILE_NAME}</dd>
-              </dl>
-              #end
-            </hr>
-          </li>
-        </ul>
-      </div>
+
+      #include(docs/DescriptionBlock.html)
+      
       <div class="summary">
         <ul class="blockList">
           <li class="blockList">
@@ -57,7 +28,7 @@
                     <th class="colLast" scope="col">Type and Description</th>
                   </tr>
                   #for(${CHILD} in ${CONTAINER})
-                  <tr #if(${ODD_ROW}==true)class="altColor"#end #if(${ODD_ROW}==false)class="rowColor"#end>
+                  <tr #if(${ODD_ROW}=="true")class="altColor"#end #if(${ODD_ROW}=="false")class="rowColor"#end>
                     <td class="colFirst">
                       <code>
                         ${CHILD.THIS_NAME}
@@ -66,11 +37,11 @@
                     <td class="colLast">
                       <code>
                         <strong>
-                          #if(${CHILD.THIS_DATA}!~primitive)
+                          #if(${CHILD.THIS_DATA}!~"primitive")
                           <a href='${CHILD.THIS_TYPE_NAME}.html'>
                             #end
                             ${CHILD.THIS_TYPE_NAME}
-                            #if(${CHILD.THIS_DATA}!~primitive)
+                            #if(${CHILD.THIS_DATA}!~"primitive")
                           </a>
                           #end
                           #if(${CHILD.THIS_DATA})
@@ -79,7 +50,7 @@
                         </strong>
                       </code>
                       <div class="block">
-                        ${CHILD.THIS_DESCRIPTION}
+                        #eval(${CHILD.THIS_DESCRIPTION})
                       </div>
                     </td>
                   </tr>
@@ -108,24 +79,30 @@
                     <div class="block">
                       <code>
                         #if(${CONTAINER.THIS_ROOT_NODE})
-                        &lt;${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
-                        #end
-                        #for(${CHILD} in ${CONTAINER})
-                        <a class='tag' href='#${CHILD.THIS_NAME}'>
-                          &lt;${CHILD.THIS_NAME}#if(${CHILD.THIS_DATA}=~choice)&nbsp;type='...'#end&gt;
-                        </a>
-                          #if(${CHILD.THIS_DATA}!~primitive)
+                        <strong>&lt;${CONTAINER.THIS_ROOT_NODE}&gt;</strong><br/>
+                        <div class="xmlIndent">
+                          #end
+                          #for(${CHILD} in ${CONTAINER})
+                          <strong>
+                            &lt;${CHILD.THIS_NAME}#if(${CHILD.THIS_DATA}=~"choice")&nbsp;type='...'#end&gt;
+                          </strong>
+                          #if(${CHILD.THIS_DATA}!~"primitive")
                           <a href='${CHILD.THIS_TYPE_NAME}.html'>
                             #end
                             &nbsp;${CHILD.THIS_TYPE_NAME}
-                            #if(${CHILD.THIS_DATA}!~primitive)
+                            #if(${CHILD.THIS_DATA}!~"primitive")
                           </a>
                           #end&nbsp;
-                        <a class='tag' href='#${CHILD.THIS_NAME}'>&lt;/${CHILD.THIS_NAME}&gt;</a>
-                        #if(${CHILD.THIS_DATA})&nbsp;&lt;!-- ${CHILD.THIS_DATA} --&gt;#end<br/>
-                        #end
-                        #if(${CONTAINER.THIS_ROOT_NODE})
-                        &lt;/${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
+                          <strong>
+                            &lt;/${CHILD.THIS_NAME}&gt;
+                          </strong>
+                          #if(${CHILD.THIS_DATA}=~"optional")&nbsp;&lt;!-- optional --&gt;#end
+                          #if(${CHILD.THIS_DATA}=~"list")&nbsp;&lt;!-- list --&gt;#end
+                          <br/>
+                          #end
+                          #if(${CONTAINER.THIS_ROOT_NODE})
+                        </div>
+                        <strong>&lt;/${CONTAINER.THIS_ROOT_NODE}&gt;</strong><br/>
                         #end
                       </code>
                     </div>
@@ -135,17 +112,19 @@
                 #include(docs/Functions.html)
                 <ul class="blockList">
                   <li class="blockList">
-                    <h4>Full XML Context</h4>
+                    <h4>Local + Children XML Fragment</h4>
                     <div class="block">
                       <code>
                         #if(${CONTAINER.THIS_ROOT_NODE})
-                        &lt;${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
-                        #end
+                        <strong>&lt;${CONTAINER.THIS_ROOT_NODE}&gt;</strong><br/>
+                        <div class="xmlIndentColor">
+                          #end
 
-                        #call(renderContainer(${CONTAINER}))
+                          #call(renderStart(${CONTAINER}))
 
-                        #if(${CONTAINER.THIS_ROOT_NODE})
-                        &lt;/${CONTAINER.THIS_ROOT_NODE}&gt;<br/>
+                          #if(${CONTAINER.THIS_ROOT_NODE})
+                        </div>
+                        <strong>&lt;/${CONTAINER.THIS_ROOT_NODE}&gt;</strong><br/>
                         #end
                       </code>
                     </div>

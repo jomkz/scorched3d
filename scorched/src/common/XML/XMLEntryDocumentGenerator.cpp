@@ -106,6 +106,30 @@ void XMLEntryDocumentGenerator::writeDocumentation()
 		templateRenderer.renderTemplateToFile(data_, &local,
 			"docs/styles.css", outFile);
 	}
+	{
+		TemplateRenderer templateRenderer;
+		TemplateProviderLocal local;
+		std::list<TemplateProvider *> filesList, typesList;
+		std::map<std::string, XMLEntryInfo>::iterator itor = types_.begin(),
+			end = types_.end();
+		for (; itor != end; ++itor)
+		{
+			if (itor->second.entry->isXMLEntryRoot())
+			{
+				filesList.push_back(itor->second.entry);
+			}
+			typesList.push_back(itor->second.entry);
+		}
+
+		TemplateProviderList files(filesList);
+		local.addLocalVariable("FILES", &files);
+		TemplateProviderList types(typesList);
+		local.addLocalVariable("TYPES", &types);
+
+		std::string outFile = S3D::formatStringBuffer("%s/%s", directory_.c_str(), "index.html");
+		templateRenderer.renderTemplateToFile(data_, &local,
+			"docs/index.html", outFile);
+	}
 }
 
 void XMLEntryDocumentGenerator::addEntry(XMLEntry *referingType, XMLEntry *entry)
@@ -170,6 +194,13 @@ void XMLEntryDocumentGenerator::addList(XMLEntry *referingType, XMLEntryListBase
 
 bool XMLEntryDocumentGenerator::addType(XMLEntry *referingType, XMLEntry *entry, XMLEntryType type)
 {
+	if (!(entry->getData() & XMLEntry::eDataChoice) &&
+		!(entry->getData() & XMLEntry::eDataList) &&
+		!(entry->getData() & XMLEntry::eDataContainer))
+	{
+		return false;
+	}
+
 	std::string typeName;
 	entry->getTypeName(typeName);
 

@@ -152,3 +152,17 @@ std::string &S3D::getThreadLocalStringCopy(const std::string &other)
 	result.append(other);
 	return result;
 }
+
+void S3D::strtok(const std::string &str, const std::string &tok, std::list<std::string> &result)
+{
+	char *tmp = new char[str.length() + 1];
+	tmp[0] = '\0';
+	strcpy(tmp, str.c_str());
+	for (char *token = ::strtok(tmp, tok.c_str());
+		token != 0;
+		token = ::strtok(0, tok.c_str()))
+	{
+		result.push_back(token);
+	}
+	delete[] tmp;
+}

@@ -54,6 +54,8 @@ public:
 	virtual void getTypeName(std::string &result) = 0;
 	virtual void getDescription(std::string &result) = 0;
 
+	virtual bool isXMLEntryRoot() { return false; }
+
 	// TemplateProvider
 	virtual TemplateProvider *getChild(TemplateData &data, const std::string &name);
 protected:
@@ -235,11 +237,11 @@ public:
 	}
 	virtual void getStringProperty(TemplateData &data, std::string &result)
 	{
-		value_->getStringProperty(data, result);
+		if (value_) value_->getStringProperty(data, result);
 	}
 	virtual void getListProperty(TemplateData &data, std::list<TemplateProvider *> &result)
 	{
-		value_->getListProperty(data, result);
+		if (value_) value_->getListProperty(data, result);
 	}
 protected:
 	std::string type_;

@@ -119,12 +119,15 @@ bool LandscapeDescriptionsBase::landscapeEnabled(OptionsGame &context,
 	std::string landscapes = context.getLandscapes();
 	if (landscapes.empty()) return true; // Default un-initialized state
 
-	char *token = strtok((char *) landscapes.c_str(), ":");
-	while(token != 0)
+	std::list<std::string> tokResult;
+	S3D::strtok(landscapes, ":", tokResult);
+	std::list<std::string>::iterator tokItor = tokResult.begin(),
+		tokEnd = tokResult.end();
+	for (; tokItor != tokEnd; ++tokItor)
 	{
-		if (0 == strcmp(token, name)) return true;
-		token = strtok(0, ":");
+		if (0 == strcmp(tokItor->c_str(), name)) return true;
 	}
+
 	return false;
 }
 

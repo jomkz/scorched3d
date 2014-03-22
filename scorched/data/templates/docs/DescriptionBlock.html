@@ -1,0 +1,32 @@
+      <div class="description">
+        <ul class="blockList">
+          <li class="blockList">
+            <dl>
+              <dt>All Refering Types:</dt>
+              <dd>
+                #for(${REFERING_TYPE} in ${REFERING_TYPES})
+                <a href='${REFERING_TYPE}.html'>${REFERING_TYPE}</a>
+                #end
+              </dd>
+            </dl>
+            <hr>
+              <br/>
+              <div class="block">
+                #eval(${CONTAINER.THIS_DESCRIPTION})
+              </div>
+              #if(${CONTAINER.THIS_FILE_NAME})
+              <dl>
+                <dt>
+                  <span class="strong">File type:</span>
+                </dt>
+                <dd>${CONTAINER.THIS_FILE_LOCATION}</dd>
+                <dt>
+                  <span class="strong">File name:</span>
+                </dt>
+                <dd>${CONTAINER.THIS_FILE_NAME}</dd>
+              </dl>
+              #end
+            </hr>
+          </li>
+        </ul>
+      </div>

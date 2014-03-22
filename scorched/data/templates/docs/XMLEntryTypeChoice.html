@@ -5,73 +5,112 @@
     <link rel="stylesheet" type="text/css" href="styles.css" title="Style"/>
   </head>
   <body BGCOLOR="white">
-    <hr/>
-    <h2>
-      ${CONTAINER.THIS_TYPE_NAME}
-    </h2>
-    #if(${REFERING_TYPES})
-    <dl>
-      <dt>
-        <B>All References:</B>
-      </dt>
-      <dd>
-        #for(${REFERING_TYPE} in ${REFERING_TYPES})
-        <a href='${REFERING_TYPE}.html'>${REFERING_TYPE}</a>
-        #end
-      </dd>
-    </dl>
-    #end
-    <hr/>
-    <p>
-      ${CONTAINER.THIS_DESCRIPTION}
-    </p>
-    <hr/>
+    <div class="header">
+      <h2 title="Choice ${CONTAINER.THIS_TYPE_NAME}" class="title">Type ${CONTAINER.THIS_TYPE_NAME}</h2>
+    </div>
+    <div class="contentContainer">
 
-    <p>
-      <table BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-        <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Choice</B>
-            </FONT>
-          </TH>
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Type</B>
-            </FONT>
-          </TH>
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Description</B>
-            </FONT>
-          </TH>
-        </TR>
+      #include(docs/DescriptionBlock.html)
 
-        #for(${CHILD} in ${CONTAINER.THIS_CHOICE_TYPE})
-        <TR BGCOLOR="white" CLASS="TableRowColor">
-          <TD>
-            <a class='tag' id='${CHILD.THIS_NAME}'>
-              ${CHILD.THIS_NAME}
-            </a>
-          </TD>
-          <TD style="white-space: nowrap">
-            <span class='content'>
-              #if(${CHILD.THIS_DATA}!~primitive)
-              <a href='${CHILD.THIS_TYPE_NAME}.html'>
-                #end
-                ${CHILD.THIS_TYPE_NAME}
-                #if(${CHILD.THIS_DATA}!~primitive)
-              </a>
-              #end
-            </span>
-            #if(${CHILD.THIS_DATA})
-            <span class='option'>(${CHILD.THIS_DATA})</span>
-            #end
-          </TD>
-          <TD>${CHILD.THIS_DESCRIPTION}</TD>
-        </TR>
-        #end
-      </table>
-    </p>
+      <div class="summary">
+        <ul class="blockList">
+          <li class="blockList">
+            <!-- =========== FIELD SUMMARY =========== -->
+            <ul class="blockList">
+              <li class="blockList">
+                <a name="field_summary">
+                  <!--   -->
+                </a>
+                <h3>Type Summary</h3>
+                <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Type Summary table, listing fields, and an explanation">
+                  <tr>
+                    <th class="colFirst" scope="col">Type Name</th>
+                    <th class="colLast" scope="col">Type and Description</th>
+                  </tr>
+                  #for(${CHILD} in ${CONTAINER.THIS_CHOICE_TYPE})
+                  <tr #if(${ODD_ROW}=="true")class="altColor"#end #if(${ODD_ROW}=="false")class="rowColor"#end>
+                    <td class="colFirst">
+                      <code>
+                        ${CHILD.THIS_NAME}
+                      </code>
+                    </td>
+                    <td class="colLast">
+                      <code>
+                        <strong>
+                          #if(${CHILD.THIS_DATA}!~"primitive")
+                          <a href='${CHILD.THIS_TYPE_NAME}.html'>
+                            #end
+                            ${CHILD.THIS_TYPE_NAME}
+                            #if(${CHILD.THIS_DATA}!~"primitive")
+                          </a>
+                          #end
+                          #if(${CHILD.THIS_DATA})
+                          (${CHILD.THIS_DATA})
+                          #end
+                        </strong>
+                      </code>
+                      <div class="block">
+                        #eval(${CHILD.THIS_DESCRIPTION})
+                      </div>
+                    </td>
+                  </tr>
+                  #end
+                </table>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="details">
+        <ul class="blockList">
+          <li class="blockList">
+            <!-- ============ METHOD DETAIL ========== -->
+            <ul class="blockList">
+              <li class="blockList">
+                <a name="method_detail">
+                  <!--   -->
+                </a>
+                <h3>XML Detail</h3>
+
+                <ul class="blockList">
+
+                  #for(${TOPCHILD} in ${CONTAINER.THIS_CHOICE_TYPE})
+
+                  <li class="blockList">
+                    <h4>Local XML Fragment For Type ${TOPCHILD.THIS_NAME}</h4>
+                    <div class="block">
+                      <code>
+                        #for(${CHILD} in ${TOPCHILD})
+                        <strong>
+                            &lt;${CHILD.THIS_NAME}#if(${CHILD.THIS_DATA}=~"choice")&nbsp;type='...'#end&gt;
+                          </strong>
+                          #if(${CHILD.THIS_DATA}!~"primitive")
+                          <a href='${CHILD.THIS_TYPE_NAME}.html'>
+                            #end
+                            &nbsp;${CHILD.THIS_TYPE_NAME}
+                            #if(${CHILD.THIS_DATA}!~"primitive")
+                          </a>
+                          #end&nbsp;
+                          <strong>
+                            &lt;/${CHILD.THIS_NAME}&gt;
+                          </strong>
+                          #if(${CHILD.THIS_DATA}=~"optional")&nbsp;&lt;!-- optional --&gt;#end
+                          #if(${CHILD.THIS_DATA}=~"list")&nbsp;&lt;!-- list --&gt;#end
+                          <br/>
+                        #end
+                      </code>
+                    </div>
+                  </li>
+                  
+                  #end
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+    </div>
   </body>
 </html>

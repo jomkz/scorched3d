@@ -40,8 +40,27 @@
 
 void DocumentGenerator::generatDocumentation(const std::string &directory)
 {
-	XMLEntryDocumentGenerator documentGenerator(directory);
+	/* TEST CODE
+	TemplateRenderer renderer;
 
+	TemplateProviderLocal local(0);
+	local.addLocalVariable("aa", new TemplateProviderString("AAVALUE"));
+	TemplateProviderLocal *valid = new TemplateProviderLocal(&local);
+	local.addLocalVariable("valid", valid);
+	valid->addLocalVariable("var", new TemplateProviderString("CHILDVALUE"));
+
+	std::list<TemplateProvider *> lst;
+	lst.push_back(new TemplateProviderString("A"));
+	lst.push_back(new TemplateProviderString("B"));
+	lst.push_back(new TemplateProviderString("C"));
+	local.addLocalVariable("listvar", new TemplateProviderList(lst));
+
+	TemplateData data;
+	renderer.renderTemplateToFile(data, &local, "docs/text.txt", 
+		S3D::formatStringBuffer("%s/test.txt", directory.c_str()));
+	*/
+
+	XMLEntryDocumentGenerator documentGenerator(directory);
 	OptionsGame optionsGame;
 	documentGenerator.addXMLEntryRoot(&optionsGame);
 

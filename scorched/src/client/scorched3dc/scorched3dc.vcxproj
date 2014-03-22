@@ -270,6 +270,8 @@
     <ClCompile Include="..\..\common\target\TargetSpace.cpp" />
     <ClCompile Include="..\..\common\target\TargetSpaceContainment.cpp" />
     <ClCompile Include="..\..\common\target\TargetState.cpp" />
+    <ClCompile Include="..\..\common\template\Template.cpp" />
+    <ClCompile Include="..\..\common\template\TemplateParser.cpp" />
     <ClCompile Include="..\..\common\template\TemplateProvider.cpp" />
     <ClCompile Include="..\..\common\template\TemplateRenderer.cpp" />
     <ClCompile Include="..\..\common\weapons\Accessory.cpp" />
@@ -756,6 +758,8 @@
     <ClInclude Include="..\..\common\target\TargetSpace.h" />
     <ClInclude Include="..\..\common\target\TargetSpaceContainment.h" />
     <ClInclude Include="..\..\common\target\TargetState.h" />
+    <ClInclude Include="..\..\common\template\Template.h" />
+    <ClInclude Include="..\..\common\template\TemplateParser.h" />
     <ClInclude Include="..\..\common\template\TemplateProvider.h" />
     <ClInclude Include="..\..\common\template\TemplateRenderer.h" />
     <ClInclude Include="..\..\common\weapons\Accessory.h" />

@@ -700,11 +700,13 @@ bool XMLEntryFixedVector::setValueFromString(const std::string &string)
 	FixedVector value;
 
 	int i=0;
-	char *token = strtok((char *) string.c_str(), " ");
-	while(token != 0)
+	std::list<std::string> tokResult;
+	S3D::strtok(string, " ", tokResult);
+	std::list<std::string>::iterator tokItor = tokResult.begin(),
+		tokEnd = tokResult.end();
+	for (; tokItor != tokEnd; ++tokItor)
 	{
-		value[i++] = fixed(token);		
-		token = strtok(0, " ");
+		value[i++] = fixed(tokItor->c_str());
 	}
 	if (i!=3) return false;
 	return setValue(value);

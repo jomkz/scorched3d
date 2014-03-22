@@ -1,0 +1,17 @@
+BEFORE${aa}AFTER
+#if(${aa}=="sd")
+TRUE
+#end
+
+#function(aFunction(${hmm}))
+HMM ${hmm}
+#end
+
+#for(${child} in ${listvar})
+CHILD : ${child} #call(aFunction(${child}))
+#if(${aa}=="sd")
+TRUE
+#end
+
+
+#end

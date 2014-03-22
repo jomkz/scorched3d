@@ -1,63 +1,113 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Configuration File Index - Scorched3D [[VERSION]]</title>
+    <title>Configuration File Index - Scorched3D ${SCORCHED_VERSION}</title>
     <link rel="stylesheet" type="text/css" href="styles.css" title="Style"/>
   </head>
   <body BGCOLOR="white">
-    <hr/>
-    <h2>File Index</h2>
-    <p>
-      <table BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-        <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Type</B>
-            </FONT>
-          </TH>
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Description</B>
-            </FONT>
-          </TH>
-        </TR>
+    <div class="header">
+      <h2 title="Type Index" class="title">Type Index</h2>
+    </div>
+    <div class="contentContainer">
+      <div class="summary">
+        <ul class="blockList">
+          <li class="blockList">
+            <!-- =========== FIELD SUMMARY =========== -->
+            <ul class="blockList">
+              <li class="blockList">
+                <a name="field_summary">
+                  <!--   -->
+                </a>
+                <h3>Files</h3>
+                <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+                  <tr>
+                    <th class="colFirst" scope="col">Type Name</th>
+                    <th class="colLast" scope="col">Description</th>
+                  </tr>
+                  #for(${CHILD} in ${FILES})
+                  <tr #if(${ODD_ROW}=="true")class="altColor"#end="" #if(${ODD_ROW}=="false")class="rowColor"#end="">
+                    <td class="colFirst">
+                      <code>
+                        ${CHILD.THIS_TYPE_NAME}
+                      </code>
+                    </td>
+                    <td class="colLast">
+                      <code>
+                        <strong>
+                          #if(${CHILD.THIS_DATA}!~"primitive")
+                          <a href='${CHILD.THIS_TYPE_NAME}.html'>
+                            #end
+                            ${CHILD.THIS_TYPE_NAME}
+                            #if(${CHILD.THIS_DATA}!~"primitive")
+                          </a>
+                          #end
+                          #if(${CHILD.THIS_DATA})
+                          (${CHILD.THIS_DATA})
+                          #end
+                        </strong>
+                      </code>
+                      <div class="block">
+                        #eval(${CHILD.THIS_DESCRIPTION})
+                      </div>
+                    </td>
+                  </tr>
+                  #end
+                </table>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
 
-        {{loop:ROOT}}
-        <TR BGCOLOR="white" CLASS="TableRowColor">
-          <TD>
-            <a class='tag' id='[[INDEX_TYPE]]' href='[[INDEX_TYPE]].html'>[[INDEX_TYPE]]</a>
-          </TD>
-          <TD>[[INDEX_DESCRIPTION]]</TD>
-        </TR>
-        {{loop:ROOT}}
-      </table>
-    </p>
-    <hr/>
-    <h2>Type Index</h2>
-    <p>
-      <table BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-        <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Type</B>
-            </FONT>
-          </TH>
-          <TH ALIGN="left">
-            <FONT SIZE="+2">
-              <B>Description</B>
-            </FONT>
-          </TH>
-        </TR>
-
-        {{loop:INDEX}}
-        <TR BGCOLOR="white" CLASS="TableRowColor">
-          <TD>
-            <a class='tag' id='[[INDEX_TYPE]]' href='[[INDEX_TYPE]].html'>[[INDEX_TYPE]]</a>
-          </TD>
-          <TD>[[INDEX_DESCRIPTION]]</TD>
-        </TR>
-        {{loop:INDEX}}
-      </table>
-    </p>
+      <div class="summary">
+        <ul class="blockList">
+          <li class="blockList">
+            <!-- =========== FIELD SUMMARY =========== -->
+            <ul class="blockList">
+              <li class="blockList">
+                <a name="field_summary">
+                  <!--   -->
+                </a>
+                <h3>Types</h3>
+                <table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+                  <tr>
+                    <th class="colFirst" scope="col">Type Name</th>
+                    <th class="colLast" scope="col">Description</th>
+                  </tr>
+                  #for(${CHILD} in ${TYPES})
+                  <tr #if(${ODD_ROW}=="true")class="altColor"#end="" #if(${ODD_ROW}=="false")class="rowColor"#end="">
+                    <td class="colFirst">
+                      <code>
+                        ${CHILD.THIS_TYPE_NAME}
+                      </code>
+                    </td>
+                    <td class="colLast">
+                      <code>
+                        <strong>
+                          #if(${CHILD.THIS_DATA}!~"primitive")
+                          <a href='${CHILD.THIS_TYPE_NAME}.html'>
+                            #end
+                            ${CHILD.THIS_TYPE_NAME}
+                            #if(${CHILD.THIS_DATA}!~"primitive")
+                          </a>
+                          #end
+                          #if(${CHILD.THIS_DATA})
+                          (${CHILD.THIS_DATA})
+                          #end
+                        </strong>
+                      </code>
+                      <div class="block">
+                        #eval(${CHILD.THIS_DESCRIPTION})
+                      </div>
+                    </td>
+                  </tr>
+                  #end
+                </table>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
   </body>
 </html>

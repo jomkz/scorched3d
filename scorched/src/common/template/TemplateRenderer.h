@@ -22,8 +22,8 @@
 #define __INCLUDE_TemplateRendererh_INCLUDE__
 
 #include <template/TemplateProvider.h>
-#include <vector>
 
+class Template;
 class TemplateRenderer
 {
 public:
@@ -36,41 +36,7 @@ public:
 		const std::string &templateName, const std::string &outFile);
 
 private:
-	class Function
-	{
-	public:
-		std::string name;
-		std::string content;
-		std::vector<std::string> parameters;
-	};
-	std::map<std::string, Function> functions_;
-
-	void loadFile(const std::string &templateName, std::string &result);
-	bool renderSubTemplate(TemplateData &data, TemplateProvider *baseContext, std::string templateFile, 
-		std::string &result, std::list<std::string> &functionStack);
-	bool expectCharacter(std::string &templateFile, std::string::size_type position, char character);
-	bool expectIdCharacter(std::string &templateFile, std::string::size_type position);
-	bool expectNotCharacter(std::string &templateFile, std::string::size_type position, char character);
-	bool expectStringEndingIn(std::string &templateFile, std::string::size_type position, char end, std::string &str);
-	bool expectString(std::string &templateFile, std::string::size_type position, const std::string &str);
-	std::string::size_type readVariableReference(TemplateData &data, std::string &templateFile, std::string::size_type position,
-		TemplateProvider *currentContext, TemplateProvider *&variableResult);
-	std::string::size_type readVariableName(std::string &templateFile, std::string::size_type position,
-		std::string &variableName);
-	std::string::size_type readIf(TemplateData &data, std::string &templateFile, std::string::size_type position,
-		TemplateProvider *currentContext, bool &ifResult);
-	std::string::size_type readFunction(TemplateData &data, std::string &templateFile, std::string::size_type position,
-		TemplateProvider *currentContext, Function &functionResult);
-	std::string::size_type readFor(TemplateData &data, std::string &templateFile, std::string::size_type position,
-		TemplateProvider *currentContext, std::string &varName, std::list<TemplateProvider *> &result);
-	std::string::size_type readUrl(TemplateData &data, std::string &templateFile, std::string::size_type position,
-		TemplateProvider *currentContext, std::string &urlName);
-	std::string::size_type readInclude(TemplateData &data, std::string &templateFile, std::string::size_type position,
-		TemplateProvider *currentContext, std::string &fileName);
-	std::string::size_type readCallFunction(TemplateData &data, std::string &templateFile, std::string::size_type position,
-		TemplateProvider *currentContext, std::string &result, std::list<std::string> &stack);
-	std::string::size_type findEnd(TemplateData &data, std::string &templateFile, std::string::size_type position,
-		TemplateProvider *currentContext);
+	std::map<std::string, Template *> templates_;
 };
 
 #endif // __INCLUDE_TemplateRendererh_INCLUDE__

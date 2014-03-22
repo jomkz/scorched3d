@@ -23,6 +23,7 @@
 
 #include <stdio.h> // For snprintf on linux
 #include <string>
+#include <list>
 #include <stdarg.h> // For va_list
 
 #if !defined(HAVE_SNPRINTF) && !defined(_MSC_VER) // Now defined in CE_GUI
@@ -58,6 +59,7 @@ namespace S3D
 	std::string &formatStringList(const char *format, va_list ap);
 	std::string &getThreadLocalString();
 	std::string &getThreadLocalStringCopy(const std::string &other);
+	void strtok(const std::string &str, const std::string &tok, std::list<std::string> &result);
 }
 
 #endif // __SNPRINTF_SAMBA__

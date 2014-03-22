@@ -1,64 +1,130 @@
+#function(renderStart(${item}))
+	#if(${TAG.THIS_DATA}=~"list")
+		#call(renderList(${item}))
+	#end
+	#if(${TAG.THIS_DATA}!~"list")
+		<div class="box">
+			<div class="boxTitle">
+				<strong>
+					&lt!-- Type <a href="${item.THIS_TYPE_NAME}.html">${item.THIS_TYPE_NAME}</a>
+					#if(${CHILD.THIS_DATA}=~"optional")
+						(optional)
+					#end
+					--&gt;
+				</strong>
+			</div>
+			#call(renderContainer(${item}))
+		</div>
+	#end
+#end
+
+#function(addTag(${TAG}))
+	#if(${TAG.THIS_DATA}=~"choice")
+		<strong>&lt;${TAG.THIS_NAME} type="
+		#for(${TYPE} in ${TAG.THIS_CHOICE_TYPE})
+			${TYPE.THIS_NAME}
+		#end
+		"&gt;</strong>
+	#end
+	#if(${TAG.THIS_DATA}!~"choice")
+		<strong>&lt;${TAG.THIS_NAME}&gt;</strong>
+	#end
+	<br/>
+#end
+
 #function(renderList(${localList}))
-	#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~primitive)
-		${CHILD.THIS_TYPE_NAME}
-	#end
-	#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~container)
-		#call(renderContainer(${localList.THIS_LIST_TYPE}))
-	#end
-	#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~choice)
-		#call(renderChoice(${localList.THIS_LIST_TYPE}))
-	#end
+	<div class="box">
+		<div class="boxTitle">
+			<strong>
+				&lt!-- List of type <a href="${localList.THIS_TYPE_NAME}.html">${localList.THIS_TYPE_NAME}</a> 
+				#if(${localList.THIS_DATA}=~"optional")
+					(optional)
+				#end
+				--&gt;
+			</strong>
+		</div>
+		#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~"primitive")
+			${CHILD.THIS_TYPE_NAME}
+		#end
+		#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~"container")
+			#call(renderContainer(${localList.THIS_LIST_TYPE}))
+		#end
+		#if(${localList.THIS_LIST_TYPE.THIS_DATA}=~"choice")
+			#call(renderChoice(${localList.THIS_LIST_TYPE}))
+		#end
+	</div>
 #end
 
 #function(renderContainer(${localContainer}))
-	<table>
+	#if(${STACK_DEPTH}<="4")
+
     #for(${CHILD} in ${localContainer})
-		<tr><td>
-		#if(${CHILD.THIS_DATA}!~list)
-			#if(${CHILD.THIS_DATA}=~container)
-				&lt;${CHILD.THIS_NAME}&gt;<br/>
-					#call(renderContainer(${CHILD}))
-				&lt;/${CHILD.THIS_NAME}&gt;
+		#if(${CHILD.THIS_DATA}!~"list")
+			#if(${CHILD.THIS_DATA}=~"container")
+				#call(addTag(${CHILD}))
+					<div class="box">
+						<div class="boxTitle">
+							<strong>
+								&lt!-- Type <a href="${CHILD.THIS_TYPE_NAME}.html">${CHILD.THIS_TYPE_NAME}</a> 
+								#if(${CHILD.THIS_DATA}=~"optional")
+									(optional)
+								#end
+								--&gt;
+							</strong>
+						</div>						
+						#call(renderContainer(${CHILD}))
+					</div>
+				<strong>&lt;/${CHILD.THIS_NAME}&gt;</strong><br/>
 			#end
-			#if(${CHILD.THIS_DATA}=~choice)
-				&lt;${CHILD.THIS_NAME}&gt;<br/>
+			#if(${CHILD.THIS_DATA}=~"choice")
+				#call(addTag(${CHILD}))
 					#call(renderChoice(${CHILD}))
-				&lt;/${CHILD.THIS_NAME}&gt;
+				<strong>&lt;/${CHILD.THIS_NAME}&gt;</strong><br/>
 			#end
-			#if(${CHILD.THIS_DATA}=~primitive)
-				&lt;${CHILD.THIS_NAME}&gt;&nbsp;${CHILD.THIS_TYPE_NAME}&nbsp;&lt;/${CHILD.THIS_NAME}&gt;
+			#if(${CHILD.THIS_DATA}=~"primitive")
+				<strong>&lt;${CHILD.THIS_NAME}&gt;</strong>
+					&nbsp;${CHILD.THIS_TYPE_NAME}&nbsp;
+				<strong>&lt;/${CHILD.THIS_NAME}&gt;</strong><br/>
 			#end
 		#end
-		#if(${CHILD.THIS_DATA}=~list)
-			&lt;${CHILD.THIS_NAME}&gt;<br/>
+		#if(${CHILD.THIS_DATA}=~"list")
+			#call(addTag(${CHILD}))
 				#call(renderList(${CHILD}))
-			&lt;/${CHILD.THIS_NAME}&gt;
+			<strong>&lt;/${CHILD.THIS_NAME}&gt;</strong><br/>
 		#end
-		</td></tr>
     #end
-	</table>
+
+	#end
+	#if(${STACK_DEPTH}>"4")
+		<i>Content ommited for brevity...</i>
+	#end
 #end
 
 #function(renderChoice(${localChoice}))
-	<table>
     #for(${CHILD} in ${localChoice.THIS_CHOICE_TYPE})
-		<tr><td>
-		#if(${CHILD.THIS_DATA}!~list)
-			#if(${CHILD.THIS_DATA}=~container)
-				&lt;${CHILD.THIS_NAME}&gt;<br/>
-					#call(renderContainer(${CHILD}))
-				&lt;/${CHILD.THIS_NAME}&gt;
+		<div class="box">
+			<div class="boxTitle">
+				<strong>
+					&lt!-- Choice <a href="${localChoice.THIS_TYPE_NAME}.html">${localChoice.THIS_TYPE_NAME}</a> type = "${CHILD.THIS_NAME}" 
+					#if(${CHILD.THIS_DATA}=~"optional")
+						(optional)
+					#end
+					--&gt;
+				</strong>
+			</div>
+		#if(${CHILD.THIS_DATA}!~"list")
+			#if(${CHILD.THIS_DATA}=~"container")
+				#call(renderContainer(${CHILD}))
 			#end
-			#if(${CHILD.THIS_DATA}=~primitive)
-				&lt;${CHILD.THIS_NAME}&gt;&nbsp;${CHILD.THIS_TYPE_NAME}&nbsp;&lt;/${CHILD.THIS_NAME}&gt;
+			#if(${CHILD.THIS_DATA}=~"primitive")
+				<strong>&lt;${CHILD.THIS_NAME}&gt;</strong>
+					&nbsp;${CHILD.THIS_TYPE_NAME}&nbsp;
+				<strong>&lt;/${CHILD.THIS_NAME}&gt;</strong><br/>
 			#end
 		#end
-		#if(${CHILD.THIS_DATA}=~list)
-			&lt;${CHILD.THIS_NAME}&gt;<br/>
-				#call(renderList(${CHILD}))
-			&lt;/${CHILD.THIS_NAME}&gt;
+		#if(${CHILD.THIS_DATA}=~"list")
+			call(renderList(${CHILD}))
 		#end
-		</td></tr>
+		</div>
     #end
-	</table>
 #end

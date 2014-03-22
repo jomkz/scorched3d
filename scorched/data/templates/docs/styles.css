@@ -41,7 +41,7 @@ h3 {
     font-size:1.4em;
 }
 h4 {
-    font-size:1.3em;
+    font-size:1.0em;
 }
 h5 {
     font-size:1.2em;
@@ -471,4 +471,22 @@ h1.hidden {
 }
 .strong {
     font-weight:bold;
+}
+
+div.xmlIndent {
+    margin:0px 0px 0px 25px;
+    padding:0px 0px;
+}
+
+div.boxTitle {
+    margin:0px 0px 0px 0px;
+    padding:0px 0px;
+	background-color:#eeeeef;
+	border-bottom:1px solid #9eadc0;
+}
+
+div.box {
+    margin:5px 0px 0px 25px;
+    padding:0px 0px;
+    border:1px solid #9eadc0;
 }

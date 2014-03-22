@@ -474,13 +474,14 @@ std::string EventHandlerDataBase::getTopRanks()
 
 	stringResult.append("<table>");
 
-	std::string cols(columns);
-	char *token = strtok((char *) cols.c_str(), " ");
+	std::list<std::string> tokResult;
+	S3D::strtok(columns, " ", tokResult);
+	std::list<std::string>::iterator tokItor = tokResult.begin(),
+		tokEnd = tokResult.end();
 	stringResult.append("<tr>");
-	while(token != 0)
+	for (; tokItor != tokEnd; ++tokItor)
 	{
-		stringResult.append("<td><b>").append(token).append("</b></td>");
-		token = strtok(0, " ");
+		stringResult.append("<td><b>").append(*tokItor).append("</b></td>");
 	}
 	stringResult.append("</tr>");
 
