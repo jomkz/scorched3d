@@ -1,3 +1,44 @@
 <tex>
-
+  <texture type="layers">
+    <layersheight>18.0</layersheight>
+    <layeroffsetoctaves>1</layeroffsetoctaves>
+    <layeroffsetpersistence>0.8</layeroffsetpersistence>
+    <layeroffsetscale>0.0625</layeroffsetscale> <!-- 1/16 -->
+    <texturelayer1>
+      <worldsize>250</worldsize>
+      <texturename>TxUsandU02.dds</texturename> <!-- blue.dds / TxUsandU02.dds -->
+      <normaltexturename>TxUsandU02_n.dds</normaltexturename>
+      <blendheightfactor>0.4</blendheightfactor>
+    </texturelayer1>
+    <texturelayer2>
+      <worldsize>500</worldsize>
+      <texturename>TxUAIUgrassUdirtU01.dds</texturename> <!-- green.dds / TxUAIUgrassUdirtU01.dds -->
+      <normaltexturename>TxUAIUgrassUdirtU01_n.dds</normaltexturename>
+      <blendheightfactor>0.4</blendheightfactor>
+    </texturelayer2>
+    <texturelayer3>
+      <worldsize>300</worldsize>
+      <texturename>terrainsnowstone01.dds</texturename> <!-- white.dds / terrainsnowstone01.dds -->
+      <normaltexturename>terrainsnowstone01_n.dds</normaltexturename>
+      <blendheightfactor>0.4</blendheightfactor>
+    </texturelayer3>
+    <texturelayerdetail>
+      <worldsize>100</worldsize>
+      <texturename>TxUscrubplainU01.dds</texturename> <!-- purple.dds / TxUscrubplainU01.dds -->
+      <normaltexturename>TxUscrubplainU01_n.dds</normaltexturename>
+      <blendheightstartfactor>0.25</blendheightstartfactor>
+      <blendheightendfactor>0.5</blendheightendfactor>
+      <blendheightfactor>0.25</blendheightfactor>
+      <blendnoiseoctaves>1</blendnoiseoctaves>
+      <blendnoisepersistence>0.8</blendnoisepersistence>
+      <blendnoisescale>0.125</blendnoisescale> <!-- 1/8 -->
+    </texturelayerdetail>
+    <texturelayerslope>
+      <worldsize>200</worldsize>
+      <texturename>TxUcoastalUrockU01.dds</texturename> <!-- red.dds / TxUcoastalUrockU01.dds -->
+      <normaltexturename>TxUcoastalUrockU01_n.dds</normaltexturename>
+      <blendslopestart>0.95</blendslopestart>
+      <blendslopefactor>0.15</blendslopefactor>
+    </texturelayerslope>
+  </texture>
 </tex>

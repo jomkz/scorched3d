@@ -1,4 +1,4 @@
-<defn>
+<defn>detailnoisepersistence
 	<minplayers>0</minplayers>
 	<maxplayers>24</maxplayers>
 	<landscapewidth>256</landscapewidth>
@@ -9,12 +9,22 @@
 		<startmask>data/landscapes/textures/test-mask.png</startmask>
 	</tankstart>
   <deform type="deform"/>
-  <!--
-	<heightmap type="file">
-    	<file>data/test.png</file>
-    	<levelsurround>true</levelsurround>
-    </heightmap>
-   -->
   <heightmap type="generatenoise">
+    <landscapenoiseoctaves>2</landscapenoiseoctaves>
+    <landscapenoisepersistence>0.6</landscapenoisepersistence>
+    <landscapenoisescale>0.0125</landscapenoisescale> <!-- 1/80 -->
+    
+    <detailnoiseoctaves>4</detailnoiseoctaves>
+    <detailnoisepersistence>0.8</detailnoisepersistence>
+
+    <jaggednessnoiseoctaves>2</jaggednessnoiseoctaves>
+    <jaggednessnoisepersistence>0.8</jaggednessnoisepersistence>
+    <jaggednessnoisescale>0.25</jaggednessnoisescale> <!-- 1/4 -->
+    <jaggedstart>0.7</jaggedstart>
+
+    <landscapescalefactor>1.1</landscapescalefactor>
+    <landscapeheightscale>25</landscapeheightscale>
+    <landscapeoutlinefactor>0.7</landscapeoutlinefactor>
+    <landscapeoutlinebase>0.3</landscapeoutlinebase>
   </heightmap>
 </defn>

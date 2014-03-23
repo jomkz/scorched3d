@@ -78,7 +78,7 @@
                   #for(${TOPCHILD} in ${CONTAINER.THIS_CHOICE_TYPE})
 
                   <li class="blockList">
-                    <h4>Local XML Fragment For Type ${TOPCHILD.THIS_NAME}</h4>
+                    <h4>Local XML Fragment For Type <a href='${TOPCHILD.THIS_TYPE_NAME}.html'>${TOPCHILD.THIS_TYPE_NAME}</a> : type = "${TOPCHILD.THIS_NAME}"</h4>
                     <div class="block">
                       <code>
                         #for(${CHILD} in ${TOPCHILD})

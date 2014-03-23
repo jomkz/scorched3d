@@ -125,10 +125,54 @@ LandscapeDefnHeightMapGenerate::~LandscapeDefnHeightMapGenerate()
 }
 
 LandscapeDefnHeightMapGenerateNoise::LandscapeDefnHeightMapGenerateNoise() :
-	LandscapeDefnHeightMap("LandscapeDefnHeightMapGenerateNoise", 
-		"Procedurally/randomly generates the landscape using perlin noise generators")
+	LandscapeDefnHeightMap("LandscapeDefnHeightMapGenerateNoise",
+	"Procedurally/randomly generates the landscape using perlin noise generators"),
+	landscapenoiseoctaves("Parameter for the noise that generates the island outline. "
+		" Adding more octaves increases the detail of Perlin noise, with the added drawback of increasing the calculation time."),
+	landscapenoisepersistence("Parameter for the noise that generates the island outline. "
+		"  A multiplier that determines how quickly the amplitudes diminish for each successive octave in a Perlin-noise function. "
+		"  i.e. how much detail from each octave is left in the final result"),
+	landscapenoisescale("Parameter for the noise that generates the island outline. "
+		"  A multiplier that determines how much the noise is scaled, more scale causes the noise to become less random"),
+	landscapeoutlinefactor("Parameter that defines the island outline.  "
+		"  A factor that the noise value at a given point must be greate than to be outside the island border."
+		"  Generally a larger factor will mean that the border will be more irregular."
+		"  In general the base + the factor should = 1, where the base < 1 and the factor < 1"),
+	landscapeoutlinebase("Parameter that defines the island outline.  "
+		"  A straight addition to the outline factor that the noise value at a given point must be greate than to be outside the island border."
+		"  Generally a larger base will mean that the border will be more regular."
+		"  In general the base + the factor should = 1, where the base < 1 and the factor < 1"),
+	landscapescalefactor("Parameter that defines the scale used when re-distributing heights across the landscape."),
+	landscapeheightscale("Parameter that defines the height of the final landscape. "
+		"  The redistributed heights are multiplies by this value to get the final height"),
+	detailnoiseoctaves("Parameter for the noise that adds some random detail to the island. "
+		" Adding more octaves increases the detail of Perlin noise, with the added drawback of increasing the calculation time."),
+	detailnoisepersistence("Parameter for the noise that adds some random detail to the island. "
+		"  A multiplier that determines how quickly the amplitudes diminish for each successive octave in a Perlin-noise function. "
+		"  i.e. how much detail from each octave is left in the final result"),
+	jaggednessnoiseoctaves("Parameter for the noise that defines the jaggedness of the top of the landscape. "
+		" Adding more octaves increases the detail of Perlin noise, with the added drawback of increasing the calculation time."),
+	jaggednessnoisepersistence("Parameter for the noise that defines the jaggedness of the top of the landscape. "
+		"  A multiplier that determines how quickly the amplitudes diminish for each successive octave in a Perlin-noise function. "
+		"  i.e. how much detail from each octave is left in the final result"),
+	jaggednessnoisescale("Parameter for the noise that defines the jaggedness of the top of the landscape. "
+		"  A multiplier that determines how much the noise is scaled, more scale causes the noise to become less random"),
+	jaggedstart("Parameter for the noise that defines the jaggedness of the top of the landscape. "
+		"  The fraction of the landscape that below which that jaggedness will not be applied")
 {
-
+	addChildXMLEntry("landscapenoiseoctaves", &landscapenoiseoctaves,
+		"landscapenoisepersistence", &landscapenoisepersistence,
+		"landscapenoisescale", &landscapenoisescale,
+		"landscapescalefactor", &landscapescalefactor,
+		"landscapeheightscale", &landscapeheightscale,
+		"landscapeoutlinefactor", &landscapeoutlinefactor,
+		"landscapeoutlinebase", &landscapeoutlinebase);
+	addChildXMLEntry("detailnoiseoctaves", &detailnoiseoctaves,
+		"detailnoisepersistence", &detailnoisepersistence);
+	addChildXMLEntry("jaggednessnoiseoctaves", &jaggednessnoiseoctaves,
+		"jaggednessnoisepersistence", &jaggednessnoisepersistence,
+		"jaggednessnoisescale", &jaggednessnoisescale,
+		"jaggedstart", &jaggedstart);
 }
 
 LandscapeDefnHeightMapGenerateNoise::~LandscapeDefnHeightMapGenerateNoise()

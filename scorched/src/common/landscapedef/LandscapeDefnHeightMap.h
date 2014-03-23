@@ -103,6 +103,22 @@ public:
 	LandscapeDefnHeightMapGenerateNoise();
 	virtual ~LandscapeDefnHeightMapGenerateNoise();
 
+	XMLEntryInt landscapenoiseoctaves;
+	XMLEntryFixed landscapenoisepersistence;
+	XMLEntryFixed landscapenoisescale;
+	XMLEntryFixed landscapeoutlinefactor;
+	XMLEntryFixed landscapeoutlinebase;
+	XMLEntryFixed landscapescalefactor;
+	XMLEntryFixed landscapeheightscale;
+
+	XMLEntryInt detailnoiseoctaves;
+	XMLEntryFixed detailnoisepersistence;
+
+	XMLEntryInt jaggednessnoiseoctaves;
+	XMLEntryFixed jaggednessnoisepersistence;
+	XMLEntryFixed jaggednessnoisescale;
+	XMLEntryFixed jaggedstart;
+
 	virtual DefnHeightMapType getType() { return eHeightMapGenerateNoise; }
 };
 

@@ -26,6 +26,7 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientOptions.h>
 #include <landscapemap/LandscapeMaps.h>
+#include <landscapedef/LandscapeDescriptions.h>
 
 UIStatePlayingLand::UIStatePlayingLand(
 	Ogre::SceneManager* sceneMgr, 
@@ -89,6 +90,10 @@ void UIStatePlayingLand::create()
 
 void UIStatePlayingLand::defineOptions()
 {
+	LandscapeTex *tex = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getTex();
+	DIALOG_ASSERT(tex->texture.getValue()->getType() == LandscapeTexBase::eTexLayers);
+	LandscapeTexLayers *texLayers = (LandscapeTexLayers*) tex->texture.getValue();
+
 	// Terrain settings
 	// Configure global
 	terrainGlobalOptions_ = new Ogre::TerrainGlobalOptions();
@@ -113,39 +118,21 @@ void UIStatePlayingLand::defineOptions()
 
     // textures
 	defaultimp.layerList.resize(5);
-	defaultimp.layerList[0].worldSize = 100;
-	defaultimp.layerList[0].textureNames.push_back("TxUscrubplainU01.dds");
-	defaultimp.layerList[0].textureNames.push_back("TxUscrubplainU01_n.dds");
-	defaultimp.layerList[1].worldSize = 250;
-	defaultimp.layerList[1].textureNames.push_back("TxUsandU02.dds");
-	defaultimp.layerList[1].textureNames.push_back("TxUsandU02_n.dds");
-	defaultimp.layerList[2].worldSize = 500;
-	defaultimp.layerList[2].textureNames.push_back("TxUAIUgrassUdirtU01.dds");
-	defaultimp.layerList[2].textureNames.push_back("TxUAIUgrassUdirtU01_n.dds");
-	defaultimp.layerList[3].worldSize = 300;
-	defaultimp.layerList[3].textureNames.push_back("terrainsnowstone01.dds");
-	defaultimp.layerList[3].textureNames.push_back("terrainsnowstone01_n.dds");
-	defaultimp.layerList[4].worldSize = 200;
-	defaultimp.layerList[4].textureNames.push_back("TxUcoastalUrockU01.dds");
-	defaultimp.layerList[4].textureNames.push_back("TxUcoastalUrockU01_n.dds");
-	/*
-	defaultimp.layerList.resize(5);
-	defaultimp.layerList[0].worldSize = 100;
-	defaultimp.layerList[0].textureNames.push_back("purple.dds");
-	defaultimp.layerList[0].textureNames.push_back("TxUscrubplainU01_n.dds");
-	defaultimp.layerList[1].worldSize = 50;
-	defaultimp.layerList[1].textureNames.push_back("green.dds");
-	defaultimp.layerList[1].textureNames.push_back("TxUsandU02_n.dds");
-	defaultimp.layerList[2].worldSize = 200;
-	defaultimp.layerList[2].textureNames.push_back("blue.dds");
-	defaultimp.layerList[2].textureNames.push_back("TxUAIUgrassUdirtU01_n.dds");
-	defaultimp.layerList[3].worldSize = 100;
-	defaultimp.layerList[3].textureNames.push_back("white.dds");
-	defaultimp.layerList[3].textureNames.push_back("terrainsnowstone01_n.dds");
-	defaultimp.layerList[4].worldSize = 200;
-	defaultimp.layerList[4].textureNames.push_back("red.dds");
-	defaultimp.layerList[4].textureNames.push_back("TxUcoastalUrockU01_n.dds");
-	*/
+	defaultimp.layerList[0].worldSize = (Ogre::Real) texLayers->texturelayerdetail.worldsize.getValue().asFloat();
+	defaultimp.layerList[0].textureNames.push_back(texLayers->texturelayerdetail.texturename.getValue());
+	defaultimp.layerList[0].textureNames.push_back(texLayers->texturelayerdetail.normaltexturename.getValue());
+	defaultimp.layerList[1].worldSize = (Ogre::Real) texLayers->texturelayer1.worldsize.getValue().asFloat();
+	defaultimp.layerList[1].textureNames.push_back(texLayers->texturelayer1.texturename.getValue());
+	defaultimp.layerList[1].textureNames.push_back(texLayers->texturelayer1.normaltexturename.getValue());
+	defaultimp.layerList[2].worldSize = (Ogre::Real) texLayers->texturelayer2.worldsize.getValue().asFloat();
+	defaultimp.layerList[2].textureNames.push_back(texLayers->texturelayer2.texturename.getValue());
+	defaultimp.layerList[2].textureNames.push_back(texLayers->texturelayer2.normaltexturename.getValue());
+	defaultimp.layerList[3].worldSize = (Ogre::Real) texLayers->texturelayer3.worldsize.getValue().asFloat();
+	defaultimp.layerList[3].textureNames.push_back(texLayers->texturelayer3.texturename.getValue());
+	defaultimp.layerList[3].textureNames.push_back(texLayers->texturelayer3.normaltexturename.getValue());
+	defaultimp.layerList[4].worldSize = (Ogre::Real) texLayers->texturelayerslope.worldsize.getValue().asFloat();
+	defaultimp.layerList[4].textureNames.push_back(texLayers->texturelayerslope.texturename.getValue());
+	defaultimp.layerList[4].textureNames.push_back(texLayers->texturelayerslope.normaltexturename.getValue());
 }
 
 void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
@@ -171,7 +158,7 @@ void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
 	
 	Ogre::Terrain* firstTerrain = terrainGroup_->getTerrain(0, 0);
 
-	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong in release mode
+	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong when compiled in release mode
 	size_t blendMapWidth, blendMapHeight;
 	Ogre::TerrainLayerBlendMap* blendMap0 = firstTerrain->getLayerBlendMap(1);
 	blendMap0->convertUVToImageSpace(1.0, 1.0, &blendMapWidth, &blendMapHeight);
@@ -237,6 +224,8 @@ bool UIStatePlayingLand::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vecto
 void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty)
 {
 	unsigned int seed = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getSeed();
+	LandscapeTex *tex = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getTex();
+	LandscapeTexLayers *texLayers = (LandscapeTexLayers*)tex->texture.getValue();
 
 	/*
 	// Try enabling a color map for color variation
@@ -251,18 +240,34 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 
 	// Constants
 	const int numberSources = 3;
-	const float maxHeight = 18.0f; // Last texture ends at height 
-	const float blendHeightFactor = 0.4f; // Ends blend when % into height band
-	const float blendNormalSlopeStart = 0.95f; // Starts blending slope at %
-	const float blendNormalSlopeLength = 0.15f; // Blends when % more slope
+	const float maxHeight = texLayers->layersheight.getValue().asFloat(); // Last texture starts at height 
+	float blendHeightFactor[numberSources];
+	blendHeightFactor[0] = texLayers->texturelayer1.blendheightfactor.getValue().asFloat(); // Ends blend when % into height band
+	blendHeightFactor[1] = texLayers->texturelayer2.blendheightfactor.getValue().asFloat(); // Ends blend when % into height band
+	blendHeightFactor[2] = texLayers->texturelayer3.blendheightfactor.getValue().asFloat(); // Ends blend when % into height band
+	const float blendNormalSlopeStart = texLayers->texturelayerslope.blendslopestart.getValue().asFloat(); // Starts blending slope at %
+	const float blendNormalSlopeLength = texLayers->texturelayerslope.blendslopefactor.getValue().asFloat(); // Blends when % more slope
 	const float maxOffsetHeight = (maxHeight / numberSources) / 3.0f;
+	const float blendDetailHeightStartFactor = texLayers->texturelayerdetail.blendheightstartfactor.getValue().asFloat();
+	const float blendDetailHeightEndFactor = texLayers->texturelayerdetail.blendheightendfactor.getValue().asFloat();
+	const float blendDetailHeightStartFactorFactor = texLayers->texturelayerdetail.blendheightstartfactor.getValue().asFloat() +
+		texLayers->texturelayerdetail.blendheightfactor.getValue().asFloat();
+	const float blendDetailHeightEndFactorFactor = texLayers->texturelayerdetail.blendheightendfactor.getValue().asFloat() +
+		texLayers->texturelayerdetail.blendheightfactor.getValue().asFloat();
+	const float blendDetailAmount = 1.0f / texLayers->texturelayerdetail.blendheightfactor.getValue().asFloat();
+	const int blendDetailNoiseOctaves = texLayers->texturelayerdetail.blendnoiseoctaves.getValue();
+	const float blendDetailNoisePersistence = texLayers->texturelayerdetail.blendnoisepersistence.getValue().asFloat();
+	const float blendDetailNoiseScale = texLayers->texturelayerdetail.blendnoisescale.getValue().asFloat();
+	const int layerOffsetNoiseOctaves = texLayers->layeroffsetoctaves.getValue();
+	const float layerOffsetNoisePersistence = texLayers->layeroffsetpersistence.getValue().asFloat();
+	const float layerOffsetNoiseScale = texLayers->layeroffsetscale.getValue().asFloat();
 
 	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
 	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
 	Ogre::TerrainLayerBlendMap* blendMap2 = terrain->getLayerBlendMap(3);
 	Ogre::TerrainLayerBlendMap* blendMapStone = terrain->getLayerBlendMap(4);
 
-	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong in release mode
+	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong when compiled in release mode
 	size_t blendMapWidth, blendMapHeight;
 	blendMap0->convertUVToImageSpace(1.0, 1.0, &blendMapWidth, &blendMapHeight);
 	blendMapWidth++; // They are indexed by Zero
@@ -295,7 +300,7 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 			Ogre::ColourValue tempColor = normalMapImage.getColourAt(ix, iy, 0);
 			float normal = tempColor.g;
 			// This stops the height bands from being too uniform
-			float offSetHeight = octave_noise_2d(1, 0.8f, 1.0f / 16.0f, -hxf, -hyf) 
+			float offSetHeight = octave_noise_2d(layerOffsetNoiseOctaves, layerOffsetNoisePersistence, layerOffsetNoiseScale, -hxf, -hyf)
 				* maxOffsetHeight;
 			float height = terrain->getHeightAtTerrainPosition(tsx, tsy) / 
 				OgreSystem::OGRE_WORLD_HEIGHT_SCALE - offSetHeight;
@@ -314,11 +319,11 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 			if (heightIndex < numberSources - 1)
 			{
 				float remainderIndex = heightPer - heightIndex;
-				if (remainderIndex > blendHeightFactor)
+				if (remainderIndex > blendHeightFactor[heightIndex])
 				{
 					// We need to do some blending, figure how much
-					remainderIndex -= blendHeightFactor;
-					blendSecondAmount = remainderIndex / (1.0f - blendHeightFactor);
+					remainderIndex -= blendHeightFactor[heightIndex];
+					blendSecondAmount = remainderIndex / (1.0f - blendHeightFactor[heightIndex]);
 					blendFirstAmount = 1.0f - blendSecondAmount;
 				}
 			}
@@ -350,13 +355,13 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 			// Generate a noise map for the base map
 			// This is like the detail map that adds texture variation across the terrain
 			// Don't add it right at the lowest height, or at the max height
-			if (heightPer > 0.25f && heightPer < float(numberSources) - 0.5f) 
+			if (heightPer > blendDetailHeightStartFactor && heightPer < float(numberSources) - blendDetailHeightEndFactor)
 			{
-				float baseValue = octave_noise_2d(1, 0.8f, 1.0f / 8.0f, hxf, hyf);
+				float baseValue = octave_noise_2d(blendDetailNoiseOctaves, blendDetailNoisePersistence, blendDetailNoiseScale, hxf, hyf);
 				if (baseValue > 0.0f)
 				{
-					if (heightPer < 0.5f) baseValue *= (heightPer - 0.25f) * 4.0f;
-					else if (heightPer > float(numberSources) - 0.75f) baseValue *= 1.0f - ((heightPer - (float(numberSources) - 0.75f)) * 4.0f);
+					if (heightPer < blendDetailHeightStartFactorFactor) baseValue *= (heightPer - blendDetailHeightStartFactor) * blendDetailAmount;
+					else if (heightPer > float(numberSources) - blendDetailHeightEndFactorFactor) baseValue *= 1.0f - ((heightPer - (float(numberSources) - blendDetailHeightEndFactorFactor)) * blendDetailAmount);
 					blendFirstAmount *= Ogre::Math::Clamp(1.0f - baseValue, (Ogre::Real) 0, (Ogre::Real) 1);
 					blendSecondAmount *= Ogre::Math::Clamp(1.0f - baseValue, (Ogre::Real) 0, (Ogre::Real) 1);
 				}

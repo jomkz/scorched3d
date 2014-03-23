@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <landscapemap/HeightMapModifierNoise.h>
+#include <landscapedef/LandscapeDefnHeightMap.h>
 #include <common/simplexnoise.h>
 
 #define SIMPLEX_MIN(a, b) ((a)<(b)?(a):(b))
@@ -99,33 +100,33 @@ void HeightMapModifierNoise::generateTerrain(HeightMap &hmap,
 	int randy = int(offsetGenerator.getRandUInt("HeightMapModifierNoise::randy") % 10000) - 5000;
 
 	// The parameters that define the border of the landscape
-	int border_octaves = 2; 
-	fixed border_persistence = fixed(true, 6000); 
-	fixed border_scale = fixed(1) / fixed(80); 
+	int border_octaves = defn.landscapenoiseoctaves.getValue();
+	fixed border_persistence = defn.landscapenoisepersistence.getValue();
+	fixed border_scale = defn.landscapenoisescale.getValue();
 
 	// The parameters that define the random height added to the landscape
-	int random_octaves = 4;
-	fixed random_persistence = fixed(true, 8000);
+	int random_octaves = defn.detailnoiseoctaves.getValue();
+	fixed random_persistence = defn.detailnoisepersistence.getValue();
 
 	// The parameters that define the jaggedness of the top of the landscape
-	int jagged_octaves = 2;
-	fixed jagged_persistence = fixed(true, 8000);
-	fixed jagged_scale = fixed(1) / fixed(4);
+	int jagged_octaves = defn.jaggednessnoiseoctaves.getValue();
+	fixed jagged_persistence = defn.jaggednessnoisepersistence.getValue();
+	fixed jagged_scale = defn.jaggednessnoisescale.getValue();
 
 	// Figure out the island border (its shape)
 	if (counter) counter->setNewOp(LANG_STRING("Gen Perlin"));
 	LandInfo *landInfo = new LandInfo[sizex * sizey];
 	for (int y=0; y<sizey; y++)
 	{
-		fixed yDist = ((fixed(y)/sizey) - fixed(true, 5000)) * 2;
+		fixed yDist = ((fixed(y) / fixed(sizey)) - fixed(true, 5000)) * fixed(2);
 		for (int x=0; x<sizex; x++)
 		{
-			fixed xDist = ((fixed(x)/sizex) - fixed(true, 5000)) * 2;
+			fixed xDist = ((fixed(x) / fixed(sizex)) - fixed(true, 5000)) * fixed(2);
 			
 			// Figure out if this point is inside or outside the island
 			// Points further away from the mid point are increasingly more likely to be outside
 			fixed len = (xDist * xDist + yDist * yDist).sqrt();
-			fixed aim = (fixed(true, 7000)*len*len)+fixed(true, 3000);
+			fixed aim = (defn.landscapeoutlinefactor.getValue()*len*len) + defn.landscapeoutlinebase.getValue();
 			fixed value = (octave_noise_2d_fixed(border_octaves, border_persistence, border_scale, x + randx, y + randy) + 1) / 2;
 
 			// Create the initial land info for this point
@@ -226,10 +227,10 @@ void HeightMapModifierNoise::generateTerrain(HeightMap &hmap,
 	// Assign heights so that those closest to the water are the lowest heights
 	// Add some randomness to make it less uniform
 	{
-		fixed SCALE_FACTOR = fixed(true, 11000);
+		fixed SCALE_FACTOR = defn.landscapescalefactor.getValue();
 		int borderItems = nextBorder - border;
 		currentBorder = border;
-		fixed jaggedStart(true, 7000);
+		fixed jaggedStart = defn.jaggedstart.getValue();
 		for (int i=0; i<borderItems; i++, currentBorder++) {
 			// Let y(x) be the total area that we want at elevation <= x.
 			// We want the higher elevations to occur less than lower
@@ -264,7 +265,7 @@ void HeightMapModifierNoise::generateTerrain(HeightMap &hmap,
 		{
 			currentData->normal.zero();
 			// current->inLand ? 1.0f:-1.0f
-			currentData->height = current->actualHeight * 25;
+			currentData->height = current->actualHeight * defn.landscapeheightscale.getValue();
 		}
 	}
 
