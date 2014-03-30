@@ -32,7 +32,7 @@ const float OgreSystem::OGRE_WORLD_SCALE_FIXED((6000.0f / 128.0f) / fixed::FIXED
 
 OgreSystem::OgreSystem() : 
 	ogreRoot_(0), ogreWindow_(0),
-	guiRenderer_(0), landscapeSceneManager_(0)
+	guiRenderer_(0), landscapeSceneManager_(0), progressSceneManager_(0)
 {
 }
 
@@ -101,6 +101,7 @@ bool OgreSystem::createWindow()
 		Ogre::LogManager::getSingletonPtr()->logMessage("Failed to initialize ogre root");
 		return false;
 	}
+	// ogreWindow_->setVSyncEnabled();
 
 	// Create scene manager
 	landscapeSceneManager_ = ogreRoot_->createSceneManager(Ogre::ST_GENERIC, "PlayingSceneManager");
@@ -112,6 +113,8 @@ bool OgreSystem::createWindow()
 		landscapeSceneManager_->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(new Ogre::FocusedShadowCameraSetup()));
 	}
 
+	progressSceneManager_ = ogreRoot_->createSceneManager(Ogre::ST_GENERIC, "ProgressSceneManager");
+	
 	// Setup some defaults
 	Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
 	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(Ogre::TFO_ANISOTROPIC);
@@ -141,6 +144,8 @@ void OgreSystem::loadResources()
 
 	// General
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/bloom", "FileSystem", "General");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/general/materials", "FileSystem", "General");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/general/textures", "FileSystem", "General");
 
 	// Particle Universe
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/core", "FileSystem", "ParticleUniverse");

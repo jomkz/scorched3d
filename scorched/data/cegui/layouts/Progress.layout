@@ -2,15 +2,19 @@
 
 <GUILayout version="4" >
     <Window type="OgreTray/StaticText" name="StaticText" >
-        <Property name="Area" value="{{0,0},{1,-53},{1,0},{1,0}}" />
+        <Property name="Area" value="{{0,25},{1,-75},{1,-25},{1,-22}}" />
+        <Property name="Font" value="DejaVuSans-12" />
         <Property name="Text" value="Test" />
         <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        <Property name="TextColours" value="tl:FFFFFF00 tr:FFFFFF00 bl:FFFFFF00 br:FFFFFF00" />
+        <Property name="FrameEnabled" value="False" />
         <Property name="HorzFormatting" value="WordWrapCentreAligned" />
         <Property name="VertFormatting" value="TopAligned" />
-        <Property name="HorzScrollPageSize" value="1254" />
-        <Property name="VertScrollPageSize" value="27" />
-        <Property name="HorzScrollDocumentSize" value="22" />
-        <Property name="VertScrollDocumentSize" value="12.4227" />
+        <Property name="BackgroundEnabled" value="False" />
+        <Property name="HorzScrollPageSize" value="1230" />
+        <Property name="VertScrollPageSize" value="53" />
+        <Property name="HorzScrollDocumentSize" value="35" />
+        <Property name="VertScrollDocumentSize" value="18.625" />
         <AutoWindow namePath="__auto_hscrollbar__" >
             <AutoWindow namePath="__auto_incbtn__" >
                 <Property name="Visible" value="False" />
