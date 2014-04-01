@@ -33,6 +33,10 @@ public:
 	virtual void destroyState();
 
 protected:
+	Ogre::SceneManager* joiningSceneManager_;
+	Ogre::Camera *camera_;
+
+	void createSceneManager();
 	bool join(const CEGUI::EventArgs &e);
 };
 

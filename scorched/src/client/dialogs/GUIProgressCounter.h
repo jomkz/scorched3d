@@ -76,10 +76,9 @@ public:
 	virtual void progressChange(const LangString &op, const float percentage);
 
 protected:
-	time_t lastTime_;
 	// A seperate callback mechanism so we can get progress when
 	// the client is blocked and cant use uisync
-	// Most other things should use this as it may cause
+	// Most other things should not use this as it may cause
 	// issues with sequencing of other actions being performed via uisync
 	ThreadCallback threadCallback_;
 

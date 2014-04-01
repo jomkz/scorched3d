@@ -35,7 +35,7 @@ public:
 private:
 	void createSceneManager();
 
-	bool sceneManagerCreated_;
+	Ogre::SceneManager* progressSceneManager_;
 	Ogre::Camera *camera_;
 };
 

@@ -19,13 +19,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <scorched3dc/ScorchedUI.h>
+#include <scorched3dc/OgreSystem.h>
 #include <uistate/UIStateJoining.h>
 #include <dialogs/GUIProgressCounter.h>
 #include <engine/ThreadCallback.h>
 #include <client/ScorchedClient.h>
 #include <uiactions/UIJoinGameAction.h>
 
-UIStateJoining::UIStateJoining() : UIStateI(UIState::StateJoining)
+UIStateJoining::UIStateJoining() : 
+	UIStateI(UIState::StateJoining),
+	joiningSceneManager_(0)
 {
 }
 
@@ -35,6 +38,15 @@ UIStateJoining::~UIStateJoining()
 
 void UIStateJoining::createState()
 {
+	if (!joiningSceneManager_) createSceneManager();
+
+	// Attach camera to the window
+	Ogre::RenderWindow *window = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
+	Ogre::Viewport *vp = window->addViewport(camera_); //Our Viewport linked to the camera
+
+	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
+	camera_->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	{
 		CEGUI::Window *join = wmgr.createWindow("OgreTray/Button", "JoinButton");
@@ -61,4 +73,16 @@ void UIStateJoining::destroyState()
 	CEGUI::Window *root = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	wmgr.destroyWindow(root->getChild("JoinButton"));
+
+	Ogre::RenderWindow *window = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
+	window->removeAllViewports();
+}
+
+void UIStateJoining::createSceneManager()
+{
+	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
+	joiningSceneManager_ = ogreRoot->createSceneManager(Ogre::ST_GENERIC, "JoiningSceneManager");
+
+	// Create viewing camera
+	camera_ = joiningSceneManager_->createCamera("JoiningCamera");
 }

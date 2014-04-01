@@ -118,6 +118,8 @@ void HeightMapModifierNoise::generateTerrain(HeightMap &hmap,
 	LandInfo *landInfo = new LandInfo[sizex * sizey];
 	for (int y=0; y<sizey; y++)
 	{
+		if (counter) counter->setNewPercentage(float(y) / float(sizey) * 100.0f);
+
 		fixed yDist = ((fixed(y) / fixed(sizey)) - fixed(true, 5000)) * fixed(2);
 		for (int x=0; x<sizex; x++)
 		{
@@ -151,6 +153,8 @@ void HeightMapModifierNoise::generateTerrain(HeightMap &hmap,
 	unsigned int epoc = 0;
 	for (int y=0; y<sizey; y++)
 	{
+		if (counter) counter->setNewPercentage(float(y) / float(sizey) * 100.0f);
+
 		for (int x=0; x<sizex; x++, current++)
 		{
 			if (!current->inLand) 

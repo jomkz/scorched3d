@@ -32,7 +32,7 @@ const float OgreSystem::OGRE_WORLD_SCALE_FIXED((6000.0f / 128.0f) / fixed::FIXED
 
 OgreSystem::OgreSystem() : 
 	ogreRoot_(0), ogreWindow_(0),
-	guiRenderer_(0), landscapeSceneManager_(0), progressSceneManager_(0)
+	guiRenderer_(0), landscapeSceneManager_(0)
 {
 }
 
@@ -112,8 +112,6 @@ bool OgreSystem::createWindow()
 		landscapeSceneManager_->setShadowTextureConfig(0, 2048, 2048, Ogre::PF_X8R8G8B8);
 		landscapeSceneManager_->setShadowCameraSetup(Ogre::ShadowCameraSetupPtr(new Ogre::FocusedShadowCameraSetup()));
 	}
-
-	progressSceneManager_ = ogreRoot_->createSceneManager(Ogre::ST_GENERIC, "ProgressSceneManager");
 	
 	// Setup some defaults
 	Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);

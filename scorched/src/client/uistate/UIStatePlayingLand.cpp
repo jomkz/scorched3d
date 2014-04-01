@@ -25,6 +25,7 @@
 #include <common/DefinesAssert.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientOptions.h>
+#include <console/ConsoleRuleMethodIAdapter.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDescriptions.h>
 
@@ -86,6 +87,12 @@ void UIStatePlayingLand::create()
 
 	terrainGroup_->update();
 	terrainGroup_->freeTemporaryResources();
+
+	new ConsoleRuleMethodIAdapter<UIStatePlayingLand>(
+		ScorchedClient::instance()->getConsole(),
+		this, &UIStatePlayingLand::updateAllTerrainHeight,
+		"LandscapeRecalculate", 
+		"Forces the landscape to recalculate itself based on the information currently in the height map");
 }
 
 void UIStatePlayingLand::defineOptions()
@@ -429,78 +436,105 @@ void UIStatePlayingLand::update(float frameTime)
 		{
 			(*itor)->update(); // TODO: Optimize to only do once
 		}
+		dirtyTerrains_.clear();
 	}
 }
 
 void UIStatePlayingLand::updateHeight(int x, int y, int w, int h)
 {
-	// Disregard if totaly outside of heightmap
-	if (x + w < 0) return;
-	if (y + h < 0) return;
-	if (x >= hmap_->getMapWidth()) return;
-	if (y >= hmap_->getMapHeight()) return;
+	// Make the update slightly larger so the boundries between terrains are accounted for
+	x -= 1; y -= 1; w += 2; h += 2;
 
-	// Move hit box inside of bounds
-	if (x < 0) { w += x; x = 0; }
-	if (y < 0) { h += y; y = 0; }
-	int dx = x + w - hmap_->getMapWidth();
-	if (dx > 0) { w -= dx; }
-	int dy = y + h - hmap_->getMapHeight();
-	if (dy > 0) { h -= dy; }
+	// Terrain height map counts 0 as the top
+	// So change height map coords to terrain coords
+	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
+	int landscapeHeight = map.getMapHeight();
+	y = landscapeHeight - (y + h);
 
-	// Find which terrain instance this is on
-	int sx = x / 128;
-	int rx = x % 128;
-	int sy = y / 128;
-	int ry = y % 128;
+	int left = x / 128;
+	int top = y / 128;
+	int right = (x + w) / 128;
+	int bottom = (y + h) / 128;
 
-	if (rx + w >= 128 && ry + h >= 128)
+	Ogre::Rect updateRect(x, y, x + w, y + h);
+	updateHeightTerrain(left, top, updateRect);
+	if (left != right && top != bottom)
 	{
-		updateHeightTerrain(sx, sy, rx, ry, 127 - rx, 127 - ry);
-		updateHeightTerrain(sx + 1, sy, 0, ry, rx + w - 128, 127 - ry);
-		updateHeightTerrain(sx, sy + 1, rx, 0, 127 - rx, ry + h - 128);
-		updateHeightTerrain(sx + 1, sy + 1, 0, 0, rx + w - 128, ry + h - 128);
+		updateHeightTerrain(right, top, updateRect);
+		updateHeightTerrain(left, bottom, updateRect);
+		updateHeightTerrain(right, bottom, updateRect);
 	}
-	else if (rx + w >= 128)
+	else if (left != right)
 	{
-		updateHeightTerrain(sx, sy, rx, ry, 127 - rx, h);
-		updateHeightTerrain(sx + 1, sy, 0 , ry, rx + w - 128, h);
+		updateHeightTerrain(right, top, updateRect);
 	}
-	else if (ry + h >= 128)
+	else if (top != bottom)
 	{
-		updateHeightTerrain(sx, sy, rx, ry, w, 127 - ry);
-		updateHeightTerrain(sx, sy + 1, rx , 0, w, ry + h - 128);
-	}
-	else
-	{
-		updateHeightTerrain(sx, sy, rx, ry, w, h);
+		updateHeightTerrain(left, bottom, updateRect);
 	}
 }
 
-void UIStatePlayingLand::updateHeightTerrain(int tx, int ty, int x, int y, int w, int h)
+void UIStatePlayingLand::updateHeightTerrain(int tx, int ty, const Ogre::Rect &updateRect)
 {
-	DIALOG_ASSERT(x >= 0 && y >= 0 && x + w < 128 && y + h < 128);
+	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
+	int landscapeWidth = map.getMapWidth();
+	int landscapeHeight = map.getMapHeight();
+	int startX = tx * 128;
+	int startY = ty * 128;
 
-	int mapX = tx * 128 + x;
-	int mapY = ty * 128 + y;
-	DIALOG_ASSERT(mapX > 0 && mapY > 0 && mapX + w < hmap_->getMapWidth() && mapY + h < hmap_->getMapHeight());
+	if (startX < 0 || startY < 0) return;
+	if (startX >= landscapeWidth || startY >= landscapeHeight) return;
 
-	Ogre::Terrain *terrain = terrainGroup_->getTerrain(tx, (hmap_->getMapHeight() / 128) - 1 - ty);
-	for (int b=0; b<=h; b++)
+	Ogre::Terrain* terrain = terrainGroup_->getTerrain(tx, ty);
+	Ogre::Rect terrainRect(0, 0, 128, 128);
+	Ogre::Rect changeRect(updateRect.left - startX, updateRect.top - startY, updateRect.right - startX, updateRect.bottom - startY);
+	Ogre::Rect actualUpdate = terrainRect.intersect(changeRect);
+
+	for (int y = actualUpdate.top; y <= actualUpdate.bottom; y++)
 	{
-		HeightMap::HeightData *mapHeightData = hmap_->getHeightData(mapX, mapY + b);
-		float *landscapeHeightData = terrain->getHeightData(x, 127 - y - b);
-		for (int a=0; a<=w; a++, mapHeightData++, landscapeHeightData++)
+		HeightMap::HeightData *data = map.getHeightData(startX + actualUpdate.left, landscapeHeight - (startY + y));
+		float *landscapeHeightData = terrain->getHeightData(actualUpdate.left, y);
+		for (int x = actualUpdate.left; x <= actualUpdate.right; x++, landscapeHeightData++, data++)
 		{
-			//DIALOG_ASSERT(mapX + a < hmap_->getMapWidth() && mapY + b < hmap_->getMapHeight());
-			//DIALOG_ASSERT(x + a < 128 && 127 - y - b >= 0);
-
-			float height = mapHeightData->height.getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED;
-			(*landscapeHeightData) = height;
+			float height = data->height.getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED;
+			*landscapeHeightData = height;
 		}
 	}
-	terrain->dirtyRect(Ogre::Rect(x, 127 - y - h, x + w + 1, 127 - y + 1));
+
+	terrain->dirtyRect(Ogre::Rect(actualUpdate.left, actualUpdate.top,
+		actualUpdate.right + 1, actualUpdate.bottom + 1));
 	dirtyTerrains_.insert(terrain);
+}
+
+void UIStatePlayingLand::updateAllTerrainHeight()
+{
+	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
+	int landscapeWidth = map.getMapWidth();
+	int landscapeHeight = map.getMapHeight();
+
+	for (int tx = 0; tx<landscapeWidth / 128; tx++)
+	{
+		for (int ty = 0; ty<landscapeHeight / 128; ty++)
+		{
+			Ogre::Terrain* terrain = terrainGroup_->getTerrain(tx, ty);
+			int startX = tx * 128;
+			int startY = ty * 128;
+
+			for (int y = 0; y<129; y++)
+			{
+				HeightMap::HeightData *data = map.getHeightData(startX, landscapeHeight - (startY + y));
+				float *landscapeHeightData = terrain->getHeightData(0, y);
+				for (int x = 0; x<129; x++, landscapeHeightData++, data++)
+				{
+					float height = data->height.getInternalData() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE_FIXED;
+					*landscapeHeightData = height;
+				}
+			}
+
+			terrain->dirtyRect(Ogre::Rect(0, 0, 129, 129));
+			dirtyTerrains_.insert(terrain);
+		}
+	}
 }
 
 void UIStatePlayingLand::showLandscapePoints() 
@@ -518,7 +552,7 @@ void UIStatePlayingLand::showLandscapePoints()
 		for (int x=0; x<hmap_->getMapWidth() + 1; x++, heightData++)
 		{
 			manual->position(OgreSystem::OGRE_WORLD_SCALE * x, 
-				heightData->height.asFloat() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE, 
+				heightData->height.asFloat() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE + 0.1f, 
 				OgreSystem::OGRE_WORLD_SCALE * y);
 		}
 		manual->end();

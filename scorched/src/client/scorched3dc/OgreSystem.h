@@ -45,7 +45,6 @@ public:
 	Ogre::Root *getOgreRoot() { return ogreRoot_; }
 	Ogre::RenderWindow *getOgreRenderWindow() { return ogreWindow_; }
 	Ogre::SceneManager *getOgreLandscapeSceneManager() { return landscapeSceneManager_; }
-	Ogre::SceneManager *getOgreProgressSceneManager() { return progressSceneManager_; }
 
 	bool create();
 	bool createUI();
@@ -54,7 +53,7 @@ protected:
 	// Ogre
 	Ogre::Root *ogreRoot_;
 	Ogre::RenderWindow* ogreWindow_;
-	Ogre::SceneManager* landscapeSceneManager_, *progressSceneManager_;
+	Ogre::SceneManager* landscapeSceneManager_;
 
 	// CEGUI
 	CEGUI::OgreRenderer* guiRenderer_;

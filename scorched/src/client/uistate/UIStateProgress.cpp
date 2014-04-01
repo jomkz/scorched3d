@@ -25,7 +25,7 @@
 
 UIStateProgress::UIStateProgress() : 
 	UIStateI(UIState::StateProgress),
-	sceneManagerCreated_(false)
+	progressSceneManager_(0)
 {
 }
 
@@ -35,11 +35,7 @@ UIStateProgress::~UIStateProgress()
 
 void UIStateProgress::createState()
 {
-	if (!sceneManagerCreated_)
-	{
-		createSceneManager();
-		sceneManagerCreated_ = true;
-	}
+	if (!progressSceneManager_) createSceneManager();
 
 	// Attach camera to the window
 	Ogre::RenderWindow *window = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
@@ -61,6 +57,9 @@ void UIStateProgress::destroyState()
 
 void UIStateProgress::createSceneManager()
 {
+	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
+	progressSceneManager_ = ogreRoot->createSceneManager(Ogre::ST_GENERIC, "ProgressSceneManager");
+
 	// Create background rectangle covering the whole screen
 	Ogre::Rectangle2D* rect = new Ogre::Rectangle2D(true);
 	rect->setCorners(-1.0, 1.0, 1.0, -1.0);
@@ -75,10 +74,9 @@ void UIStateProgress::createSceneManager()
 	rect->setBoundingBox(aabInf);
 
 	// Attach background to the scene
-	Ogre::SceneManager *sceneMgr = ScorchedUI::instance()->getOgreSystem().getOgreProgressSceneManager();
-	Ogre::SceneNode* node = sceneMgr->getRootSceneNode()->createChildSceneNode("Background");
+	Ogre::SceneNode* node = progressSceneManager_->getRootSceneNode()->createChildSceneNode("Background");
 	node->attachObject(rect);
 
 	// Create viewing camera
-	camera_ = sceneMgr->createCamera("ProgressCamera");
+	camera_ = progressSceneManager_->createCamera("ProgressCamera");
 }

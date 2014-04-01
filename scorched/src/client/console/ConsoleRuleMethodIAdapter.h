@@ -27,8 +27,11 @@
 // A. name -> inf
 
 // Usage pattern :-
-// 	new ConsoleRuleMethodIAdapter<InfoMap>(
-//		this, showHeightBands, "InfoHeightBands");
+// 	new ConsoleRuleMethodIAdapter<UIStatePlayingLand>(
+//		ScorchedClient::instance()->getConsole(),
+//		this, &UIStatePlayingLand::updateAllTerrainHeight,
+//		"LandscapeRecalculate",
+//		"Forces the landscape to recalculate itself based on the information currently in the height map")
 // Calls InfoMap::showHeightBands when InfoHeightBands is selected 
 // in the console
 template<class T>

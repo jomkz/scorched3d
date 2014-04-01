@@ -60,7 +60,8 @@ protected:
 	void defineTerrain(long x, long y);
 	void createNormalMap(Ogre::Image &normalMapImage);
 	void initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty);
-	void updateHeightTerrain(int x, int y, int w, int h, int tx, int ty);
+	void updateHeightTerrain(int tx, int ty, const Ogre::Rect &updateRect);
+	void updateAllTerrainHeight();
 	void showLandscapePoints();
 	void hideLandscapePoints();
 };

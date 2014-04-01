@@ -105,7 +105,7 @@ ProgressCounter *GUIProgressCounter::instance()
 }
 
 GUIProgressCounter::GUIProgressCounter() : 
-	lastTime_(0), threadCallback_(false)
+	threadCallback_(false)
 {
 }
 
@@ -125,11 +125,6 @@ void GUIProgressCounter::operationChange(const LangString &op)
 
 void GUIProgressCounter::progressChange(const LangString &op, const float percentage)
 {
-	time_t currentTime = time(0);
-	if (currentTime != lastTime_)
-	{
-		lastTime_ = currentTime;
-		GUIProgressThreadCallback *callback = new GUIProgressThreadCallback(op, percentage);
-		threadCallback_.addCallback(callback);
-	}
+	GUIProgressThreadCallback *callback = new GUIProgressThreadCallback(op, percentage);
+	threadCallback_.addCallback(callback);
 }
