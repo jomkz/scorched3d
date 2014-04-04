@@ -54,6 +54,7 @@ public:
 
 	void fireWeapon();
 	void nextWeapon();
+	void previousWeapon();
 
 	void setWeapons(Tank *tank);
 	void setTankRenderer(UITankRenderer *tankRenderer) { tankRenderer_ = tankRenderer; }

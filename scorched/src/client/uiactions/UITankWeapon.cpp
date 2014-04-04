@@ -137,6 +137,22 @@ void UITankWeapon::nextWeapon()
 	}
 }
 
+void UITankWeapon::previousWeapon()
+{
+	if (tankAccessories_.empty()) return;
+	std::vector<Accessory *>::iterator findIter =
+		std::find(tankAccessories_.begin(), tankAccessories_.end(), getCurrentWeapon());
+	if (findIter == tankAccessories_.begin())
+	{
+		setCurrentWeapon(tankAccessories_[tankAccessories_.size() - 1]);
+	}
+	else
+	{
+		findIter--;
+		setCurrentWeapon(*findIter);
+	}
+}
+
 void UITankWeapon::fireWeapon()
 {
 	if (!tankRenderer_->getTarget()) return;

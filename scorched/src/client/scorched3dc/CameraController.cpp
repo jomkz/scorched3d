@@ -21,6 +21,7 @@
 #include <scorched3dc/CameraController.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/InputManager.h>
+#include <scorched3dc/OgreSystem.h>
 #include <client/ClientOptions.h>
 
 CameraController::CameraController(
@@ -167,9 +168,12 @@ void CameraController::mouseClick(int positionX, int positionY, int mouseButton)
 {
 	if (mouseButton == OIS::MB_Left)
 	{
+		Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
+		Ogre::Viewport *vp = ogreRenderWindow->getViewport(0);
+
 		Ogre::Ray cameraRay;
-		Ogre::Real posX = ((Ogre::Real) positionX) / ((Ogre::Real) camera_->getViewport()->getActualWidth());
-		Ogre::Real posY = ((Ogre::Real) positionY) / ((Ogre::Real) camera_->getViewport()->getActualHeight());
+		Ogre::Real posX = ((Ogre::Real) positionX) / ((Ogre::Real) vp->getActualWidth());
+		Ogre::Real posY = ((Ogre::Real) positionY) / ((Ogre::Real) vp->getActualHeight());
 		camera_->getCameraToViewportRay(posX, posY, &cameraRay);
 		Ogre::Vector3 position;
 		if (heightProvider_ && heightProvider_->getIntersection(cameraRay, &position))

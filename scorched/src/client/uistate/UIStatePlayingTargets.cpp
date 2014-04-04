@@ -53,37 +53,53 @@ void UIStatePlayingTargets::update(float frameTime)
 
 		bool changedValues = false;
 		InputManager &inputManager = ScorchedUI::instance()->getInputManager();
+		fixed frameModifier(1);
+		if (inputManager.isKeyDown(OIS::KC_LSHIFT) &&
+			inputManager.isKeyDown(OIS::KC_LCONTROL))
+		{
+			frameModifier = fixed(true, 2500);
+		}
+		else if (inputManager.isKeyDown(OIS::KC_LSHIFT))
+		{
+			frameModifier = fixed(3);
+		}
+		else if (inputManager.isKeyDown(OIS::KC_LCONTROL))
+		{
+			frameModifier = fixed(true, 5000);
+		}
+
+
 		if (inputManager.isKeyDown(OIS::KC_LEFT))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * -45, true);
+			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * -45 * frameModifier, true);
 		}
 		else if (inputManager.isKeyDown(OIS::KC_RIGHT))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * 45, true);
+			tankRenderer_->getShotHistory().rotateGunXY(fixedFrameTime * 45 * frameModifier, true);
 		}
 
 		if (inputManager.isKeyDown(OIS::KC_UP))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * -20, true);
+			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * -20 * frameModifier, true);
 		}
 		else if (inputManager.isKeyDown(OIS::KC_DOWN))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * 20, true);
+			tankRenderer_->getShotHistory().rotateGunYZ(fixedFrameTime * 20 * frameModifier, true);
 		}
 
 		if (inputManager.isKeyDown(OIS::KC_EQUALS))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().changePower(fixedFrameTime * 100, true);
+			tankRenderer_->getShotHistory().changePower(fixedFrameTime * 100 * frameModifier, true);
 		}
 		else if (inputManager.isKeyDown(OIS::KC_MINUS))
 		{
 			changedValues = true;
-			tankRenderer_->getShotHistory().changePower(fixedFrameTime * -100, true);
+			tankRenderer_->getShotHistory().changePower(fixedFrameTime * -100 * frameModifier, true);
 		}
 	}
 }
@@ -92,6 +108,7 @@ void UIStatePlayingTargets::keyPressed(const OIS::KeyEvent &arg)
 {
 	if (tankRenderer_)
 	{
+		InputManager &inputManager = ScorchedUI::instance()->getInputManager();
 		switch (arg.key)
 		{
 			case OIS::KC_SPACE:
@@ -99,7 +116,15 @@ void UIStatePlayingTargets::keyPressed(const OIS::KeyEvent &arg)
 				setCurrentTank(0);
 				break;
 			case OIS::KC_TAB:
-				tankRenderer_->getTankWeapon().nextWeapon();
+				if (inputManager.isKeyDown(OIS::KC_LSHIFT))
+				{
+					tankRenderer_->getTankWeapon().previousWeapon();
+				}
+				else 
+				{
+					tankRenderer_->getTankWeapon().nextWeapon();
+				}
+				
 				break;
 		}
 	}
