@@ -453,6 +453,7 @@
     <ClCompile Include="..\console\ConsoleRules.cpp" />
     <ClCompile Include="..\dialogs\GUIConsole.cpp" />
     <ClCompile Include="..\dialogs\GUIFrameTimer.cpp" />
+    <ClCompile Include="..\dialogs\GUILogo.cpp" />
     <ClCompile Include="..\dialogs\GUIProgressCounter.cpp" />
     <ClCompile Include="..\dialogs\GUITankInfo.cpp" />
     <ClCompile Include="..\models\ModelInstance.cpp" />
@@ -941,6 +942,7 @@
     <ClInclude Include="..\console\ConsoleRules.h" />
     <ClInclude Include="..\dialogs\GUIConsole.h" />
     <ClInclude Include="..\dialogs\GUIFrameTimer.h" />
+    <ClInclude Include="..\dialogs\GUILogo.h" />
     <ClInclude Include="..\dialogs\GUIProgressCounter.h" />
     <ClInclude Include="..\dialogs\GUITankInfo.h" />
     <ClInclude Include="..\models\ModelInstance.h" />

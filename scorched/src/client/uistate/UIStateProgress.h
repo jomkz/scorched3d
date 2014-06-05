@@ -33,10 +33,10 @@ public:
 	virtual void destroyState();
 
 private:
-	void createSceneManager();
-
 	Ogre::SceneManager* progressSceneManager_;
 	Ogre::Camera *camera_;
+
+	void createSceneManager();
 };
 
 #endif // __INCLUDE_UIStateProgressh_INCLUDE__

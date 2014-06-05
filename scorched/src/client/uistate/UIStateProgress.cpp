@@ -20,6 +20,7 @@
 
 #include <uistate/UIStateProgress.h>
 #include <dialogs/GUIProgressCounter.h>
+#include <dialogs/GUILogo.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
 
@@ -45,11 +46,13 @@ void UIStateProgress::createState()
 	camera_->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 
 	GUIProgress::instance()->setVisible(true);
+	GUILogo::instance()->setVisible(true);
 }
 
 void UIStateProgress::destroyState()
 {
 	GUIProgress::instance()->setVisible(false);
+	GUILogo::instance()->setVisible(false);
 
 	Ogre::RenderWindow *window = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 	window->removeAllViewports();

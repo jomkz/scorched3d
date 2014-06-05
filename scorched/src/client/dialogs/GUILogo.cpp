@@ -18,29 +18,44 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStateMainMenuh_INCLUDE__)
-#define __INCLUDE_UIStateMainMenuh_INCLUDE__
+#include <scorched3dc/ScorchedUI.h>
+#include <dialogs/GUILogo.h>
 
-#include <uistate/UIStateI.h>
-#include <common/SplinePath.h>
-
-class UIStateMainMenu : public UIStateI
+GUILogo *GUILogo::instance()
 {
-public:
-	UIStateMainMenu();
-	virtual ~UIStateMainMenu();
+	static GUILogo instance_;
+	return &instance_;
+}
 
-	virtual void createState();
-	virtual void destroyState();
-	virtual void updateState(float frameTime);
+GUILogo::GUILogo() : 
+	window_(0)
+{
+   create();
+   setVisible(false);
+}
 
-protected:
-	Ogre::SceneManager* menuSceneManager_;
-	Ogre::Camera *camera_;
-	SplinePath path_;
+GUILogo::~GUILogo()
+{
+	window_ = 0;
+}
 
-	bool start(const CEGUI::EventArgs &e);
-	void createSceneManager();
-};
+void GUILogo::create()
+{
+	CEGUI::WindowManager *pWindowManager = CEGUI::WindowManager::getSingletonPtr();
+	window_ = pWindowManager->loadLayoutFromFile("Logo.layout");
+ 
+	if (window_)
+	{
+		CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow()->addChild(window_);
+	}
+}
 
-#endif // __INCLUDE_UIStateMainMenuh_INCLUDE__
+void GUILogo::setVisible(bool visible)
+{
+    window_->setVisible(visible);
+}
+ 
+bool GUILogo::isVisible()
+{
+    return window_->isVisible();
+}

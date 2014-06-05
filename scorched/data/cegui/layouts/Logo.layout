@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="OgreTray/StaticImage" name="StaticImage" >
+        <Property name="Area" value="{{1,-275},{0,30},{1,-9},{0,150}}" />
+        <Property name="Image" value="Logo/Full" />
+        <Property name="MaxSize" value="{{0.5,0},{0.5,0}}" />
+        <Property name="FrameEnabled" value="False" />
+        <Property name="BackgroundEnabled" value="False" />
+    </Window>
+</GUILayout>

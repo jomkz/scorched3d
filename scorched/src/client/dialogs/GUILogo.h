@@ -18,29 +18,25 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_UIStateMainMenuh_INCLUDE__)
-#define __INCLUDE_UIStateMainMenuh_INCLUDE__
+#if !defined(__INCLUDE_GUILogoh_INCLUDE__)
+#define __INCLUDE_GUILogoh_INCLUDE__
 
-#include <uistate/UIStateI.h>
-#include <common/SplinePath.h>
-
-class UIStateMainMenu : public UIStateI
+class GUILogo
 {
 public:
-	UIStateMainMenu();
-	virtual ~UIStateMainMenu();
+	static GUILogo *instance();
 
-	virtual void createState();
-	virtual void destroyState();
-	virtual void updateState(float frameTime);
+	void setVisible(bool visible);
+	bool isVisible(); 
 
 protected:
-	Ogre::SceneManager* menuSceneManager_;
-	Ogre::Camera *camera_;
-	SplinePath path_;
+	void create();   
 
-	bool start(const CEGUI::EventArgs &e);
-	void createSceneManager();
+	CEGUI::Window *window_;
+private:
+	GUILogo();
+	virtual ~GUILogo();
+
 };
 
-#endif // __INCLUDE_UIStateMainMenuh_INCLUDE__
+#endif

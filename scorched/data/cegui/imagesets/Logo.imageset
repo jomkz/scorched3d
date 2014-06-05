@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Imageset version="2" name="Logo" imagefile="Logo.png" nativeHorzRes="472" nativeVertRes="209" autoScaled="vertical" >
+    <Image name="Full" xPos="0" yPos="0" width="472" height="209" />
+ </Imageset>

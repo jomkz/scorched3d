@@ -1524,6 +1524,9 @@
     <ClCompile Include="..\..\common\template\TemplateParser.cpp">
       <Filter>template</Filter>
     </ClCompile>
+    <ClCompile Include="..\dialogs\GUILogo.cpp">
+      <Filter>dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2971,6 +2974,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\template\TemplateParser.h">
       <Filter>template</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dialogs\GUILogo.h">
+      <Filter>dialogs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

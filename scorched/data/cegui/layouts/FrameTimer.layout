@@ -9,6 +9,7 @@
             <Property name="Font" value="DejaVuSans-12" />
             <Property name="Text" value="0.0" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="AlwaysOnTop" value="True" />
             <Property name="HorzFormatting" value="CentreAligned" />
             <Property name="HorzScrollPageSize" value="74" />
             <Property name="VertScrollPageSize" value="19" />
