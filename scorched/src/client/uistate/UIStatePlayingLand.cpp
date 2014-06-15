@@ -28,6 +28,13 @@
 #include <console/ConsoleRuleMethodIAdapter.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <landscapedef/LandscapeDescriptions.h>
+#include <BatchPage.h>
+#include <ImpostorPage.h>
+#include <GrassLoader.h>
+
+#define LANDSCAPE_RESOURCE_GROUP "Landscape"
+
+static UIStatePlayingLand *currentLand_ = 0;
 
 UIStatePlayingLand::UIStatePlayingLand(
 	Ogre::SceneManager* sceneMgr, 
@@ -39,6 +46,7 @@ UIStatePlayingLand::UIStatePlayingLand(
 	sunLight_(sunLight), shadowLight_(shadowLight),
 	hydrax_(hydrax), landscapeGrid_(0), hmap_(0)
 {
+	currentLand_ = this;
 	create();
 }
 
@@ -52,17 +60,22 @@ void UIStatePlayingLand::create()
 	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
 	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
-	// Create the terrain objects
-	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 129, OgreSystem::OGRE_WORLD_SIZE);
-    terrainGroup_->setOrigin(Ogre::Vector3(OgreSystem::OGRE_WORLD_SIZE / 2, 0, OgreSystem::OGRE_WORLD_SIZE + OgreSystem::OGRE_WORLD_SIZE / 2));
-
-	// Load terrain data
-	defineOptions();
 	int landscapeWidth = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeWidth();
 	int landscapeHeight = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getLandscapeHeight();
-	for (int x=0; x<landscapeWidth/128; x++)
+	int landscapeSquaresWidth = landscapeWidth / 128;
+	int landscapeSquaresHeight = landscapeHeight / 128;
+
+	// Create the terrain objects
+	terrainGroup_ = new Ogre::TerrainGroup(sceneMgr_, Ogre::Terrain::ALIGN_X_Z, 129, OgreSystem::OGRE_WORLD_SIZE);
+	// Move the terrain so its bottom left is at 0,0 (the terrain normal counts the top as 0)
+	terrainGroup_->setOrigin(Ogre::Vector3(OgreSystem::OGRE_WORLD_SIZE / 2, 0, 
+		(landscapeSquaresHeight * OgreSystem::OGRE_WORLD_SIZE) - (OgreSystem::OGRE_WORLD_SIZE / 2)));
+
+	// Load terrain data
+	defineTerrainCreationOptions();
+	for (int x = 0; x<landscapeSquaresWidth; x++)
 	{
-		for (int y=0; y<landscapeHeight/128; y++)
+		for (int y=0; y<landscapeSquaresHeight; y++)
 		{
 			defineTerrain(x, y);
 		}
@@ -71,22 +84,27 @@ void UIStatePlayingLand::create()
 	// Load the terrain from the loaded data
 	terrainGroup_->loadAllTerrains(true);
 
-	// Generate the normal map image
-	Ogre::Image normalMapImage;
-	createNormalMap(normalMapImage);
+	// Generate the information required by all layers
+	// including the normal map
+	LayerInfo layerInfo;
+	createLayerInfo(layerInfo, landscapeSquaresWidth, landscapeSquaresHeight);
 
-	// Create the blend maps
-	for (int x=0; x<landscapeWidth/128; x++)
+	// Create the layers including blend maps
+	for (int x=0; x<landscapeSquaresWidth; x++)
 	{
-		for (int y=0; y<landscapeHeight/128; y++)
+		for (int y=0; y<landscapeSquaresHeight; y++)
 		{
 			Ogre::Terrain* terrain = terrainGroup_->getTerrain(x, y);
-			initBlendMaps(terrain, normalMapImage, x, y);
+			initLayers(terrain, layerInfo, x, y);
 		}
 	}
 
+	// Calculate the terrain
 	terrainGroup_->update();
 	terrainGroup_->freeTemporaryResources();
+
+	// Create the grass for the appropriate layers
+	createGrass(layerInfo, landscapeSquaresWidth, landscapeSquaresHeight);
 
 	new ConsoleRuleMethodIAdapter<UIStatePlayingLand>(
 		ScorchedClient::instance()->getConsole(),
@@ -95,7 +113,7 @@ void UIStatePlayingLand::create()
 		"Forces the landscape to recalculate itself based on the information currently in the height map");
 }
 
-void UIStatePlayingLand::defineOptions()
+void UIStatePlayingLand::defineTerrainCreationOptions()
 {
 	LandscapeTex *tex = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getTex();
 	DIALOG_ASSERT(tex->texture.getValue()->getType() == LandscapeTexBase::eTexLayers);
@@ -108,7 +126,7 @@ void UIStatePlayingLand::defineOptions()
     terrainGlobalOptions_->setCompositeMapDistance(10000); 
 	terrainGlobalOptions_->setUseVertexCompressionWhenAvailable(false);
 	terrainGlobalOptions_->setVisibilityFlags(OgreSystem::VisibiltyMaskLandscape);
-	terrainGlobalOptions_->setDefaultResourceGroup("Landscape");
+	terrainGlobalOptions_->setDefaultResourceGroup(LANDSCAPE_RESOURCE_GROUP);
 
     // Important to set these so that the terrain knows what to use for derived (non-realtime) data
     terrainGlobalOptions_->setLightMapDirection(shadowLight_->getDerivedDirection());
@@ -142,13 +160,31 @@ void UIStatePlayingLand::defineOptions()
 	defaultimp.layerList[4].textureNames.push_back(texLayers->texturelayerslope.normaltexturename.getValue());
 }
 
-void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
+void UIStatePlayingLand::getBlendMapWidth(size_t &blendMapWidth, size_t &blendMapHeight)
 {
+	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong when compiled in release mode
+	Ogre::Terrain* firstTerrain = terrainGroup_->getTerrain(0, 0);
+	Ogre::TerrainLayerBlendMap* blendMap0 = firstTerrain->getLayerBlendMap(1);
+	blendMap0->convertUVToImageSpace(1.0, 1.0, &blendMapWidth, &blendMapHeight);
+	blendMapWidth++; // They are indexed by Zero
+	blendMapHeight++;
+}
+
+void UIStatePlayingLand::createLayerInfo(LayerInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight)
+{
+	// Find the most efficient size to create the maps
+	// i.e. the same size as all the blend maps applied to the landscape
+	size_t blendMapWidth = 0, blendMapHeight = 0;
+	getBlendMapWidth(blendMapWidth, blendMapHeight);
+	int fullImageWidth = landscapeSquaresWidth * blendMapWidth;
+	int fullImageHeight = landscapeSquaresHeight * blendMapHeight;
+
 	// Add the entire landscape normal data to an image
 	// The image we can resize to match the blend map size
 	// This image is smoothed during the resize process and is a quick/dirty way
 	// of smoothing the landscape normal data over the blend map
 	// We don't need to do this with the height data as we can get this from the landscape itself
+	// Note: The memory for this is deleted by Ogre because the data is loaded into the image with autodeleete set
 	unsigned char *rawData = OGRE_ALLOC_T(unsigned char, 
 		(hmap_->getMapHeight() + 1)*(hmap_->getMapWidth() + 1)*sizeof(unsigned char), 
 		Ogre::MEMCATEGORY_GENERAL);
@@ -162,20 +198,20 @@ void UIStatePlayingLand::createNormalMap(Ogre::Image &normalMapImage)
 			*currentRawData = (unsigned char) ((normal[2].asFloat() + 1.0f) * 126.0f);
 		}
 	}
-	
-	Ogre::Terrain* firstTerrain = terrainGroup_->getTerrain(0, 0);
+	layerInfo.normalMapImage.loadDynamicImage(rawData, hmap_->getMapWidth() + 1, hmap_->getMapHeight() + 1, 1, Ogre::PF_L8, true);
+	layerInfo.normalMapImage.resize(fullImageWidth, fullImageHeight);
 
-	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong when compiled in release mode
-	size_t blendMapWidth, blendMapHeight;
-	Ogre::TerrainLayerBlendMap* blendMap0 = firstTerrain->getLayerBlendMap(1);
-	blendMap0->convertUVToImageSpace(1.0, 1.0, &blendMapWidth, &blendMapHeight);
-	blendMapWidth++; // They are indexed by Zero
-	blendMapHeight++;
+	// Create the grassmap image
+	rawData = OGRE_ALLOC_T(unsigned char,
+		fullImageWidth * fullImageHeight * sizeof(unsigned char) * 3,
+		Ogre::MEMCATEGORY_GENERAL);
+	layerInfo.grassLayerImage.loadDynamicImage(rawData, fullImageWidth, fullImageHeight, 1, Ogre::PF_BYTE_RGB, true);
 
-	normalMapImage.loadDynamicImage(rawData, hmap_->getMapWidth() + 1, hmap_->getMapHeight() + 1, 1, Ogre::PF_L8, true);
-	int newWidth = hmap_->getMapWidth() / 128 * blendMapWidth;
-	int newHeight = hmap_->getMapHeight() / 128 * blendMapHeight;
-	normalMapImage.resize(newWidth, newHeight);
+	// Create the grassmap density
+	rawData = OGRE_ALLOC_T(unsigned char,
+		fullImageWidth * fullImageHeight * sizeof(unsigned char),
+		Ogre::MEMCATEGORY_GENERAL);
+	layerInfo.grassLayerDensity.loadDynamicImage(rawData, fullImageWidth, fullImageHeight, 1, Ogre::PF_L8, true);
 }
 
 void UIStatePlayingLand::defineTerrain(long tx, long ty)
@@ -203,32 +239,7 @@ void UIStatePlayingLand::defineTerrain(long tx, long ty)
 	terrainGroup_->defineTerrain(tx, ty, &newImport);
 }
 
-Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
-{
-	Ogre::Vector3 newPosition = position + Ogre::Vector3(0,1000000,0);
-	Ogre::Ray ray(newPosition, Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::TerrainGroup::RayResult result = 
-		terrainGroup_->rayIntersects(ray);
-	if (result.hit) 
-	{
-		return result.terrain->getHeightAtWorldPosition(newPosition);
-	}
-	return 0.0f;
-}
-
-bool UIStatePlayingLand::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition)
-{
-	Ogre::TerrainGroup::RayResult result = 
-		terrainGroup_->rayIntersects(cameraRay);
-	if (result.hit) 
-	{
-		*outPosition = result.position;
-		return true;
-	}
-	return false;
-}
-
-void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty)
+void UIStatePlayingLand::initLayers(Ogre::Terrain* terrain, LayerInfo &layerInfo, long tx, long ty)
 {
 	unsigned int seed = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getSeed();
 	LandscapeTex *tex = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getTex();
@@ -274,11 +285,12 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 	Ogre::TerrainLayerBlendMap* blendMap2 = terrain->getLayerBlendMap(3);
 	Ogre::TerrainLayerBlendMap* blendMapStone = terrain->getLayerBlendMap(4);
 
-	// Do this rather than firstTerrain->getLayerBlendMapSize() as it seems to be wrong when compiled in release mode
+	Ogre::Image textureMap1 = Ogre::Image();
+	textureMap1.load(S3D::replace(texLayers->texturelayer2.texturename.getValue(), "dds", "jpg"), LANDSCAPE_RESOURCE_GROUP);
+	float textureMap1WorldSize = texLayers->texturelayer2.worldsize.getValue().asFloat();
+
 	size_t blendMapWidth, blendMapHeight;
-	blendMap0->convertUVToImageSpace(1.0, 1.0, &blendMapWidth, &blendMapHeight);
-	blendMapWidth++; // They are indexed by Zero
-	blendMapHeight++;
+	getBlendMapWidth(blendMapWidth, blendMapHeight);
 
 	float imageMultiplierX = float(blendMapWidth) / 128.0f;
 	float imageMultiplierY = float(blendMapHeight) / 128.0f;
@@ -298,13 +310,11 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 			blendMap0->convertImageToTerrainSpace(x, y, &tsx, &tsy);
 			float hxf = (tsx * 128.0f) + sx;
 			float hyf = (tsy * 128.0f) + sy;
-			int hx = int(hxf);
-			int hy = int(hyf);
 
 			// Get height and normal information
 			int ix = int(hxf * imageMultiplierX);
 			int iy = int(hyf * imageMultiplierY);
-			Ogre::ColourValue tempColor = normalMapImage.getColourAt(ix, iy, 0);
+			Ogre::ColourValue tempColor = layerInfo.normalMapImage.getColourAt(ix, iy, 0);
 			float normal = tempColor.g;
 			// This stops the height bands from being too uniform
 			float offSetHeight = octave_noise_2d(layerOffsetNoiseOctaves, layerOffsetNoisePersistence, layerOffsetNoiseScale, -hxf, -hyf)
@@ -368,7 +378,8 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 				if (baseValue > 0.0f)
 				{
 					if (heightPer < blendDetailHeightStartFactorFactor) baseValue *= (heightPer - blendDetailHeightStartFactor) * blendDetailAmount;
-					else if (heightPer > float(numberSources) - blendDetailHeightEndFactorFactor) baseValue *= 1.0f - ((heightPer - (float(numberSources) - blendDetailHeightEndFactorFactor)) * blendDetailAmount);
+					else if (heightPer > float(numberSources) - blendDetailHeightEndFactorFactor) baseValue *= 1.0f - 
+						((heightPer - (float(numberSources) - blendDetailHeightEndFactorFactor)) * blendDetailAmount);
 					blendFirstAmount *= Ogre::Math::Clamp(1.0f - baseValue, (Ogre::Real) 0, (Ogre::Real) 1);
 					blendSecondAmount *= Ogre::Math::Clamp(1.0f - baseValue, (Ogre::Real) 0, (Ogre::Real) 1);
 				}
@@ -384,6 +395,20 @@ void UIStatePlayingLand::initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &norm
 			}
 			(*pBlendStone) = blendSideAmount;
 			pBlendStone++;
+
+			// Update grass
+			float grassDensity = 0.0f;
+			if (heightIndex == 1) grassDensity = blendFirstAmount;
+			else if (heightIndex + 1 == 1) grassDensity = blendSecondAmount;
+			Ogre::ColourValue grassDensityValue(grassDensity, grassDensity, grassDensity, 1.0f);
+			layerInfo.grassLayerDensity.setColourAt(grassDensityValue, ix, iy, 0);
+			
+			// Find the color for this layer at the specified point
+			int colix = int(hxf * OgreSystem::OGRE_WORLD_SCALE / textureMap1WorldSize * float(textureMap1.getWidth())) % textureMap1.getWidth();
+			int coliy = int(hyf * OgreSystem::OGRE_WORLD_SCALE / textureMap1WorldSize * float(textureMap1.getHeight())) % textureMap1.getHeight();
+			Ogre::ColourValue grassColorValue(1.0f, 0.f, 0.0f, 1.0f);
+			if (grassDensity > 0.0f) grassColorValue = textureMap1.getColourAt(colix, coliy, 0);
+			layerInfo.grassLayerImage.setColourAt(grassColorValue, ix, iy, 0);
 		}
 	}
 
@@ -438,6 +463,8 @@ void UIStatePlayingLand::update(float frameTime)
 		}
 		dirtyTerrains_.clear();
 	}
+
+	grass_->update();
 }
 
 void UIStatePlayingLand::updateHeight(int x, int y, int w, int h)
@@ -564,4 +591,76 @@ void UIStatePlayingLand::hideLandscapePoints()
 {
 	OgreSystem::destroySceneNode(landscapeGrid_);
 	landscapeGrid_ = 0;
+}
+
+// Used by paging scene manager
+float UIStatePlayingLand::getTerrainHeight(const float x, const float z, void *userData)
+{
+	Ogre::Terrain *pTerrain = 0;
+	float height = currentLand_->terrainGroup_->getHeightAtWorldPosition(x, 0, z, &pTerrain);
+	return height;
+}
+
+Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
+{
+	Ogre::Vector3 newPosition = position + Ogre::Vector3(0, 1000000, 0);
+	Ogre::Ray ray(newPosition, Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::TerrainGroup::RayResult result =
+		terrainGroup_->rayIntersects(ray);
+	if (result.hit)
+	{
+		return result.terrain->getHeightAtWorldPosition(newPosition);
+	}
+	return 0.0f;
+}
+
+bool UIStatePlayingLand::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition)
+{
+	Ogre::TerrainGroup::RayResult result =
+		terrainGroup_->rayIntersects(cameraRay);
+	if (result.hit)
+	{
+		*outPosition = result.position;
+		return true;
+	}
+	return false;
+}
+
+void UIStatePlayingLand::createGrass(LayerInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight)
+{
+	// Paged Geometry
+	grass_ = new Forests::PagedGeometry(camera_, 50);
+	grass_->addDetailLevel<Forests::GrassPage>(OgreSystem::OGRE_WORLD_SCALE * 10);
+
+	Forests::GrassLoader *grassLoader = new Forests::GrassLoader(grass_);
+	grass_->setPageLoader(grassLoader);
+	grassLoader->setHeightFunction(&getTerrainHeight);
+	Forests::GrassLayer *layer = grassLoader->addLayer("grass");
+	layer->setMinimumSize(4.0f, 4.0f);
+	layer->setMaximumSize(5.0f, 5.0f);
+	layer->setAnimationEnabled(false);
+	layer->setSwayDistribution(10.0f);
+	layer->setSwayLength(0.5f);
+	layer->setSwaySpeed(0.5f);
+	layer->setDensity(0.25f);
+	//layer->setRenderTechnique(Forests::GRASSTECH_SPRITE);
+	layer->setFadeTechnique(Forests::FADETECH_GROW);
+
+	Ogre::TextureManager &textureManager = Ogre::TextureManager::getSingleton();
+	layerInfo.grassLayerDensity.flipAroundY();
+	Ogre::TexturePtr densityTexture = textureManager.loadImage(
+		"PSMDensityMap", "General", layerInfo.grassLayerDensity, Ogre::TEX_TYPE_2D, 1);
+	layer->setDensityMap(densityTexture);
+	textureManager.remove("PSMDensityMap"); // Clean up texture, texture data is copied by PSM
+
+	layerInfo.grassLayerImage.flipAroundY();
+	Ogre::TexturePtr colorTexture = textureManager.loadImage(
+		"PSMColorMap", "General", layerInfo.grassLayerImage, Ogre::TEX_TYPE_2D, 1);
+	layer->setColorMap(colorTexture);
+	textureManager.remove("PSMColorMap"); // Clean up texture, texture data is copied by PSM
+
+	layer->setMapBounds(Forests::TBounds(0, 0,
+		OgreSystem::OGRE_WORLD_SIZE * landscapeSquaresWidth,
+		OgreSystem::OGRE_WORLD_SIZE * landscapeSquaresHeight));
+
 }

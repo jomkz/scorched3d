@@ -59,6 +59,7 @@ namespace S3D
 	std::string &formatStringList(const char *format, va_list ap);
 	std::string &getThreadLocalString();
 	std::string &getThreadLocalStringCopy(const std::string &other);
+	std::string &replace(std::string &src, const std::string &lookFor, const std::string &replace);
 	void strtok(const std::string &str, const std::string &tok, std::list<std::string> &result);
 }
 

@@ -30,12 +30,9 @@ class PlacementObject : public XMLEntryContainer
 public:
 	enum Type
 	{
-		eModel,
 		eTarget,
 		eGroup,
 		eRandom,
-		eTank,
-		eShadow,
 		eHeight,
 		eNone
 	};

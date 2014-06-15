@@ -144,6 +144,7 @@ void OgreSystem::loadResources()
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/bloom", "FileSystem", "General");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/general/materials", "FileSystem", "General");
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/general/textures", "FileSystem", "General");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/grass", "FileSystem", "General");
 
 	// Particle Universe
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/core", "FileSystem", "ParticleUniverse");

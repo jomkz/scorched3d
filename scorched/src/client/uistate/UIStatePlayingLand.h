@@ -24,6 +24,7 @@
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
 #include <Hydrax/Hydrax.h>
+#include <PagedGeometry.h>
 #include <set>
 
 class HeightMap;
@@ -50,20 +51,34 @@ protected:
 	Ogre::TerrainGlobalOptions *terrainGlobalOptions_;
 	Ogre::TerrainGroup *terrainGroup_;
 	Ogre::Light *sunLight_, *shadowLight_;
+	Forests::PagedGeometry *grass_;
 	Hydrax::Hydrax *hydrax_;
 	std::set<Ogre::Terrain *> dirtyTerrains_;
 	Ogre::SceneNode *landscapeGrid_;
 	HeightMap *hmap_;
 
+	class LayerInfo
+	{
+	public:
+		Ogre::Image normalMapImage;
+		Ogre::Image grassLayerImage;
+		Ogre::Image grassLayerDensity;
+	};
+
 	void create();
-	void defineOptions();
+	void defineTerrainCreationOptions();
 	void defineTerrain(long x, long y);
-	void createNormalMap(Ogre::Image &normalMapImage);
-	void initBlendMaps(Ogre::Terrain* terrain, Ogre::Image &normalMapImage, long tx, long ty);
+	void createLayerInfo(LayerInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
+	void initLayers(Ogre::Terrain* terrain, LayerInfo &layerInfo, long tx, long ty);
 	void updateHeightTerrain(int tx, int ty, const Ogre::Rect &updateRect);
 	void updateAllTerrainHeight();
 	void showLandscapePoints();
 	void hideLandscapePoints();
+	void createGrass(LayerInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
+	void getBlendMapWidth(size_t &width, size_t &height);
+
+	// Used by paging scene manager
+	static inline float getTerrainHeight(const float x, const float z, void *userData = NULL);
 };
 
 #endif // __INCLUDE_UIStatePlayingLandh_INCLUDE__
