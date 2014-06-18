@@ -28,6 +28,7 @@
 #include <set>
 
 class HeightMap;
+class LandscapeTexLayer;
 class UIStatePlayingLand
 {
 public:
@@ -51,30 +52,45 @@ protected:
 	Ogre::TerrainGlobalOptions *terrainGlobalOptions_;
 	Ogre::TerrainGroup *terrainGroup_;
 	Ogre::Light *sunLight_, *shadowLight_;
-	Forests::PagedGeometry *grass_;
 	Hydrax::Hydrax *hydrax_;
 	std::set<Ogre::Terrain *> dirtyTerrains_;
 	Ogre::SceneNode *landscapeGrid_;
 	HeightMap *hmap_;
+	std::list<Forests::PagedGeometry *> grass_;
 
 	class LayerInfo
 	{
 	public:
-		Ogre::Image normalMapImage;
+		LayerInfo() : hasGrass(false) {}
+		~LayerInfo() {}
+
+		bool hasGrass;
+		LandscapeTexLayer *texLayer;
 		Ogre::Image grassLayerImage;
 		Ogre::Image grassLayerDensity;
+	};
+
+	class LayersInfo
+	{
+	public:
+		LayersInfo() {}
+		~LayersInfo() { while (!layers.empty()) { delete layers.back();  layers.pop_back(); } }
+
+		Ogre::Image normalMapImage;
+		std::vector<LayerInfo *> layers;
 	};
 
 	void create();
 	void defineTerrainCreationOptions();
 	void defineTerrain(long x, long y);
-	void createLayerInfo(LayerInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
-	void initLayers(Ogre::Terrain* terrain, LayerInfo &layerInfo, long tx, long ty);
+	void createLayerInfo(LayersInfo &layersInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
+	void initLayers(Ogre::Terrain* terrain, LayersInfo &layerInfo, long tx, long ty);
+	void initLayer(LayersInfo &layersInfo, LandscapeTexLayer &layer, int fullImageWidth, int fullImageHeight);
 	void updateHeightTerrain(int tx, int ty, const Ogre::Rect &updateRect);
 	void updateAllTerrainHeight();
 	void showLandscapePoints();
 	void hideLandscapePoints();
-	void createGrass(LayerInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
+	void createGrass(LayersInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
 	void getBlendMapWidth(size_t &width, size_t &height);
 
 	// Used by paging scene manager

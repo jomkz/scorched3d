@@ -22,6 +22,7 @@
 #define __INCLUDE_LandscapeTexh_INCLUDE__
 
 #include <landscapedef/LandscapeInclude.h>
+#include <landscapedef/LandscapeGrass.h>
 
 class LandscapeTexBase : public XMLEntryContainer
 {
@@ -56,6 +57,7 @@ public:
 	virtual ~LandscapeTexLayer();
 
 	XMLEntryFixed blendheightfactor;
+	LandscapeGrassList grassList;
 };
 
 class LandscapeTexLayerSlope : public LandscapeTexLayerBase

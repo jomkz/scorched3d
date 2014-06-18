@@ -150,6 +150,7 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeEvent.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeEventAction.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeEventCondition.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeGrass.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeInclude.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeMovement.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeMusic.cpp" />
@@ -638,6 +639,7 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeEvent.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeEventAction.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeEventCondition.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeGrass.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeInclude.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeMovement.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeMusic.h" />

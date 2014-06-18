@@ -15,6 +15,13 @@
       <texturename>TxUAIUgrassUdirtU01.dds</texturename> <!-- green.dds / TxUAIUgrassUdirtU01.dds -->
       <normaltexturename>TxUAIUgrassUdirtU01_n.dds</normaltexturename>
       <blendheightfactor>0.4</blendheightfactor>
+      <grass>
+        <materialname>grass</materialname>
+        <visibledistance>10</visibledistance>
+        <density>0.25</density>
+        <minimumsize>4</minimumsize>
+        <maximumsize>4</maximumsize>
+      </grass>
     </texturelayer2>
     <texturelayer3>
       <worldsize>300</worldsize>

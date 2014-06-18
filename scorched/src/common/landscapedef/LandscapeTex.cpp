@@ -63,6 +63,7 @@ LandscapeTexLayer::LandscapeTexLayer() :
 	blendheightfactor("Each texture height layer is blended this proportion into the next height band.")
 {
 	addChildXMLEntry("blendheightfactor", &blendheightfactor);
+	addChildXMLEntry("grass", &grassList);
 }
 
 LandscapeTexLayer::~LandscapeTexLayer()

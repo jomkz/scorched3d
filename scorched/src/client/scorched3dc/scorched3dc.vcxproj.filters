@@ -1527,6 +1527,9 @@
     <ClCompile Include="..\dialogs\GUILogo.cpp">
       <Filter>dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeGrass.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2977,6 +2980,9 @@
     </ClInclude>
     <ClInclude Include="..\dialogs\GUILogo.h">
       <Filter>dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeGrass.h">
+      <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
