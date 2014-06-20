@@ -66,7 +66,6 @@ protected:
 
 		bool hasGrass;
 		LandscapeTexLayer *texLayer;
-		Ogre::Image grassLayerImage;
 		Ogre::Image grassLayerDensity;
 	};
 
@@ -77,6 +76,7 @@ protected:
 		~LayersInfo() { while (!layers.empty()) { delete layers.back();  layers.pop_back(); } }
 
 		Ogre::Image normalMapImage;
+		Ogre::Image textureMapImage;
 		std::vector<LayerInfo *> layers;
 	};
 
