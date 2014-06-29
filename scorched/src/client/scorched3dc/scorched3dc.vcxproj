@@ -155,11 +155,13 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeMovement.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeMusic.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeOptions.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSky.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeSound.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeSoundPosition.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeSoundSound.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeSoundTiming.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeTex.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeWater.cpp" />
     <ClCompile Include="..\..\common\landscapemap\DeformLandscape.cpp" />
     <ClCompile Include="..\..\common\landscapemap\GroundMaps.cpp" />
     <ClCompile Include="..\..\common\landscapemap\HeightMap.cpp" />
@@ -644,11 +646,13 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeMovement.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeMusic.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeOptions.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSky.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeSound.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeSoundPosition.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeSoundSound.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeSoundTiming.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeTex.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeWater.h" />
     <ClInclude Include="..\..\common\landscapemap\DeformLandscape.h" />
     <ClInclude Include="..\..\common\landscapemap\GroundMaps.h" />
     <ClInclude Include="..\..\common\landscapemap\HeightMap.h" />

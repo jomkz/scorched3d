@@ -249,7 +249,7 @@ void Napalm::simulateAddEdge(int x, int y)
 	{
 		// Check napalm is under water 
 		LandscapeTex &tex = *context_->getLandscapeMaps().getDescriptions().getTex();
-		fixed waterHeight = tex.waterHeight.getValue();
+		fixed waterHeight = tex.water.waterHeight.getValue();
 
 		if (height < waterHeight) // Water height
 		{

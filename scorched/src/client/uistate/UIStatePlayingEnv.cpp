@@ -22,6 +22,9 @@
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
 #include <client/ClientOptions.h>
+#include <client/ScorchedClient.h>
+#include <landscapedef/LandscapeTex.h>
+#include <landscapemap/LandscapeMaps.h>
 
 class HydraxRttListener : public Hydrax::RttManager::RttListener
 {
@@ -132,6 +135,7 @@ UIStatePlayingEnv::~UIStatePlayingEnv()
 
 void UIStatePlayingEnv::create()
 {
+	LandscapeTex *tex = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getTex();
 	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
 	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
@@ -139,7 +143,7 @@ void UIStatePlayingEnv::create()
 
 	// Light
 	sunLight_ = sceneMgr_->createLight("LightSun");
-	sunLight_->setDiffuseColour(1, 1, 1);
+	sunLight_->setDiffuseColour(1, 1, 1); // Temp this is set properly later
 	sunLight_->setCastShadows(false);
 
 	// Shadow caster
@@ -153,6 +157,14 @@ void UIStatePlayingEnv::create()
 	Ogre::LogManager::getSingletonPtr()->logMessage("*** Creating HydraX ***");
 	hydraX_ = new Hydrax::Hydrax(sceneMgr_, camera_, camera_->getViewport());
 
+	// Water grid options
+	Hydrax::Module::ProjectedGrid::Options projectedOptions; /*Generic one*/
+	projectedOptions.Strength = tex->water.strength.getValue().asFloat();
+	projectedOptions.ChoppyStrength = tex->water.choppystrength.getValue().asFloat();
+	projectedOptions.ChoppyWaves = tex->water.choppywaves.getValue();
+	projectedOptions.Smooth = tex->water.smooth.getValue();
+	projectedOptions.Elevation = tex->water.waterHeight.getValue().asFloat() * OgreSystem::OGRE_WORLD_HEIGHT_SCALE;
+
 	// Create our projected grid module  
 	Hydrax::Module::ProjectedGrid *hydraxModule = new Hydrax::Module::ProjectedGrid(// Hydrax parent pointer
 		hydraX_,
@@ -163,7 +175,7 @@ void UIStatePlayingEnv::create()
 		// Normal mode
 		Hydrax::MaterialManager::NM_VERTEX,
 		// Projected grid options
-		Hydrax::Module::ProjectedGrid::Options(/*Generic one*/));
+		projectedOptions);
 
 	// Set our module
 	hydraX_->setModule(static_cast<Hydrax::Module::Module*>(hydraxModule));

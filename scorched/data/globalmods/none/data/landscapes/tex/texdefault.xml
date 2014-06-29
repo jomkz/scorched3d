@@ -48,4 +48,6 @@
       <blendslopefactor>0.15</blendslopefactor>
     </texturelayerslope>
   </texture>
+  <sky/>
+  <water/>
 </tex>

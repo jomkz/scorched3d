@@ -23,6 +23,8 @@
 
 #include <landscapedef/LandscapeInclude.h>
 #include <landscapedef/LandscapeGrass.h>
+#include <landscapedef/LandscapeWater.h>
+#include <landscapedef/LandscapeSky.h>
 
 class LandscapeTexBase : public XMLEntryContainer
 {
@@ -126,7 +128,8 @@ public:
 	virtual ~LandscapeTex();
 	
 	LandscapeTexChoice texture;
-	XMLEntryFixed waterHeight;
+	LandscapeWater water;
+	LandscapeSky sky;
 private:
 	LandscapeTex(const LandscapeTex &other);
 	LandscapeTex &operator=(LandscapeTex &other);

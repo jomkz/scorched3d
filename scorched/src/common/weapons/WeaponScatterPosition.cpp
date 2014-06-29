@@ -50,7 +50,7 @@ void WeaponScatterPosition::fireWeapon(ScorchedContext &context,
 {
 	// Mininum height, if we are grounding
 	LandscapeTex &tex = *context.getLandscapeMaps().getDescriptions().getTex();
-	fixed allowedHeight = S3D_MAX(fixed(0), tex.waterHeight.getValue());
+	fixed allowedHeight = S3D_MAX(fixed(0), tex.water.waterHeight.getValue());
 
 	fixed scatterpercentage = scatterpercentage_.getValue(context);
 

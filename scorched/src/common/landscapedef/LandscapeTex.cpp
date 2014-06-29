@@ -177,11 +177,11 @@ void LandscapeTexChoice::getAllTypes(std::set<std::string> &allTypes)
 }
 
 LandscapeTex::LandscapeTex(const char *name, const char *description, bool required) : 
-	LandscapeInclude(name, description, required),
-	waterHeight("The height of the landscape water", 0, -10)
+	LandscapeInclude(name, description, required)
 {
 	addChildXMLEntry("texture", &texture);
-	addChildXMLEntry("waterheight", &waterHeight);
+	addChildXMLEntry("water", &water);
+	addChildXMLEntry("sky", &sky);
 }
 
 LandscapeTex::~LandscapeTex()

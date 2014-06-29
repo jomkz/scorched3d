@@ -1530,6 +1530,12 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeGrass.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeWater.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeSky.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2982,6 +2988,12 @@
       <Filter>dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeGrass.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeWater.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeSky.h">
       <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>
