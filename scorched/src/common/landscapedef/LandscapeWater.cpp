@@ -34,6 +34,7 @@ LandscapeWater::LandscapeWater() :
 	addChildXMLEntry("smooth", &smooth);
 	addChildXMLEntry("choppywaves", &choppywaves);
 	addChildXMLEntry("choppystrength", &choppystrength);
+	addChildXMLEntry("watercolorgradient", &watergradient);
 }
 
 LandscapeWater::~LandscapeWater()

@@ -1536,6 +1536,9 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeSky.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeColorGradient.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2994,6 +2997,9 @@
       <Filter>landscapedef</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeSky.h">
+      <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeColorGradient.h">
       <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>

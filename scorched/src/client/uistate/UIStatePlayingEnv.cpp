@@ -24,6 +24,7 @@
 #include <client/ClientOptions.h>
 #include <client/ScorchedClient.h>
 #include <landscapedef/LandscapeTex.h>
+#include <landscapedef/LandscapeWater.h>
 #include <landscapemap/LandscapeMaps.h>
 
 class HydraxRttListener : public Hydrax::RttManager::RttListener
@@ -94,38 +95,24 @@ private:
 	Hydrax::Hydrax *hydraX_;
 };
 
+static void addGradient(SkyX::ColorGradient &dest, LandscapeColorGradient &src)
+{
+	std::list<XMLEntryFixedVector4 *>::iterator itor = src.colors.getChildren().begin(),
+		end = src.colors.getChildren().end();
+	for (; itor != end; ++itor)
+	{
+		FixedVector4 &value = (*itor)->getValue();
+		dest.addCFrame(SkyX::ColorGradient::ColorFrame(
+			Ogre::Vector3(value[0].asFloat(), value[1].asFloat(), value[2].asFloat()), value[3].asFloat()));
+	}
+}
+
 UIStatePlayingEnv::UIStatePlayingEnv(
 	Ogre::SceneManager* sceneMgr, 
 	Ogre::Camera* camera) : 
 	sceneMgr_(sceneMgr), camera_(camera),
 	skyX_(0), hydraX_(0)
 {
-	// Color gradients
-	// Water
-	waterGradient_ = SkyX::ColorGradient();
-	waterGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.058209f,0.535822f,0.779105f)*0.4f, 1.0f));
-	waterGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.058209f,0.535822f,0.729105f)*0.3f, 0.8f));
-	waterGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.058209f,0.535822f,0.679105f)*0.25f, 0.6f));
-	waterGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.058209f,0.535822f,0.679105f)*0.2f, 0.5f));
-	waterGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.058209f,0.535822f,0.679105f)*0.1f, 0.45f));
-	waterGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.058209f,0.535822f,0.679105f)*0.025f, 0.0f));
-	// Sun
-	sunGradient_ = SkyX::ColorGradient();
-	sunGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.8f,0.75f,0.55f)*1.5f, 1.0f));
-	sunGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.8f,0.75f,0.55f)*1.4f, 0.75f));
-	sunGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.8f,0.75f,0.55f)*1.3f, 0.5625f));
-	sunGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.6f,0.5f,0.2f)*1.5f, 0.5f));
-	sunGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.5f,0.5f,0.5f)*0.25f, 0.45f));
-	sunGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(0.5f,0.5f,0.5f)*0.01f, 0.0f));
-	// Ambient
-	ambientGradient_ = SkyX::ColorGradient();
-	ambientGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(1.0f,1.0f,1.0f)*1.0f, 1.0f));
-	ambientGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(1.0f,1.0f,1.0f)*1.0f, 0.6f));
-	ambientGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(1.0f,1.0f,1.0f)*0.6f, 0.5f));
-	ambientGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(1.0f,1.0f,1.0f)*0.3f, 0.45f));
-	ambientGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(1.0f,1.0f,1.0f)*0.1f, 0.35f));
-	ambientGradient_.addCFrame(SkyX::ColorGradient::ColorFrame(Ogre::Vector3(1.0f,1.0f,1.0f)*0.05f, 0.0f));
-
 	create();
 }
 
@@ -139,7 +126,21 @@ void UIStatePlayingEnv::create()
 	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
 	Ogre::RenderWindow *ogreRenderWindow = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 
-	sceneMgr_->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
+	// Color gradients
+	// Water
+	waterGradient_ = SkyX::ColorGradient();
+	addGradient(waterGradient_, tex->water.watergradient);
+	// Sun
+	sunGradient_ = SkyX::ColorGradient();
+	addGradient(sunGradient_, tex->sky.sungradient);
+	// Ambient
+	ambientGradient_ = SkyX::ColorGradient();
+	addGradient(ambientGradient_, tex->sky.ambientgradient);
+
+	sceneMgr_->setAmbientLight(Ogre::ColourValue(
+		tex->sky.ambientcolor.getValue()[0].asFloat(), 
+		tex->sky.ambientcolor.getValue()[1].asFloat(),
+		tex->sky.ambientcolor.getValue()[2].asFloat()));
 
 	// Light
 	sunLight_ = sceneMgr_->createLight("LightSun");

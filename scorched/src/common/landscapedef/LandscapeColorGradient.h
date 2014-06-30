@@ -18,23 +18,27 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandscapeWaterh_INCLUDE__)
-#define __INCLUDE_LandscapeWaterh_INCLUDE__
+#if !defined(__INCLUDE_LandscapeColorGradienth_INCLUDE__)
+#define __INCLUDE_LandscapeColorGradienth_INCLUDE__
 
-#include <landscapedef/LandscapeColorGradient.h>
+#include <XML/XMLEntryComplexTypes.h>
 
-class LandscapeWater : public XMLEntryContainer
+class LandscapeColorGradientList : public XMLEntryList<XMLEntryFixedVector4>
 {
 public:
-	LandscapeWater();
-	virtual ~LandscapeWater();
+	LandscapeColorGradientList();
+	virtual ~LandscapeColorGradientList();
 
-	XMLEntryFixed waterHeight;
-	XMLEntryFixed strength;
-	XMLEntryBool smooth;
-	XMLEntryBool choppywaves;
-	XMLEntryFixed choppystrength;
-	LandscapeColorGradient watergradient;
+	virtual XMLEntryFixedVector4 *createXMLEntry(void *xmlData);
 };
 
-#endif // __INCLUDE_LandscapeWaterh_INCLUDE__
+class LandscapeColorGradient : public XMLEntryContainer
+{
+public:
+	LandscapeColorGradient();
+	virtual ~LandscapeColorGradient();
+
+	LandscapeColorGradientList colors;
+};
+
+#endif // __INCLUDE_LandscapeColorGradienth_INCLUDE__

@@ -665,7 +665,7 @@ XMLEntryFixedVector::XMLEntryFixedVector(const char *description) :
 
 XMLEntryFixedVector::XMLEntryFixedVector(const char *description,
 	unsigned int data,
-	FixedVector value) :
+	const FixedVector &value) :
 	XMLEntrySimpleType(description, data), 
 	value_(value), defaultValue_(value)
 {
@@ -717,7 +717,75 @@ FixedVector &XMLEntryFixedVector::getValue()
 	return value_;
 }
 
-bool XMLEntryFixedVector::setValue(FixedVector value)
+bool XMLEntryFixedVector::setValue(const FixedVector &value)
+{
+	value_ = value;
+	return true;
+}
+
+XMLEntryFixedVector4::XMLEntryFixedVector4(const char *description) :
+	XMLEntrySimpleType(description, XMLEntrySimpleType::eDataRequired)
+{
+
+}
+
+XMLEntryFixedVector4::XMLEntryFixedVector4(const char *description,
+	unsigned int data,
+	const FixedVector4 &value) :
+	XMLEntrySimpleType(description, data),
+	value_(value), defaultValue_(value)
+{
+
+}
+
+XMLEntryFixedVector4::~XMLEntryFixedVector4()
+{
+
+}
+
+void XMLEntryFixedVector4::getValueAsString(std::string &result)
+{
+	std::string a = value_[0].asString();
+	std::string b = value_[1].asString();
+	std::string c = value_[2].asString();
+	std::string d = value_[3].asString();
+
+	result = a + " " + b + " " + c + " " + d;
+}
+
+void XMLEntryFixedVector4::getDefaultValueAsString(std::string &result)
+{
+	std::string a = defaultValue_[0].asString();
+	std::string b = defaultValue_[1].asString();
+	std::string c = defaultValue_[2].asString();
+	std::string d = defaultValue_[3].asString();
+
+	result = a + " " + b + " " + c + " " + d;
+}
+
+bool XMLEntryFixedVector4::setValueFromString(const std::string &string)
+{
+	FixedVector4 value;
+
+	int i = 0;
+	std::list<std::string> tokResult;
+	S3D::strtok(string, " ", tokResult);
+	std::list<std::string>::iterator tokItor = tokResult.begin(),
+		tokEnd = tokResult.end();
+	for (; tokItor != tokEnd; ++tokItor)
+	{
+		value[i++] = fixed(tokItor->c_str());
+	}
+	if (i != 4) return false;
+	return setValue(value);
+}
+
+FixedVector4 &XMLEntryFixedVector4::getValue()
+{
+	return value_;
+}
+
+bool XMLEntryFixedVector4::setValue(const FixedVector4 &value)
 {
 	value_ = value;
 	return true;

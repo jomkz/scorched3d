@@ -48,6 +48,32 @@
       <blendslopefactor>0.15</blendslopefactor>
     </texturelayerslope>
   </texture>
-  <sky/>
-  <water/>
+  <sky>
+    <ambientcolorgradient>
+      <color>1.000000 1.000000 1.000000 1.000000</color>
+      <color>1.000000 1.000000 1.000000 0.600000</color>
+      <color>0.600000 0.600000 0.600000 0.500000</color>
+      <color>0.300000 0.300000 0.300000 0.450000</color>
+      <color>0.100000 0.100000 0.100000 0.350000</color>
+      <color>0.050000 0.050000 0.050000 0.000000</color>
+    </ambientcolorgradient>
+    <suncolorgradient>
+      <color>1.200000 1.125000 0.825000 1.000000</color>
+      <color>1.120000 1.050000 0.770000 0.750000</color>
+      <color>1.040000 0.975000 0.715000 0.562500</color>
+      <color>0.900000 0.750000 0.300000 0.500000</color>
+      <color>0.125000 0.125000 0.125000 0.450000</color>
+      <color>0.005000 0.005000 0.005000 0.000000</color>
+    </suncolorgradient>
+  </sky>
+  <water>
+    <watercolorgradient>
+      <color>0.023284 0.214329 0.311642 1.000000</color>
+      <color>0.017463 0.160747 0.218732 0.800000</color>
+      <color>0.014552 0.133955 0.169776 0.600000</color>
+      <color>0.011642 0.107164 0.135821 0.500000</color>
+      <color>0.005821 0.053582 0.067910 0.450000</color>
+      <color>0.001455 0.013396 0.016978 0.000000</color>
+    </watercolorgradient>
+  </water>
 </tex>

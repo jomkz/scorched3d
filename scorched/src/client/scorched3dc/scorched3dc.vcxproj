@@ -139,6 +139,7 @@
     <ClCompile Include="..\..\common\image\ImageID.cpp" />
     <ClCompile Include="..\..\common\image\ImagePngFactory.cpp" />
     <ClCompile Include="..\..\common\image\ImageStore.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeColorGradient.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefn.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefnDeform.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeDefnHeightMap.cpp" />
@@ -629,6 +630,7 @@
     <ClInclude Include="..\..\common\image\ImageID.h" />
     <ClInclude Include="..\..\common\image\ImagePngFactory.h" />
     <ClInclude Include="..\..\common\image\ImageStore.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeColorGradient.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefn.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefnDeform.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeDefnHeightMap.h" />

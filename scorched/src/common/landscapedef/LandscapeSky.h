@@ -21,7 +21,7 @@
 #if !defined(__INCLUDE_LandscapeSkyh_INCLUDE__)
 #define __INCLUDE_LandscapeSkyh_INCLUDE__
 
-#include <XML/XMLEntryComplexTypes.h>
+#include <landscapedef/LandscapeColorGradient.h>
 
 class LandscapeSky : public XMLEntryContainer
 {
@@ -29,6 +29,9 @@ public:
 	LandscapeSky();
 	virtual ~LandscapeSky();
 
+	XMLEntryFixedVector ambientcolor;
+	LandscapeColorGradient sungradient;
+	LandscapeColorGradient ambientgradient;
 };
 
 #endif // __INCLUDE_LandscapeSkyh_INCLUDE__

@@ -1,5 +1,10 @@
 <tex>
   <texture type="none"/>
-  <sky/>
-  <water/>
+  <sky>
+    <ambientcolorgradient/>
+    <suncolorgradient/>
+  </sky>
+  <water>
+    <watercolorgradient/>
+  </water>
 </tex>

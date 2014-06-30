@@ -21,9 +21,13 @@
 #include <landscapedef/LandscapeSky.h>
 
 LandscapeSky::LandscapeSky() :
-	XMLEntryContainer("LandscapeSky", 
-		"Defines water.")
+	XMLEntryContainer("LandscapeSky", "Defines sky."),
+	ambientcolor("The ambient scene color, regardless of other lighting effects.", 0, 
+		FixedVector(fixed(true, 4000), fixed(true, 4000), fixed(true, 4000)))
 {
+	addChildXMLEntry("ambientcolor", &ambientcolor);
+	addChildXMLEntry("ambientcolorgradient", &ambientgradient);
+	addChildXMLEntry("suncolorgradient", &sungradient);
 }
 
 LandscapeSky::~LandscapeSky()

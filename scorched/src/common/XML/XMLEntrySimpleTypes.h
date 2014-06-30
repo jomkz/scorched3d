@@ -304,7 +304,7 @@ public:
 	XMLEntryFixedVector(const char *description);
 	XMLEntryFixedVector(const char *description,
 		unsigned int data,
-		FixedVector defaultValue);
+		const FixedVector &defaultValue);
 	virtual ~XMLEntryFixedVector();
 
 	virtual void getTypeName(std::string &result) { result = "vector"; }
@@ -314,11 +314,34 @@ public:
 	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleStringType; }
 
 	virtual FixedVector &getValue();
-	virtual bool setValue(FixedVector value);
+	virtual bool setValue(const FixedVector &value);
 
 protected:
 	FixedVector defaultValue_;
 	FixedVector value_;
+};
+
+class XMLEntryFixedVector4 : public XMLEntrySimpleType
+{
+public:
+	XMLEntryFixedVector4(const char *description);
+	XMLEntryFixedVector4(const char *description,
+		unsigned int data,
+		const FixedVector4 &defaultValue);
+	virtual ~XMLEntryFixedVector4();
+
+	virtual void getTypeName(std::string &result) { result = "vector4"; }
+	virtual void getValueAsString(std::string &result);
+	virtual void getDefaultValueAsString(std::string &result);
+	virtual bool setValueFromString(const std::string &string);
+	virtual XMLEntrySimpleTypeCatagory getTypeCatagory() { return eSimpleStringType; }
+
+	virtual FixedVector4 &getValue();
+	virtual bool setValue(const FixedVector4 &value);
+
+protected:
+	FixedVector4 defaultValue_;
+	FixedVector4 value_;
 };
 
 #endif // __INCLUDE_XMLEntryTypesh_INCLUDE__

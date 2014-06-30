@@ -18,23 +18,33 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_LandscapeWaterh_INCLUDE__)
-#define __INCLUDE_LandscapeWaterh_INCLUDE__
-
 #include <landscapedef/LandscapeColorGradient.h>
 
-class LandscapeWater : public XMLEntryContainer
+LandscapeColorGradientList::LandscapeColorGradientList() :
+	XMLEntryList<XMLEntryFixedVector4>("A list of colors that will be used to form a color change gradient.  "
+		"Colors will be picked from the gradient depending on the time of the day.")
 {
-public:
-	LandscapeWater();
-	virtual ~LandscapeWater();
+}
 
-	XMLEntryFixed waterHeight;
-	XMLEntryFixed strength;
-	XMLEntryBool smooth;
-	XMLEntryBool choppywaves;
-	XMLEntryFixed choppystrength;
-	LandscapeColorGradient watergradient;
-};
+LandscapeColorGradientList::~LandscapeColorGradientList()
+{
 
-#endif // __INCLUDE_LandscapeWaterh_INCLUDE__
+}
+
+XMLEntryFixedVector4 *LandscapeColorGradientList::createXMLEntry(void *xmlData)
+{
+	return new XMLEntryFixedVector4("Color");
+}
+
+LandscapeColorGradient::LandscapeColorGradient() :
+	XMLEntryContainer("LandscapeColorGradient", 
+		"A list of colors that will be used to form a color change gradient.  "
+		"Colors will be picked from the gradient depending on the time of the day.")
+{
+	addChildXMLEntry("color", &colors);
+}
+
+LandscapeColorGradient::~LandscapeColorGradient()
+{
+}
+
