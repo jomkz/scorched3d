@@ -77,7 +77,7 @@ system mp2_fire_04
         material                                mp2_smoke_atlas_a
         renderer                                Billboard
         {
-            render_queue_group                  49
+
             texture_coords_rows                 2
             texture_coords_columns              2
             billboard_rotation_type             vertex
