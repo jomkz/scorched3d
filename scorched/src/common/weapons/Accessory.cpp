@@ -24,9 +24,6 @@
 #include <common/Defines.h>
 #include <common/OptionsScorched.h>
 #include <lang/LangResource.h>
-#include <tank/Tank.h>
-#include <tank/TankModel.h>
-#include <tank/TankModelContainer.h>
 #include <stdlib.h>
 
 static XMLEntryEnum::EnumEntry PositionSelectTypeEnum[] =

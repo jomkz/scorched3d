@@ -37,7 +37,7 @@ public:
 	REGISTER_ACCESSORY_HEADER(WeaponAnimation, AccessoryPart::AccessoryWeapon);
 
 protected:
-	XMLEntryParticleID particleName_;
+	XMLEntryParticleIDList particles_;
 };
 
 #endif // !defined(AFX_WeaponAnimation_H__A96ADD10_0901_4E1D_A49B_9BE78AD33B9B__INCLUDED_)

@@ -1539,6 +1539,9 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeColorGradient.cpp">
       <Filter>landscapedef</Filter>
     </ClCompile>
+    <ClCompile Include="..\models\ParticleInstance.cpp">
+      <Filter>models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -3001,6 +3004,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeColorGradient.h">
       <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\models\ParticleInstance.h">
+      <Filter>models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

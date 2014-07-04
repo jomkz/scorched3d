@@ -462,6 +462,7 @@
     <ClCompile Include="..\dialogs\GUITankInfo.cpp" />
     <ClCompile Include="..\models\ModelInstance.cpp" />
     <ClCompile Include="..\models\ModelStore.cpp" />
+    <ClCompile Include="..\models\ParticleInstance.cpp" />
     <ClCompile Include="..\uiactions\UIActiveTankAction.cpp" />
     <ClCompile Include="..\uiactions\UIJoinGameAction.cpp" />
     <ClCompile Include="..\uiactions\UILandscapeDeformAction.cpp" />
@@ -955,6 +956,7 @@
     <ClInclude Include="..\dialogs\GUITankInfo.h" />
     <ClInclude Include="..\models\ModelInstance.h" />
     <ClInclude Include="..\models\ModelStore.h" />
+    <ClInclude Include="..\models\ParticleInstance.h" />
     <ClInclude Include="..\uiactions\UIActiveTankAction.h" />
     <ClInclude Include="..\uiactions\UIJoinGameAction.h" />
     <ClInclude Include="..\uiactions\UILandscapeDeformAction.h" />

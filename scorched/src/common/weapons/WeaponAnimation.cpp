@@ -23,17 +23,17 @@
 #include <engine/ActionController.h>
 #include <common/Defines.h>
 #ifndef S3D_SERVER
-//#include <sprites/MetaActionRenderer.h>
+#include <client/ScorchedClient.h>
+#include <uiactions/UIParticleAction.h>
 #endif
 
 REGISTER_ACCESSORY_SOURCE(WeaponAnimation);
 
 WeaponAnimation::WeaponAnimation() :
 	Weapon("WeaponAnimation", 
-		"Used to generate the animation/particle effects like the laser beam death or the small blue ring that flashes when you die."),
-	particleName_()
+		"Used to generate the particle effects like the laser beam death or the small blue ring that flashes when you die.")
 {
-	addChildXMLEntry("animation", &particleName_);
+	addChildXMLEntry("particle", &particles_);
 }
 
 WeaponAnimation::~WeaponAnimation()
@@ -44,27 +44,11 @@ WeaponAnimation::~WeaponAnimation()
 void WeaponAnimation::fireWeapon(ScorchedContext &context,
 	WeaponFireContext &weaponContext, FixedVector &position, FixedVector &velocity)
 {
-
 #ifndef S3D_SERVER
-	/*
 	if (!context.getServerMode())
 	{
-		MetaActionRenderer *renderer = (MetaActionRenderer *) 
-			MetaClassRegistration::getNewClass(rendererName_.c_str());
-
-		if (renderer)
-		{
-			renderer->init(weaponContext.getPlayerId(), 
-				position.asVector(), velocity.asVector(), data_.c_str());
-			context.getActionController().addAction(new SpriteAction(renderer));
-		}
-		else
-		{
-			S3D::dialogMessage("Animation", S3D::formatStringBuffer(
-						  "No renderer named \"%s\"",
-						  rendererName_.c_str()));
-		}
+		UIParticleAction *particleAction = new UIParticleAction(position, particles_);
+		ScorchedClient::instance()->getClientUISync().addActionFromClient(particleAction);
 	}
-	*/
 #endif // #ifndef S3D_SERVER
 }

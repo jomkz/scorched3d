@@ -123,13 +123,27 @@ void XMLEntryModel::getAllTypes(std::set<std::string> &allTypes)
 
 XMLEntryParticleID::XMLEntryParticleID(bool required) :
 	XMLEntryContainer("ParticleID", "A reference to an ogre particle definition", required),
-	particleName("The ogre particle script name, this script  must already be loaded in the ogre resources")
+	particleName("The ogre particle script name, this script must already be loaded in the ogre resources")
 {
 	addChildXMLEntry("particlename", &particleName);
 }
 
 XMLEntryParticleID::~XMLEntryParticleID()
 {
+}
+
+XMLEntryParticleIDList::XMLEntryParticleIDList() :
+	XMLEntryList<XMLEntryParticleID>("A set of particles", 0)
+{
+}
+
+XMLEntryParticleIDList::~XMLEntryParticleIDList()
+{
+}
+
+XMLEntryParticleID *XMLEntryParticleIDList::createXMLEntry(void *xmlData)
+{
+	return new XMLEntryParticleID();
 }
 
 XMLEntrySoundID::XMLEntrySoundID(bool required) :

@@ -63,6 +63,12 @@ void Explosion::init()
 #ifndef S3D_SERVER
 	if (!context_->getServerMode()) 
 	{
+		if (!weapon_->getExplosionParticles().getChildren().empty())
+		{
+			UIParticleAction *particleAction = new UIParticleAction(position_, weapon_->getExplosionParticles());
+			ScorchedClient::instance()->getClientUISync().addActionFromClient(particleAction);
+		}
+
 		if (weapon_->getCameraTrack().getCameraTrack())
 		{
 			TankViewPointProvider *vPoint = new TankViewPointProvider();

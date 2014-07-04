@@ -22,6 +22,7 @@
 #define __INCLUDE_UITargetModelh_INCLUDE__
 
 #include <client/ClientUISync.h>
+#include <models/ModelInstance.h>
 
 class UITargetRenderer;
 class UITargetModel
@@ -33,8 +34,7 @@ public:
 	void updateStateAndPosition();
 protected:
 	ClientUISyncActionRegisterable *positionChangedRegisterable_;
-	Ogre::SceneNode *targetNode_;
-	Ogre::Entity *targetEntity_;
+	ModelInstance modelInstance_;
 	UITargetRenderer *targetRenderer_;
 		
 	void positionChangedSync(); // Synced (UI and Client Thread)

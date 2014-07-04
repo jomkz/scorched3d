@@ -49,7 +49,7 @@ WeaponExplosion::WeaponExplosion() :
 	addChildXMLEntry("explodeunderground", &explodeUnderGround_);
 	addChildXMLEntry("onlyhurtshield", &onlyHurtShield_);
 	addChildXMLEntry("cameratrack", &cameraTrack_);
-
+	addChildXMLEntry("explosionparticle", &explosionParticles_);
 }
 
 WeaponExplosion::~WeaponExplosion()

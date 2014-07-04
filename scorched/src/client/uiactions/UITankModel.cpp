@@ -27,6 +27,8 @@
 #include <target/TargetLife.h>
 #include <tanket/TanketShotInfo.h>
 #include <tank/Tank.h>
+#include <tank/TankModel.h>
+#include <tank/TankModelContainer.h>
 #include <common/Logger.h>
 
 UITankModel::UITankModel(UITankRenderer *tankRenderer) :
@@ -56,9 +58,13 @@ void UITankModel::performUIActionAlive()
 
 void UITankModel::create()
 {
+	Tank *tank = (Tank *) targetRenderer_->getTarget();
+	TankModel *model = tank->getModelContainer().getTankModel();
+
+	modelInstance_.create(model->getTankModel());
 	UITargetModel::create();
 
-	Ogre::SkeletonInstance* skel = targetEntity_->getSkeleton();
+	Ogre::SkeletonInstance* skel = modelInstance_.getModelEntity()->getSkeleton();
 	gunBone_ = skel->getBone("Gun");
 	gunBone_->setManuallyControlled(true);
 	gunBone_->setInitialState();

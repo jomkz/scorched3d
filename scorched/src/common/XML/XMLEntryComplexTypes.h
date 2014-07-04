@@ -33,6 +33,15 @@ public:
 	XMLEntryString particleName;
 };
 
+class XMLEntryParticleIDList : public XMLEntryList<XMLEntryParticleID>
+{
+public:
+	XMLEntryParticleIDList();
+	virtual ~XMLEntryParticleIDList();
+
+	virtual XMLEntryParticleID *createXMLEntry(void *xmlData);
+};
+
 class XMLEntryModelParticle : public XMLEntryContainer
 {
 public:

@@ -43,6 +43,7 @@ public:
 	bool getExplodeUnderGround() { return explodeUnderGround_.getValue(); }
 	bool getOnlyHurtShield() { return onlyHurtShield_.getValue(); }
 	WeaponCameraTrack &getCameraTrack() { return cameraTrack_; }
+	XMLEntryParticleIDList &getExplosionParticles() { return explosionParticles_; }
 
 	// Inherited from Weapon
 	virtual void fireWeapon(ScorchedContext &context,
@@ -56,6 +57,7 @@ protected:
 	XMLEntryNumberParser hurtAmountExp_;
 	XMLEntryBool explodeUnderGround_;
 	XMLEntryBool onlyHurtShield_;
+	XMLEntryParticleIDList explosionParticles_;
 	WeaponCameraTrack cameraTrack_;
 };
 

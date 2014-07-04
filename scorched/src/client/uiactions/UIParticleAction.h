@@ -23,30 +23,25 @@
 
 #include <common/FixedVector.h>
 #include <client/ClientUISync.h>
-#include <ParticleUniverse/ParticleUniverseSystem.h>
-#include <ParticleUniverse/ParticleUniverseSystemListener.h>
+#include <models/ParticleInstance.h>
 
-class UIParticleAction : public ClientUISyncAction, public ParticleUniverse::ParticleSystemListener
+class UIParticleAction : public ClientUISyncAction, public ParticleInstanceI
 {
 public:
-	UIParticleAction(FixedVector &position, const std::string &particleScriptName);
+	UIParticleAction(FixedVector &position, XMLEntryParticleIDList &particles);
 	virtual ~UIParticleAction();
 
 	// ClientUISyncAction
 	virtual void performUIAction();
 
-	// ParticleUniverse::ParticleSystemListener
-	virtual void handleParticleSystemEvent(ParticleUniverse::ParticleSystem* particleSystem, 
-		ParticleUniverse::ParticleUniverseEvent& particleUniverseEvent);
+	// ParticleInstanceI
+	virtual void finished(ParticleInstance *instance);
 protected:
-	static unsigned int particleNumber_;
+	ParticleInstance particleInstances_;
+	XMLEntryParticleIDList &particles_;
 	FixedVector position_;
 	bool destroy_;
-	std::string particleScriptName_;
-	Ogre::SceneNode *particleNode_;
-	ParticleUniverse::ParticleSystem* pSys_;
 
-	void create();
 };
 
 #endif // __INCLUDE_UIParticleActionh_INCLUDE__

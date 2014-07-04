@@ -412,6 +412,9 @@ with any tank.</description>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
 				<size>11</size>
+        <explosionparticle>
+          <particlename>mp2_explosion_01</particlename>
+        </explosionparticle>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>
@@ -433,6 +436,9 @@ with any tank.</description>
 				<hurtamount>1.0</hurtamount>
 				<deform>down</deform>
 				<size>18</size>
+        <explosionparticle>
+          <particlename>mp2_explosion_01</particlename>
+        </explosionparticle>
 			</collisionaction>
 		</accessoryaction>
 	</accessory>

@@ -18,26 +18,43 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_ModelInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
-#define AFX_ModelInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
+#if !defined(AFX_ParticleInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#define AFX_ParticleInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_
 
 #include <XML/XMLEntryComplexTypes.h>
+#include <ParticleUniverse/ParticleUniverseSystem.h>
+#include <ParticleUniverse/ParticleUniverseSystemListener.h>
 
-class ModelInstance
+class ParticleInstance;
+class ParticleInstanceI
 {
 public:
-	ModelInstance();
-	virtual ~ModelInstance();
+	ParticleInstanceI() {}
+	virtual ~ParticleInstanceI() {}
 
-	void create(XMLEntryModel &model);
+	virtual void finished(ParticleInstance *instance) = 0;
+};
+
+class ParticleInstance : public ParticleUniverse::ParticleSystemListener
+{
+public:
+	ParticleInstance();
+	virtual ~ParticleInstance();
+
+	void create(XMLEntryParticleIDList &particles);
 	Ogre::SceneNode *getSceneNode() { return sceneNode_;  }
-	Ogre::Entity *getModelEntity() { return modelEntity_;  }
 
 	bool isCreated() { return sceneNode_ != 0; }
+	void setListener(ParticleInstanceI *listener) { listener_ = listener;  }
+
+	// ParticleUniverse::ParticleSystemListener
+	virtual void handleParticleSystemEvent(ParticleUniverse::ParticleSystem* particleSystem,
+		ParticleUniverse::ParticleUniverseEvent& particleUniverseEvent);
 protected:
+	ParticleInstanceI *listener_;
+	int runningParticles_;
 	Ogre::SceneNode *sceneNode_;
-	Ogre::Entity *modelEntity_;
 	std::vector<ParticleUniverse::ParticleSystem *> pSys_;
 };
 
-#endif // !defined(AFX_ModelInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
+#endif // !defined(AFX_ParticleInstance_H__516D85F7_420B_43EB_B0BE_563DCBE1B143__INCLUDED_)
