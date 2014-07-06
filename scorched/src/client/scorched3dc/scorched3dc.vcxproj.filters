@@ -690,9 +690,6 @@
     <ClCompile Include="..\..\common\placement\PlacementTypeTankStart.cpp">
       <Filter>placement</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\placement\PlacementTypeTree.cpp">
-      <Filter>placement</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\simactions\AdminSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
@@ -1542,6 +1539,9 @@
     <ClCompile Include="..\models\ParticleInstance.cpp">
       <Filter>models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\landscapedef\LandscapeTrees.cpp">
+      <Filter>landscapedef</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -2151,9 +2151,6 @@
       <Filter>placement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\placement\PlacementTypeTankStart.h">
-      <Filter>placement</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\placement\PlacementTypeTree.h">
       <Filter>placement</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\simactions\AdminSimAction.h">
@@ -3007,6 +3004,9 @@
     </ClInclude>
     <ClInclude Include="..\models\ParticleInstance.h">
       <Filter>models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\landscapedef\LandscapeTrees.h">
+      <Filter>landscapedef</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

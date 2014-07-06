@@ -31,6 +31,7 @@
 #include <BatchPage.h>
 #include <ImpostorPage.h>
 #include <GrassLoader.h>
+#include <TreeLoader2D.h>
 
 #define LANDSCAPE_RESOURCE_GROUP "Landscape"
 
@@ -103,8 +104,9 @@ void UIStatePlayingLand::create()
 	terrainGroup_->update();
 	terrainGroup_->freeTemporaryResources();
 
-	// Create the grass for the appropriate layers
+	// Create the grass and trees for the appropriate layers
 	createGrass(layersInfo, landscapeSquaresWidth, landscapeSquaresHeight);
+	createTrees(landscapeSquaresWidth, landscapeSquaresHeight);
 
 	new ConsoleRuleMethodIAdapter<UIStatePlayingLand>(
 		ScorchedClient::instance()->getConsole(),
@@ -245,12 +247,11 @@ void UIStatePlayingLand::defineTerrain(long tx, long ty)
 	int startX = tx * 128;
 	int startY = ty * 128;
 
-	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
 	float *heightData = OGRE_ALLOC_T(float, 129*129, Ogre::MEMCATEGORY_GEOMETRY);
 	float *currentPoint = heightData;
 	for (int y=0; y<129; y++)
 	{
-		HeightMap::HeightData *data = map.getHeightData(startX, map.getMapHeight() - (startY + y));
+		HeightMap::HeightData *data = hmap_->getHeightData(startX, hmap_->getMapHeight() - (startY + y));
 		for (int x=0; x<129; x++, currentPoint++, data++)
 		{
 			float height = data->height.asFloat();
@@ -551,11 +552,11 @@ void UIStatePlayingLand::update(float frameTime)
 		dirtyTerrains_.clear();
 	}
 
-	std::list<Forests::PagedGeometry *>::iterator grassStart = grass_.begin(),
-		grassEnd = grass_.end();
-	for (; grassStart != grassEnd; ++grassStart) 
+	std::list<Forests::PagedGeometry *>::iterator pagedGeom = pagedGeom_.begin(),
+		pagedGeomEnd = pagedGeom_.end();
+	for (; pagedGeom != pagedGeomEnd; ++pagedGeom)
 	{
-		(*grassStart)->update();
+		(*pagedGeom)->update();
 	}
 }
 
@@ -566,8 +567,7 @@ void UIStatePlayingLand::updateHeight(int x, int y, int w, int h)
 
 	// Terrain height map counts 0 as the top
 	// So change height map coords to terrain coords
-	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
-	int landscapeHeight = map.getMapHeight();
+	int landscapeHeight = hmap_->getMapHeight();
 	y = landscapeHeight - (y + h);
 
 	int left = x / 128;
@@ -595,9 +595,8 @@ void UIStatePlayingLand::updateHeight(int x, int y, int w, int h)
 
 void UIStatePlayingLand::updateHeightTerrain(int tx, int ty, const Ogre::Rect &updateRect)
 {
-	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
-	int landscapeWidth = map.getMapWidth();
-	int landscapeHeight = map.getMapHeight();
+	int landscapeWidth = hmap_->getMapWidth();
+	int landscapeHeight = hmap_->getMapHeight();
 	int startX = tx * 128;
 	int startY = ty * 128;
 
@@ -611,7 +610,7 @@ void UIStatePlayingLand::updateHeightTerrain(int tx, int ty, const Ogre::Rect &u
 
 	for (int y = actualUpdate.top; y <= actualUpdate.bottom; y++)
 	{
-		HeightMap::HeightData *data = map.getHeightData(startX + actualUpdate.left, landscapeHeight - (startY + y));
+		HeightMap::HeightData *data = hmap_->getHeightData(startX + actualUpdate.left, landscapeHeight - (startY + y));
 		float *landscapeHeightData = terrain->getHeightData(actualUpdate.left, y);
 		for (int x = actualUpdate.left; x <= actualUpdate.right; x++, landscapeHeightData++, data++)
 		{
@@ -627,9 +626,8 @@ void UIStatePlayingLand::updateHeightTerrain(int tx, int ty, const Ogre::Rect &u
 
 void UIStatePlayingLand::updateAllTerrainHeight()
 {
-	HeightMap &map = ScorchedClient::instance()->getLandscapeMaps().getGroundMaps().getHeightMap();
-	int landscapeWidth = map.getMapWidth();
-	int landscapeHeight = map.getMapHeight();
+	int landscapeWidth = hmap_->getMapWidth();
+	int landscapeHeight = hmap_->getMapHeight();
 
 	for (int tx = 0; tx<landscapeWidth / 128; tx++)
 	{
@@ -641,7 +639,7 @@ void UIStatePlayingLand::updateAllTerrainHeight()
 
 			for (int y = 0; y<129; y++)
 			{
-				HeightMap::HeightData *data = map.getHeightData(startX, landscapeHeight - (startY + y));
+				HeightMap::HeightData *data = hmap_->getHeightData(startX, landscapeHeight - (startY + y));
 				float *landscapeHeightData = terrain->getHeightData(0, y);
 				for (int x = 0; x<129; x++, landscapeHeightData++, data++)
 				{
@@ -695,15 +693,9 @@ float UIStatePlayingLand::getTerrainHeight(const float x, const float z, void *u
 
 Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
 {
-	Ogre::Vector3 newPosition = position + Ogre::Vector3(0, 1000000, 0);
-	Ogre::Ray ray(newPosition, Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::TerrainGroup::RayResult result =
-		terrainGroup_->rayIntersects(ray);
-	if (result.hit)
-	{
-		return result.terrain->getHeightAtWorldPosition(newPosition);
-	}
-	return 0.0f;
+	Ogre::Terrain *pTerrain = 0;
+	float height = currentLand_->terrainGroup_->getHeightAtWorldPosition(position.x, 0, position.z, &pTerrain);
+	return height;
 }
 
 bool UIStatePlayingLand::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *outPosition)
@@ -720,19 +712,12 @@ bool UIStatePlayingLand::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vecto
 
 void UIStatePlayingLand::createGrass(LayersInfo &layersInfo, int landscapeSquaresWidth, int landscapeSquaresHeight)
 {
-	layersInfo.textureMapImage.save("c:/tmp/texture.png");
-
 	int g = 0;
 	std::vector<LayerInfo *>::iterator itor = layersInfo.layers.begin(),
 		end = layersInfo.layers.end();
 	for (; itor != end; ++itor)
 	{
 		LayerInfo *layerInfo = *itor;
-		if (layerInfo->hasGrass)
-		{
-			layerInfo->grassLayerDensity.save(S3D::formatStringBuffer("c:/tmp/grass_density%i.png", g++));
-		}
-
 		std::list<LandscapeGrass *>::iterator gitor = layerInfo->texLayer->grassList.getChildren().begin(),
 			gend = layerInfo->texLayer->grassList.getChildren().end();
 		for (; gitor != gend; ++gitor)
@@ -741,7 +726,7 @@ void UIStatePlayingLand::createGrass(LayersInfo &layersInfo, int landscapeSquare
 
 			// Paged Geometry
 			Forests::PagedGeometry *grass = new Forests::PagedGeometry(camera_, 50);
-			grass_.push_back(grass);
+			pagedGeom_.push_back(grass);
 			grass->addDetailLevel<Forests::GrassPage>(OgreSystem::OGRE_WORLD_SCALE * 
 				landscapeGrass->visibleDistance.getValue().asFloat());
 			Forests::GrassLoader *grassLoader = new Forests::GrassLoader(grass);
@@ -752,12 +737,12 @@ void UIStatePlayingLand::createGrass(LayersInfo &layersInfo, int landscapeSquare
 			layer->setMinimumSize(minimumSize, minimumSize);
 			float maximumSize = landscapeGrass->maximumSize.getValue().asFloat();
 			layer->setMaximumSize(maximumSize, maximumSize);
-			layer->setAnimationEnabled(false);
-			layer->setSwayDistribution(10.0f);
-			layer->setSwayLength(0.5f);
-			layer->setSwaySpeed(0.5f);
+			layer->setAnimationEnabled(false);		//Enable animations
+			layer->setSwayDistribution(7.0f);		//Sway fairly unsynchronized
+			layer->setSwayLength(0.5f);				//Sway back and forth 0.5 units in length
+			layer->setSwaySpeed(0.4f);				//Sway 1/2 a cycle every second
 			layer->setDensity(landscapeGrass->density.getValue().asFloat());
-			//layer->setRenderTechnique(Forests::GRASSTECH_SPRITE);
+			//layer->setRenderTechnique(Forests::GRASSTECH_SPRITE); // Sprits don't look good from above
 			layer->setFadeTechnique(Forests::FADETECH_GROW);
 			
 			Ogre::TextureManager &textureManager = Ogre::TextureManager::getSingleton();
@@ -774,6 +759,53 @@ void UIStatePlayingLand::createGrass(LayersInfo &layersInfo, int landscapeSquare
 			layer->setMapBounds(Forests::TBounds(0, 0,
 				OgreSystem::OGRE_WORLD_SIZE * landscapeSquaresWidth,
 				OgreSystem::OGRE_WORLD_SIZE * landscapeSquaresHeight));
+		}
+	}
+}
+
+void UIStatePlayingLand::createTrees(int landscapeSquaresWidth, int landscapeSquaresHeight)
+{
+	LandscapeTex *tex = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getTex();
+	std::list<LandscapeTrees *>::iterator itor = tex->trees.getChildren().begin(),
+		end = tex->trees.getChildren().end();
+	for (; itor != end; ++itor)
+	{
+		// Get the placements for the trees
+		LandscapeTrees *treesDefinition = *itor;
+		FileRandomGenerator generator;
+		std::list<FixedVector> positions;
+		treesDefinition->getPositions(*hmap_, generator, positions, 0);
+		
+		if (!positions.empty())
+		{
+			// Create the trees instance
+			Forests::PagedGeometry *trees = new Forests::PagedGeometry();
+			trees->setCamera(camera_);	//Set the camera so PagedGeometry knows how to calculate LODs
+			trees->setPageSize(200);	//Set the size of each page of geometry
+			trees->setInfinite();		//Use infinite paging mode
+			trees->addDetailLevel<Forests::BatchPage>(2000, 30);		// Use batches up to 150 units away, and fade for 30 more units
+			trees->addDetailLevel<Forests::ImpostorPage>(10 * 128 * OgreSystem::OGRE_WORLD_SCALE, 50);	// Use impostors up to 400 units, and for for 50 more units
+			pagedGeom_.push_back(trees);
+
+			// Create a new TreeLoader2D object
+			Forests::TreeLoader2D *treeLoader = new Forests::TreeLoader2D(trees, Forests::TBounds(0, 0,
+				OgreSystem::OGRE_WORLD_SIZE * landscapeSquaresWidth,
+				OgreSystem::OGRE_WORLD_SIZE * landscapeSquaresHeight));
+			trees->setPageLoader(treeLoader);	// Assign the "treeLoader" to be used to load geometry for the PagedGeometry instance
+			treeLoader->setHeightFunction(&getTerrainHeight); //Supply a height function to TreeLoader2D so it can calculate tree Y values
+			Ogre::Entity *tree1 = sceneMgr_->createEntity("Tree1", "fir05_30.mesh");
+
+			Ogre::Vector3 oposition;
+			std::list<FixedVector>::iterator titor = positions.begin(), tend = positions.end();
+			for (; titor != tend; ++titor)
+			{
+				Ogre::Real scale = Ogre::Math::RangeRandom(0.1f, 0.5f);
+				Ogre::Radian yaw = Ogre::Degree(Ogre::Math::RangeRandom(0, 360));
+				oposition.x = (*titor)[0].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED;
+				oposition.z = (*titor)[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED;
+
+				treeLoader->addTree(tree1, oposition, yaw, scale);
+			}
 		}
 	}
 }

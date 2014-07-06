@@ -22,7 +22,6 @@
 #include <placement/PlacementObject.h>
 #include <placement/PlacementTypeMask.h>
 #include <placement/PlacementTypeDirect.h>
-#include <placement/PlacementTypeTree.h>
 #include <placement/PlacementTypeCount.h>
 #include <placement/PlacementTypeBounds.h>
 #include <placement/PlacementTypeTankStart.h>
@@ -102,7 +101,7 @@ bool PlacementType::checkCloseness(FixedVector &position,
 	{
 		std::list<Position>::iterator currentItor;
 		for (currentItor = returnPositions.begin();
-			currentItor != returnPositions.begin();
+			currentItor != returnPositions.end();
 			++currentItor)
 		{
 			Position *object = &(*currentItor);
@@ -133,7 +132,6 @@ PlacementTypeChoice::~PlacementTypeChoice()
 
 PlacementType *PlacementTypeChoice::createXMLEntry(const std::string &type, void *xmlData)
 {
-	if (0 == strcmp(type.c_str(), "trees")) return new PlacementTypeTree;
 	if (0 == strcmp(type.c_str(), "mask")) return new PlacementTypeMask;
 	if (0 == strcmp(type.c_str(), "direct")) return new PlacementTypeDirect;
 	if (0 == strcmp(type.c_str(), "count")) return new PlacementTypeCount;
@@ -145,7 +143,6 @@ PlacementType *PlacementTypeChoice::createXMLEntry(const std::string &type, void
 
 void PlacementTypeChoice::getAllTypes(std::set<std::string> &allTypes)
 {
-	allTypes.insert("trees");
 	allTypes.insert("mask");
 	allTypes.insert("direct");
 	allTypes.insert("count");

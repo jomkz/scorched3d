@@ -182,6 +182,7 @@ LandscapeTex::LandscapeTex(const char *name, const char *description, bool requi
 	addChildXMLEntry("texture", &texture);
 	addChildXMLEntry("water", &water);
 	addChildXMLEntry("sky", &sky);
+	addChildXMLEntry("tree", &trees);
 }
 
 LandscapeTex::~LandscapeTex()

@@ -56,7 +56,7 @@ protected:
 	std::set<Ogre::Terrain *> dirtyTerrains_;
 	Ogre::SceneNode *landscapeGrid_;
 	HeightMap *hmap_;
-	std::list<Forests::PagedGeometry *> grass_;
+	std::list<Forests::PagedGeometry *> pagedGeom_;
 
 	class LayerInfo
 	{
@@ -91,6 +91,7 @@ protected:
 	void showLandscapePoints();
 	void hideLandscapePoints();
 	void createGrass(LayersInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
+	void createTrees(int landscapeSquaresWidth, int landscapeSquaresHeight);
 	void getBlendMapWidth(size_t &width, size_t &height);
 
 	// Used by paging scene manager

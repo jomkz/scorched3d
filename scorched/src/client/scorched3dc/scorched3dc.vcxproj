@@ -162,6 +162,7 @@
     <ClCompile Include="..\..\common\landscapedef\LandscapeSoundSound.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeSoundTiming.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeTex.cpp" />
+    <ClCompile Include="..\..\common\landscapedef\LandscapeTrees.cpp" />
     <ClCompile Include="..\..\common\landscapedef\LandscapeWater.cpp" />
     <ClCompile Include="..\..\common\landscapemap\DeformLandscape.cpp" />
     <ClCompile Include="..\..\common\landscapemap\GroundMaps.cpp" />
@@ -215,7 +216,6 @@
     <ClCompile Include="..\..\common\placement\PlacementTypeDirect.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementTypeMask.cpp" />
     <ClCompile Include="..\..\common\placement\PlacementTypeTankStart.cpp" />
-    <ClCompile Include="..\..\common\placement\PlacementTypeTree.cpp" />
     <ClCompile Include="..\..\common\simactions\AdminSimAction.cpp" />
     <ClCompile Include="..\..\common\simactions\DestinationLoadedSimAction.cpp" />
     <ClCompile Include="..\..\common\simactions\NextTurnSimAction.cpp" />
@@ -655,6 +655,7 @@
     <ClInclude Include="..\..\common\landscapedef\LandscapeSoundSound.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeSoundTiming.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeTex.h" />
+    <ClInclude Include="..\..\common\landscapedef\LandscapeTrees.h" />
     <ClInclude Include="..\..\common\landscapedef\LandscapeWater.h" />
     <ClInclude Include="..\..\common\landscapemap\DeformLandscape.h" />
     <ClInclude Include="..\..\common\landscapemap\GroundMaps.h" />
@@ -709,7 +710,6 @@
     <ClInclude Include="..\..\common\placement\PlacementTypeDirect.h" />
     <ClInclude Include="..\..\common\placement\PlacementTypeMask.h" />
     <ClInclude Include="..\..\common\placement\PlacementTypeTankStart.h" />
-    <ClInclude Include="..\..\common\placement\PlacementTypeTree.h" />
     <ClInclude Include="..\..\common\simactions\AdminSimAction.h" />
     <ClInclude Include="..\..\common\simactions\DestinationLoadedSimAction.h" />
     <ClInclude Include="..\..\common\simactions\NextTurnSimAction.h" />

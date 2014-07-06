@@ -76,4 +76,10 @@
       <color>0.001455 0.013396 0.016978 0.000000</color>
     </watercolorgradient>
   </water>
+  <tree>
+    <numobjects>1000000</numobjects>
+    <numclusters>75</numclusters>
+    <minheight>8</minheight>
+    <maxheight>30</maxheight>   
+  </tree>
 </tex>

@@ -25,6 +25,7 @@
 #include <landscapedef/LandscapeGrass.h>
 #include <landscapedef/LandscapeWater.h>
 #include <landscapedef/LandscapeSky.h>
+#include <landscapedef/LandscapeTrees.h>
 
 class LandscapeTexBase : public XMLEntryContainer
 {
@@ -130,6 +131,7 @@ public:
 	LandscapeTexChoice texture;
 	LandscapeWater water;
 	LandscapeSky sky;
+	LandscapeTreesList trees;
 private:
 	LandscapeTex(const LandscapeTex &other);
 	LandscapeTex &operator=(LandscapeTex &other);
