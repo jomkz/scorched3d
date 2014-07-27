@@ -799,7 +799,7 @@ void UIStatePlayingLand::createTrees(int landscapeSquaresWidth, int landscapeSqu
 			std::list<FixedVector>::iterator titor = positions.begin(), tend = positions.end();
 			for (; titor != tend; ++titor)
 			{
-				Ogre::Real scale = Ogre::Math::RangeRandom(0.1f, 0.5f);
+				Ogre::Real scale = Ogre::Math::RangeRandom(0.25f, 1.0f);
 				Ogre::Radian yaw = Ogre::Degree(Ogre::Math::RangeRandom(0, 360));
 				oposition.x = (*titor)[0].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED;
 				oposition.z = (*titor)[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED;

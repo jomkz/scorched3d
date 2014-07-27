@@ -77,7 +77,7 @@
     </watercolorgradient>
   </water>
   <tree>
-    <numobjects>1000000</numobjects>
+    <numobjects>2000000</numobjects>
     <numclusters>75</numclusters>
     <minheight>8</minheight>
     <maxheight>30</maxheight>   
