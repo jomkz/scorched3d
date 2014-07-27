@@ -238,6 +238,7 @@
     <ClInclude Include="..\..\common\lang\ResourceBundleEntryImpl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="..\..\common\common\include.rc" />
     <ResourceCompile Include="..\wxdialogs\wxinclude.rc">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)/../scorched-dep-win32/include/wx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)/../scorched-dep-win32/include/wx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

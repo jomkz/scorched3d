@@ -454,6 +454,9 @@
     <ResourceCompile Include="..\wxdialogs\wxinclude.rc">
       <Filter>wxdialogs</Filter>
     </ResourceCompile>
+    <ResourceCompile Include="..\..\common\common\include.rc">
+      <Filter>common</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\CHANGELOG" />
