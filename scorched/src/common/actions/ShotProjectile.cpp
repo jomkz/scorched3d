@@ -232,10 +232,14 @@ void ShotProjectile::simulate(fixed frameTime, bool &remove)
 		}
 	}
 
-	if (wobbleSpin_ > 0)
+ 	if (wobbleSpin_ > 0)
 	{
 		FixedVector up(0, 0, 1);
 		FixedVector velocityPerp = (velocity_.Normalize() * up).Normalize();
+		if (velocityPerp == FixedVector::getNullVector()) 
+		{
+			velocityPerp = FixedVector(1, 0, 0);
+		}
 		FixedVector forceDir = ((velocityPerp * physicsSpin_.cos()) * wobbleAmount_ * velocity_.Magnitude() / 50);
 		getPhysics().applyOffset(forceDir);
 
