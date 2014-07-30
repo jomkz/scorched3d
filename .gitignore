@@ -19,6 +19,7 @@ build/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+lang*.resource
 *_i.c
 *_p.c
 *.ilk
@@ -26,6 +27,7 @@ build/
 *.obj
 *.o
 *.deps
+*.exe
 Makefile.in
 autom4te.cache
 *.pch

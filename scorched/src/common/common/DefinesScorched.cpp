@@ -37,7 +37,7 @@
 #endif
 
 unsigned int S3D::ScorchedPort = 27270;
-std::string S3D::ScorchedVersion = "44BETA-2"
+std::string S3D::ScorchedVersion = "44"
 #ifdef _DEBUG
 	" **DEBUG**"
 #endif

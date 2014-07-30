@@ -1,2 +1,0 @@
-Found 1 mesh(es)
-grabbing mesh 0 with 162 vertices!
