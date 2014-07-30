@@ -123,6 +123,11 @@ bool UniqueIdStore::saveUniqueId(unsigned int ip, const char *id,
 	// AutoDetect server no unique id saved
 	if (0 == strcmp(published, "AutoDetect")) return true;
 
+	if (0 == strcmp(published, "scorched3d.game-host.org"))
+	{
+		published = "game-host.scorched3d.co.uk";
+	}
+
 	// Check the published ip matches the actual server ip
 	IPaddress address;
 	if (SDLNet_ResolveHost(&address, (char *) published, 0) != 0)
