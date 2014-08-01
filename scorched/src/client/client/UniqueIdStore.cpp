@@ -62,6 +62,11 @@ bool UniqueIdStore::loadStore()
 		if (!node->getNamedChild("id", entry.id)) return false;
 		if (!node->getNamedChild("published", entry.published)) return false;
 
+		if (0 == strcmp(entry.published.c_str(), "scorched3d.game-host.org"))
+		{
+			entry.published = "game-host.scorched3d.co.uk";
+		}
+
 		IPaddress ipAddress;
 		if (SDLNet_ResolveHost(&ipAddress, (char *) entry.published.c_str(), 0) == 0)
 		{
