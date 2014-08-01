@@ -12,67 +12,53 @@ RequestExecutionLevel admin
 SetCompressor lzma
 
 ; MUI 1.67 compatible ------
-!include "MUI.nsh"
+!include "MUI2.nsh"
 !include "scripts\FileAssociation.nsh"
 
+!include "${NSISDIR}\Contrib\Modern UI\System.nsh"
+
 ; MUI Settings
-!define MUI_ABORTWARNING
 !define MUI_ICON "data\images\tank2.ico"
 !define MUI_UNICON "data\images\tank2.ico"
 
-; Welcome page
+;Modern UI Configuration
+!define MUI_WELCOMEPAGE  
+!define MUI_DIRECTORYPAGE
+!define MUI_ABORTWARNING
+!define MUI_UNINSTALLER
+!define MUI_UNCONFIRMPAGE
+!define MUI_FINISHPAGE  
+!define MUI_FINISHPAGE_TEXT "Thank you for installing Scorched3D.  If you like Scorched3D please visit our website."
+!define MUI_FINISHPAGE_LINK "www.scorched3d.co.uk"
+!define MUI_FINISHPAGE_LINK_LOCATION "http://www.scorched3d.co.uk"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "..\scorched-dep-win32\installer\wizard.bmp"
+!define MUI_HEADERIMAGE 
+!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\orange.bmp"
+
+
 !insertmacro MUI_PAGE_WELCOME
-; License page
-!insertmacro MUI_PAGE_LICENSE "COPYING"
-; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
-; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
-; Finish page
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW un.ModifyUnWelcome
+!define MUI_PAGE_CUSTOMFUNCTION_LEAVE un.LeaveUnWelcome
+
+!insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
 
 ; Language files
 !insertmacro MUI_LANGUAGE "English"
-!insertmacro MUI_LANGUAGE "Russian"
-
-; Reserve files
-!insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
-!insertmacro MUI_RESERVEFILE_LANGDLL
 
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
-ShowInstDetails show
-ShowUnInstDetails show
-
-Function .onInit
-	;Language selection dialog
-	Push ""
-	Push ${LANG_ENGLISH}
-	Push English
-	Push ${LANG_RUSSIAN}
-	Push Russian
-	Push A ; A means auto count languages
-	       ; for the auto count to work the first empty push (Push "") must remain
-	LangDLL::LangDialog "Installer Language" "Please select the language of the installer"
-
-	Pop $LANGUAGE
-	StrCmp $LANGUAGE "cancel" 0 +2
-		Abort
-
-  ReadRegStr $R0 ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString"
-  StrCmp $R0 "" done
-
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION "$(^Name) is already installed, do you wish to re-install?" IDOK done
-  Abort
-done:
-
-FunctionEnd
+ShowInstDetails "nevershow"
+ShowUnInstDetails "nevershow"
 
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
@@ -91,13 +77,6 @@ Section "MainSection" SEC01
   File "Release\scorcheds.exe"
     
   ${registerExtension} "$INSTDIR\scorchedc.exe" ".s3l" "Scorched3D_Launch"
-
-  FileOpen $9 "$INSTDIR\data\lang\language.ini" w
-  StrCmp $LANGUAGE ${LANG_ENGLISH} 0 +2
-    FileWrite $9 "EN"
-  StrCmp $LANGUAGE ${LANG_RUSSIAN} 0 +2
-    FileWrite $9 "RU"
-  FileClose $9
 SectionEnd
 
 Section -AdditionalIcons
@@ -123,21 +102,20 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
 SectionEnd
 
-Function un.onUninstSuccess
-  HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer."
+Var mycheckbox ; You could just store the HWND in $1 etc if you don't want this extra v
+Function un.ModifyUnWelcome
+${NSD_CreateCheckbox} 120u -30u 50% 24u "Remove all user data.  Warning: this includes STATS, saved games, mods etc?"
+Pop $mycheckbox
+SetCtlColors $mycheckbox "" ${MUI_BGCOLOR}
 FunctionEnd
 
 Var DEL_USER
-Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES remove
-  Abort
-remove:
-
-  StrCpy $DEL_USER "FALSE"
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you want to remove all $(^Name) user data.  Warning: this includes STATS, saved games, mods etc?" IDNO nodel
-  StrCpy $DEL_USER "TRUE";
-nodel:
+Function un.LeaveUnWelcome
+${NSD_GetState} $mycheckbox $0
+StrCpy $DEL_USER "FALSE"
+${If} $0 <> 0
+    StrCpy $DEL_USER "TRUE"
+${EndIf}
 FunctionEnd
 
 Section Uninstall
