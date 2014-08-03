@@ -90,7 +90,7 @@ static void addDirection(const Ogre::Vector3 &position, const Ogre::Radian &dir,
 	Ogre::Vector3 direction = position;
 	direction.normalise();
 
-	float res = 3.14 - atan2(direction.x, direction.z);
+	float res = 3.14f - atan2(direction.x, direction.z);
 
 	//Ogre::Radian dir(res);
 

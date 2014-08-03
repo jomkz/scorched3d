@@ -23,6 +23,7 @@
 #include <scorched3dc/OgreSystem.h>
 #include <common/simplexnoise.h>
 #include <common/DefinesAssert.h>
+#include <common/Logger.h>
 #include <client/ScorchedClient.h>
 #include <client/ClientOptions.h>
 #include <console/ConsoleRuleMethodIAdapter.h>
@@ -686,15 +687,13 @@ void UIStatePlayingLand::hideLandscapePoints()
 // Used by paging scene manager
 float UIStatePlayingLand::getTerrainHeight(const float x, const float z, void *userData)
 {
-	Ogre::Terrain *pTerrain = 0;
-	float height = currentLand_->terrainGroup_->getHeightAtWorldPosition(x, 0, z, &pTerrain);
+	float height = currentLand_->terrainGroup_->getHeightAtWorldPosition(x, 0, z);
 	return height;
 }
 
 Ogre::Real UIStatePlayingLand::getHeight(const Ogre::Vector3 &position)
 {
-	Ogre::Terrain *pTerrain = 0;
-	float height = currentLand_->terrainGroup_->getHeightAtWorldPosition(position.x, 0, position.z, &pTerrain);
+	float height = currentLand_->terrainGroup_->getHeightAtWorldPosition(position.x, 0, position.z);
 	return height;
 }
 
@@ -725,7 +724,7 @@ void UIStatePlayingLand::createGrass(LayersInfo &layersInfo, int landscapeSquare
 			LandscapeGrass *landscapeGrass = *gitor;
 
 			// Paged Geometry
-			Forests::PagedGeometry *grass = new Forests::PagedGeometry(camera_, 50);
+			Forests::PagedGeometry *grass = new Forests::PagedGeometry(camera_, 30);
 			pagedGeom_.push_back(grass);
 			grass->addDetailLevel<Forests::GrassPage>(OgreSystem::OGRE_WORLD_SCALE * 
 				landscapeGrass->visibleDistance.getValue().asFloat());
@@ -784,7 +783,7 @@ void UIStatePlayingLand::createTrees(int landscapeSquaresWidth, int landscapeSqu
 			trees->setPageSize(200);	//Set the size of each page of geometry
 			trees->setInfinite();		//Use infinite paging mode
 			trees->addDetailLevel<Forests::BatchPage>(2000, 30);		// Use batches up to 150 units away, and fade for 30 more units
-			trees->addDetailLevel<Forests::ImpostorPage>(10 * 128 * OgreSystem::OGRE_WORLD_SCALE, 50);	// Use impostors up to 400 units, and for for 50 more units
+			trees->addDetailLevel<Forests::ImpostorPage>(OgreSystem::OGRE_WORLD_SIZE, 50);	// Use impostors up to 400 units, and for for 50 more units
 			pagedGeom_.push_back(trees);
 
 			// Create a new TreeLoader2D object
@@ -794,6 +793,8 @@ void UIStatePlayingLand::createTrees(int landscapeSquaresWidth, int landscapeSqu
 			trees->setPageLoader(treeLoader);	// Assign the "treeLoader" to be used to load geometry for the PagedGeometry instance
 			treeLoader->setHeightFunction(&getTerrainHeight); //Supply a height function to TreeLoader2D so it can calculate tree Y values
 			Ogre::Entity *tree1 = sceneMgr_->createEntity("Tree1", "fir05_30.mesh");
+
+			Logger::log(S3D::formatStringBuffer("Adding %u trees", positions.size()));
 
 			Ogre::Vector3 oposition;
 			std::list<FixedVector>::iterator titor = positions.begin(), tend = positions.end();

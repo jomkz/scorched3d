@@ -17,10 +17,10 @@
       <blendheightfactor>0.4</blendheightfactor>
       <grass>
         <materialname>grass</materialname>
-        <visibledistance>10</visibledistance>
-        <density>0.25</density>
-        <minimumsize>4</minimumsize>
-        <maximumsize>4</maximumsize>
+        <visibledistance>15</visibledistance>
+        <density>0.2</density>
+        <minimumsize>5</minimumsize>
+        <maximumsize>8</maximumsize>
       </grass>
     </texturelayer2>
     <texturelayer3>
