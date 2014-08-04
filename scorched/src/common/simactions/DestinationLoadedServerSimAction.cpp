@@ -18,7 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <simactions/DestinationLoadedSimAction.h>
+#include <simactions/DestinationLoadedServerSimAction.h>
+#include <simactions/DestinationLoadedClientSimAction.h>
 #include <simactions/TankLoadedSimAction.h>
 #include <common/Logger.h>
 #include <common/OptionsTransient.h>
@@ -27,25 +28,26 @@
 #include <tank/TankState.h>
 #include <engine/Simulator.h>
 #include <server/ScorchedServer.h>
+#include <server/ServerDestinations.h>
 #include <server/ServerSimulator.h>
 
-REGISTER_CLASS_SOURCE(DestinationLoadedSimAction);
+REGISTER_CLASS_SOURCE(DestinationLoadedServerSimAction);
 
-DestinationLoadedSimAction::DestinationLoadedSimAction() :
+DestinationLoadedServerSimAction::DestinationLoadedServerSimAction() :
 	destinationId_(0)
 {
 }
 
-DestinationLoadedSimAction::DestinationLoadedSimAction(unsigned int destinationId) :
+DestinationLoadedServerSimAction::DestinationLoadedServerSimAction(unsigned int destinationId) :
 	destinationId_(destinationId)
 {
 }
 
-DestinationLoadedSimAction::~DestinationLoadedSimAction()
+DestinationLoadedServerSimAction::~DestinationLoadedServerSimAction()
 {
 }
 
-bool DestinationLoadedSimAction::invokeAction(ScorchedContext &context)
+bool DestinationLoadedServerSimAction::invokeAction(ScorchedContext &context)
 {
 	if (context.getServerMode())
 	{
@@ -55,7 +57,7 @@ bool DestinationLoadedSimAction::invokeAction(ScorchedContext &context)
 	return true;
 }
 
-void DestinationLoadedSimAction::setLoaded(ScorchedContext &context)
+void DestinationLoadedServerSimAction::setLoaded(ScorchedContext &context)
 {
 	// These tanks are now ready to play
 	std::map<unsigned int, Tank *>::iterator itor;
@@ -76,15 +78,24 @@ void DestinationLoadedSimAction::setLoaded(ScorchedContext &context)
 				addSimulatorAction(loadedAction);
 		}
 	}
+
+	ServerDestination *serverDestination =
+		ScorchedServer::instance()->getServerDestinations().getDestination(destinationId_);
+	if (serverDestination)
+	{
+		ScorchedServer::instance()->getServerSimulator().
+			addSimulatorAction(new DestinationLoadedClientSimAction(destinationId_, serverDestination->getInitialLevel()));
+		serverDestination->setInitialLevel(false);
+	}
 }
 
-bool DestinationLoadedSimAction::writeMessage(NetBuffer &buffer)
+bool DestinationLoadedServerSimAction::writeMessage(NetBuffer &buffer)
 {
 	buffer.addToBuffer(destinationId_);
 	return true;
 }
 
-bool DestinationLoadedSimAction::readMessage(NetBufferReader &reader)
+bool DestinationLoadedServerSimAction::readMessage(NetBufferReader &reader)
 {
 	if (!reader.getFromBuffer(destinationId_)) return false;
 	return true;

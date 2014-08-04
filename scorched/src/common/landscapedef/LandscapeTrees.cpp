@@ -29,18 +29,22 @@
 
 LandscapeTrees::LandscapeTrees() : 
 	XMLEntryContainer("LandscapeTrees",
-		"Attempts to place a large number of trees on the lanscape in clusters (groups), only actualy places the trees that pass all the criterias"),
-	mincloseness("How close trees may be placed together", 0, 0),
-	numobjects("The number of trees to attempt to place on the landscape"),
-	maxobjects("The upper limit on the number of trees that are placed on the landscape", 0, 2000),
+		"Attempts to place a large number of trees on the lanscape in clusters (groups).  Only trees that pass all criteria are placed."),
+	meshname("The name of the ogre mesh to place as the tree"),
+	meshscale("The scale to apply to the mesh", 0, 1),
+	mincloseness("How close trees may be placed together.  (0 turns off checking)", 0, 0),
+	numobjectspersquare("The number of trees to attempt to place on each landscape square."),
+	maxobjects("The upper limit on the number of trees that are placed on the landscape.  Used as a failsafe to prevent too many trees.", 0, 2000),
 	mask("The name of a file containing a mask to use when placing trees", 0, ""),
 	numclusters("The number of clusters (groups) of trees that will be created"),
 	minheight("The minimum landscape heights to allow trees to be placed on"),
 	maxheight("The maximum landscape heights to allow trees to be placed on")
 
 {
+	addChildXMLEntry("meshname", &meshname);
+	addChildXMLEntry("meshscale", &meshscale);
 	addChildXMLEntry("mincloseness", &mincloseness);
-	addChildXMLEntry("numobjects", &numobjects);
+	addChildXMLEntry("numobjectspersquare", &numobjectspersquare);
 	addChildXMLEntry("maxobjects", &maxobjects);
 	addChildXMLEntry("mask", &mask);
 	addChildXMLEntry("numclusters", &numclusters);
@@ -182,37 +186,46 @@ void LandscapeTrees::getPositions(
 
 	// Add lots of trees, more chance of adding a tree where
 	// the map is stongest
-	int objectCount = 0;
-	const int NoIterations = numobjects.getValue();
-	for (int i=0; i<NoIterations && objectCount < maxobjects.getValue(); i++)
+	int totalObjects = 0;
+	unsigned char *currentObjectMap = objectMap;
+	for (int y = 0; y < 64; y++)
 	{
-		if (i % 1000 == 0) if (counter) 
-			counter->setNewPercentage(
-				S3D_MAX(float(i)/float(NoIterations), float(objectCount) / float(maxobjects.getValue())) *100.0f);
-
-		fixed lx = generator.getRandFixed("LandscapeTrees") * fixed(groundMapWidth);
-		fixed ly = generator.getRandFixed("LandscapeTrees") * fixed(groundMapHeight);
-		int rx = (lx.asInt());
-		int ry = (ly.asInt());
-		int nx = rx / treeMapMultWidth;
-		int ny = ry / treeMapMultHeight;
-		int r = objectMap[nx + 64 * ny];
-		int nr = (generator.getRandFixed("LandscapeTrees") * 512).asInt();
-
-		if (nr < r)
+		for (int x = 0; x < 64; x++, currentObjectMap++)
 		{
-			fixed height = 
-				hmap.getInterpHeight(lx, ly);
-			if (height > minheight.getValue() + fixed(true, 5000))
+			if (totalObjects > maxobjects.getValue()) break;
+
+			int r = *currentObjectMap;
+			if (r > 0)
 			{
-				objectCount ++;
-				FixedVector position;
-				position[0] = lx;
-				position[1] = ly;
-				position[2] = height;
-				if (checkCloseness(position, returnPositions))
+				for (int i = 0; i < numobjectspersquare.getValue(); i++)
 				{
-					returnPositions.push_back(position);
+					int nr = (generator.getRandFixed("LandscapeTrees") * 255).asInt();
+					if (nr < r)
+					{
+						fixed lx = (generator.getRandFixed("LandscapeTrees") * fixed(treeMapMultWidth)) +
+							fixed(x * treeMapMultWidth) - fixed(treeMapMultWidth / 2);
+						fixed ly = (generator.getRandFixed("LandscapeTrees") * fixed(treeMapMultHeight)) +
+							fixed(y * treeMapMultHeight) - fixed(treeMapMultHeight / 2);
+						if (lx > 0 && ly > 0 &&
+							lx < fixed(groundMapWidth) &&
+							ly < fixed(groundMapHeight))
+						{
+							fixed height =
+								hmap.getInterpHeight(lx, ly);
+							if (height > minheight.getValue() + fixed(true, 5000))
+							{
+								FixedVector position;
+								position[0] = lx;
+								position[1] = ly;
+								position[2] = height;
+								if (checkCloseness(position, returnPositions))
+								{
+									totalObjects++;
+									returnPositions.push_back(position);
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -221,6 +234,8 @@ void LandscapeTrees::getPositions(
 
 bool LandscapeTrees::checkCloseness(FixedVector &position, std::list<FixedVector> &returnPositions)
 {
+	if (mincloseness.getValue() == 0) return true;
+
 	std::list<FixedVector>::iterator currentItor = returnPositions.begin(),
 		endItor = returnPositions.end();
 	for (; currentItor != endItor; ++currentItor)

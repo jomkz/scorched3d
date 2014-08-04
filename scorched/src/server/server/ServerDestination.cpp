@@ -90,6 +90,7 @@ ServerDestination::ServerDestination(unsigned int destinationId,
 	state_(sDownloadingMod),
 	adminTries_(0), 
 	admin_(false), levelNumber_(0),
+	initialLevel_(true),
 	destinationId_(destinationId),
 	ipAddress_(ipAddress),
 	ping_(25, fixed(true, fixed::FIXED_RESOLUTION / int64_t(25)))

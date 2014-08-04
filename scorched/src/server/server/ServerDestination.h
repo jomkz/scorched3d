@@ -77,6 +77,9 @@ public:
 	unsigned int getDestinationId() { return destinationId_; }
 	unsigned int getIpAddress() { return ipAddress_; }
 
+	bool getInitialLevel() { return initialLevel_; }
+	void setInitialLevel(bool initialLevel) { initialLevel_ = initialLevel; }
+
 	void setAdmin(bool admin) { admin_ = admin; }
 	bool getAdmin() { return admin_; }
 
@@ -100,6 +103,7 @@ protected:
 	unsigned int levelNumber_;
 	int adminTries_;
 	bool admin_;
+	bool initialLevel_;
 	fixed lastSentPingTime_;
 };
 

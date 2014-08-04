@@ -77,7 +77,8 @@
     </watercolorgradient>
   </water>
   <tree>
-    <numobjects>2000000</numobjects>
+    <meshname>fir05_30.mesh</meshname>
+    <numobjectspersquare>100</numobjectspersquare>
     <numclusters>75</numclusters>
     <minheight>8</minheight>
     <maxheight>30</maxheight>   

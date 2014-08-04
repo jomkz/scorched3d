@@ -36,14 +36,18 @@ public:
 		std::list<FixedVector> &returnPositions,
 		ProgressCounter *counter = 0);
 
+	const std::string &getMeshName() { return meshname.getValue(); }
+	fixed getMeshScale() { return meshscale.getValue(); }
+
 protected:
 	XMLEntryInt maxobjects;
-	XMLEntryInt numobjects;
+	XMLEntryInt numobjectspersquare;
 	XMLEntryInt numclusters;
 	XMLEntryFixed minheight, maxheight;
 	XMLEntryFixed mincloseness;
 	XMLEntryString mask;
-
+	XMLEntryString meshname;
+	XMLEntryFixed meshscale;
 
 	bool checkCloseness(FixedVector &position, std::list<FixedVector> &returnPositions);
 };

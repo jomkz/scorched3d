@@ -18,28 +18,29 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_DestinationLoadedSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
-#define AFX_DestinationLoadedSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
+#if !defined(AFX_DestinationLoadedClientSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#define AFX_DestinationLoadedClientSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_
 
 #include <simactions/SimAction.h>
 
-class DestinationLoadedSimAction : public SimAction
+class DestinationLoadedClientSimAction : public SimAction
 {
 public:
-	DestinationLoadedSimAction();
-	DestinationLoadedSimAction(unsigned int destinationId);
-	virtual ~DestinationLoadedSimAction();
+	DestinationLoadedClientSimAction();
+	DestinationLoadedClientSimAction(unsigned int destinationId, bool initialLevel);
+	virtual ~DestinationLoadedClientSimAction();
 
 	virtual bool invokeAction(ScorchedContext &context);
 
 	virtual bool writeMessage(NetBuffer &buffer);
 	virtual bool readMessage(NetBufferReader &reader);
 
-REGISTER_CLASS_HEADER(DestinationLoadedSimAction);
+REGISTER_CLASS_HEADER(DestinationLoadedClientSimAction);
 protected:
 	unsigned int destinationId_;
+	bool initialLevel_;
 
 	void setLoaded(ScorchedContext &context);
 };
 
-#endif // !defined(AFX_DestinationLoadedSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)
+#endif // !defined(AFX_DestinationLoadedClientSimAction_H__2C00E711_B337_4665_AB54_C6661FD67E5D__INCLUDED_)

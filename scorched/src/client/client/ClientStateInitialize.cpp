@@ -300,9 +300,6 @@ bool ClientStateInitialize::processConnectAcceptMessage(
 	}
 	totalBytes_ = 0;
 	if (!ComsMessageSender::sendToServer(comsFileMessage)) return false;
-
-	ScorchedClient::instance()->getClientState().getClientLoadLevel().setInitialLevel(true);
-
 	return true;
 }
 

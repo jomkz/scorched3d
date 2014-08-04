@@ -792,15 +792,18 @@ void UIStatePlayingLand::createTrees(int landscapeSquaresWidth, int landscapeSqu
 				OgreSystem::OGRE_WORLD_SIZE * landscapeSquaresHeight));
 			trees->setPageLoader(treeLoader);	// Assign the "treeLoader" to be used to load geometry for the PagedGeometry instance
 			treeLoader->setHeightFunction(&getTerrainHeight); //Supply a height function to TreeLoader2D so it can calculate tree Y values
-			Ogre::Entity *tree1 = sceneMgr_->createEntity("Tree1", "fir05_30.mesh");
-
+			
+			// Add all of the tree objects
 			Logger::log(S3D::formatStringBuffer("Adding %u trees", positions.size()));
-
+			static unsigned int treeId = 0;
+			std::string entityName = S3D::formatStringBuffer("Forests::PagedGeometry::Tree_%u", ++treeId);
+			Ogre::Entity *tree1 = sceneMgr_->createEntity(entityName, treesDefinition->getMeshName());
+			Ogre::Real globalScale = (Ogre::Real) treesDefinition->getMeshScale().asFloat();
 			Ogre::Vector3 oposition;
 			std::list<FixedVector>::iterator titor = positions.begin(), tend = positions.end();
 			for (; titor != tend; ++titor)
 			{
-				Ogre::Real scale = Ogre::Math::RangeRandom(0.25f, 1.0f);
+				Ogre::Real scale = Ogre::Math::RangeRandom(0.25f, 1.0f) * globalScale;
 				Ogre::Radian yaw = Ogre::Degree(Ogre::Math::RangeRandom(0, 360));
 				oposition.x = (*titor)[0].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED;
 				oposition.z = (*titor)[1].getInternalData() * OgreSystem::OGRE_WORLD_SCALE_FIXED;

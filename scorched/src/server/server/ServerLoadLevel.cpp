@@ -25,7 +25,7 @@
 #include <landscapedef/LandscapeDescription.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <engine/Simulator.h>
-#include <simactions/DestinationLoadedSimAction.h>
+#include <simactions/DestinationLoadedServerSimAction.h>
 #include <target/TargetContainer.h>
 #include <tank/Tank.h>
 #include <tank/TankState.h>
@@ -124,5 +124,5 @@ bool ServerLoadLevel::processMessage(
 void ServerLoadLevel::setLoaded(unsigned int destinationId)
 {
 	ScorchedServer::instance()->getServerSimulator().
-		addSimulatorAction(new DestinationLoadedSimAction(destinationId));
+		addSimulatorAction(new DestinationLoadedServerSimAction(destinationId));
 }

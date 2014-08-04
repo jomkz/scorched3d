@@ -1455,9 +1455,6 @@
     <ClCompile Include="DocumentGenerator.cpp">
       <Filter>scorched3dc</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\simactions\DestinationLoadedSimAction.cpp">
-      <Filter>simactions</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\XML\XMLEntryRoot.cpp">
       <Filter>XML</Filter>
     </ClCompile>
@@ -1541,6 +1538,12 @@
     </ClCompile>
     <ClCompile Include="..\..\common\landscapedef\LandscapeTrees.cpp">
       <Filter>landscapedef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\DestinationLoadedClientSimAction.cpp">
+      <Filter>simactions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\simactions\DestinationLoadedServerSimAction.cpp">
+      <Filter>simactions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2918,9 +2921,6 @@
     <ClInclude Include="DocumentGenerator.h">
       <Filter>scorched3dc</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\simactions\DestinationLoadedSimAction.h">
-      <Filter>simactions</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\XML\XMLEntryRoot.h">
       <Filter>XML</Filter>
     </ClInclude>
@@ -3007,6 +3007,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\landscapedef\LandscapeTrees.h">
       <Filter>landscapedef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\DestinationLoadedClientSimAction.h">
+      <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\simactions\DestinationLoadedServerSimAction.h">
+      <Filter>simactions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

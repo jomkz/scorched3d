@@ -31,11 +31,7 @@ class ClientStateLoadLevel
 public:
 	ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler);
 	virtual ~ClientStateLoadLevel();
-
-	void setInitialLevel(bool initialLevel) { initialLevel_ = initialLevel; }
 protected:
-	bool initialLevel_;
-
 	bool processLoadLevelMessage(NetMessage &netMessage, NetBufferReader &reader);
 	bool actualProcessLoadLevelMessage(NetMessage &netMessage, NetBufferReader &reader);
 };

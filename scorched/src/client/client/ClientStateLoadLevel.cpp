@@ -37,10 +37,9 @@
 #include <target/TargetContainer.h>
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
-#include <uistate/UIState.h>
 #include <dialogs/GUIProgressCounter.h>
 
-ClientStateLoadLevel::ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler) : initialLevel_(true)
+ClientStateLoadLevel::ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler)
 {
 	new ComsMessageHandlerIAdapter<ClientStateLoadLevel>(
 		this, &ClientStateLoadLevel::processLoadLevelMessage,
@@ -215,30 +214,6 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 
 	// Make sure simulator knows we are not loading a level
 	ScorchedClient::instance()->getClientSimulator().setLoadingLevel(false);
-
-	// Show the player selection dialogs
-	if (initialLevel_)
-	{
-		initialLevel_ = false;
-		// TODO
-		/*
-		if (ClientParams::instance()->getConnectedToServer())
-		{
-			PlayerInGameDialog::instance()->displayDialog();
-			PlayerInGameDialog::instance()->initializeFirst();
-		}
-		else
-		{
-			PlayerInitialDialog::instance()->displayDialog();
-		}
-		*/
-
-		UIState::setStateNonUIThread(UIState::StateJoining);
-	}
-	else
-	{
-		UIState::setStateNonUIThread(UIState::StatePlaying);
-	}
 
 	// Tell the server we have finished processing the landscape
 	ComsLevelLoadedMessage levelLoadedMessage;
