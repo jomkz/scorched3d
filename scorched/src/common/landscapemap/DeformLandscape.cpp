@@ -37,6 +37,7 @@
 #ifndef S3D_SERVER
 #include <client/ScorchedClient.h>
 #include <client/ClientUISync.h>
+#include <uistate/UIStatePlaying.h>
 #include <uiactions/UILandscapeDeformAction.h>
 #endif
 
@@ -132,8 +133,8 @@ void DeformLandscape::deformLandscape(
 			int sizei = radius.asInt();
 			ScorchedClient::instance()->getClientUISync().addActionFromClient(
 				new UILandscapeDeformAction(
-					pos[0].asInt() - sizei, pos[1].asInt() - sizei, 
-					sizei * 2, sizei * 2));
+					UIStatePlaying::DeformTypeCircle,
+					pos, sizei));
 		}
 	}
 #endif
@@ -285,8 +286,8 @@ void DeformLandscape::flattenArea(
 			int sizei = size.asInt();
 			ScorchedClient::instance()->getClientUISync().addActionFromClient(
 				new UILandscapeDeformAction(
-					tankPos[0].asInt() - sizei, tankPos[1].asInt() - sizei, 
-					sizei * 2, sizei * 2));
+					UIStatePlaying::DeformTypeSquare,
+					tankPos, sizei));
 		}
 #endif
 	}

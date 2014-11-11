@@ -31,10 +31,15 @@ class CameraController;
 class UIStatePlaying : public UIStateI, public CameraControllerHeightProvider
 {
 public:
+	enum DeformType {
+		DeformTypeSquare,
+		DeformTypeCircle
+	};
+
 	UIStatePlaying();
 	virtual ~UIStatePlaying();
 
-	void updateHeight(int x, int y, int w, int h);
+	void heightChanged(DeformType type, const FixedVector &position, int width);
 
 	UIStatePlayingTargets *getTargets() { return targets_; }
 

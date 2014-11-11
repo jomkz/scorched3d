@@ -22,17 +22,20 @@
 #define __INCLUDE_UILandscapeDeformActionh_INCLUDE__
 
 #include <client/ClientUISync.h>
+#include <uistate/UIStatePlaying.h>
 
 class UILandscapeDeformAction : public ClientUISyncAction
 {
 public:
-	UILandscapeDeformAction(int x, int y, int w, int h);
+	UILandscapeDeformAction(UIStatePlaying::DeformType type, const FixedVector &position, int w);
 	virtual ~UILandscapeDeformAction();
 
 	// ClientUISyncAction
 	virtual void performUIAction();
 protected:
-	int x_, y_, w_, h_;
+	UIStatePlaying::DeformType type_;
+	FixedVector position_;
+	int width_;
 };
 
 #endif // __INCLUDE_UILandscapeDeformActionh_INCLUDE__

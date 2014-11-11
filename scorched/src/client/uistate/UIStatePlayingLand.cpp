@@ -32,7 +32,6 @@
 #include <BatchPage.h>
 #include <ImpostorPage.h>
 #include <GrassLoader.h>
-#include <TreeLoader2D.h>
 
 #define LANDSCAPE_RESOURCE_GROUP "Landscape"
 
@@ -561,7 +560,60 @@ void UIStatePlayingLand::update(float frameTime)
 	}
 }
 
-void UIStatePlayingLand::updateHeight(int x, int y, int w, int h)
+void UIStatePlayingLand::heightChanged(UIStatePlaying::DeformType type, const FixedVector &position, int width)
+{
+	updateHeightFromHeightMap(
+		position[0].asInt() - width, position[1].asInt() - width,
+		width * 2, width * 2);
+
+	switch (type)
+	{
+	case UIStatePlaying::DeformTypeCircle:
+		{
+			Ogre::Vector3 ogrePosition(position[0].asFloat(), position[2].asFloat(), position[1].asFloat());
+			std::list<Forests::TreeLoader2D *>::iterator itor = treeLoaders_.begin(),
+				end = treeLoaders_.end();
+			for (; itor != end; ++itor)
+			{
+				Forests::TreeLoader2D *treeLoader = *itor;
+				treeLoader->deleteTrees(
+					ogrePosition, (Ogre::Real) width);
+			}
+			std::list<Forests::PagedGeometry *>::iterator pagedGeom = pagedGeom_.begin(),
+				pagedGeomEnd = pagedGeom_.end();
+			for (; pagedGeom != pagedGeomEnd; ++pagedGeom)
+			{
+				Forests::PagedGeometry *geom = *pagedGeom;
+				geom->reloadGeometryPages(ogrePosition, (Ogre::Real) width);
+			}
+		}
+		break;
+	case UIStatePlaying::DeformTypeSquare:
+		{
+			Ogre::Real x = position[0].asFloat();
+			Ogre::Real y = position[1].asFloat();
+			Ogre::Real size = width * 2.0f;
+			Forests::TBounds area(x - size, y + size, x + size, y - size);
+			std::list<Forests::TreeLoader2D *>::iterator itor = treeLoaders_.begin(),
+				end = treeLoaders_.end();
+			for (; itor != end; ++itor)
+			{
+				Forests::TreeLoader2D *treeLoader = *itor;
+				treeLoader->deleteTrees(area);
+			}
+			std::list<Forests::PagedGeometry *>::iterator pagedGeom = pagedGeom_.begin(),
+				pagedGeomEnd = pagedGeom_.end();
+			for (; pagedGeom != pagedGeomEnd; ++pagedGeom)
+			{
+				Forests::PagedGeometry *geom = *pagedGeom;
+				geom->reloadGeometryPages(area);
+			}
+		}
+		break;
+	}
+}
+
+void UIStatePlayingLand::updateHeightFromHeightMap(int x, int y, int w, int h)
 {
 	// Make the update slightly larger so the boundries between terrains are accounted for
 	x -= 1; y -= 1; w += 2; h += 2;
@@ -779,6 +831,7 @@ void UIStatePlayingLand::createTrees(int landscapeSquaresWidth, int landscapeSqu
 		{
 			// Create the trees instance
 			Forests::PagedGeometry *trees = new Forests::PagedGeometry();
+			// trees->setTempDir();
 			trees->setCamera(camera_);	//Set the camera so PagedGeometry knows how to calculate LODs
 			trees->setPageSize(200);	//Set the size of each page of geometry
 			trees->setInfinite();		//Use infinite paging mode
@@ -792,6 +845,7 @@ void UIStatePlayingLand::createTrees(int landscapeSquaresWidth, int landscapeSqu
 				OgreSystem::OGRE_WORLD_SIZE * landscapeSquaresHeight));
 			trees->setPageLoader(treeLoader);	// Assign the "treeLoader" to be used to load geometry for the PagedGeometry instance
 			treeLoader->setHeightFunction(&getTerrainHeight); //Supply a height function to TreeLoader2D so it can calculate tree Y values
+			treeLoaders_.push_back(treeLoader);
 			
 			// Add all of the tree objects
 			Logger::log(S3D::formatStringBuffer("Adding %u trees", positions.size()));

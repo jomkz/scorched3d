@@ -23,8 +23,10 @@
 
 #include <Terrain/OgreTerrain.h>
 #include <Terrain/OgreTerrainGroup.h>
+#include <uistate/UIStatePlaying.h>
 #include <Hydrax/Hydrax.h>
 #include <PagedGeometry.h>
+#include <TreeLoader2D.h>
 #include <set>
 
 class HeightMap;
@@ -44,7 +46,7 @@ public:
 	
 	void updateLandscapeTextures();
 	void update(float frameTime);
-	void updateHeight(int x, int y, int w, int h);
+	void heightChanged(UIStatePlaying::DeformType type, const FixedVector &position, int width);
 
 protected:
 	Ogre::Camera* camera_;
@@ -57,6 +59,7 @@ protected:
 	Ogre::SceneNode *landscapeGrid_;
 	HeightMap *hmap_;
 	std::list<Forests::PagedGeometry *> pagedGeom_;
+	std::list<Forests::TreeLoader2D *> treeLoaders_;
 
 	class LayerInfo
 	{
@@ -93,6 +96,7 @@ protected:
 	void createGrass(LayersInfo &layerInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
 	void createTrees(int landscapeSquaresWidth, int landscapeSquaresHeight);
 	void getBlendMapWidth(size_t &width, size_t &height);
+	void updateHeightFromHeightMap(int x, int y, int w, int h);
 
 	// Used by paging scene manager
 	static inline float getTerrainHeight(const float x, const float z, void *userData = NULL);

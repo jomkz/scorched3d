@@ -21,10 +21,9 @@
 #include <uiactions/UILandscapeDeformAction.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <uistate/UIState.h>
-#include <uistate/UIStatePlaying.h>
 
-UILandscapeDeformAction::UILandscapeDeformAction(int x, int y, int w, int h) :
-	x_(x), y_(y), w_(w), h_(h)
+UILandscapeDeformAction::UILandscapeDeformAction(UIStatePlaying::DeformType type, const FixedVector &position, int w) :
+	type_(type), position_(position), width_(w)	
 {
 }
 
@@ -37,7 +36,7 @@ void UILandscapeDeformAction::performUIAction()
 	UIStateI *currentState = ScorchedUI::instance()->getUIState().getCurrentState();
 	if (currentState->getState() == UIState::StatePlaying)
 	{
-		((UIStatePlaying *) currentState)->updateHeight(x_, y_, w_, h_);
+		((UIStatePlaying *) currentState)->heightChanged(type_, position_, width_);
 	}
 	delete this;
 }

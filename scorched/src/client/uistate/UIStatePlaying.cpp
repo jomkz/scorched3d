@@ -111,7 +111,7 @@ bool UIStatePlaying::getIntersection(const Ogre::Ray &cameraRay, Ogre::Vector3 *
 	return land_->getIntersection(cameraRay, outPosition);
 }
 
-void UIStatePlaying::updateHeight(int x, int y, int w, int h)
+void UIStatePlaying::heightChanged(DeformType type, const FixedVector &position, int width)
 {
-	land_->updateHeight(x, y, w, h);
+	land_->heightChanged(type, position, width);
 }
