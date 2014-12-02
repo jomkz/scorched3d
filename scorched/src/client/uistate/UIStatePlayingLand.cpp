@@ -778,6 +778,7 @@ void UIStatePlayingLand::createGrass(LayersInfo &layersInfo, int landscapeSquare
 			// Paged Geometry
 			Forests::PagedGeometry *grass = new Forests::PagedGeometry(camera_, 30);
 			pagedGeom_.push_back(grass);
+			grass->setTempDir(S3D::getTempFile("./"));
 			grass->addDetailLevel<Forests::GrassPage>(OgreSystem::OGRE_WORLD_SCALE * 
 				landscapeGrass->visibleDistance.getValue().asFloat());
 			Forests::GrassLoader *grassLoader = new Forests::GrassLoader(grass);
@@ -831,7 +832,7 @@ void UIStatePlayingLand::createTrees(int landscapeSquaresWidth, int landscapeSqu
 		{
 			// Create the trees instance
 			Forests::PagedGeometry *trees = new Forests::PagedGeometry();
-			// trees->setTempDir();
+			trees->setTempDir(S3D::getTempFile("./"));
 			trees->setCamera(camera_);	//Set the camera so PagedGeometry knows how to calculate LODs
 			trees->setPageSize(200);	//Set the size of each page of geometry
 			trees->setInfinite();		//Use infinite paging mode

@@ -121,26 +121,42 @@ std::string &S3D::getDataFileMod()
 #endif
 
 static boost::mutex cwd_mutex;
+static std::string cwd;
+
+void S3D::setCWD(const std::string &path)
+{
+	#ifdef _WIN32
+		SetCurrentDirectory(path.c_str());
+	#else
+		chdir(path.c_str());
+	#endif // _WIN32	
+	cwd.clear();
+}
+
+std::string S3D::getCWD()
+{
+	if (cwd.empty())
+	{
+		boost::unique_lock<boost::mutex> scoped_lock(cwd_mutex);
+		if (cwd.empty())
+		{
+			static char path[1024];
+#ifdef _WIN32
+			GetCurrentDirectory(sizeof(path), path);
+#else
+			getcwd(path, sizeof(path));
+#endif // _WIN32
+			cwd = path;
+		}
+	}
+	return cwd;
+}
+
 static std::string GET_DIR(const std::string &dir)
 {
 	if (dir[0] == '.')
 	{
-		static std::string cwd;
-		if (cwd.empty())
-		{
-			boost::unique_lock<boost::mutex> scoped_lock(cwd_mutex);
-			if (cwd.empty())
-			{
-				static char path[1024];
-#ifdef _WIN32
-				GetCurrentDirectory(sizeof(path), path);
-#else
-				getcwd(path, sizeof(path));
-#endif // _WIN32
-				cwd = path;
-			}
-		}
-		std::string result = cwd;
+		std::string result = S3D::getCWD();
 		result += "/" + dir;
 		return result;
 	}
@@ -291,6 +307,29 @@ std::string &S3D::getSaveFile(const std::string &filename)
 		{
 			std::string homeDirStr = S3D::getSettingsFile("");
 			std::string newDir(std::string(homeDirStr) + std::string("/saves"));
+			if (S3D::dirExists(newDir)) homeDirStr = newDir;
+			else if (S3D::dirMake(newDir)) homeDirStr = newDir;
+			homeDir = homeDirStr;
+		}
+	}
+
+	std::string &buffer = S3D::formatStringBuffer(
+		"%s/%s", homeDir.c_str(), filename.c_str());
+	S3D::fileDos2Unix(buffer);
+	return buffer;
+}
+
+static boost::mutex temp_file_mutex;
+std::string &S3D::getTempFile(const std::string &filename)
+{
+	static std::string homeDir;
+	if (homeDir.empty())
+	{
+		boost::unique_lock<boost::mutex> scoped_lock(temp_file_mutex);
+		if (homeDir.empty())
+		{
+			std::string homeDirStr = S3D::getSettingsFile("");
+			std::string newDir(std::string(homeDirStr) + std::string("/tmp"));
 			if (S3D::dirExists(newDir)) homeDirStr = newDir;
 			else if (S3D::dirMake(newDir)) homeDirStr = newDir;
 			homeDir = homeDirStr;

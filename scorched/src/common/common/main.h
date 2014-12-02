@@ -61,12 +61,7 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 	// Check we are in the correct directory
 	if (!S3D::dirExists(S3D::getDataFile("data")))
 	{
-		char currentDir[1024];
-#ifdef _WIN32
-		GetCurrentDirectory(sizeof(currentDir), currentDir);
-#else
-		getcwd(currentDir, sizeof(currentDir));
-#endif // _WIN32
+		std::string cwd = S3D::getCWD();
 		std::string dataDir = S3D::getDataFile("");
 
 		// Perhaps we can get the directory from the executables path name
@@ -76,11 +71,7 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 		if (slashPos != std::string::npos)
 		{
 			path.erase(slashPos);
-#ifdef _WIN32
-			SetCurrentDirectory(path.c_str());
-#else
-			chdir(path.c_str());
-#endif // _WIN32			
+			S3D::setCWD(path);
 		}
 
 		// Now try again for the correct directory
@@ -95,7 +86,7 @@ void run_main(int argc, char *argv[], OptionsParameters &params)
 				"Checked path, binary directory : %s\n"
 				"Checked path, data directory : %s\n\n"
 				"If Scorched3D does not run please re-install Scorched3D.",
-				currentDir, path.c_str(), dataDir.c_str()));
+				cwd.c_str(), path.c_str(), dataDir.c_str()));
 		}
 	}
 

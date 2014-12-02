@@ -23,7 +23,13 @@
 
 OptionsParameters::OptionsParameters(const char *name, const char *description) :
 	XMLEntrySimpleContainer(name, description),
-	settingsdir_("The directory in the users home directory that the scorched3d settings are stored in.", 0, ".scorched3do"),
+	settingsdir_("The directory in the users home directory that the scorched3d settings are stored in.", 0, 
+#ifdef _WIN32
+		"scorched3do"
+#else
+		".scorched3do"
+#endif
+	),
 	rewriteoptions_("When reading options files rewrite them to refresh all options", 0, false)
 {
 	addChildXMLEntry("settingsdir", &settingsdir_, "rewriteoptions", &rewriteoptions_);

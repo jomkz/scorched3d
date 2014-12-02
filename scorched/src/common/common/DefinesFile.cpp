@@ -39,6 +39,7 @@
 std::string S3D::getHomeDir()
 {
 #ifdef _WIN32
+	if (getenv("LOCALAPPDATA")) return getenv("LOCALAPPDATA");
 	if (getenv("USERPROFILE")) return getenv("USERPROFILE");
 	if (getenv("HOMEPATH") && getenv("HOMEDRIVE"))
 	{

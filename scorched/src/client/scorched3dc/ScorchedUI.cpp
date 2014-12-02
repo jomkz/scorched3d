@@ -69,7 +69,7 @@ bool ScorchedUI::go()
 	thread_id = boost::this_thread::get_id();
 
 	// Setup S3D logger
-	Logger::addLogger(new FileLogger("Scorched3D.log", ".", false), false);
+	Logger::addLogger(new FileLogger("Scorched3D.log", S3D::getTempFile("."), false), false);
 	Logger::log(S3D::formatStringBuffer("Scorched3D - Version %s (%s) - %s",
 		S3D::ScorchedVersion.c_str(), 
 		S3D::ScorchedProtocolVersion.c_str(), 

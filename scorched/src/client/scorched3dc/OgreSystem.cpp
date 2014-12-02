@@ -124,38 +124,60 @@ bool OgreSystem::createWindow()
 void OgreSystem::loadResources()
 {
 	// Landscape
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/land", "FileSystem", "Landscape");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/land/nvidia", "FileSystem", "Landscape");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/land"), "FileSystem", "Landscape");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/land/nvidia"), "FileSystem", "Landscape");
 
 	// HydraX
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/hydrax", "FileSystem", "Hydrax");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/hydrax"), "FileSystem", "Hydrax");
 
 	// CEGUI
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/imagesets", "FileSystem", "Imagesets");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/fonts", "FileSystem", "Fonts");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/schemes", "FileSystem", "Schemes");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/looknfeel", "FileSystem", "LookNFeel");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/cegui/layouts", "FileSystem", "Layouts");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/cegui/imagesets"), "FileSystem", "Imagesets");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/cegui/fonts"), "FileSystem", "Fonts");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/cegui/schemes"), "FileSystem", "Schemes");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/cegui/looknfeel"), "FileSystem", "LookNFeel");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/cegui/layouts"), "FileSystem", "Layouts");
 
 	// SkyX
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/skyx", "FileSystem", "SkyX");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/skyx"), "FileSystem", "SkyX");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getTempFile("."), "FileSystem", "SkyX");
 
 	// General
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/bloom", "FileSystem", "General");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/general/materials", "FileSystem", "General");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/general/textures", "FileSystem", "General");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/grass", "FileSystem", "General");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/bloom"), "FileSystem", "General");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/general/materials"), "FileSystem", "General");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/general/textures"), "FileSystem", "General");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/grass"), "FileSystem", "General");
 
 	// Particle Universe
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/core", "FileSystem", "ParticleUniverse");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/textures", "FileSystem", "ParticleUniverse");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/materials", "FileSystem", "ParticleUniverse");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/particleuniverse/scripts", "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/particleuniverse/core"), "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/particleuniverse/textures"), "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/particleuniverse/materials"), "FileSystem", "ParticleUniverse");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/particleuniverse/scripts"), "FileSystem", "ParticleUniverse");
 
 	// Models
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models", "FileSystem", "Models");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models/abrams", "FileSystem", "Models");
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/models/projectiles", "FileSystem", "Models");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/models"), "FileSystem", "Models");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/models/abrams"), "FileSystem", "Models");
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
+		S3D::getDataFile("data/models/projectiles"), "FileSystem", "Models");
 
 	// load resources
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
@@ -163,6 +185,8 @@ void OgreSystem::loadResources()
 
 bool OgreSystem::createUI()
 {
+	CEGUI::DefaultLogger *logger = new CEGUI::DefaultLogger();
+	CEGUI::Logger::getSingleton().setLogFilename(S3D::getTempFile("CEGUI.log"));
 	guiRenderer_ = &CEGUI::OgreRenderer::bootstrapSystem();
 	CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
 	CEGUI::Font::setDefaultResourceGroup("Fonts");
@@ -186,7 +210,7 @@ bool OgreSystem::createUI()
 bool OgreSystem::create()
 {
 	// Create ogre not specifying any configuration (.cfg) files to read
-	ogreRoot_ = new Ogre::Root("", "");
+	ogreRoot_ = new Ogre::Root("", "", S3D::getTempFile("Ogre3D.log"));
 
 	// Load the OpenGL RenderSystem and the SceneManager plugins
 	Ogre::LogManager::getSingletonPtr()->logMessage("*** Loading Plugins ***");

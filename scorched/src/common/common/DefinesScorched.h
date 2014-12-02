@@ -23,6 +23,9 @@
 
 namespace S3D
 {
+	std::string getCWD();
+	void setCWD(const std::string &path);
+
 	void setExeName(const std::string &name);
 	void setSettingsDir(const std::string &dir);
 	void setDataFileMod(const std::string &mod);
@@ -39,6 +42,7 @@ namespace S3D
 	std::string &getSettingsFile(const std::string &filename);
 	std::string &getHomeFile(const std::string &filename);
 	std::string &getSaveFile(const std::string &filename);
+	std::string &getTempFile(const std::string &filename);
 	std::string &getSettingsModFile(const std::string &filename);
 	std::string &getGlobalModFile(const std::string &filename);
 
