@@ -120,7 +120,7 @@ void UIStateMainMenu::createSceneManager()
 	pointLight->setDiffuseColour(1.0, 1.0, 1.0);
 	pointLight->setSpecularColour(1.0, 1.0, 1.0);
 	menuSceneManager_->setAmbientLight(Ogre::ColourValue(0.2f, 0.2f, 0.2f));
-	Ogre::SceneNode* lightNode = menuSceneManager_->getRootSceneNode()->createChildSceneNode("AnimLightNode");
+	Ogre::SceneNode* lightNode = menuSceneManager_->getRootSceneNode()->createChildSceneNode("MainMenuLightNode");
 	lightNode->attachObject(pointLight);
 
 	// Animate the camera

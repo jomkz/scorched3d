@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="ProgressWindow" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        <Window type="OgreTray/StaticImage" name="ProgressImage" >
+            <Property name="Area" value="{{0.5,-200},{0.5,-250},{0.5,195},{0.5,252}}" />
+            <Property name="Image" value="Progress/Full" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="FrameEnabled" value="False" />
+            <Property name="BackgroundEnabled" value="False" />
+            <Window type="OgreTray/StaticText" name="DescriptionText" >
+                <Property name="Area" value="{{0,36},{0,130},{0,355},{0,477}}" />
+                <Property name="Font" value="DejaVuSans-10" />
+                <Property name="Text" value="Description" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TextColours" value="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" />
+                <Property name="FrameEnabled" value="False" />
+                <Property name="VertFormatting" value="TopAligned" />
+                <Property name="BackgroundEnabled" value="False" />
+                <Property name="HorzScrollPageSize" value="319" />
+                <Property name="VertScrollPageSize" value="347" />
+                <Property name="HorzScrollDocumentSize" value="77" />
+                <Property name="VertScrollDocumentSize" value="15.5148" />
+                <AutoWindow namePath="__auto_hscrollbar__" >
+                    <AutoWindow namePath="__auto_incbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_decbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                </AutoWindow>
+                <AutoWindow namePath="__auto_vscrollbar__" >
+                    <AutoWindow namePath="__auto_incbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_decbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                </AutoWindow>
+            </Window>
+            <Window type="OgreTray/ProgressBar" name="ProgressBar" >
+                <Property name="Area" value="{{0,137},{0,12},{0,365},{0,20}}" />
+                <Property name="StepSize" value="0.01" />
+                <Property name="CurrentProgress" value="1" />
+            </Window>
+            <Window type="OgreTray/StaticText" name="WallTypeText" >
+                <Property name="Area" value="{{0,-87},{0,95},{0,135},{0,471}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Rotation" value="w:1 x:0 y:0 z:0.7" />
+                <Property name="TextColours" value="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" />
+                <Property name="FrameEnabled" value="False" />
+                <Property name="BackgroundEnabled" value="False" />
+                <Property name="HorzScrollPageSize" value="222" />
+                <Property name="VertScrollPageSize" value="376" />
+                <Property name="AutoRenderingSurface" value="True" />
+                <AutoWindow namePath="__auto_hscrollbar__" >
+                    <AutoWindow namePath="__auto_incbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_decbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                </AutoWindow>
+                <AutoWindow namePath="__auto_vscrollbar__" >
+                    <AutoWindow namePath="__auto_incbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_decbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                </AutoWindow>
+            </Window>
+            <Window type="OgreTray/StaticText" name="TitleText" >
+                <Property name="Area" value="{{0,138},{0,25},{0,350},{0,62}}" />
+                <Property name="Font" value="DejaVuSans-12" />
+                <Property name="Text" value="TitleText" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="TextColours" value="tl:FFFFFFFF tr:FFFFFFFF bl:FFFFFFFF br:FFFFFFFF" />
+                <Property name="FrameEnabled" value="False" />
+                <Property name="BackgroundEnabled" value="False" />
+                <Property name="HorzScrollPageSize" value="212" />
+                <Property name="VertScrollPageSize" value="37" />
+                <Property name="HorzScrollDocumentSize" value="73" />
+                <Property name="VertScrollDocumentSize" value="18.625" />
+                <AutoWindow namePath="__auto_hscrollbar__" >
+                    <AutoWindow namePath="__auto_incbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_decbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                </AutoWindow>
+                <AutoWindow namePath="__auto_vscrollbar__" >
+                    <AutoWindow namePath="__auto_incbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                    <AutoWindow namePath="__auto_decbtn__" >
+                        <Property name="Visible" value="False" />
+                    </AutoWindow>
+                </AutoWindow>
+            </Window>
+        </Window>
+        <Window type="OgreTray/StaticImage" name="LandscapeImage" >
+            <Property name="Area" value="{{0,0},{0,94},{0,685},{0,643}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="FrameEnabled" value="False" />
+            <Property name="BackgroundEnabled" value="False" />
+            <Property name="VerticalAlignment" value="Centre" />
+            <Property name="HorizontalAlignment" value="Centre" />
+        </Window>
+    </Window>
+</GUILayout>

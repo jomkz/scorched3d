@@ -121,6 +121,21 @@ Vector &OptionsTransient::getWallColor()
 	return wallColor;
 }
 
+std::string OptionsTransient::getWallName()
+{
+	switch (getWallType())
+	{
+	case wallWrapAround:
+		return "wrap";
+	case wallBouncy:
+		return "bouncy";
+	case wallConcrete:
+		return "concrete";
+	default:
+		return "none";
+	}
+}
+
 void OptionsTransient::newGameWall()
 {
 	switch (optionsGame_.getWallType())

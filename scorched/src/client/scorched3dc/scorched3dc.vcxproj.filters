@@ -1545,6 +1545,9 @@
     <ClCompile Include="..\..\common\simactions\DestinationLoadedServerSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
+    <ClCompile Include="..\models\MiniLandscape.cpp">
+      <Filter>models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -3013,6 +3016,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\simactions\DestinationLoadedServerSimAction.h">
       <Filter>simactions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\models\MiniLandscape.h">
+      <Filter>models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

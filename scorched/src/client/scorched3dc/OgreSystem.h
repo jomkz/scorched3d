@@ -45,6 +45,7 @@ public:
 	Ogre::Root *getOgreRoot() { return ogreRoot_; }
 	Ogre::RenderWindow *getOgreRenderWindow() { return ogreWindow_; }
 	Ogre::SceneManager *getOgreLandscapeSceneManager() { return landscapeSceneManager_; }
+	CEGUI::OgreRenderer *getGUIRenderer() { return guiRenderer_; }
 
 	bool create();
 	bool createUI();

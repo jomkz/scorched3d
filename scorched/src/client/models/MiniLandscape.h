@@ -18,37 +18,36 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(__INCLUDE_GUIProgressCounterh_INCLUDE__)
-#define __INCLUDE_GUIProgressCounterh_INCLUDE__
+#if !defined(__INCLUDE_MiniLandscapeh_INCLUDE__)
+#define __INCLUDE_MiniLandscapeh_INCLUDE__
 
-#include <common/ProgressCounter.h>
-#include <engine/ThreadCallbackI.h>
-#include <engine/ThreadCallback.h>
+#include <uistate/UIStateI.h>
+#include <client/ClientUISync.h>
 
-class GUIProgressCounter : public ProgressCounterI
+class MiniLandscape
 {
 public:
-	static ProgressCounter *instance();
+	static MiniLandscape *instance();
 
-	void updateProgress();
+	void create();
+	void update();
+	CEGUI::BasicImage *createGUITexture();
 
-	// ProgressCounterI
-	// ** Called from the client and server so careful with threading **
-	virtual void operationChange(const LangString &op);
-	virtual void progressChange(const LangString &op, const float percentage);
+	Ogre::RenderTarget *getTexture() { return renderTexture_; }
 
 protected:
-	// A seperate callback mechanism so we can get progress when
-	// the client is blocked and cant use uisync
-	// Most other things should not use this as it may cause
-	// issues with sequencing of other actions being performed via uisync
-	ThreadCallback threadCallback_;
+	int x_size, z_size;
+	Ogre::Real half_x_size, half_z_size;
+	Ogre::SceneManager* landscapeSceneManager_;
+	Ogre::Camera *landscapeCamera_;
+	Ogre::RenderTarget *renderTexture_;
+	Ogre::ManualObject *miniLandscape_;
+	Ogre::SceneNode *waterNode_;
+	Ogre::TexturePtr rtt_texture_; 
 
-private:
-	static ProgressCounter *instance_;
-
-	GUIProgressCounter ();
-	virtual ~GUIProgressCounter ();	
+private: 
+	MiniLandscape();
+	virtual ~MiniLandscape();
 };
 
-#endif
+#endif // __INCLUDE_MiniLandscapeh_INCLUDE__

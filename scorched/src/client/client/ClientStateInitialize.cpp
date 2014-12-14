@@ -25,7 +25,6 @@
 #include <client/ScorchedClient.h>
 #include <client/ClientHandlers.h>
 #include <client/ClientState.h>
-#include <client/ClientStateLoadLevel.h>
 #include <client/ClientServerAccess.h>
 #include <client/ClientOptions.h>
 #include <common/DefinesAssert.h>

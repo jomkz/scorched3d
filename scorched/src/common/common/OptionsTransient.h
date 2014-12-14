@@ -54,6 +54,7 @@ public:
 
 	// Walls
 	WallType getWallType() { return (WallType) wallType_.getValue(); }
+	std::string getWallName();
 	Vector &getWallColor();
 
 	// Rounds left

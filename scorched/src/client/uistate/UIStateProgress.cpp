@@ -20,7 +20,7 @@
 
 #include <uistate/UIStateProgress.h>
 #include <dialogs/GUIProgressCounter.h>
-#include <dialogs/GUILogo.h>
+#include <models/MiniLandscape.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
 
@@ -45,28 +45,31 @@ void UIStateProgress::createState()
 	vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
 	camera_->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 
-	GUIProgress::instance()->setVisible(true);
-	GUILogo::instance()->setVisible(true);
+	titleText_->setText("Loading...");
+	descriptionText_->setText("");
+	progressBar_->setProgress(0.0f);
+	window_->setVisible(true);
 }
 
 void UIStateProgress::destroyState()
 {
-	GUIProgress::instance()->setVisible(false);
-	GUILogo::instance()->setVisible(false);
-
+	window_->setVisible(false);
 	Ogre::RenderWindow *window = ScorchedUI::instance()->getOgreSystem().getOgreRenderWindow();
 	window->removeAllViewports();
 }
 
 void UIStateProgress::createSceneManager()
 {
+	MiniLandscape::instance()->create();
+	CEGUI::BasicImage *ceGuiTex = MiniLandscape::instance()->createGUITexture();
+
 	Ogre::Root *ogreRoot = ScorchedUI::instance()->getOgreSystem().getOgreRoot();
 	progressSceneManager_ = ogreRoot->createSceneManager(Ogre::ST_GENERIC, "ProgressSceneManager");
 
 	// Create background rectangle covering the whole screen
 	Ogre::Rectangle2D* rect = new Ogre::Rectangle2D(true);
 	rect->setCorners(-1.0, 1.0, 1.0, -1.0);
-	rect->setMaterial("General/Background");
+	rect->setMaterial("General/Black"); 
 
 	// Render the background before everything else
 	rect->setRenderQueueGroup(Ogre::RENDER_QUEUE_BACKGROUND);
@@ -82,4 +85,99 @@ void UIStateProgress::createSceneManager()
 
 	// Create viewing camera
 	camera_ = progressSceneManager_->createCamera("ProgressCamera");
+
+	// Window code
+	CEGUI::WindowManager *pWindowManager = CEGUI::WindowManager::getSingletonPtr();
+	window_ = pWindowManager->loadLayoutFromFile("Progress2.layout");
+	DIALOG_ASSERT(window_);
+	CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow()->addChild(window_);
+	titleText_ = static_cast<CEGUI::Window *>(window_->getChild("ProgressImage/TitleText"));;
+	descriptionText_ = static_cast<CEGUI::Window *>(window_->getChild("ProgressImage/DescriptionText"));;
+	progressBar_ = static_cast<CEGUI::ProgressBar*>(window_->getChild("ProgressImage/ProgressBar"));
+
+	CEGUI::Window *landscapeImage = static_cast<CEGUI::Window*>(window_->getChild("LandscapeImage"));
+	landscapeImage->setProperty("Image", ceGuiTex->getName());
+}
+
+void UIStateProgress::updateProgress(const LangString &op, float progress)
+{
+	
+}
+
+void UIStateProgress::updateDescription(const std::string &name, const std::string &description)
+{
+	titleText_->setText(name);
+	descriptionText_->setText(description);
+}
+
+void UIStateProgress::updateLandscape()
+{
+	MiniLandscape::instance()->update();
+}
+
+void UIStateProgress::updateState(float frameTime)
+{
+
+}
+
+GUIProgressUpdateThreadCallback::GUIProgressUpdateThreadCallback(const LangString &op, const float percentage) :
+	op_(op), percentage_(percentage)
+{
+}
+
+GUIProgressUpdateThreadCallback::~GUIProgressUpdateThreadCallback()
+{
+}
+
+void GUIProgressUpdateThreadCallback::callbackInvoked()
+{
+	if (ScorchedUI::instance()->getUIState().getState() != UIState::StateProgress)
+	{
+		return;
+	}
+
+	UIStateProgress *progress = (UIStateProgress *)ScorchedUI::instance()->getUIState().getCurrentState();
+	progress->updateProgress(op_, percentage_);
+	delete this;
+}
+
+GUIProgressDescriptionThreadCallback::GUIProgressDescriptionThreadCallback(const std::string &name, const std::string &description) :
+	name_(name), description_(description)
+{
+}
+
+GUIProgressDescriptionThreadCallback::~GUIProgressDescriptionThreadCallback()
+{
+}
+
+void GUIProgressDescriptionThreadCallback::performUIAction()
+{
+	if (ScorchedUI::instance()->getUIState().getState() != UIState::StateProgress)
+	{
+		return;
+	}
+
+	UIStateProgress *progress = (UIStateProgress *)ScorchedUI::instance()->getUIState().getCurrentState();
+	progress->updateDescription(name_, description_);
+	delete this;
+}
+
+GUIProgressLandscapeThreadCallback::GUIProgressLandscapeThreadCallback()
+{
+}
+
+GUIProgressLandscapeThreadCallback::~GUIProgressLandscapeThreadCallback()
+{
+}
+
+void GUIProgressLandscapeThreadCallback::performUIAction()
+{
+	if (ScorchedUI::instance()->getUIState().getState() != UIState::StateProgress)
+	{
+		return;
+	}
+
+	UIStateProgress *progress = (UIStateProgress *)ScorchedUI::instance()->getUIState().getCurrentState();
+	progress->updateLandscape();
+	delete this;
 }

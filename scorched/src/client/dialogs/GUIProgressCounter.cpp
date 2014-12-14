@@ -21,80 +21,8 @@
 #include <scorched3dc/ScorchedUI.h>
 #include <dialogs/GUIProgressCounter.h>
 #include <uistate/UIState.h>
+#include <uistate/UIStateProgress.h>
 #include <common/Logger.h>
-
-GUIProgress *GUIProgress::instance()
-{
-	static GUIProgress instance_;
-	return &instance_;
-}
-
-GUIProgress::GUIProgress() : 
-	window_(0), totalTime_(0.0f), frameCount_(0)
-{
-   create();
-   setVisible(false);
-}
-
-GUIProgress::~GUIProgress()
-{
-	window_ = 0;
-}
-
-void GUIProgress::create()
-{
-	CEGUI::WindowManager *pWindowManager = CEGUI::WindowManager::getSingletonPtr();
-	window_ = pWindowManager->loadLayoutFromFile("Progress.layout");
- 
-	if (window_)
-	{
-		CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow()->addChild(window_);
-		staticText_ = window_;
-		progressBar_ = static_cast<CEGUI::ProgressBar*>(window_->getChild("ProgressBar"));
-	}
-}
-
-void GUIProgress::setVisible(bool visible)
-{
-	staticText_->setText("");
-	progressBar_->setProgress(0.0f);
-    window_->setVisible(visible);
-}
- 
-bool GUIProgress::isVisible()
-{
-    return window_->isVisible();
-}
-
-GUIProgressThreadCallback::GUIProgressThreadCallback(const LangString &op, const float percentage) :
-	op_(op), percentage_(percentage)
-{
-}
-
-GUIProgressThreadCallback::~GUIProgressThreadCallback()
-{
-}
-
-void GUIProgressThreadCallback::callbackInvoked()
-{
-	if (ScorchedUI::instance()->getUIState().getState() != UIState::StateProgress)
-	{
-		return;
-	}
-
-	CEGUI::Window *staticText = GUIProgress::instance()->getStaticText();
-	if (staticText)
-	{
-		std::string opStr = LangStringUtil::convertFromLang(op_.c_str());
-		staticText->setText(opStr.c_str());
-	}
-	CEGUI::ProgressBar *progressBar = GUIProgress::instance()->getProgressBar();
-	if (progressBar)
-	{
-		progressBar->setProgress(percentage_);
-	}
-	delete this;
-}
 
 ProgressCounter *GUIProgressCounter::instance_(0);
 
@@ -125,6 +53,6 @@ void GUIProgressCounter::operationChange(const LangString &op)
 
 void GUIProgressCounter::progressChange(const LangString &op, const float percentage)
 {
-	GUIProgressThreadCallback *callback = new GUIProgressThreadCallback(op, percentage);
+	GUIProgressUpdateThreadCallback *callback = new GUIProgressUpdateThreadCallback(op, percentage);
 	threadCallback_.addCallback(callback);
 }

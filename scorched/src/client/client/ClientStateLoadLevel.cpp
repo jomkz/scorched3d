@@ -30,6 +30,7 @@
 #include <common/Logger.h>
 #include <common/OptionsScorched.h>
 #include <common/ChannelManager.h>
+#include <common/OptionsTransient.h>
 #include <landscapedef/LandscapeDescriptions.h>
 #include <landscapemap/LandscapeMaps.h>
 #include <lang/LangResource.h>
@@ -38,6 +39,7 @@
 #include <target/TargetRenderer.h>
 #include <net/NetInterface.h>
 #include <dialogs/GUIProgressCounter.h>
+#include <uistate/UIStateProgress.h>
 
 ClientStateLoadLevel::ClientStateLoadLevel(ComsMessageHandler &comsMessageHandler)
 {
@@ -105,11 +107,12 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 		message.getLandscapeDescription().getName());
 	if (landscapeDescription)
 	{
-		//Image image = ImageFactory::loadImage(S3D::eModLocation,
-		//	S3D::formatStringBuffer("data/landscapes/%s", 
-		//	landscapeDefinition->picture.c_str()));
-		// TODO
-		//ProgressDialog::instance()->setIcon(image);
+		std::string wallType = ScorchedClient::instance()->getOptionsTransient().getWallName();
+		GUIProgressDescriptionThreadCallback *descCallback = new GUIProgressDescriptionThreadCallback(
+			landscapeDescription->name.getValue(), 
+			std::string("Wall type : ") + wallType + "\n" +
+			landscapeDescription->description.getValue());
+		ScorchedClient::instance()->getClientUISync().addActionFromClient(descCallback);
 	}
 
 	// Generate new landscape
@@ -117,6 +120,10 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 		ScorchedClient::instance()->getContext(),
 		message.getLandscapeDescription(),
 		GUIProgressCounter::instance()); // No events
+
+	// Inform progress that landscape has been generated
+	GUIProgressLandscapeThreadCallback *landCallback = new GUIProgressLandscapeThreadCallback();
+	ScorchedClient::instance()->getClientUISync().addActionFromClient(landCallback);
 
 	// Reset and initialize simulator and
 	ScorchedClient::instance()->getClientSimulator().newLevel();

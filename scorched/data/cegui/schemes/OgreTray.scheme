@@ -2,6 +2,7 @@
 <GUIScheme version="5" name="OgreTray">
     <Imageset filename="OgreTray.imageset" />
     <Imageset filename="Logo.imageset" />
+    <Imageset filename="Progress.imageset" />
     <Font filename="DejaVuSans-8.font" />
     <Font filename="DejaVuSans-10.font" />
     <Font filename="DejaVuSans-12.font" />
