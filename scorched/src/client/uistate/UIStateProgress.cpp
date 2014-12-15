@@ -20,7 +20,7 @@
 
 #include <uistate/UIStateProgress.h>
 #include <dialogs/GUIProgressCounter.h>
-#include <models/MiniLandscape.h>
+#include <graph/MiniLandscape.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
 
@@ -101,7 +101,7 @@ void UIStateProgress::createSceneManager()
 
 void UIStateProgress::updateProgress(const LangString &op, float progress)
 {
-	
+	progressBar_->setProgress(progress / 100.0f);
 }
 
 void UIStateProgress::updateDescription(const std::string &name, const std::string &description)

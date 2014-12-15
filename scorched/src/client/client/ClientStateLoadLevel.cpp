@@ -122,8 +122,11 @@ bool ClientStateLoadLevel::actualProcessLoadLevelMessage(NetMessage &netMessage,
 		GUIProgressCounter::instance()); // No events
 
 	// Inform progress that landscape has been generated
-	GUIProgressLandscapeThreadCallback *landCallback = new GUIProgressLandscapeThreadCallback();
-	ScorchedClient::instance()->getClientUISync().addActionFromClient(landCallback);
+	if (landscapeDescription)
+	{
+		GUIProgressLandscapeThreadCallback *landCallback = new GUIProgressLandscapeThreadCallback();
+		ScorchedClient::instance()->getClientUISync().addActionFromClient(landCallback);
+	}
 
 	// Reset and initialize simulator and
 	ScorchedClient::instance()->getClientSimulator().newLevel();

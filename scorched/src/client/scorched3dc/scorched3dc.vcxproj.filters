@@ -85,6 +85,9 @@
     <Filter Include="template">
       <UniqueIdentifier>{90e8fda9-9a2c-40aa-8b16-3b93c3a27f16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="graph">
+      <UniqueIdentifier>{4eb2ef95-0eaa-4df7-8f70-9727aa6cfc0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -1545,8 +1548,17 @@
     <ClCompile Include="..\..\common\simactions\DestinationLoadedServerSimAction.cpp">
       <Filter>simactions</Filter>
     </ClCompile>
-    <ClCompile Include="..\models\MiniLandscape.cpp">
-      <Filter>models</Filter>
+    <ClCompile Include="..\graph\LandscapeBlender.cpp">
+      <Filter>graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\graph\MiniLandscape.cpp">
+      <Filter>graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\graph\LandscapeBlenderFull.cpp">
+      <Filter>graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\graph\LandscapeBlenderMini.cpp">
+      <Filter>graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3017,8 +3029,17 @@
     <ClInclude Include="..\..\common\simactions\DestinationLoadedServerSimAction.h">
       <Filter>simactions</Filter>
     </ClInclude>
-    <ClInclude Include="..\models\MiniLandscape.h">
-      <Filter>models</Filter>
+    <ClInclude Include="..\graph\LandscapeBlender.h">
+      <Filter>graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\graph\MiniLandscape.h">
+      <Filter>graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\graph\LandscapeBlenderFull.h">
+      <Filter>graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\graph\LandscapeBlenderMini.h">
+      <Filter>graph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

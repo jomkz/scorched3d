@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <uistate/UIStatePlayingLand.h>
+#include <graph/LandscapeBlenderFull.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
 #include <common/simplexnoise.h>
@@ -32,8 +33,6 @@
 #include <BatchPage.h>
 #include <ImpostorPage.h>
 #include <GrassLoader.h>
-
-#define LANDSCAPE_RESOURCE_GROUP "Landscape"
 
 static UIStatePlayingLand *currentLand_ = 0;
 
@@ -91,14 +90,13 @@ void UIStatePlayingLand::create()
 	createLayerInfo(layersInfo, landscapeSquaresWidth, landscapeSquaresHeight);
 
 	// Create the layers including blend maps
-	for (int x=0; x<landscapeSquaresWidth; x++)
-	{
-		for (int y=0; y<landscapeSquaresHeight; y++)
-		{
-			Ogre::Terrain* terrain = terrainGroup_->getTerrain(x, y);
-			initLayers(terrain, layersInfo, x, y);
-		}
-	}
+	size_t blendMapWidth, blendMapHeight;
+	getBlendMapWidth(blendMapWidth, blendMapHeight);
+	LandscapeBlenderFull landscapeBlender(
+		*ScorchedClient::instance(), layersInfo,
+		blendMapWidth, blendMapHeight,
+		terrainGroup_);
+	landscapeBlender.calculate(landscapeSquaresWidth, landscapeSquaresHeight);
 
 	// Calculate the terrain
 	terrainGroup_->update();
@@ -264,250 +262,6 @@ void UIStatePlayingLand::defineTerrain(long tx, long ty)
 	newImport.deleteInputData = false;
 
 	terrainGroup_->defineTerrain(tx, ty, &newImport);
-}
-
-void UIStatePlayingLand::initLayers(Ogre::Terrain* terrain, LayersInfo &layersInfo, long tx, long ty)
-{
-	unsigned int seed = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getSeed();
-	LandscapeTex *tex = ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getTex();
-	LandscapeTexLayers *texLayers = (LandscapeTexLayers*)tex->texture.getValue();
-
-	/*
-	// Try enabling a color map for color variation
-	Ogre::Image colourMapImage;
-	colourMapImage.load("colormap.jpg", terrain->getResourceGroup());
-    if (tx % 2 == 0) colourMapImage.flipAroundY();
-    if (ty % 2 == 0) colourMapImage.flipAroundX();
-	terrain->setGlobalColourMapEnabled(true, colourMapImage.getWidth());
-	Ogre::TexturePtr colourMap  = terrain->getGlobalColourMap();
-	colourMap->loadImage(colourMapImage);
-	*/
-
-	// Constants loaded from file
-	const int numberSources = 3;
-	const float maxHeight = texLayers->layersheight.getValue().asFloat(); // Last texture starts at height 
-	float blendHeightFactor[numberSources];
-	blendHeightFactor[0] = texLayers->texturelayer1.blendheightfactor.getValue().asFloat(); // Ends blend when % into height band
-	blendHeightFactor[1] = texLayers->texturelayer2.blendheightfactor.getValue().asFloat(); // Ends blend when % into height band
-	blendHeightFactor[2] = texLayers->texturelayer3.blendheightfactor.getValue().asFloat(); // Ends blend when % into height band
-	const float blendNormalSlopeStart = texLayers->texturelayerslope.blendslopestart.getValue().asFloat(); // Starts blending slope at %
-	const float blendNormalSlopeLength = texLayers->texturelayerslope.blendslopefactor.getValue().asFloat(); // Blends when % more slope
-	const float maxOffsetHeight = (maxHeight / numberSources) / 3.0f;
-	const float blendDetailHeightStartFactor = texLayers->texturelayerdetail.blendheightstartfactor.getValue().asFloat();
-	const float blendDetailHeightEndFactor = texLayers->texturelayerdetail.blendheightendfactor.getValue().asFloat();
-	const float blendDetailHeightStartFactorFactor = texLayers->texturelayerdetail.blendheightstartfactor.getValue().asFloat() +
-		texLayers->texturelayerdetail.blendheightfactor.getValue().asFloat();
-	const float blendDetailHeightEndFactorFactor = texLayers->texturelayerdetail.blendheightendfactor.getValue().asFloat() +
-		texLayers->texturelayerdetail.blendheightfactor.getValue().asFloat();
-	const float blendDetailAmount = 1.0f / texLayers->texturelayerdetail.blendheightfactor.getValue().asFloat();
-	const int blendDetailNoiseOctaves = texLayers->texturelayerdetail.blendnoiseoctaves.getValue();
-	const float blendDetailNoisePersistence = texLayers->texturelayerdetail.blendnoisepersistence.getValue().asFloat();
-	const float blendDetailNoiseScale = texLayers->texturelayerdetail.blendnoisescale.getValue().asFloat();
-	const int layerOffsetNoiseOctaves = texLayers->layeroffsetoctaves.getValue();
-	const float layerOffsetNoisePersistence = texLayers->layeroffsetpersistence.getValue().asFloat();
-	const float layerOffsetNoiseScale = texLayers->layeroffsetscale.getValue().asFloat();
-
-	// Figure out which blend maps are from which layers
-	Ogre::TerrainLayerBlendMap* blendMap0 = terrain->getLayerBlendMap(1);
-	Ogre::TerrainLayerBlendMap* blendMap1 = terrain->getLayerBlendMap(2);
-	Ogre::TerrainLayerBlendMap* blendMap2 = terrain->getLayerBlendMap(3);
-	Ogre::TerrainLayerBlendMap* blendMapStone = terrain->getLayerBlendMap(4);
-
-	// Load the actual landscape textures so we can create one texture with the whole landscape on it (used for the grass map)
-	Ogre::Image textureMap[numberSources];
-	float textureMapWorldSize[numberSources];
-	textureMap[0].load(S3D::replace(texLayers->texturelayer1.texturename.getValue(), "dds", "jpg"), LANDSCAPE_RESOURCE_GROUP);
-	textureMap[1].load(S3D::replace(texLayers->texturelayer2.texturename.getValue(), "dds", "jpg"), LANDSCAPE_RESOURCE_GROUP);
-	textureMap[2].load(S3D::replace(texLayers->texturelayer3.texturename.getValue(), "dds", "jpg"), LANDSCAPE_RESOURCE_GROUP);
-	textureMapWorldSize[0] = texLayers->texturelayer1.worldsize.getValue().asFloat();
-	textureMapWorldSize[1] = texLayers->texturelayer2.worldsize.getValue().asFloat();
-	textureMapWorldSize[2] = texLayers->texturelayer3.worldsize.getValue().asFloat();
-	Ogre::Image textureMapStone, textureMapDetail;
-	textureMapStone.load(S3D::replace(texLayers->texturelayerslope.texturename.getValue(), "dds", "jpg"), LANDSCAPE_RESOURCE_GROUP);
-	float textureMapWorldSizeStone = texLayers->texturelayerslope.worldsize.getValue().asFloat();
-	textureMapDetail.load(S3D::replace(texLayers->texturelayerdetail.texturename.getValue(), "dds", "jpg"), LANDSCAPE_RESOURCE_GROUP);
-	float textureMapWorldSizeDetail = texLayers->texturelayerdetail.worldsize.getValue().asFloat();
-	
-	size_t blendMapWidth, blendMapHeight;
-	getBlendMapWidth(blendMapWidth, blendMapHeight);
-
-	float imageMultiplierX = float(blendMapWidth) / 128.0f;
-	float imageMultiplierY = float(blendMapHeight) / 128.0f;
-	float sx = tx * 128.0f;
-	float sy = ty * 128.0f;
-	float *pBlend[numberSources];
-	pBlend[0] = blendMap0->getBlendPointer();
-	pBlend[1] = blendMap1->getBlendPointer();
-	pBlend[2] = blendMap2->getBlendPointer();
-	float* pBlendStone = blendMapStone->getBlendPointer();
-	for (Ogre::uint16 y = 0; y < blendMapHeight; ++y)
-	{
-		for (Ogre::uint16 x = 0; x < blendMapWidth; ++x)
-		{
-			// Figure out the height map coords
-			Ogre::Real tsx, tsy;
-			blendMap0->convertImageToTerrainSpace(x, y, &tsx, &tsy);
-			float hxf = (tsx * 128.0f) + sx;
-			float hyf = (tsy * 128.0f) + sy;
-
-			// Get height and normal information
-			int ix = int(hxf * imageMultiplierX);
-			int iy = layersInfo.normalMapImage.getHeight() - int(hyf * imageMultiplierY);
-			Ogre::ColourValue tempColor = layersInfo.normalMapImage.getColourAt(ix, iy, 0);
-			float normal = tempColor.g;
-			// This stops the height bands from being too uniform
-			float offSetHeight = octave_noise_2d(layerOffsetNoiseOctaves, layerOffsetNoisePersistence, layerOffsetNoiseScale, -hxf, -hyf)
-				* maxOffsetHeight;
-			float height = terrain->getHeightAtTerrainPosition(tsx, tsy) / 
-				OgreSystem::OGRE_WORLD_HEIGHT_SCALE - offSetHeight;
-
-			// Find the index of the current texture by deviding the height into strips
-			float heightPer = (height / maxHeight) * (float) numberSources;
-			int heightIndex = (int) heightPer;
-			if (heightIndex >= numberSources) 
-			{
-				heightIndex = numberSources - 1;
-			}
-
-			// Check if we are in a blending transition phase
-			float blendFirstAmount = 1.0f;
-			float blendSecondAmount = 0.0f;
-			if (heightIndex < numberSources - 1)
-			{
-				float remainderIndex = heightPer - heightIndex;
-				if (remainderIndex > blendHeightFactor[heightIndex])
-				{
-					// We need to do some blending, figure how much
-					remainderIndex -= blendHeightFactor[heightIndex];
-					blendSecondAmount = remainderIndex / (1.0f - blendHeightFactor[heightIndex]);
-					blendFirstAmount = 1.0f - blendSecondAmount;
-				}
-			}
-
-			// Check to see if we need to blend in the side texture
-			float blendSideAmount = 0.0f;
-			if (normal < blendNormalSlopeStart)
-			{
-				if (normal < blendNormalSlopeStart - blendNormalSlopeLength)
-				{
-					// Only use the side texture
-					blendSideAmount = 1.0f;
-					blendFirstAmount = 0.0f;
-					blendSecondAmount = 0.0f;
-				}
-				else
-				{
-					// Blend in the side texture
-					float remainderIndex = normal - (blendNormalSlopeStart - blendNormalSlopeLength);
-					remainderIndex /= blendNormalSlopeLength;
-				
-					blendSideAmount = (1.0f - remainderIndex);
-					blendFirstAmount *= remainderIndex;
-					blendSecondAmount *= remainderIndex;
-				}
-			}
-
-			// Add in the base value
-			// Generate a noise map for the base map
-			// This is like the detail map that adds texture variation across the terrain
-			// Don't add it right at the lowest height, or at the max height
-			if (heightPer > blendDetailHeightStartFactor && heightPer < float(numberSources) - blendDetailHeightEndFactor)
-			{
-				float baseValue = octave_noise_2d(blendDetailNoiseOctaves, blendDetailNoisePersistence, blendDetailNoiseScale, hxf, hyf);
-				if (baseValue > 0.0f)
-				{
-					if (heightPer < blendDetailHeightStartFactorFactor) baseValue *= (heightPer - blendDetailHeightStartFactor) * blendDetailAmount;
-					else if (heightPer > float(numberSources) - blendDetailHeightEndFactorFactor) baseValue *= 1.0f - 
-						((heightPer - (float(numberSources) - blendDetailHeightEndFactorFactor)) * blendDetailAmount);
-					blendFirstAmount *= Ogre::Math::Clamp(1.0f - baseValue, (Ogre::Real) 0, (Ogre::Real) 1);
-					blendSecondAmount *= Ogre::Math::Clamp(1.0f - baseValue, (Ogre::Real) 0, (Ogre::Real) 1);
-				}
-			}
-
-			// The texture color at this position
-			float colorAmountFromLayers = 0.0f;
-			Ogre::ColourValue textureColorValue(0.0f, 0.0f, 0.0f, 1.0f);
-
-			// Update maps
-			for (int i=0; i<numberSources; i++)
-			{
-				// Update the blend map
-				float blendAmount = 0.0f;
-				if (i==heightIndex) blendAmount = blendFirstAmount;
-				else if (i==heightIndex+1) blendAmount = blendSecondAmount;
-				(*pBlend[i]) = blendAmount;
-				pBlend[i]++;
-				colorAmountFromLayers += blendAmount;
-
-				if (layersInfo.layers[i]->hasGrass)
-				{
-					// Grass density
-					float grassDensity = blendAmount;
-					Ogre::ColourValue grassDensityValue(grassDensity, grassDensity, grassDensity, 1.0f);
-					layersInfo.layers[i]->grassLayerDensity.setColourAt(grassDensityValue, ix, iy, 0);
-				}
-
-				blendAmount -= blendSideAmount; // Reduce the grass on the slope
-				if (blendAmount > 0.0f)
-				{
-					// Find the coordinates on the source texture
-					int colix = int(hxf * OgreSystem::OGRE_WORLD_SCALE / textureMapWorldSize[i] * 
-						float(textureMap[i].getWidth())) % textureMap[i].getWidth();
-					int coliy = int(hyf * OgreSystem::OGRE_WORLD_SCALE / textureMapWorldSize[i] * 
-						float(textureMap[i].getHeight())) % textureMap[i].getHeight();
-
-					// Texture color
-					Ogre::ColourValue layerColorValue = textureMap[i].getColourAt(colix, coliy, 0);
-					textureColorValue += layerColorValue * blendAmount;
-				}
-			}
-
-			// Add in the slope texture, the one when the gradient is larger
-			(*pBlendStone) = blendSideAmount;
-			pBlendStone++;
-			colorAmountFromLayers += blendSideAmount;
-			if (blendSideAmount > 0.0f)
-			{
-				// Find the coordinates on the source texture
-				int colix = int(hxf * OgreSystem::OGRE_WORLD_SCALE / textureMapWorldSizeStone *
-					float(textureMapStone.getWidth())) % textureMapStone.getWidth();
-				int coliy = int(hyf * OgreSystem::OGRE_WORLD_SCALE / textureMapWorldSizeStone *
-					float(textureMapStone.getHeight())) % textureMapStone.getHeight();
-
-				// Texture color
-				Ogre::ColourValue layerColorValue = textureMapStone.getColourAt(colix, coliy, 0);
-				textureColorValue += layerColorValue * blendSideAmount;
-			}
-
-			// Add in the default texture, the detail texture
-			if (colorAmountFromLayers < 1.0f) 
-			{
-				float blendAmount = 1.0f - colorAmountFromLayers;
-
-				// Find the coordinates on the source texture
-				int colix = int(hxf * OgreSystem::OGRE_WORLD_SCALE / textureMapWorldSizeDetail *
-					float(textureMapDetail.getWidth())) % textureMapDetail.getWidth();
-				int coliy = int(hyf * OgreSystem::OGRE_WORLD_SCALE / textureMapWorldSizeDetail *
-					float(textureMapDetail.getHeight())) % textureMapDetail.getHeight();
-
-				// Texture color
-				Ogre::ColourValue layerColorValue = textureMapDetail.getColourAt(colix, coliy, 0);
-				textureColorValue += layerColorValue * blendAmount;
-			}
-
-			// Set the final texture color
-			layersInfo.textureMapImage.setColourAt(textureColorValue, ix, iy, 0);
-		}
-	}
-
-	blendMap0->dirty();
-	blendMap1->dirty();
-	blendMap2->dirty();
-	blendMapStone->dirty();
-	blendMap0->update();
-	blendMap1->update();
-	blendMap2->update();
-	blendMapStone->update();
 }
 
 void UIStatePlayingLand::updateLandscapeTextures()

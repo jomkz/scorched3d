@@ -20,8 +20,8 @@ material General/MiniLandscapeWater
 		{
           texture_unit
           {
-            texture water.jpg
-            scale 0.4 0.4
+            texture ocean.dds
+            scale 0.2 0.2
           }
 		 }
     }

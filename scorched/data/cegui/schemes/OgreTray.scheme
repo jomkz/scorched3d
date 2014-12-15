@@ -20,6 +20,7 @@
     <FalagardMapping windowType="OgreTray/Title"                targetType="DefaultWindow"          renderer="Core/Default"             lookNFeel="OgreTray/MiniTray" />
     <FalagardMapping windowType="OgreTray/CaptionedStaticText"  targetType="DefaultWindow"          renderer="Core/StaticText"          lookNFeel="OgreTray/CaptionedStaticText" />
     <FalagardMapping windowType="OgreTray/ProgressBar"          targetType="CEGUI/ProgressBar"      renderer="Core/ProgressBar"         lookNFeel="OgreTray/ProgressBar" />
+    <FalagardMapping windowType="OgreTray/NewProgressBar"       targetType="CEGUI/ProgressBar"      renderer="Core/ProgressBar"         lookNFeel="OgreTray/NewProgressBar" />
     <FalagardMapping windowType="OgreTray/Editbox"              targetType="CEGUI/Editbox"          renderer="Core/Editbox"             lookNFeel="OgreTray/Editbox" />
     <FalagardMapping windowType="OgreTray/MultiLineEditbox"     targetType="CEGUI/MultiLineEditbox" renderer="Core/MultiLineEditbox"    lookNFeel="OgreTray/MultiLineEditbox" />
     <FalagardMapping windowType="OgreTray/Listbox"              targetType="CEGUI/Listbox"          renderer="Core/Listbox"             lookNFeel="OgreTray/Listbox" />

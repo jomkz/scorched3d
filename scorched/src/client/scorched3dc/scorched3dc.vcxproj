@@ -461,7 +461,10 @@
     <ClCompile Include="..\dialogs\GUILogo.cpp" />
     <ClCompile Include="..\dialogs\GUIProgressCounter.cpp" />
     <ClCompile Include="..\dialogs\GUITankInfo.cpp" />
-    <ClCompile Include="..\models\MiniLandscape.cpp" />
+    <ClCompile Include="..\graph\LandscapeBlender.cpp" />
+    <ClCompile Include="..\graph\LandscapeBlenderFull.cpp" />
+    <ClCompile Include="..\graph\LandscapeBlenderMini.cpp" />
+    <ClCompile Include="..\graph\MiniLandscape.cpp" />
     <ClCompile Include="..\models\ModelInstance.cpp" />
     <ClCompile Include="..\models\ModelStore.cpp" />
     <ClCompile Include="..\models\ParticleInstance.cpp" />
@@ -957,7 +960,10 @@
     <ClInclude Include="..\dialogs\GUILogo.h" />
     <ClInclude Include="..\dialogs\GUIProgressCounter.h" />
     <ClInclude Include="..\dialogs\GUITankInfo.h" />
-    <ClInclude Include="..\models\MiniLandscape.h" />
+    <ClInclude Include="..\graph\LandscapeBlender.h" />
+    <ClInclude Include="..\graph\LandscapeBlenderFull.h" />
+    <ClInclude Include="..\graph\LandscapeBlenderMini.h" />
+    <ClInclude Include="..\graph\MiniLandscape.h" />
     <ClInclude Include="..\models\ModelInstance.h" />
     <ClInclude Include="..\models\ModelStore.h" />
     <ClInclude Include="..\models\ParticleInstance.h" />

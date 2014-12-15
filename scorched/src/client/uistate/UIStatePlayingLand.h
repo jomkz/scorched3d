@@ -29,11 +29,35 @@
 #include <TreeLoader2D.h>
 #include <set>
 
+#define LANDSCAPE_RESOURCE_GROUP "Landscape"
+
 class HeightMap;
 class LandscapeTexLayer;
 class UIStatePlayingLand
 {
 public:
+	class LayerInfo
+	{
+	public:
+		LayerInfo() : hasGrass(false) {}
+		~LayerInfo() {}
+
+		bool hasGrass;
+		LandscapeTexLayer *texLayer;
+		Ogre::Image grassLayerDensity;
+	};
+
+	class LayersInfo
+	{
+	public:
+		LayersInfo() {}
+		~LayersInfo() { while (!layers.empty()) { delete layers.back();  layers.pop_back(); } }
+
+		Ogre::Image normalMapImage;
+		Ogre::Image textureMapImage;
+		std::vector<LayerInfo *> layers;
+	};
+
 	UIStatePlayingLand(Ogre::SceneManager* sceneMgr,
 		Ogre::Camera* camera,
 		Ogre::Light *sunLight,
@@ -61,33 +85,10 @@ protected:
 	std::list<Forests::PagedGeometry *> pagedGeom_;
 	std::list<Forests::TreeLoader2D *> treeLoaders_;
 
-	class LayerInfo
-	{
-	public:
-		LayerInfo() : hasGrass(false) {}
-		~LayerInfo() {}
-
-		bool hasGrass;
-		LandscapeTexLayer *texLayer;
-		Ogre::Image grassLayerDensity;
-	};
-
-	class LayersInfo
-	{
-	public:
-		LayersInfo() {}
-		~LayersInfo() { while (!layers.empty()) { delete layers.back();  layers.pop_back(); } }
-
-		Ogre::Image normalMapImage;
-		Ogre::Image textureMapImage;
-		std::vector<LayerInfo *> layers;
-	};
-
 	void create();
 	void defineTerrainCreationOptions();
 	void defineTerrain(long x, long y);
 	void createLayerInfo(LayersInfo &layersInfo, int landscapeSquaresWidth, int landscapeSquaresHeight);
-	void initLayers(Ogre::Terrain* terrain, LayersInfo &layerInfo, long tx, long ty);
 	void initLayer(LayersInfo &layersInfo, LandscapeTexLayer &layer, int fullImageWidth, int fullImageHeight);
 	void updateHeightTerrain(int tx, int ty, const Ogre::Rect &updateRect);
 	void updateAllTerrainHeight();

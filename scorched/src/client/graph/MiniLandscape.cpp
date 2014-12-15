@@ -18,7 +18,8 @@
 //    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <models/MiniLandscape.h>
+#include <graph/MiniLandscape.h>
+#include <graph/LandscapeBlenderMini.h>
 #include <scorched3dc/ScorchedUI.h>
 #include <scorched3dc/OgreSystem.h>
 #include <client/ScorchedClient.h>
@@ -197,7 +198,7 @@ void MiniLandscape::create()
 	MiniWaterSide4->position(Ogre::Vector3(-half_x_size, 1.0, half_z_size));
 	MiniWaterSide4->normal(0.0, 0.0, 1.0);
 	MiniWaterSide4->textureCoord(1.0, 1.0);
-	MiniWaterSide4->position(Ogre::Vector3(half_x_size, 1.0,-half_z_size));
+	MiniWaterSide4->position(Ogre::Vector3(half_x_size, 1.0, half_z_size));
 	MiniWaterSide4->normal(0.0, 0.0, 1.0);
 	MiniWaterSide4->textureCoord(1.0, 0.0);
 	MiniWaterSide4->quad(3, 2, 1, 0);
@@ -207,7 +208,6 @@ void MiniLandscape::create()
 
 	// Now save the contents
 	renderTexture_->update();
-	//renderTexture_->writeContentsToFile("i:\\tmp\\start.png");
 }
 
 void MiniLandscape::update()
@@ -251,9 +251,24 @@ void MiniLandscape::update()
 	LandscapeTex &tex = *ScorchedClient::instance()->getLandscapeMaps().getDescriptions().getTex();
 	fixed waterHeight = tex.water.waterHeight.getValue();
 	waterNode_->setPosition(0.0, waterHeight.asFloat(), 0.0);
+	
+	// Update material
+	LandscapeBlenderMini miniBlender(*ScorchedClient::instance());
+	miniBlender.calculate();
+	Ogre::TexturePtr mapTexture = Ogre::TextureManager::getSingleton().createManual(
+		"MiniLandTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, Ogre::TEX_TYPE_2D,
+		miniBlender.textureMapImage.getWidth(), miniBlender.textureMapImage.getHeight(),
+		0, Ogre::PF_BYTE_RGB);
+	mapTexture->loadImage(miniBlender.textureMapImage);
+
+	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(
+		"General/MiniLandscapeLand", // name
+		Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+	material->getTechnique(0)->getPass(0)->createTextureUnitState("MiniLandTex");
 
 	// Now save the contents
 	renderTexture_->update();
+	//renderTexture_->writeContentsToFile("i:\\tmp\\start.png");
 }
 
 CEGUI::BasicImage *MiniLandscape::createGUITexture()

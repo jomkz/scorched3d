@@ -1597,7 +1597,69 @@
             </Layer>
         </StateImagery>
     </WidgetLook>
-    <!--
+
+  <!--
+:::: Progress Bar
+-->
+  <WidgetLook name="OgreTray/NewProgressBar">
+    <Property name="Size" value="{{0, 256}, {0, 32}}" />
+    <NamedArea name="ProgressArea">
+      <Area>
+        <Dim type="LeftEdge">
+          <AbsoluteDim value="0"/>
+        </Dim>
+        <Dim type="TopEdge">
+          <AbsoluteDim value="0"/>
+        </Dim>
+        <Dim type="RightEdge">
+          <UnifiedDim scale="1" type="RightEdge"/>
+        </Dim>
+        <Dim type="BottomEdge">
+          <UnifiedDim scale="1" type="BottomEdge"/>
+        </Dim>
+      </Area>
+    </NamedArea>
+    <ImagerySection name="progress">
+      <FrameComponent>
+        <Area>
+          <Dim type="LeftEdge">
+            <AbsoluteDim value="0"/>
+          </Dim>
+          <Dim type="TopEdge">
+            <AbsoluteDim value="0"/>
+          </Dim>
+          <Dim type="Width">
+            <OperatorDim op="Multiply">
+              <UnifiedDim scale="1" type="Width"/>
+              <PropertyDim name="CurrentProgress"/>
+            </OperatorDim>
+          </Dim>
+          <Dim type="Height">
+            <UnifiedDim scale="1" type="Height"/>
+          </Dim>
+        </Area>
+        <Image component="LeftEdge" name="OgreTrayImages/NewScrollStart"/>
+        <Image component="Background" name="OgreTrayImages/NewScrollBar"/>
+        <Image component="RightEdge" name="OgreTrayImages/NewScrollEnd"/>
+      </FrameComponent>
+    </ImagerySection>
+    <StateImagery name="Enabled">
+    </StateImagery>
+    <StateImagery name="Disabled">
+    </StateImagery>
+    <StateImagery name="EnabledProgress">
+      <Layer>
+        <Section section="progress"/>
+      </Layer>
+    </StateImagery>
+    <StateImagery name="DisabledProgress">
+      <Layer>
+        <Section section="progress"/>
+      </Layer>
+    </StateImagery>
+  </WidgetLook>
+
+  <!--
 :::: Progress Bar
 -->
     <WidgetLook name="OgreTray/ProgressBar">
