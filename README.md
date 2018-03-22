@@ -1,4 +1,4 @@
-# Scorched 3D
+# Scorched3D
 
 A simple turn-based artillery game and also a real-time strategy game.
 
