@@ -18,4 +18,4 @@ A simple turn-based artillery game and also a real-time strategy game in which p
 
 ## About
 
-This repo was forked over to GitHub on Thursday, March 22nd, 2018.
+This repo was forked over to GitHub on Thursday, March 22nd, 2018 for experimentation and further enhancement.
