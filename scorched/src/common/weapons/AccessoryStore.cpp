@@ -156,7 +156,7 @@ AccessoryPart *AccessoryStore::createAccessoryPart(
 	Accessory *parent, XMLNode *currentNode)
 {
 	XMLNode *typeNode = 0;
-	if (!currentNode->getNamedParameter("type", typeNode)) return false;
+	if (!currentNode->getNamedParameter("type", typeNode)) return 0;
 
 	AccessoryPart *accessoryPart = 
 		AccessoryMetaRegistration::getNewAccessory(typeNode->getContent(), this);
