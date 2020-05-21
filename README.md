@@ -1,4 +1,4 @@
-# Scorched3D
+# Scorched 3D
 
 A simple turn-based artillery game and also a real-time strategy game.
 
@@ -19,3 +19,43 @@ A simple turn-based artillery game and also a real-time strategy game in which p
 ## About
 
 This repo was forked over to GitHub on Thursday, March 22nd, 2018 for experimentation and further enhancement.
+
+## Development
+
+Download and install the c++ development tools for your Linux distribution.
+
+### Dependencies
+
+Download the development dependencies.
+
+#### Arch Linux
+
+  * openal
+  * wxGTK
+  * wxgtk-common
+  * freealut
+  * fftw3
+  * sdl_net
+  * wxgtk2
+  * wxgtk3
+  * freetype2
+
+### Configure
+
+``` bash
+cd scorched
+automake --add-missing
+sh autogen.sh
+```
+
+### Compile
+
+``` bash
+make -j2
+```
+
+### Install
+
+``` bash
+sudo make install
+```
