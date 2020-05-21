@@ -418,18 +418,18 @@ AC_DEFUN([AC_CHECK_FT2],
    if test x$ft_config_exec_prefix != x ; then
      ft_config_args="$ft_config_args --exec-prefix=$ft_config_exec_prefix"
      if test x${FT2_CONFIG+set} != xset ; then
-       FT2_CONFIG=$ft_config_exec_prefix/bin/freetype-config
+       FT2_CONFIG=$ft_config_exec_prefix/bin/pkg-config
      fi
    fi
 
    if test x$ft_config_prefix != x ; then
      ft_config_args="$ft_config_args --prefix=$ft_config_prefix"
      if test x${FT2_CONFIG+set} != xset ; then
-       FT2_CONFIG=$ft_config_prefix/bin/freetype-config
+       FT2_CONFIG=$ft_config_prefix/bin/pkg-config
      fi
    fi
 
-   AC_PATH_PROG([FT2_CONFIG], [freetype-config], [no])
+   AC_PATH_PROG([FT2_CONFIG], [pkg-config], [no])
 
    min_ft_version=m4_if([$1], [], [7.0.1], [$1])
    AC_MSG_CHECKING([for FreeType -- version >= $min_ft_version])
@@ -437,13 +437,13 @@ AC_DEFUN([AC_CHECK_FT2],
    if test "$FT2_CONFIG" = "no" ; then
      no_ft=yes
    else
-     FT2_CFLAGS=`$FT2_CONFIG $ft_config_args --cflags`
-     FT2_LIBS=`$FT2_CONFIG $ft_config_args --libs`
-     ft_config_major_version=`$FT2_CONFIG $ft_config_args --version | \
+     FT2_CFLAGS=`$FT2_CONFIG $ft_config_args --cflags freetype2`
+     FT2_LIBS=`$FT2_CONFIG $ft_config_args --libs freetype2`
+     ft_config_major_version=`$FT2_CONFIG $ft_config_args --modversion freetype2 | \
        sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-     ft_config_minor_version=`$FT2_CONFIG $ft_config_args --version | \
+     ft_config_minor_version=`$FT2_CONFIG $ft_config_args --modversion freetype2 | \
        sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-     ft_config_micro_version=`$FT2_CONFIG $ft_config_args --version | \
+     ft_config_micro_version=`$FT2_CONFIG $ft_config_args --modversion freetype2 | \
        sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
      ft_min_major_version=`echo $min_ft_version | \
        sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
